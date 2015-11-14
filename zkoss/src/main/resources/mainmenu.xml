@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:XMLRootMenu xmlns:ns2="http://www.daibutsu.de/zk/menu">
+
+	<!-- ######################################################### -->
+	<!-- #################### possible Tags ###################### -->
+	<!-- ######################################################### -->
+	<!-- menu:           a parent menu that have child nodes.      -->
+	<!-- menuItem:       the menu item.                            -->
+	<!-- zulNavigation:  the path and name of the zul-file.        -->
+	<!-- iconName:       the path and name to an icon.             -->
+	<!-- rightName:      if it's declared, than the rightname must -->
+	<!--                 be the same as in the securityContext for -->
+	<!--                 creating this menuitem.                   -->
+	<!-- open:           (true/false opens a menu at creation time -->
+	<!-- ######################################################### -->
+
+	<!-- DON'T CHANGE THE ID FOR the Dashboard menu entry -->
+	<!-- it's used in the mainMenuCtrl.java  -->
+	<menuItem id="menu_Item_Home" zulNavigation="/WEB-INF/pages/dashboard.zul"
+		iconName="/images/icons/console_view.gif" />
+	<!-- Guestbook
+	<menuItem id="menu_Item_Guestbook" zulNavigation="/WEB-INF/pages/guestbook/guestBookList.zul"
+		iconName="/images/icons/create_doc_16x16.gif" /> -->
+	<!-- Calendar 
+	<menuItem id="menu_Item_Calendar" zulNavigation="/WEB-INF/pages/calendar/calendar.zul"
+		iconName="/images/icons/calendar1_16x16.gif" />-->
+	<!-- Spreadsheet -->
+	<!--
+		closed, until the spreadsheet jar's are in the maven repo <menuItem
+		id="menu_Item_SpreadSheet"
+		zulNavigation="/WEB-INF/pages/spreadsheet/spreadsheet.zul"
+		iconName="/images/icons/spreadsheet_16x16.png" />
+	-->
+
+	<!-- ReadMe MenuTree 
+	<menu id="menu_Category_ReadMe" rightName="" open="true">
+		
+		<menuItem id="menu_Item_Documentation" zulNavigation="/WEB-INF/pages/documentation/documentation.zul"
+			iconName="/images/icons/icon-pdf_16x16.png" />
+		
+		<menuItem id="menu_Item_Blog" zulNavigation="/WEB-INF/pages/blog/blog.zul"
+			iconName="/images/icons/wpmini-blue_16x16.png" />
+		
+		<menuItem id="menu_Item_Codes" zulNavigation="/WEB-INF/pages/codes/codes.zul"
+			iconName="/images/icons/cardbox1_16x16.gif" />
+	</menu>-->
+
+	<!-- OfficeData MenuTree 
+	<menu id="menu_Category_OfficeData" rightName="menuCat_OfficeData">
+		<menuItem id="menu_Item_Customers" zulNavigation="/WEB-INF/pages/customer/customerList.zul"
+			iconName="/images/icons/view.gif" rightName="menuItem_OfficeData_Customers" />
+		<menuItem id="menu_Item_Orders" zulNavigation="/WEB-INF/pages/order/orderList.zul"
+			iconName="/images/icons/view.gif" rightName="menuItem_OfficeData_Orders" />
+	</menu>
+-->
+	<!-- BaseData MenuTree 
+	<menu id="menu_Category_MainData" rightName="menuCat_MainData">
+		<menuItem id="menu_Item_Articles" zulNavigation="/WEB-INF/pages/article/articleMain.zul"
+			iconName="/images/icons/index_16x16.gif" rightName="menuItem_MainData_ArticleItems" />
+		<menuItem id="menu_Item_Branches" zulNavigation="/WEB-INF/pages/branch/branchMain.zul"
+			iconName="/images/icons/index_16x16.gif" rightName="menuItem_MainData_Branch" />
+		<menuItem id="menu_Item_Offices" zulNavigation="/WEB-INF/pages/office/officeMain.zul"
+			iconName="/images/icons/index_16x16.gif" rightName="menuItem_MainData_Office" />
+	</menu>
+-->
+	<!-- Administration MenuTree -->
+	<menu id="menu_Category_Administration" rightName="menuCat_Administration">
+		<menuItem id="menu_Item_Users" iconName="/images/icons/user_group_16x16.png"
+			zulNavigation="/WEB-INF/pages/administration/sec_user/userList.zul" rightName="menuItem_Administration_Users" />
+		<menu id="menu_Category_UserRights" rightName="menuCat_UserRights">
+			<menuItem id="menu_Item_UserRoles" zulNavigation="/WEB-INF/pages/administration/sec_userrole/secUserrole.zul"
+				iconName="/images/icons/exdDatabaseView_16x16.gif" rightName="menuItem_Administration_UserRoles" />
+			<menuItem id="menu_Item_Roles" zulNavigation="/WEB-INF/pages/administration/sec_role/secRoleList.zul"
+				iconName="/images/icons/exdDatabaseView_16x16.gif" rightName="menuItem_Administration_Roles" />
+			<menuItem id="menu_Item_RoleGroups" zulNavigation="/WEB-INF/pages/administration/sec_rolegroup/secRolegroup.zul"
+				iconName="/images/icons/exdDatabaseView_16x16.gif" rightName="menuItem_Administration_RoleGroups" />
+			<menuItem id="menu_Item_Groups" zulNavigation="/WEB-INF/pages/administration/sec_group/secGroupList.zul"
+				iconName="/images/icons/exdDatabaseView_16x16.gif" rightName="menuItem_Administration_Groups" />
+			<menuItem id="menu_Item_GroupRights"
+				zulNavigation="/WEB-INF/pages/administration/sec_groupright/secGroupright.zul"
+				iconName="/images/icons/exdDatabaseView_16x16.gif" rightName="menuItem_Administration_GroupRights" />
+			<menuItem id="menu_Item_Rights" zulNavigation="/WEB-INF/pages/administration/sec_right/secRightList.zul"
+				iconName="/images/icons/exdDatabaseView_16x16.gif" rightName="menuItem_Administration_Rights" />
+		</menu>
+		<menuItem id="menu_Item_LoginsLog"
+			zulNavigation="/WEB-INF/pages/administration/sec_loginlog/secLoginLogMain.zul"
+			iconName="/images/icons/method_16x16.gif" rightName="menuItem_Administration_LoginsLog" />
+		<!--<menuItem id="menu_Item_HibernateStatistics" zulNavigation="/WEB-INF/pages/debug/HibernateStatistics.zul"
+			iconName="/images/icons/method_16x16.gif" rightName="menuItem_Administration_HibernateStats" />
+			-->
+	</menu>
+	<!-- Master MenuTree -->
+	<menu id="menu_Category_Master" >
+		<menuItem id="menu_Item_Karyawan" zulNavigation="/WEB-INF/pages/master/karyawan/karyawanList.zul"
+			iconName="/images/icons/index_16x16.gif" />
+		<menuItem id="menu_Item_Barang" zulNavigation="/WEB-INF/pages/master/barang/barangList.zul"
+			iconName="/images/icons/index_16x16.gif" />
+		<menuItem id="menu_Item_HargaBarang" zulNavigation="/WEB-INF/pages/master/hargabarang/hargaBarangList.zul"
+			iconName="/images/icons/index_16x16.gif" />
+		<menuItem id="menu_Item_KategoriBarang" zulNavigation="/WEB-INF/pages/master/kategoribarang/kategoriBarangList.zul"
+			iconName="/images/icons/index_16x16.gif" />
+		<menuItem id="menu_Item_UnitBarang" zulNavigation="/WEB-INF/pages/master/unitbarang/unitBarangList.zul"
+			iconName="/images/icons/index_16x16.gif" />			
+		<menuItem id="menu_Item_Wilayah" zulNavigation="/WEB-INF/pages/master/wilayah/wilayahList.zul"
+			iconName="/images/icons/index_16x16.gif" />					
+		<menuItem id="menu_Item_Status" zulNavigation="/WEB-INF/pages/master/status/statusList.zul"
+			iconName="/images/icons/index_16x16.gif" />			
+		<menuItem id="menu_Item_BonusTransport" zulNavigation="/WEB-INF/pages/master/bonustransport/bonusTransportList.zul"
+			iconName="/images/icons/index_16x16.gif" />			
+		<menuItem id="menu_Item_Komisi" zulNavigation="/WEB-INF/pages/master/komisi/komisiList.zul"
+			iconName="/images/icons/index_16x16.gif" />			
+	</menu>
+	<!-- Transaction MenuTree -->
+	<menu id="menu_Category_Transaction" >
+		<menuItem id="menu_Item_Penjualan" zulNavigation="/WEB-INF/pages/transaction/penjualan/penjualanList.zul"
+			iconName="/images/icons/view.gif" />
+		<menuItem id="menu_Item_ApprovalPenjualan" zulNavigation="/WEB-INF/pages/transaction/approvalpenjualan/approvalPenjualanList.zul"
+			iconName="/images/icons/view.gif" />
+		<menuItem id="menu_Item_Piutang" zulNavigation="/WEB-INF/pages/transaction/piutang/piutangList.zul"
+			iconName="/images/icons/view.gif" />
+		<menuItem id="menu_Item_ApprovalPiutang" zulNavigation="/WEB-INF/pages/transaction/approvalpiutang/approvalPiutangList.zul"
+			iconName="/images/icons/view.gif" />
+		<menuItem id="menu_Item_Kolektor" zulNavigation="/WEB-INF/pages/transaction/kolektor/kolektorList.zul"
+			iconName="/images/icons/view.gif" />
+		<menuItem id="menu_Item_TabunganSales" zulNavigation="/WEB-INF/pages/transaction/tabungansales/tabungansalesList.zul"
+			iconName="/images/icons/view.gif" />
+	</menu>
+	<!-- Report MenuTree -->
+	<menu id="menu_Category_Report" >
+		<menuItem id="menu_Item_ReportSummaryPenjualan" zulNavigation="/WEB-INF/pages/report/summarypenjualan/summaryPenjualanFilterPage.zul"
+			iconName="/images/icons/view.gif" />
+		<menuItem id="menu_Item_ReportPenerimaanPembayaran" zulNavigation="/WEB-INF/pages/report/penerimaanpembayaran/penerimaanPembayaranFilterPage.zul"
+			iconName="/images/icons/view.gif" />
+		<menuItem id="menu_Item_ReportKolektor" zulNavigation="/WEB-INF/pages/report/kolektor/KolektorFilterPage.zul"
+			iconName="/images/icons/view.gif" />
+		<menuItem id="menu_Item_ReportKomisi" zulNavigation="/WEB-INF/pages/report/komisi/KomisiFilterPage.zul"
+			iconName="/images/icons/view.gif" />
+		<menuItem id="menu_Item_ReportBarang" zulNavigation="/WEB-INF/pages/report/barang/BarangFilterPage.zul"
+			iconName="/images/icons/view.gif" />
+		<menuItem id="menu_Item_ReportPiutang" zulNavigation="/WEB-INF/pages/report/piutang/PiutangFilterPage.zul"
+			iconName="/images/icons/view.gif" />
+		<menuItem id="menu_Item_ReportInvoice" zulNavigation="/WEB-INF/pages/report/invoice/InvoiceFilterPage.zul"
+			iconName="/images/icons/view.gif" />
+		<menuItem id="menu_Item_ReportBonusTransport" zulNavigation="/WEB-INF/pages/report/bonustransport/BonusTransportFilterPage.zul"
+			iconName="/images/icons/view.gif" />
+		<menuItem id="menu_Item_ReportTabunganSales" zulNavigation="/WEB-INF/pages/report/tabungansales/TabunganSalesFilterPage.zul"
+			iconName="/images/icons/view.gif" />
+		<menuItem id="menu_Item_ReportAkumulasiPiutang" zulNavigation="/WEB-INF/pages/report/akumulasipiutang/AkumulasiPiutangFilterPage.zul"
+			iconName="/images/icons/view.gif" />
+		<menuItem id="menu_Item_ReportBukuPiutang" zulNavigation="/WEB-INF/pages/report/bukupiutang/BukuPiutangFilterPage.zul"
+			iconName="/images/icons/view.gif" />
+		<menuItem id="menu_Item_ReportM3" zulNavigation="/WEB-INF/pages/report/m3/M3FilterPage.zul"
+			iconName="/images/icons/view.gif" />
+	</menu>
+	<!-- Report MenuTree -->
+	<menu id="menu_Category_Utility" >
+		<menuItem id="menu_Item_ProfilePerusahaan" zulNavigation="/WEB-INF/pages/profileperusahaan/profilePerusahaanList.zul"
+			iconName="/images/icons/index_16x16.gif" />
+		<menuItem id="menu_Item_Parameter" zulNavigation="/WEB-INF/pages/parameter/parameterList.zul"
+			iconName="/images/icons/index_16x16.gif" />
+	</menu>
+
+</ns2:XMLRootMenu>

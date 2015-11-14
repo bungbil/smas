@@ -1,0 +1,106 @@
+<?link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css" ?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:w="http://www.zkoss.org/2005/zk/client"
+	xmlns:n="http://www.zkoss.org/2005/zk/native"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+	<style>
+		div.c-wrapper{ width: 80%; /* for example */ margin: auto; }
+
+		h2 { margin: 0; color: #666; padding-top: 90px; font-size: 52px; font-family: "verdana", sans-serif; }
+
+		.item{ background: #333; text-align: center; height: 300px !important;}
+
+		.carousel-indicators { bottom: 0px; }
+
+		.carousel-caption { position: absolute; bottom: 20px; padding-bottom: 1px; }
+
+		.black-text { color: black; } .gray-text { color: #e6e9ec; } .darkgray-text { color: #98a4b2; }
+
+	</style>
+
+	<n:div class="c-wrapper">
+		<n:div id="myCarousel" class="carousel slide" data-interval="3000" data-ride="carousel">
+			<!-- Carousel indicators -->
+			<n:ol class="carousel-indicators">
+				<n:li data-target="#myCarousel" data-slide-to="0" class="active"></n:li>
+				<n:li data-target="#myCarousel" data-slide-to="1"></n:li>
+				<n:li data-target="#myCarousel" data-slide-to="2"></n:li>
+				<n:li data-target="#myCarousel" data-slide-to="3"></n:li>
+				<n:li data-target="#myCarousel" data-slide-to="4"></n:li>
+				<n:li data-target="#myCarousel" data-slide-to="5"></n:li>
+			</n:ol>
+			<!-- Carousel items -->
+			<n:div class="carousel-inner">
+				<n:div class="active item">
+					<n:div>
+						<image style="padding-top:10px; padding-bottom:10px;"
+							src="/images/slider/zksample2_dashboard_400x230.jpg" />
+					</n:div>
+					<n:div class="carousel-caption">
+						<n:h3 class="gray-text">Dashboard</n:h3>
+					</n:div>
+				</n:div>
+				<n:div class="item">
+					<n:div>
+						<image style="padding-top:10px; padding-bottom:10px;"
+							src="/images/slider/zksample2_loginslog_400x230.jpg" />
+					</n:div>
+					<n:div class="carousel-caption">
+						<n:h3 class="gray-text">Log Files</n:h3>
+					</n:div>
+				</n:div>
+				<n:div class="item">
+					<n:div>
+						<image style="padding-top:10px; padding-bottom:10px;"
+							src="/images/slider/zksample2_calendar_400x230.jpg" />
+					</n:div>
+					<n:div class="carousel-caption">
+						<n:h3 class="gray-text">Calendar</n:h3>
+					</n:div>
+				</n:div>
+				<n:div class="item">
+					<n:div>
+						<image style="padding-top:10px; padding-bottom:10px;"
+							src="/images/slider/zksampl2_chart_400x230.jpg" />
+					</n:div>
+					<n:div class="carousel-caption">
+						<n:h3 class="gray-text">Charts</n:h3>
+					</n:div>
+				</n:div>
+				<n:div class="item">
+					<n:div>
+						<image style="padding-top:10px; padding-bottom:10px;"
+							src="/images/slider/zksample2_many_modal_windows_400x230.jpg" />
+					</n:div>
+					<n:div class="carousel-caption">
+						<n:h3 class="gray-text">Modal windows</n:h3>
+					</n:div>
+				</n:div>
+				<n:div class="item">
+					<n:div>
+						<image style="padding-top:10px; padding-bottom:10px;"
+							src="/images/slider/zksample2_report_400x230.jpg" />
+					</n:div>
+					<n:div class="carousel-caption">
+						<n:h3 class="gray-text">Reports</n:h3>
+					</n:div>
+				</n:div>
+			</n:div>
+			<!-- Carousel nav -->
+			<n:a class="carousel-control left" href="#myCarousel" data-slide="prev">
+				<n:span class="glyphicon glyphicon-chevron-left"></n:span>
+			</n:a>
+			<n:a class="carousel-control right" href="#myCarousel" data-slide="next">
+				<n:span class="glyphicon glyphicon-chevron-right"></n:span>
+			</n:a>
+		</n:div>
+	</n:div>
+
+	<!-- start the carousel sliding of the images -->
+	<n:script type="text/javascript">
+		$(document).ready(function() { $('.carousel').carousel(); }); // end document.ready
+	</n:script>
+
+</zk>

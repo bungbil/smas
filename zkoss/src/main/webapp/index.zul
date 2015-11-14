@@ -1,0 +1,119 @@
+<?page id="indexPage" title=" Sales Management System" contentType="text/html;charset=UTF-8" cacheable="false" 
+	language="xul/html" zscriptLanguage="Java"?>
+<?meta content="text/html; charset=UTF-8" 	pageEncoding="UTF-8"?>
+
+<?meta name="description" content="A bigger sample application for the ZKoss framework. Uses other frameworks like Spring, Spring-Security, Hibernate, JasperReports, Generic-Hibernate-DAO. Works with a H2 Database who is started and demo-data filled by applications deploy on a tomcat." ?>
+<?meta name="keywords" content="Zk Sample, zksample2, ZKoss, ZK, RIA, Ajax, Framework, Ajax framework, Java, JSF, Open Source, Web Development, Web, forsthaus, zk-web.de" ?>
+<?meta name="keywords" lang="de" content="Zk Beispiel, zksample2, ZKoss, RIA, ZK, Ajax, Framework, Ajax framekwork, Java, JSF, Open Source, Web Entwicklung, forsthaus, zk-web.de" ?>
+<?meta name="keywords" lang="en-us" content="Zk Sample, zksample2, ZKoss, ZK, RIA, Ajax, Framework, Ajax framework, Java, JSF, Open Source, Web Development, Web, forsthaus, zk-web.de" ?>
+<?meta name="keywords" lang="en" content="Zk Sample, zksample2, ZKoss, ZK, RIA, Ajax, Framework, Ajax framework, Java, JSF, Open Source, Web Development, Web, forsthaus, zk-web.de" ?>
+
+<!-- ##### ONLY used for this page ##### -->
+<!-- ##### activate BOOTSTRAP 3 responsive layout ##### -->
+<?meta name="viewport" content="width=device-width, initial-scale=1.0"?>
+<?link rel="stylesheet" media="screen"
+    href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700" ?>
+<?link rel="stylesheet" href="/css/bootstrap/font-awesome.min.css" ?>
+<?link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css" ?>
+<?link rel="stylesheet" href="/css/bootstrap/bootstrap-theme.css" media="screen" ?>
+<?link rel="stylesheet" href="/css/bootstrap/main.css" ?>
+
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:n="http://www.zkoss.org/2005/zk/native" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+	<n:body class="home">
+
+		<n:div class="container-fluid">
+
+			<window id="startWindow" border="none" width="100%" use="de.forsthaus.webui.InitApplicationCtrl">
+
+				<style>
+					body { padding: 0 0; /* 0 padding on top and bottom and 0 padding on right and left */
+
+					.z-loading { top: 50% !important; left: 45% !important; align: center; vertical-align: middle; }
+					.z-groupbox-hl, .z-groupbox-hr, .z-groupbox-hm { background-color: #000000 }
+
+					.zksample2-header { background:url('/images/ZKHeader_2x38.png') background-repeat: repeat-x; float:
+					left; height: 38px;width: 990px; }
+				</style>
+
+
+				<!-- Intro -->
+				<n:div class="container text-center">
+					<n:h3 class="thin">Sumber Mas</n:h3>
+					<n:p class="text-muted">
+						 Sales Management System
+					</n:p>
+				</n:div>
+				<!-- /Intro-->
+
+
+				<!-- Highlights - jumbotron -->
+				<n:div class="jumbotron ">
+					<n:div class="container">
+						<n:div class="row" style="background-color: #EBEBEB; padding: 20px;">							
+								<n:div class="h-caption">
+									<n:h4>Klik Log in untuk masuk ke aplikasi</n:h4>
+								</n:div>
+								<n:div class="h-body text-center">
+									<div>
+										<a id="btn_ii" sclass="btn btn-lg btn-danger" label="Log in"
+											href="/pages/index.zul" tooltiptext="Go to the application" />								
+									</div>
+								</n:div>
+						</n:div>
+						<!-- /row  -->
+					</n:div>
+				</n:div>
+				<!-- /Highlights -->
+
+				<borderlayout>
+					<center id="bl_center" border="none" style="background-color: #EBEBEB" flex="true" />
+					<south id="bl_south" border="none" style="background-color: #EBEBEB" height="32px" />
+				</borderlayout>
+
+
+
+				<n:div class="footer2">
+					<n:div class="container">
+						<n:div class="row">
+
+							<n:div class="col-md-6 widget">
+								<n:div class="widget-body"></n:div>
+							</n:div>
+
+							<n:div class="col-md-6 widget">
+								<n:div class="widget-body">
+									<n:p class="text-right">
+										
+										Copyright 2016, Sumber Mas
+									</n:p>
+								</n:div>
+							</n:div>
+
+						</n:div>
+						<!-- /row of widgets -->
+					</n:div>
+				</n:div>
+
+			</window>
+
+		</n:div><!-- class="container" -->
+
+		<!-- JavaScript libs are placed at the end of the document so the pages load faster -->
+		<?script
+            src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ?>
+		<?script
+            src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js" ?>
+		<?script
+            src="/js/jquery/jquery-1.11.1.min.js" ?>
+
+		
+
+	</n:body>
+
+</zk>
