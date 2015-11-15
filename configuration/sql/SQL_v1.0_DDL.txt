@@ -315,6 +315,30 @@ rol_id
 );
 
 
+/*==============================================================*/
+/* Table: parameter                                             */
+/*==============================================================*/
+create table parameter (
+   param_name           VARCHAR(254)     not null,
+   param_value          VARCHAR(254)     not null,
+   description  		VARCHAR(254)     null,
+   constraint PK_PARAMETER primary key (param_name)
+)
+without oids;
+
+comment on table parameter is
+'Defines the parameter that are used in the application. 
+I.e. Application_Version.';
+
+-- set table ownership
+alter table parameter owner to smas
+;
+/*==============================================================*/
+/* Index: idx_param_name                                           */
+/*==============================================================*/
+create unique index idx_param_name on parameter (
+param_name
+);
 
 
 

@@ -40,15 +40,15 @@ public class ParameterListCtrl  extends GFCBaseListCtrl<Parameter>  implements S
 
 	// filter components
 	protected Checkbox checkbox_ParameterList_ShowAll; // autowired
-	protected Textbox tb_Parameter_ParamName; // autowired
+	protected Textbox tb_Parameter_ParameterName; // autowired
 
 	// Listbox Parameter
 	protected Borderlayout borderLayout_parametersList; // autowired
 	protected Listbox listBoxParameters; // aurowired
 	protected Paging paging_ParameterList; // aurowired
-	protected Listheader listheader_ParameterList_paramName; // aurowired
-	protected Listheader listheader_ParameterList_paramValue; // aurowired
-	protected Listheader listheader_ParameterList_description; // aurowired
+	protected Listheader listheader_ParameterList_parameterName; // aurowired
+	protected Listheader listheader_ParameterList_parameterValue; // aurowired
+	protected Listheader listheader_ParameterList_parameterDescription; // aurowired
 
 	// row count for listbox
 	private int countRows;
@@ -84,19 +84,14 @@ public class ParameterListCtrl  extends GFCBaseListCtrl<Parameter>  implements S
 		// init, show all rights
 		checkbox_ParameterList_ShowAll.setChecked(true);
 
-		// not used listheaders must be declared like ->
-		// lh.setSortAscending(""); lh.setSortDescending("")
-		listheader_ParameterList_paramName.setSortAscending(new FieldComparator("paramName", true));
-		listheader_ParameterList_paramName.setSortDescending(new FieldComparator("paramName", false));
-		listheader_ParameterList_paramValue.setSortAscending("");
-		listheader_ParameterList_paramValue.setSortDescending("");
-		listheader_ParameterList_description.setSortAscending("");
-		listheader_ParameterList_description.setSortDescending("");
+		listheader_ParameterList_parameterName.setSortAscending(new FieldComparator("parameterName", true));
+		listheader_ParameterList_parameterName.setSortDescending(new FieldComparator("parameterName", false));
+
 		
 		
 		// ++ create the searchObject and init sorting ++//
 		HibernateSearchObject<Parameter> soParameter = new HibernateSearchObject<Parameter>(Parameter.class, getCountRows());
-		soParameter.addSort("paramName", false);
+		soParameter.addSort("parameterName", false);
 
 		// set the paging params
 		paging_ParameterList.setPageSize(getCountRows());
@@ -170,7 +165,7 @@ public class ParameterListCtrl  extends GFCBaseListCtrl<Parameter>  implements S
 	public void onCheck$checkbox_ParameterList_ShowAll(Event event) {
 
 		// empty the text search boxes
-		tb_Parameter_ParamName.setValue(""); // clear
+		tb_Parameter_ParameterName.setValue(""); // clear
 
 		// ++ create the searchObject and init sorting ++//
 		HibernateSearchObject<Parameter> soParameter = new HibernateSearchObject<Parameter>(Parameter.class, getCountRows());
@@ -186,14 +181,14 @@ public class ParameterListCtrl  extends GFCBaseListCtrl<Parameter>  implements S
 	public void onClick$button_ParameterList_paramName(Event event) throws Exception {
 
 		// if not empty
-		if (!tb_Parameter_ParamName.getValue().isEmpty()) {
+		if (!tb_Parameter_ParameterName.getValue().isEmpty()) {
 			checkbox_ParameterList_ShowAll.setChecked(false); // unCheck
 
 			// ++ create the searchObject and init sorting ++//
 			HibernateSearchObject<Parameter> soParameter = new HibernateSearchObject<Parameter>(Parameter.class, getCountRows());
 			soParameter.addSort("paramName", false);
 
-			soParameter.addFilter(new Filter("rolShortdescription", "%" + tb_Parameter_ParamName.getValue() + "%", Filter.OP_ILIKE));
+			soParameter.addFilter(new Filter("paramName", "%" + tb_Parameter_ParameterName.getValue() + "%", Filter.OP_ILIKE));
 
 			// Set the ListModel.
 			getPagedListWrapper().init(soParameter, listBoxParameters, paging_ParameterList);

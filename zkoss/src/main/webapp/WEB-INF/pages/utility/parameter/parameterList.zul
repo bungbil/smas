@@ -7,7 +7,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
-	<window id="parameterListWindow" apply="${secRoleListCtrl}"
+	<window id="parameterListWindow" apply="${parameterListCtrl}"
 		border="none" width="100%">
 
 		<panel id="panel_ParameterList"
@@ -34,62 +34,55 @@
 					<hbox align="center" style="padding: 2px">
 
 						<space />
-						<checkbox id="checkbox_SecRoleList_ShowAll"
+						<checkbox id="checkbox_ParameterList_ShowAll"
 							label="${c:l('common.Show.All')}" />
 						<separator bar="true" orient="vertical" />
 
 						<label
-							id="label_SecRoleList_rolShortdescription"
-							value="${c:l('label_SecRoleList_rolShortdescription.value')}" />
-						<textbox id="tb_SecRole_RoleName" width="120px" />
+							id="label_ParameterList_parameterName"
+							value="${c:l('label_ParameterList_parameterName.value')}" />
+						<textbox id="tb_Parameter_ParameterName" width="120px" />
 						<button
-							id="button_SecRoleList_rolShortdescription"
+							id="button_ParameterList_parameterName"
 							sclass="oT_ButtonWithIcon" image="/images/icons/search.gif"
-							tooltiptext="${c:l('button_SecRoleList_rolShortdescription.tooltiptext')}" />
+							tooltiptext="${c:l('button_ParameterList_parameterName.tooltiptext')}" />
 
 					</hbox>
 				</toolbar>
 
-				<!-- CRUD BUTTONS -->
-				<toolbar align="end"
-					style="float:right; border-style: none;">
-					<button id="button_SecRoleList_PrintSecRole"
-						sclass="oT_ButtonWithIcon"
-						image="/images/icons/btn_print2_16x16.gif"
-						tooltiptext="${c:l('button_SecRoleList_PrintSecRole.tooltiptext')}" />
-					<separator bar="true" orient="vertical" />
-					<button id="button_SecRoleList_NewSecRole"
-						sclass="oT_ButtonWithIcon"
-						image="/images/icons/btn_new2_16x16.gif"
-						tooltiptext="${c:l('button_SecRoleList_NewSecRole.tooltiptext')}" />
-				</toolbar>
+				
 			</hbox>
 		</div>
 
 
-		<borderlayout id="borderLayout_secRolesList">
+		<borderlayout id="borderLayout_parametersList">
 
 			<north border="none" height="26px">
-				<paging id="paging_SecRoleList" />
+				<paging id="paging_ParameterList" />
 			</north>
 
 			<center border="none">
 
-				<listbox id="listBoxSecRoles"
+				<listbox id="listBoxParameters"
 					style="border-top-width: 0px; border-left-width: 0px; border-right-width: 0px; border-bottom-width: 1px;"
 					vflex="true" tooltiptext="${c:l('listbox.tooltiptext')}"
 					width="100%" height="100%" multiple="false">
 					<listhead sizable="true">
 						<listheader
-							id="listheader_SecRoleList_rolShortdescription"
+							id="listheader_ParameterList_parameterName"
 							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
-							label="${c:l('listheader_SecRoleList_rolShortdescription.label')}"
+							label="${c:l('listheader_ParameterList_parameterName.label')}"
 							sort="auto" width="30%" />
 						<listheader
-							id="listheader_SecRoleList_rolLongdescription"
+							id="listheader_ParameterList_parameterValue"
 							sclass="FDListBoxHeader1" image="/images/icons/sequence.gif"
-							label="${c:l('listheader_SecRoleList_rolLongdescription.label')}"
-							sort="none" width="70%" />
+							label="${c:l('listheader_ParameterList_parameterValue.label')}"
+							sort="none" width="30%" />
+						<listheader
+							id="listheader_ParameterList_parameterDescription"
+							sclass="FDListBoxHeader1" image="/images/icons/sequence.gif"
+							label="${c:l('listheader_ParameterList_parameterDescription.label')}"
+							sort="none" width="40%" />
 					</listhead>
 				</listbox>
 
