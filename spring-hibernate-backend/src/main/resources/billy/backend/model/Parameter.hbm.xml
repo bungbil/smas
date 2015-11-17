@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+	<class name="billy.backend.model.Parameter" table="Parameter">
+
+		<id name="id" type="long">
+			<column name="param_id" />
+			<generator class="sequence">
+				<param name="sequence">parameter_seq</param>
+			</generator>
+		</id>
+
+		<version name="version" column="VERSION" type="integer" />
+
+		<property name="paramName" type="string">
+			<column name="param_name" length="50" not-null="true" unique="true" />
+		</property>
+		<property name="paramValue" type="string">
+			<column name="param_value" length="254" />
+		</property>
+		<property name="description" type="string">
+			<column name="description" length="254" />
+		</property>		
+		
+	</class>
+</hibernate-mapping>

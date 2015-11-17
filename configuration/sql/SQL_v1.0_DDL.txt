@@ -315,30 +315,48 @@ rol_id
 );
 
 
+
+DROP TABLE IF EXISTS parameter cascade;
+DROP SEQUENCE IF EXISTS parameter_seq;
+
 /*==============================================================*/
-/* Table: parameter                                             */
+/* Table: Parameter                                             */
 /*==============================================================*/
 create table parameter (
-   param_name           VARCHAR(254)     not null,
-   param_value          VARCHAR(254)     not null,
-   description  		VARCHAR(254)     null,
-   constraint PK_PARAMETER primary key (param_name)
+   param_id             INT8                 not null,
+   param_name           varchar(50)          not null,
+   param_value       	varchar(254)          null,
+   description          varchar(254)          null,
+   version              int4                 not null default 0,
+   constraint pk_parameter primary key (param_id)
 )
 without oids;
-
-comment on table parameter is
-'Defines the parameter that are used in the application. 
-I.e. Application_Version.';
 
 -- set table ownership
 alter table parameter owner to smas
 ;
 /*==============================================================*/
-/* Index: idx_param_name                                           */
+/* Index: ix_param_id                                             */
 /*==============================================================*/
-create unique index idx_param_name on parameter (
+create unique index ix_param_id on parameter using btree (
+param_id
+);
+
+/*==============================================================*/
+/* Index: ix_param_name
+/*==============================================================*/
+create  index ix_param_name on parameter (
 param_name
 );
+
+/*==============================================================*/
+/* Index: ix_param_description                                         */
+/*==============================================================*/
+create unique index ix_param_description on parameter (
+description
+);
+
+
 
 
 

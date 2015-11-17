@@ -110,7 +110,6 @@ public class OfficeListCtrl extends GFCBaseListCtrl<Office> implements Serializa
 	@Override
 	public void doAfterCompose(Component window) throws Exception {
 		super.doAfterCompose(window);
-
 		/**
 		 * 1. Set an 'alias' for this composer name to access it in the
 		 * zul-file.<br>
@@ -127,7 +126,6 @@ public class OfficeListCtrl extends GFCBaseListCtrl<Office> implements Serializa
 		 */
 		if (arg.containsKey("ModuleMainController")) {
 			setOfficeMainCtrl((OfficeMainCtrl) arg.get("ModuleMainController"));
-
 			// SET THIS CONTROLLER TO THE module's Parent/MainController
 			getOfficeMainCtrl().setOfficeListCtrl(this);
 

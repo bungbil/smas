@@ -1,19 +1,16 @@
 /******************** PARAMETER ********************/  
-INSERT INTO PARAMETER (PARAM_NAME,PARAM_VALUE,DESCRIPTION) values
-('APPLICATION_VERSION','1.0','Application Version');
+INSERT INTO PARAMETER (PARAM_ID,PARAM_NAME,PARAM_VALUE,DESCRIPTION,VERSION) values
+(1,'APPLICATION_VERSION','1.0','Application Version',1);
 
 
 /******************** Security: USERS ********************/  
 INSERT INTO SEC_USER (USR_ID, USR_LOGINNAME, USR_PASSWORD, USR_LASTNAME, USR_FIRSTNAME, USR_EMAIL, USR_LOCALE, USR_ENABLED, USR_ACCOUNTNONEXPIRED, USR_CREDENTIALSNONEXPIRED, USR_ACCOUNTNONLOCKED, USR_TOKEN,  VERSION) values 
-(1, 'admin', 'admin', 'Visor', 'Super', 'admin@web.de', NULL, true, true, true, true, null, 0);
+(1, 'admin', 'admin', 'Admin', 'Super', 'admin@sumber.mas', NULL, true, true, true, true, null, 0);
 
 /******************** Security: ROLES ********************/  
 INSERT INTO SEC_ROLE (ROL_ID, ROL_SHORTDESCRIPTION, ROL_LONGDESCRIPTION, VERSION) values
 (1,'ROLE_ADMIN','Administrator Role', 0),
-(2,'ROLE_SALES','Sales Role', 0),
-(2,'ROLE_PIUTANG','Piutang Role', 0),
-(4,'ROLE_KOLEKTOR','Kolektor Role', 0),
-(5,'ROLE_MASTER','Kolektor Role', 0),
+
 
 /* Admin Usr-ID: 1 */
 INSERT INTO SEC_USERROLE (URR_ID, USR_ID, ROL_ID, VERSION) values
@@ -198,7 +195,7 @@ INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
 (15015, 1, 'menuCat_UserRights', 0),
 (15016, 2, 'menuItem_Administration_LoginsLog', 0),
 (15017, 2, 'menuItem_Administration_HibernateStats', 0),
-(15018, 2, 'menu_Item_Calendar', 0),f
+(15018, 2, 'menu_Item_Calendar', 0),
 
 /* Pages = Type(0) */
 /* --> Page Customer */

@@ -59,6 +59,7 @@
 				</value>
 				<value>de/forsthaus/backend/model/ApplicationNews.hbm.xml
 				</value>
+				<value>billy/backend/model/Parameter.hbm.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -257,5 +258,21 @@
 		<property name="applicationNewsDAO" ref="applicationNewsDAO" />
 		<property name="hibernateStatisticsDao" ref="hibernateStatisticsDao" />
 	</bean>
-
+	
+	<!-- ====================================================== -->
+	<!-- Billy Base bean -->
+	<!-- ====================================================== -->
+	<bean id="billyBasisDAO" abstract="true" p:hibernateTemplate-ref="hibernateTemplate" class="billy.backend.dao.impl.BasisDAO" />
+	
+	<!-- ====================================================== -->
+	<!-- Billy DAO beans -->
+	<!-- ====================================================== -->
+	<bean id="parameterDAO" class="billy.backend.dao.impl.ParameterDAOImpl" parent="basisDAO" />
+	
+	<!-- ====================================================== -->
+	<!-- Billy SERVICE beans -->
+	<!-- ====================================================== -->
+	<bean name="parameterService" class="billy.backend.service.impl.ParameterServiceImpl">
+		<property name="parameterDAO" ref="parameterDAO" />
+	</bean>
 </beans>

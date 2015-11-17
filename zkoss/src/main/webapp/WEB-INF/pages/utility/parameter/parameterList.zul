@@ -2,93 +2,64 @@
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
 
+<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- Namespace dependent DataBinding Initiator.          -->
+<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./windowParameterList" ?>
+
 <zk xmlns="http://www.zkoss.org/2005/zul"
 	xmlns:h="http://www.w3.org/1999/xhtml"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
-	<window id="parameterListWindow" apply="${parameterListCtrl}"
+	<window id="windowParameterList" apply="${parameterListCtrl}"
 		border="none" width="100%">
 
-		<panel id="panel_ParameterList"
-			title="${c:l('panel_ParameterList.title')}" border="none" />
+		<borderlayout id="borderLayout_parameterList">
 
-		<div sclass="z-toolbar" style="padding:0">
-			<hbox pack="stretch" sclass="hboxRemoveWhiteStrips"
-				width="100%">
-
-				<!-- COMMON BUTTONS -->
-				<toolbar align="start"
-					style="float:left; border-style: none;">
-					<toolbarbutton id="btnHelp"
-						image="/images/icons/light_16x16.gif"
-						tooltiptext="${c:l('btnHelp.tooltiptext')}" />
-					<toolbarbutton id="btnRefresh"
-						image="/images/icons/refresh2_yellow_16x16.gif"
-						tooltiptext="${c:l('btnRefresh.tooltiptext')}" />
-				</toolbar>
-
-				<!-- SEARCH AREA -->
-				<toolbar align="center"
-					style="float:left; border-style: none;">
-					<hbox align="center" style="padding: 2px">
-
-						<space />
-						<checkbox id="checkbox_ParameterList_ShowAll"
-							label="${c:l('common.Show.All')}" />
-						<separator bar="true" orient="vertical" />
-
-						<label
-							id="label_ParameterList_parameterName"
-							value="${c:l('label_ParameterList_parameterName.value')}" />
-						<textbox id="tb_Parameter_ParameterName" width="120px" />
-						<button
-							id="button_ParameterList_parameterName"
-							sclass="oT_ButtonWithIcon" image="/images/icons/search.gif"
-							tooltiptext="${c:l('button_ParameterList_parameterName.tooltiptext')}" />
-
-					</hbox>
-				</toolbar>
-
-				
-			</hbox>
-		</div>
-
-
-		<borderlayout id="borderLayout_parametersList">
-
+			<!-- PAGING COMPONENT -->
 			<north border="none" height="26px">
 				<paging id="paging_ParameterList" />
 			</north>
 
 			<center border="none">
 
-				<listbox id="listBoxParameters"
+				<listbox id="listBoxParameter"
 					style="border-top-width: 0px; border-left-width: 0px; border-right-width: 0px; border-bottom-width: 1px;"
-					vflex="true" tooltiptext="${c:l('listbox.tooltiptext')}"
-					width="100%" height="100%" multiple="false">
+					model="@{controller.parameters}"
+					selectedItem="@{controller.selectedParameter}" vflex="true"
+					tooltiptext="${c:l('listbox.tooltiptext')}" width="100%"
+					height="100%" multiple="false">
 					<listhead sizable="true">
-						<listheader
-							id="listheader_ParameterList_parameterName"
+						<listheader id="listheader_ParameterList_Name"
 							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
-							label="${c:l('listheader_ParameterList_parameterName.label')}"
-							sort="auto" width="30%" />
-						<listheader
-							id="listheader_ParameterList_parameterValue"
-							sclass="FDListBoxHeader1" image="/images/icons/sequence.gif"
-							label="${c:l('listheader_ParameterList_parameterValue.label')}"
-							sort="none" width="30%" />
-						<listheader
-							id="listheader_ParameterList_parameterDescription"
-							sclass="FDListBoxHeader1" image="/images/icons/sequence.gif"
-							label="${c:l('listheader_ParameterList_parameterDescription.label')}"
-							sort="none" width="40%" />
+							label="${c:l('listheader_ParameterList_Name.label')}" sort="auto"
+							width="30%" />
+						<listheader id="listheader_ParameterList_Value"
+							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
+							label="${c:l('listheader_ParameterList_Value.label')}" sort="auto"
+							width="30%" />
+						<listheader id="listheader_ParameterList_Description"
+							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
+							label="${c:l('listheader_ParameterList_Description.label')}" sort="auto"
+							width="40%" />
+
 					</listhead>
+
+					<listitem self="@{each='parameter'}" value="@{parameter}"
+						forward="onDoubleClick=onDoubleClickedParameterItem">
+
+						<listcell label="@{parameter.paramName}"
+							style="padding-left: 5px" />
+						<listcell label="@{parameter.paramValue}"
+							style="padding-left: 5px" />
+						<listcell label="@{parameter.description}"
+							style="padding-left: 5px" />						
+					</listitem>
+
 				</listbox>
 
 			</center>
-			<south border="none" />
-
 		</borderlayout>
 
 	</window>

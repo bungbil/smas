@@ -50,9 +50,14 @@
 			expression="execution(* de.forsthaus.backend.service.*.*(..))" />
 		<aop:pointcut id="daoMethods"
 			expression="execution(* de.forsthaus.backend.dao.*.*(..))" />
+		<aop:pointcut id="serviceBillyMethods"
+			expression="execution(* billy.backend.service.*.*(..))" />
+		<aop:pointcut id="daoBillyMethods"
+			expression="execution(* billy.backend.dao.*.*(..))" />
 
 		<aop:advisor advice-ref="serviceTxAdvice" pointcut-ref="guiServiceMethods" />
 		<aop:advisor advice-ref="serviceTxAdvice" pointcut-ref="serviceMethods" />
+		<aop:advisor advice-ref="serviceTxAdvice" pointcut-ref="serviceBillyMethods" />
 		<!--
 			<aop:advisor advice-ref="serviceTxAdvice" pointcut-ref="daoMethods"
 			/>

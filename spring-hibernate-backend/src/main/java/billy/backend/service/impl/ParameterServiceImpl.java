@@ -8,25 +8,54 @@ import billy.backend.service.ParameterService;
 
 public class ParameterServiceImpl implements ParameterService {
 
-	private ParameterDAO parameterDAO;
+	private ParameterDAO ParameterDAO;
+
+	public ParameterDAO getParameterDAO() {
+		return ParameterDAO;
+	}
+
+	public void setParameterDAO(ParameterDAO ParameterDAO) {
+		this.ParameterDAO = ParameterDAO;
+	}
 
 	@Override
-	public int getCountAllParameters() {
-		// TODO Auto-generated method stub
-		return parameterDAO.getCountAllParameters();
+	public Parameter getNewParameter() {
+		return getParameterDAO().getNewParameter();
+	}
+
+	@Override
+	public Parameter getParameterByID(Long fil_nr) {
+		return getParameterDAO().getParameterById(fil_nr);
 	}
 
 	@Override
 	public List<Parameter> getAllParameters() {
-		// TODO Auto-generated method stub
-		return parameterDAO.getAllParameters();
+		return getParameterDAO().getAllParameters();
 	}
 
 	@Override
-	public void saveOrUpdate(Parameter parameter) {
-		// TODO Auto-generated method stub
-		parameterDAO.saveOrUpdate(parameter);
+	public void saveOrUpdate(Parameter Parameter) {
+		getParameterDAO().saveOrUpdate(Parameter);
 	}
-	
+
+	@Override
+	public void delete(Parameter Parameter) {
+		getParameterDAO().delete(Parameter);
+	}
+
+	@Override
+	public List<Parameter> getParametersLikeParamValue(String string) {
+		return getParameterDAO().getParametersLikeParamValue(string);
+	}
+
+	@Override
+	public List<Parameter> getParametersLikeDescription(String string) {
+		return getParameterDAO().getParametersLikeDescription(string);
+	}
+
+	@Override
+	public int getCountAllParameters() {
+		return getParameterDAO().getCountAllParameters();
+	}
 
 }

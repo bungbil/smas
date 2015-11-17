@@ -145,14 +145,14 @@ public class InitApplicationCtrl extends WindowBaseCtrl implements Serializable 
 
 		// countDemoData();
 
-		showApplicationNews();
+		//showApplicationNews();
 
 		/* Monitor the application */
-		showStatistic();
+		//showStatistic();
 
-		createButtons();
+		//createButtons();
 
-		showUsersOnlineChart();
+		//showUsersOnlineChart();
 
 		bl_center.invalidate();
 	}

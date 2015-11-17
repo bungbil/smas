@@ -324,7 +324,19 @@
 	<!-- Spreadsheet / Tabellenkalkulation -->
 	<!-- <bean id="spreadsheetMainCtrl" class="de.forsthaus.webui.spreadsheet.SpreadsheetMainCtrl" parent="basisCtrl" scope="prototype"> 
 		</bean> -->
-
+	
+	<!-- Parameter -->
+	<bean id="parameterMainCtrl" class="billy.webui.utility.parameter.ParameterMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="parameterService" ref="parameterService" />
+		<property name="parameterListCtrl" ref="parameterListCtrl" />
+		<property name="parameterDetailCtrl" ref="parameterDetailCtrl" />
+	</bean>
+	<bean id="parameterListCtrl" class="billy.webui.utility.parameter.ParameterListCtrl" parent="basisCtrl" scope="prototype">
+		<property name="parameterService" ref="parameterService" />
+	</bean>
+	<bean id="parameterDetailCtrl" class="billy.webui.utility.parameter.ParameterDetailCtrl" parent="basisCtrl" scope="prototype">
+		<property name="parameterService" ref="parameterService" />
+	</bean>
 
 </beans>
 

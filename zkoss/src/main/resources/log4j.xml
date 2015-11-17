@@ -31,9 +31,12 @@
 			<param name="ConversionPattern" value="%d{ISO8601} %-6p [%t] %c{1} M[%M] --> %m\n" />
 		</layout>
 	</appender>
-
+	
+	<category name="billy">
+		<priority value="INFO" />
+	</category>
 	<category name="de.forsthaus">
-		<priority value="ERROR" />
+		<priority value="INFO" />
 	</category>
 	<category name="net.sf.jasperreports">
 		<priority value="ERROR" />

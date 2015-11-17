@@ -1,57 +1,59 @@
 package billy.webui.utility.parameter;
 
 import java.io.Serializable;
-import java.util.HashMap;
 
 import org.apache.log4j.Logger;
-import org.zkoss.zk.ui.Executions;
+import org.zkoss.util.resource.Labels;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zkplus.databind.AnnotateDataBinder;
+import org.zkoss.zkplus.databind.BindingListModelList;
 import org.zkoss.zul.Borderlayout;
-import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.FieldComparator;
 import org.zkoss.zul.Intbox;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listheader;
-import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Paging;
 import org.zkoss.zul.Panel;
-import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
-import billy.backend.model.Parameter;
-import billy.webui.utility.parameter.model.ParameterListModelItemRenderer;
-
-import com.googlecode.genericdao.search.Filter;
-
 import de.forsthaus.UserWorkspace;
+import billy.backend.model.Parameter;
+import billy.backend.service.ParameterService;
 import de.forsthaus.backend.util.HibernateSearchObject;
 import de.forsthaus.webui.util.GFCBaseListCtrl;
-import de.forsthaus.webui.util.ZksampleMessageUtils;
 
-public class ParameterListCtrl  extends GFCBaseListCtrl<Parameter>  implements Serializable {
+public class ParameterListCtrl extends GFCBaseListCtrl<Parameter> implements Serializable {
 
-	private static final long serialVersionUID = -6139454778139881103L;
+	private static final long serialVersionUID = -2170565288232491362L;
 	private static final Logger logger = Logger.getLogger(ParameterListCtrl.class);
 
-	protected Window parameterListWindow; // autowired
-	protected Panel panel_ParameterList; // autowired
+	protected Window windowParameterList; // autowired
+	protected Panel panelParameterList; // autowired
 
-	// filter components
-	protected Checkbox checkbox_ParameterList_ShowAll; // autowired
-	protected Textbox tb_Parameter_ParameterName; // autowired
+	protected Borderlayout borderLayout_parameterList; // autowired
+	protected Paging paging_ParameterList; // autowired
+	protected Listbox listBoxParameter; // autowired
+	protected Listheader listheader_ParameterList_Name; // autowired
+	protected Listheader listheader_ParameterList_Value; // autowired
+	protected Listheader listheader_ParameterList_Description; // autowired
+	
 
-	// Listbox Parameter
-	protected Borderlayout borderLayout_parametersList; // autowired
-	protected Listbox listBoxParameters; // aurowired
-	protected Paging paging_ParameterList; // aurowired
-	protected Listheader listheader_ParameterList_parameterName; // aurowired
-	protected Listheader listheader_ParameterList_parameterValue; // aurowired
-	protected Listheader listheader_ParameterList_parameterDescription; // aurowired
+	// NEEDED for ReUse in the SearchWindow
+	private HibernateSearchObject<Parameter> searchObj;
 
 	// row count for listbox
 	private int countRows;
+
+	// Databinding
+	private AnnotateDataBinder binder;
+	private ParameterMainCtrl parameterMainCtrl;
+
+	// ServiceDAOs / Domain Classes
+	private transient ParameterService parameterService;
 
 	/**
 	 * default constructor.<br>
@@ -60,145 +62,264 @@ public class ParameterListCtrl  extends GFCBaseListCtrl<Parameter>  implements S
 		super();
 	}
 
-	public void onCreate$parameterListWindow(Event event) throws Exception {
+	@Override
+	public void doAfterCompose(Component window) throws Exception {
+		super.doAfterCompose(window);
 		
-		int panelHeight = 50;
-		// TODO put the logic for working with panel in the ApplicationWorkspace
-		final boolean withPanel = false;
-		if (withPanel == false) {
-			panel_ParameterList.setVisible(false);
+		this.self.setAttribute("controller", this, false);
+		if (arg.containsKey("ModuleMainController")) {
+			setParameterMainCtrl((ParameterMainCtrl) arg.get("ModuleMainController"));
+			getParameterMainCtrl().setParameterListCtrl(this);
+
+			if (getParameterMainCtrl().getSelectedParameter() != null) {
+				setSelectedParameter(getParameterMainCtrl().getSelectedParameter());
+			} else
+				setSelectedParameter(null);
 		} else {
-			panel_ParameterList.setVisible(true);
-			panelHeight = 0;
+			setSelectedParameter(null);
 		}
+	}
 
-		final int menuOffset = UserWorkspace.getInstance().getMenuOffset();
-		int height = ((Intbox) Path.getComponent("/outerIndexWindow/currentDesktopHeight")).getValue().intValue();
-		height = height - menuOffset;
-		height = height + panelHeight;
-		final int maxListBoxHeight = height - 175;
-		setCountRows(Math.round(maxListBoxHeight / 22));
-		
-		borderLayout_parametersList.setHeight(String.valueOf(maxListBoxHeight) + "px");
+	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
+	// +++++++++++++++ Component Events ++++++++++++++++ //
+	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
-		// init, show all rights
-		checkbox_ParameterList_ShowAll.setChecked(true);
+	/**
+	 * Automatically called method from zk.
+	 * 
+	 * @param event
+	 * @throws Exception
+	 */
 
-		listheader_ParameterList_parameterName.setSortAscending(new FieldComparator("parameterName", true));
-		listheader_ParameterList_parameterName.setSortDescending(new FieldComparator("parameterName", false));
+	public void onCreate$windowParameterList(Event event) throws Exception {
+		binder = (AnnotateDataBinder) event.getTarget().getAttribute("binder", true);
 
-		
-		
-		// ++ create the searchObject and init sorting ++//
-		HibernateSearchObject<Parameter> soParameter = new HibernateSearchObject<Parameter>(Parameter.class, getCountRows());
-		soParameter.addSort("parameterName", false);
+		doFillListbox();
+
+		binder.loadAll();
+	}
+
+	public void doFillListbox() {
+
+		doFitSize();
 
 		// set the paging params
 		paging_ParameterList.setPageSize(getCountRows());
 		paging_ParameterList.setDetailed(true);
 
-		// Set the ListModel.
-		getPagedListWrapper().init(soParameter, listBoxParameters, paging_ParameterList);
-		// set the itemRenderer
-		listBoxParameters.setItemRenderer(new ParameterListModelItemRenderer());
-
-	}
-
-	public void onParameterItemDoubleClicked(Event event) throws Exception {
-
-		// get the selected object
-		Listitem item = listBoxParameters.getSelectedItem();
-
-		if (item != null) {
-			// CAST AND STORE THE SELECTED OBJECT
-			Parameter aParam = (Parameter) item.getAttribute("data");
-
-			showDetailView(aParam);
-		}
-	}
-
-	private void showDetailView(Parameter aParam) throws Exception {
-
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("param", aParam);
-		map.put("listBoxParameters", listBoxParameters);
-
-		// call the zul-file with the parameters packed in a map
-		try {
-			Executions.createComponents("/WEB-INF/pages/utility/parameter/parameterDialog.zul", null, map);
-		} catch (final Exception e) {
-			logger.error("onOpenWindow:: error opening window / " + e.getMessage());
-
-			ZksampleMessageUtils.showErrorMessage(e.toString());
-		}
-	}
-
-	/**
-	 * when the "help" button is clicked. <br>
-	 * 
-	 * @param event
-	 * @throws InterruptedException
-	 */
-	public void onClick$btnHelp(Event event) throws InterruptedException {
-		ZksampleMessageUtils.doShowNotImplementedMessage();
-	}
-
-	/**
-	 * when the "refresh" button is clicked. <br>
-	 * <br>
-	 * Refreshes the view by calling the onCreate event manually.
-	 * 
-	 * @param event
-	 * @throws InterruptedException
-	 */
-	public void onClick$btnRefresh(Event event) throws InterruptedException {
-
-		Events.postEvent("onCreate", parameterListWindow, event);
-		parameterListWindow.invalidate();
-	}
-
-	/**
-	 * when the checkBox 'Show All' for filtering is checked. <br>
-	 * 
-	 * @param event
-	 */
-	public void onCheck$checkbox_ParameterList_ShowAll(Event event) {
-
-		// empty the text search boxes
-		tb_Parameter_ParameterName.setValue(""); // clear
-
+		// not used listheaders must be declared like ->
+		// lh.setSortAscending(""); lh.setSortDescending("")
+		listheader_ParameterList_Name.setSortAscending(new FieldComparator("paramName", true));
+		listheader_ParameterList_Name.setSortDescending(new FieldComparator("paramName", false));
+		
 		// ++ create the searchObject and init sorting ++//
-		HibernateSearchObject<Parameter> soParameter = new HibernateSearchObject<Parameter>(Parameter.class, getCountRows());
-		soParameter.addSort("paramName", false);
+		// ++ create the searchObject and init sorting ++//
+		searchObj = new HibernateSearchObject<Parameter>(Parameter.class, getCountRows());
+		searchObj.addSort("paramName", false);
+		setSearchObj(searchObj);
 
-		// Set the ListModel.
-		getPagedListWrapper().init(soParameter, listBoxParameters, paging_ParameterList);
+		// Set the BindingListModel
+		getPagedBindingListWrapper().init(searchObj, getListBoxParameter(), paging_ParameterList);
+		BindingListModelList lml = (BindingListModelList) getListBoxParameter().getModel();
+		setParameters(lml);
+
+		// check if first time opened and init databinding for selectedBean
+		if (getSelectedParameter() == null) {
+			// init the bean with the first record in the List
+			if (lml.getSize() > 0) {
+				final int rowIndex = 0;
+				// only for correct showing after Rendering. No effect as an
+				// Event
+				// yet.
+				getListBoxParameter().setSelectedIndex(rowIndex);
+				// get the first entry and cast them to the needed object
+				setSelectedParameter((Parameter) lml.get(0));
+
+				// call the onSelect Event for showing the objects data in the
+				// statusBar
+				Events.sendEvent(new Event("onSelect", getListBoxParameter(), getSelectedParameter()));
+			}
+		}
 
 	}
 
-	
+	/**
+	 * Selects the object in the listbox and change the tab.<br>
+	 * Event is forwarded in the corresponding listbox.
+	 */
+	public void onDoubleClickedParameterItem(Event event) {
+		// logger.debug(event.toString());
 
-	public void onClick$button_ParameterList_paramName(Event event) throws Exception {
+		Parameter anParameter = getSelectedParameter();
 
-		// if not empty
-		if (!tb_Parameter_ParameterName.getValue().isEmpty()) {
-			checkbox_ParameterList_ShowAll.setChecked(false); // unCheck
+		if (anParameter != null) {
+			setSelectedParameter(anParameter);
+			setParameter(anParameter);
 
-			// ++ create the searchObject and init sorting ++//
-			HibernateSearchObject<Parameter> soParameter = new HibernateSearchObject<Parameter>(Parameter.class, getCountRows());
-			soParameter.addSort("paramName", false);
+			// check first, if the tabs are created
+			if (getParameterMainCtrl().getParameterDetailCtrl() == null) {
+				Events.sendEvent(new Event("onSelect", getParameterMainCtrl().tabParameterDetail, null));
+				// if we work with spring beanCreation than we must check a
+				// little bit deeper, because the Controller are preCreated ?
+			} else if (getParameterMainCtrl().getParameterDetailCtrl().getBinder() == null) {
+				Events.sendEvent(new Event("onSelect", getParameterMainCtrl().tabParameterDetail, null));
+			}
 
-			soParameter.addFilter(new Filter("paramName", "%" + tb_Parameter_ParameterName.getValue() + "%", Filter.OP_ILIKE));
+			Events.sendEvent(new Event("onSelect", getParameterMainCtrl().tabParameterDetail, anParameter));
+		}
+	}
 
-			// Set the ListModel.
-			getPagedListWrapper().init(soParameter, listBoxParameters, paging_ParameterList);
+	/**
+	 * When a listItem in the corresponding listbox is selected.<br>
+	 * Event is forwarded in the corresponding listbox.
+	 * 
+	 * @param event
+	 */
+	public void onSelect$listBoxParameter(Event event) {
+		// logger.debug(event.toString());
+
+		// selectedParameter is filled by annotated databinding mechanism
+		Parameter anParameter = getSelectedParameter();
+
+		if (anParameter == null) {
+			return;
 		}
 
+		// check first, if the tabs are created
+		if (getParameterMainCtrl().getParameterDetailCtrl() == null) {
+			Events.sendEvent(new Event("onSelect", getParameterMainCtrl().tabParameterDetail, null));
+			// if we work with spring beanCreation than we must check a little
+			// bit deeper, because the Controller are preCreated ?
+		} else if (getParameterMainCtrl().getParameterDetailCtrl().getBinder() == null) {
+			Events.sendEvent(new Event("onSelect", getParameterMainCtrl().tabParameterDetail, null));
+		}
+
+		// INIT ALL RELATED Queries/OBJECTS/LISTS NEW
+		getParameterMainCtrl().getParameterDetailCtrl().setSelectedParameter(anParameter);
+		getParameterMainCtrl().getParameterDetailCtrl().setParameter(anParameter);
+
+		// store the selected bean values as current
+		getParameterMainCtrl().doStoreInitValues();
+
+		// show the objects data in the statusBar
+		String str = Labels.getLabel("common.Parameter") + ": " + anParameter.getParamName();
+		EventQueues.lookup("selectedObjectEventQueue", EventQueues.DESKTOP, true).publish(new Event("onChangeSelectedObject", null, str));
+
+	}
+
+	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
+	// +++++++++++++++++ Business Logic ++++++++++++++++ //
+	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
+
+	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
+	// ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
+	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
+
+	/**
+	 * Recalculates the container size for this controller and resize them.
+	 * 
+	 * Calculate how many rows have been place in the listbox. Get the
+	 * currentDesktopHeight from a hidden Intbox from the index.zul that are
+	 * filled by onClientInfo() in the indexCtroller.
+	 */
+	public void doFitSize() {
+
+		// normally 0 ! Or we have a i.e. a toolBar on top of the listBox.
+		final int specialSize = 5;
+
+		final int menuOffset = UserWorkspace.getInstance().getMenuOffset();
+		int height = ((Intbox) Path.getComponent("/outerIndexWindow/currentDesktopHeight")).getValue().intValue();
+		height = height - menuOffset;
+		final int maxListBoxHeight = height - specialSize - 148;
+		setCountRows((int) Math.round(maxListBoxHeight / 17.7));
+		borderLayout_parameterList.setHeight(String.valueOf(maxListBoxHeight) + "px");
+
+		windowParameterList.invalidate();
 	}
 
 	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++//
 	// ++++++++++++++++++ getter / setter +++++++++++++++++++//
 	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+
+	/**
+	 * Best Pratice Hint:<br>
+	 * The setters/getters for the local annotated data binded Beans/Sets are
+	 * administered in the module's mainController. Working in this way you have
+	 * clean line to share this beans/sets with other controllers.
+	 */
+	/* Master BEANS */
+	public Parameter getParameter() {
+		// STORED IN THE module's MainController
+		return getParameterMainCtrl().getSelectedParameter();
+	}
+
+	public void setParameter(Parameter anParameter) {
+		// STORED IN THE module's MainController
+		getParameterMainCtrl().setSelectedParameter(anParameter);
+	}
+
+	public void setSelectedParameter(Parameter selectedParameter) {
+		// STORED IN THE module's MainController
+		getParameterMainCtrl().setSelectedParameter(selectedParameter);
+	}
+
+	public Parameter getSelectedParameter() {
+		// STORED IN THE module's MainController
+		return getParameterMainCtrl().getSelectedParameter();
+	}
+
+	public void setParameters(BindingListModelList parameters) {
+		// STORED IN THE module's MainController
+		getParameterMainCtrl().setParameters(parameters);
+	}
+
+	public BindingListModelList getParameters() {
+		// STORED IN THE module's MainController
+		return getParameterMainCtrl().getParameters();
+	}
+
+	public void setBinder(AnnotateDataBinder binder) {
+		this.binder = binder;
+	}
+
+	public AnnotateDataBinder getBinder() {
+		return this.binder;
+	}
+
+	/* CONTROLLERS */
+	public void setParameterMainCtrl(ParameterMainCtrl parameterMainCtrl) {
+		this.parameterMainCtrl = parameterMainCtrl;
+	}
+
+	public ParameterMainCtrl getParameterMainCtrl() {
+		return this.parameterMainCtrl;
+	}
+
+	/* SERVICES */
+	public void setParameterService(ParameterService parameterService) {
+		this.parameterService = parameterService;
+	}
+
+	public ParameterService getParameterService() {
+		return this.parameterService;
+	}
+
+	/* COMPONENTS and OTHERS */
+	public void setSearchObj(HibernateSearchObject<Parameter> searchObj) {
+		this.searchObj = searchObj;
+	}
+
+	public HibernateSearchObject<Parameter> getSearchObj() {
+		return this.searchObj;
+	}
+
+	public Listbox getListBoxParameter() {
+		return this.listBoxParameter;
+	}
+
+	public void setListBoxParameter(Listbox listBoxParameter) {
+		this.listBoxParameter = listBoxParameter;
+	}
 
 	public int getCountRows() {
 		return this.countRows;

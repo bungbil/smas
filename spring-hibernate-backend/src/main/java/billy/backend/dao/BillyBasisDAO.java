@@ -8,13 +8,13 @@ import org.springframework.orm.hibernate3.HibernateOperations;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public abstract class BasisDAO<T> {
+public abstract class BillyBasisDAO<T> {
 	private HibernateOperations hibernateTemplate;
 
 	/**
 	 * constructor
 	 */
-	protected BasisDAO() {
+	protected BillyBasisDAO() {
 	}
 
 	protected HibernateOperations getHibernateTemplate() {
