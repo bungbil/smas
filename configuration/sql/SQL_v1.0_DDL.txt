@@ -19,34 +19,15 @@ SELECT CASE WHEN
 
 DROP FUNCTION public.create_plpgsql_language ();
 
-
-
-
-DROP TABLE IF EXISTS sec_user cascade;
-DROP SEQUENCE IF EXISTS sec_user_seq;
-
-DROP TABLE IF EXISTS sec_userrole cascade;
-DROP SEQUENCE IF EXISTS sec_userrole_seq;
-
-DROP TABLE IF EXISTS sec_role cascade;
-DROP SEQUENCE IF EXISTS sec_role_seq;
-
-DROP TABLE IF EXISTS sec_rolegroup cascade;
-DROP SEQUENCE IF EXISTS sec_rolegroup_seq;
-
-DROP TABLE IF EXISTS sec_group cascade;
-DROP SEQUENCE IF EXISTS sec_group_seq;
-
-DROP TABLE IF EXISTS sec_groupright cascade;
-DROP SEQUENCE IF EXISTS sec_groupright_seq;
-
-DROP TABLE IF EXISTS sec_right cascade;
-DROP SEQUENCE IF EXISTS sec_right_seq;
-
-
 /*==============================================================*/
 /* Table: sec_group                                             */
 /*==============================================================*/
+DROP TABLE IF EXISTS sec_group cascade;
+DROP SEQUENCE IF EXISTS sec_group_seq;
+
+CREATE SEQUENCE sec_group_seq START 100;
+ALTER SEQUENCE sec_group_seq OWNER TO smas;
+
 create table sec_group (
    grp_id               INT8                 not null,
    grp_shortdescription VARCHAR(30)          not null,
@@ -56,19 +37,12 @@ create table sec_group (
 )
 without oids;
 
--- set table ownership
-alter table sec_group owner to smas
-;
-/*==============================================================*/
-/* Index: idx_grp_id                                            */
-/*==============================================================*/
+alter table sec_group owner to smas;
+
 create unique index idx_grp_id on sec_group (
 grp_id
 );
 
-/*==============================================================*/
-/* Index: idx_grp_shortdescription                              */
-/*==============================================================*/
 create unique index idx_grp_shortdescription on sec_group (
 grp_shortdescription
 );
@@ -76,6 +50,12 @@ grp_shortdescription
 /*==============================================================*/
 /* Table: sec_groupright                                        */
 /*==============================================================*/
+DROP TABLE IF EXISTS sec_groupright cascade;
+DROP SEQUENCE IF EXISTS sec_groupright_seq;
+
+CREATE SEQUENCE sec_groupright_seq START 100;
+ALTER SEQUENCE sec_groupright_seq OWNER TO smas;
+
 create table sec_groupright (
    gri_id               INT8                 not null,
    grp_id               INT8                 not null,
@@ -85,19 +65,12 @@ create table sec_groupright (
 )
 without oids;
 
--- set table ownership
-alter table sec_groupright owner to smas
-;
-/*==============================================================*/
-/* Index: idx_gri_id                                            */
-/*==============================================================*/
+alter table sec_groupright owner to smas;
+
 create unique index idx_gri_id on sec_groupright (
 gri_id
 );
 
-/*==============================================================*/
-/* Index: idx_gri_grprig                                        */
-/*==============================================================*/
 create unique index idx_gri_grprig on sec_groupright (
 grp_id,
 rig_id
@@ -120,26 +93,16 @@ create table sec_loginlog (
 )
 without oids;
 
--- set table ownership
-alter table sec_loginlog owner to smas
-;
-/*==============================================================*/
-/* Index: idx_lgl_id                                            */
-/*==============================================================*/
+alter table sec_loginlog owner to smas;
+
 create unique index idx_lgl_id on sec_loginlog (
 lgl_id
 );
 
-/*==============================================================*/
-/* Index: idx_lgl_logtime                                       */
-/*==============================================================*/
 create  index idx_lgl_logtime on sec_loginlog (
 lgl_logtime
 );
 
-/*==============================================================*/
-/* Index: idx_lgl_i2c_id                                        */
-/*==============================================================*/
 create  index idx_lgl_i2c_id on sec_loginlog (
 i2c_id
 );
@@ -147,6 +110,12 @@ i2c_id
 /*==============================================================*/
 /* Table: sec_right                                             */
 /*==============================================================*/
+DROP TABLE IF EXISTS sec_right cascade;
+DROP SEQUENCE IF EXISTS sec_right_seq;
+
+CREATE SEQUENCE sec_right_seq START 100;
+ALTER SEQUENCE sec_right_seq OWNER TO smas;
+
 create table sec_right (
    rig_id               INT8                 not null,
    rig_type             INT4                 null default 1,
@@ -156,26 +125,16 @@ create table sec_right (
 )
 without oids;
 
--- set table ownership
-alter table sec_right owner to smas
-;
-/*==============================================================*/
-/* Index: idx_rig_id                                            */
-/*==============================================================*/
+alter table sec_right owner to smas;
+
 create unique index idx_rig_id on sec_right (
 rig_id
 );
 
-/*==============================================================*/
-/* Index: idx_rig_type                                          */
-/*==============================================================*/
 create  index idx_rig_type on sec_right (
 rig_type
 );
 
-/*==============================================================*/
-/* Index: idx_rig_name                                          */
-/*==============================================================*/
 create unique index idx_rig_name on sec_right (
 rig_name
 );
@@ -183,6 +142,12 @@ rig_name
 /*==============================================================*/
 /* Table: sec_role                                              */
 /*==============================================================*/
+DROP TABLE IF EXISTS sec_role cascade;
+DROP SEQUENCE IF EXISTS sec_role_seq;
+
+CREATE SEQUENCE sec_role_seq START 100;
+ALTER SEQUENCE sec_role_seq OWNER TO smas;
+
 create table sec_role (
    rol_id               INT8                 not null,
    rol_shortdescription VARCHAR(30)          not null,
@@ -192,23 +157,12 @@ create table sec_role (
 )
 without oids;
 
-comment on table sec_role is
-'Defines the roles that are used in the application. 
-I.e. ROLE_ADMINISTRATOR, ROLE_USER.';
+alter table sec_role owner to smas;
 
--- set table ownership
-alter table sec_role owner to smas
-;
-/*==============================================================*/
-/* Index: idx_role_id                                           */
-/*==============================================================*/
 create unique index idx_role_id on sec_role (
 rol_id
 );
 
-/*==============================================================*/
-/* Index: idx_role_shortdescription                             */
-/*==============================================================*/
 create unique index idx_role_shortdescription on sec_role (
 rol_shortdescription
 );
@@ -216,6 +170,12 @@ rol_shortdescription
 /*==============================================================*/
 /* Table: sec_rolegroup                                         */
 /*==============================================================*/
+DROP TABLE IF EXISTS sec_rolegroup cascade;
+DROP SEQUENCE IF EXISTS sec_rolegroup_seq;
+
+CREATE SEQUENCE sec_rolegroup_seq START 100;
+ALTER SEQUENCE sec_rolegroup_seq OWNER TO smas;
+
 create table sec_rolegroup (
    rlg_id               INT8                 not null,
    grp_id               INT8                 not null,
@@ -225,19 +185,12 @@ create table sec_rolegroup (
 )
 without oids;
 
--- set table ownership
-alter table sec_rolegroup owner to smas
-;
-/*==============================================================*/
-/* Index: idx_rlg_id                                            */
-/*==============================================================*/
+alter table sec_rolegroup owner to smas;
+
 create unique index idx_rlg_id on sec_rolegroup (
 rlg_id
 );
 
-/*==============================================================*/
-/* Index: idx_rlg_grprol                                        */
-/*==============================================================*/
 create unique index idx_rlg_grprol on sec_rolegroup (
 grp_id,
 rol_id
@@ -246,6 +199,12 @@ rol_id
 /*==============================================================*/
 /* Table: sec_user                                              */
 /*==============================================================*/
+DROP TABLE IF EXISTS sec_user cascade;
+DROP SEQUENCE IF EXISTS sec_user_seq;
+
+CREATE SEQUENCE sec_user_seq START 100;
+ALTER SEQUENCE sec_user_seq OWNER TO smas;
+
 create table sec_user (
    usr_id               INT8                 not null,
    usr_loginname        VARCHAR(50)          not null,
@@ -264,19 +223,12 @@ create table sec_user (
 )
 without oids;
 
--- set table ownership
-alter table sec_user owner to smas
-;
-/*==============================================================*/
-/* Index: idx_usr_id                                            */
-/*==============================================================*/
+alter table sec_user owner to smas;
+
 create unique index idx_usr_id on sec_user (
 usr_id
 );
 
-/*==============================================================*/
-/* Index: idx_usr_loginname                                     */
-/*==============================================================*/
 create unique index idx_usr_loginname on sec_user (
 usr_loginname
 );
@@ -284,6 +236,12 @@ usr_loginname
 /*==============================================================*/
 /* Table: sec_userrole                                          */
 /*==============================================================*/
+DROP TABLE IF EXISTS sec_userrole cascade;
+DROP SEQUENCE IF EXISTS sec_userrole_seq;
+
+CREATE SEQUENCE sec_userrole_seq START 100;
+ALTER SEQUENCE sec_userrole_seq OWNER TO smas;
+
 create table sec_userrole (
    urr_id               INT8                 not null,
    usr_id               INT8                 not null,
@@ -292,37 +250,24 @@ create table sec_userrole (
    constraint PK_SEC_USERROLE primary key (urr_id)
 )
 without oids;
+alter table sec_userrole owner to smas;
 
-comment on table sec_userrole is
-'Holdes the Roles that a user have.';
-
--- set table ownership
-alter table sec_userrole owner to smas
-;
-/*==============================================================*/
-/* Index: idx_urr_id                                            */
-/*==============================================================*/
 create unique index idx_urr_id on sec_userrole (
 urr_id
 );
 
-/*==============================================================*/
-/* Index: idx_urr_usrrol                                        */
-/*==============================================================*/
 create unique index idx_urr_usrrol on sec_userrole (
 usr_id,
 rol_id
 );
 
-
-
-DROP TABLE IF EXISTS parameter cascade;
-DROP SEQUENCE IF EXISTS parameter_seq;
-
 /*==============================================================*/
 /* Table: Parameter                                             */
 /*==============================================================*/
-create table parameter (
+DROP TABLE IF EXISTS parameter cascade;
+DROP SEQUENCE IF EXISTS parameter_seq;
+
+CREATE TABLE parameter (
    param_id             INT8                 not null,
    param_name           varchar(50)          not null,
    param_value       	varchar(254)          null,
@@ -331,30 +276,18 @@ create table parameter (
    constraint pk_parameter primary key (param_id)
 )
 without oids;
+ALTER TABLE parameter owner to smas;
 
--- set table ownership
-alter table parameter owner to smas
-;
-/*==============================================================*/
-/* Index: ix_param_id                                             */
-/*==============================================================*/
-create unique index ix_param_id on parameter using btree (
+CREATE SEQUENCE parameter_seq START 100;
+ALTER SEQUENCE parameter_seq OWNER TO smas;
+
+CREATE UNIQUE INDEX ix_param_id on parameter using btree (
 param_id
 );
-
-/*==============================================================*/
-/* Index: ix_param_name
-/*==============================================================*/
-create  index ix_param_name on parameter (
+CREATE UNIQUE INDEX ix_param_name on parameter (
 param_name
 );
 
-/*==============================================================*/
-/* Index: ix_param_description                                         */
-/*==============================================================*/
-create unique index ix_param_description on parameter (
-description
-);
 
 
 

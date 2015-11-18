@@ -35,6 +35,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>de.forsthaus</groupId>
+			<artifactId>configuration</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>3.3.1.GA</version>
