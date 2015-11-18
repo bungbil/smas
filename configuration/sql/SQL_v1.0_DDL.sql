@@ -272,6 +272,8 @@ CREATE TABLE parameter (
    param_name           varchar(50)          not null,
    param_value       	varchar(254)          null,
    description          varchar(254)          null,
+   last_update       	timestamp,          
+   updated_by       	varchar(50)          null,
    version              int4                 not null default 0,
    constraint pk_parameter primary key (param_id)
 )
@@ -289,6 +291,26 @@ param_name
 );
 
 
+/*==============================================================*/
+/* Table: Profile Perusahaan                                    */
+/*==============================================================*/
+DROP TABLE IF EXISTS profile cascade;
+
+CREATE TABLE profile_perusahaan (
+   profile_id       INT8                 not null,
+   nama             varchar(100)         not null,
+   alamat       	varchar(254)         null,
+   kota             varchar(50)          null,
+   negara           varchar(50)          null,
+   telepon          varchar(50)          null,
+   email            varchar(50)          null,
+   last_update      timestamp,          
+   updated_by       varchar(50)          null,
+   version              int4             not null default 0,
+   constraint pk_parameter primary key (param_id)
+)
+without oids;
+ALTER TABLE parameter owner to smas;
 
 
 

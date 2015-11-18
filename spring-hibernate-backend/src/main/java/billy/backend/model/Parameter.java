@@ -1,5 +1,7 @@
 package billy.backend.model;
 
+import java.util.Date;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class Parameter implements java.io.Serializable, Entity {
@@ -11,6 +13,8 @@ public class Parameter implements java.io.Serializable, Entity {
 	private String paramName;
 	private String paramValue;
 	private String description;
+	private Date lastUpdate;
+	private String updatedBy;
 	
 
 	public boolean isNew() {
@@ -72,6 +76,22 @@ public class Parameter implements java.io.Serializable, Entity {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Date getLastUpdate() {
+		return lastUpdate;
+	}
+
+	public void setLastUpdate(Date lastUpdate) {
+		this.lastUpdate = lastUpdate;
+	}
+
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
 	}
 
 	@Override

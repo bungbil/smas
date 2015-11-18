@@ -3,9 +3,11 @@ package billy.webui.utility.parameter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Date;
 
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Path;
@@ -32,6 +34,7 @@ import billy.backend.service.ParameterService;
 import billy.webui.utility.parameter.report.ParameterSimpleDJReport;
 import de.forsthaus.backend.util.HibernateSearchObject;
 import de.forsthaus.backend.util.ZksampleBeanUtils;
+import de.forsthaus.policy.model.UserImpl;
 import de.forsthaus.webui.util.ButtonStatusCtrl;
 import de.forsthaus.webui.util.GFCBaseCtrl;
 import de.forsthaus.webui.util.MultiLineMessageBox;
@@ -538,6 +541,9 @@ public class ParameterMainCtrl extends GFCBaseCtrl implements Serializable {
 		getParameterDetailCtrl().getBinder().saveAll();
 
 		try {
+			String userName = ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();			
+			getParameterDetailCtrl().getParameter().setLastUpdate(new Date());			
+			getParameterDetailCtrl().getParameter().setUpdatedBy(userName);
 			// save it to database
 			getParameterService().saveOrUpdate(getParameterDetailCtrl().getParameter());
 			// if saving is successfully than actualize the beans as

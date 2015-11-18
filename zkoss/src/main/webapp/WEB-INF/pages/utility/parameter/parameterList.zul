@@ -34,16 +34,23 @@
 						<listheader id="listheader_ParameterList_Name"
 							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
 							label="${c:l('listheader_ParameterList_Name.label')}" sort="auto"
-							width="30%" />
+							width="20%" />
 						<listheader id="listheader_ParameterList_Value"
 							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
 							label="${c:l('listheader_ParameterList_Value.label')}" sort="auto"
-							width="30%" />
+							width="20%" />
 						<listheader id="listheader_ParameterList_Description"
 							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
 							label="${c:l('listheader_ParameterList_Description.label')}" sort="auto"
 							width="40%" />
-
+						<listheader id="listheader_ParameterList_lastUpdate"
+							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
+							label="${c:l('common.lastUpdate')}" sort="auto"
+							width="10%" />
+						<listheader id="listheader_ParameterList_UpdateBy"
+							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
+							label="${c:l('common.updatedBy')}" sort="auto"
+							width="10%" />
 					</listhead>
 
 					<listitem self="@{each='parameter'}" value="@{parameter}"
@@ -54,7 +61,11 @@
 						<listcell label="@{parameter.paramValue}"
 							style="padding-left: 5px" />
 						<listcell label="@{parameter.description}"
-							style="padding-left: 5px" />						
+							style="padding-left: 5px" />
+						<listcell label="@{parameter.lastUpdate}"
+							style="padding-left: 5px" />	
+						<listcell label="@{parameter.updatedBy}"
+							style="padding-left: 5px" />							
 					</listitem>
 
 				</listbox>
