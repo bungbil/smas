@@ -292,26 +292,27 @@ param_name
 
 
 /*==============================================================*/
-/* Table: Profile Perusahaan                                    */
+/* Table: Company Profile                                       */
 /*==============================================================*/
-DROP TABLE IF EXISTS profile cascade;
+DROP TABLE IF EXISTS company_profile cascade;
+DROP SEQUENCE IF EXISTS company_profile_seq;
 
-CREATE TABLE profile_perusahaan (
+CREATE TABLE company_profile (
    profile_id       INT8                 not null,
-   nama             varchar(100)         not null,
-   alamat       	varchar(254)         null,
-   kota             varchar(50)          null,
-   negara           varchar(50)          null,
-   telepon          varchar(50)          null,
+   company_name     varchar(100)         not null,
+   address       	varchar(254)         null,   
+   phone            varchar(50)          null,
    email            varchar(50)          null,
    last_update      timestamp,          
    updated_by       varchar(50)          null,
-   version              int4             not null default 0,
-   constraint pk_parameter primary key (param_id)
+   version          int4             not null default 0,
+   constraint pk_company_profile primary key (profile_id)
 )
 without oids;
-ALTER TABLE parameter owner to smas;
+ALTER TABLE company_profile owner to smas;
 
+CREATE SEQUENCE company_profile_seq START 100;
+ALTER SEQUENCE company_profile_seq OWNER TO smas;
 
 
 

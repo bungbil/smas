@@ -32,7 +32,7 @@ public class InitApplicationWorkspace implements ServletContextListener {
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
-		scheduler.shutdownNow();
+		//scheduler.shutdownNow();
 	}
 
 }

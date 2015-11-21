@@ -2,6 +2,10 @@
 INSERT INTO PARAMETER (PARAM_ID,PARAM_NAME,PARAM_VALUE,DESCRIPTION,VERSION) values
 (1,'APPLICATION_VERSION','1.0','Application Version',1);
 
+/******************** COMPANY PROFILE ********************/  
+INSERT INTO COMPANY_PROFILE (PROFILE_ID,COMPANY_NAME,ADDRESS,PHONE,EMAIL,VERSION) values
+(1,'SUMBER MAS','jl. abc','021-12324342','sumbermas@gmail.com',1);
+
 /******************** Security: USERS ********************/  
 INSERT INTO SEC_USER (USR_ID, USR_LOGINNAME, USR_PASSWORD, USR_LASTNAME, USR_FIRSTNAME, USR_EMAIL, USR_LOCALE, USR_ENABLED, USR_ACCOUNTNONEXPIRED, USR_CREDENTIALSNONEXPIRED, USR_ACCOUNTNONLOCKED, USR_TOKEN,  VERSION) values 
 (1, 'admin', 'admin', 'Admin', 'Super', 'admin@super.admin', NULL, true, true, true, true, null, 0);
@@ -132,25 +136,31 @@ INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
 
 /* PARAMETER */
 /* --> Page Parameter */
-(69, 0, 'window_ParameterList', 0),
-(70, 0, 'window_ParameterDialog', 0),
-/* Components = Type(6) */
+(69, 0, 'windowParameterList', 0),
+(70, 0, 'windowParameterDetail', 0),
 /* window_ParameterList Buttons*/
-(71, 6, 'button_ParameterMain_btnPrint', 0),
-(72, 6, 'button_ParameterList_SearchName', 0),
+(71, 6, 'button_ParameterList_SearchName', 0),
 /* window_ParameterDialog BUTTONS */
-(73, 6, 'button_ParameterMain_btnHelp', 0),
-(74, 6, 'button_ParameterMain_btnNew', 0),
-(75, 6, 'button_ParameterMain_btnEdit', 0),
-(76, 6, 'button_ParameterMain_btnDelete', 0),
-(77, 6, 'button_ParameterMain_btnSave', 0),
-(78, 6, 'button_ParameterMain_btnClose', 0),
+/* (71, 6, 'button_ParameterMain_btnNew', 0),*/
+(72, 6, 'button_ParameterMain_btnEdit', 0),
+/* (73, 6, 'button_ParameterMain_btnDelete', 0),*/
+(74, 6, 'button_ParameterMain_btnSave', 0),
+(75, 6, 'button_ParameterMain_btnClose', 0),
 /* Parameter navigation buttons */
-(79, 6, 'button_ParameterMain_btnCancel', 0),
-(80, 6, 'button_ParameterMain_btnFirst', 0),
-(81, 6, 'button_ParameterMain_btnPrevious', 0),
-(82, 6, 'button_ParameterMain_btnNext', 0),
-(83, 6, 'button_ParameterMain_btnLast', 0);
+(76, 6, 'button_ParameterMain_btnCancel', 0),
+(77, 6, 'button_ParameterMain_btnFirst', 0),
+(78, 6, 'button_ParameterMain_btnPrevious', 0),
+(79, 6, 'button_ParameterMain_btnNext', 0),
+(80, 6, 'button_ParameterMain_btnLast', 0),
+
+/* COMPANY PROFILE */
+/* --> Page Company Profile */
+(81, 0, 'windowCompanyProfileDetail', 0),
+/* window_ParameterDialog BUTTONS */
+(82, 6, 'button_CompanyProfileMain_btnEdit', 0),
+(83, 6, 'button_CompanyProfileMain_btnSave', 0),
+(84, 6, 'button_CompanyProfileMain_btnClose', 0),
+(85, 6, 'button_CompanyProfileMain_btnCancel', 0),
 
 
 INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 

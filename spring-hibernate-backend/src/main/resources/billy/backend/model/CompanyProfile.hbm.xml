@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+	<class name="billy.backend.model.CompanyProfile" table="Company_profile">
+
+		<id name="id" type="long">
+			<column name="profile_id" />
+			<generator class="sequence">
+				<param name="sequence">company_profile_seq</param>
+			</generator>
+		</id>
+
+		<version name="version" column="VERSION" type="integer" />
+
+		<property name="companyName" type="string">
+			<column name="company_name" length="100" not-null="true" unique="true" />
+		</property>
+		<property name="address" type="string">
+			<column name="address" length="254" />
+		</property>
+		<property name="phone" type="string">
+			<column name="phone" length="50" />
+		</property>		
+		<property name="email" type="string">
+			<column name="email" length="50" />
+		</property>		
+		<property name="lastUpdate" type="timestamp">
+			<column name="last_update" length="29" />
+		</property>	
+		<property name="updatedBy" type="string">
+			<column name="updated_by" length="50" />
+		</property>	
+		
+	</class>
+</hibernate-mapping>

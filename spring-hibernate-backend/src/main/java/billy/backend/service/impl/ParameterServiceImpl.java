@@ -24,8 +24,8 @@ public class ParameterServiceImpl implements ParameterService {
 	}
 
 	@Override
-	public Parameter getParameterByID(Long fil_nr) {
-		return getParameterDAO().getParameterById(fil_nr);
+	public Parameter getParameterByID(Long id) {
+		return getParameterDAO().getParameterById(id);
 	}
 
 	@Override

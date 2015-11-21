@@ -154,7 +154,7 @@
 	</menu>
 	<!-- Report MenuTree -->
 	<menu id="menu_Category_Utility" >
-		<menuItem id="menu_Item_ProfilePerusahaan" zulNavigation="/WEB-INF/pages/utility/profileperusahaan/profilePerusahaanList.zul"
+		<menuItem id="menu_Item_CompanyProfile" zulNavigation="/WEB-INF/pages/utility/companyprofile/companyProfileMain.zul"
 			iconName="/images/icons/index_16x16.gif" />
 		<menuItem id="menu_Item_Parameter" zulNavigation="/WEB-INF/pages/utility/parameter/parameterMain.zul"
 			iconName="/images/icons/index_16x16.gif" />

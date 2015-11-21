@@ -337,6 +337,15 @@
 	<bean id="parameterDetailCtrl" class="billy.webui.utility.parameter.ParameterDetailCtrl" parent="basisCtrl" scope="prototype">
 		<property name="parameterService" ref="parameterService" />
 	</bean>
+	
+	<!-- CompanyProfile -->
+	<bean id="companyProfileMainCtrl" class="billy.webui.utility.companyprofile.CompanyProfileMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="companyProfileService" ref="companyProfileService" />
+		<property name="companyProfileDetailCtrl" ref="companyProfileDetailCtrl" />
+	</bean>	
+	<bean id="companyProfileDetailCtrl" class="billy.webui.utility.companyprofile.CompanyProfileDetailCtrl" parent="basisCtrl" scope="prototype">
+		<property name="companyProfileService" ref="companyProfileService" />
+	</bean>
 
 </beans>
 

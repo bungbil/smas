@@ -9,7 +9,7 @@ public interface ParameterService {
 
 	public int getCountAllParameters();
 
-	public Parameter getParameterByID(Long paramId);
+	public Parameter getParameterByID(Long id);
 
 	public List<Parameter> getAllParameters();
 

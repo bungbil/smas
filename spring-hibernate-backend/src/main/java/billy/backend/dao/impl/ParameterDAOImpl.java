@@ -22,8 +22,8 @@ public class ParameterDAOImpl extends BillyBasisDAO<Parameter> implements Parame
 	}
 
 	@Override
-	public Parameter getParameterById(Long param_Id) {
-		return get(Parameter.class, param_Id);
+	public Parameter getParameterById(Long id) {
+		return get(Parameter.class, id);
 	}
 
 	@SuppressWarnings("unchecked")

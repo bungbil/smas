@@ -8,7 +8,7 @@ public interface ParameterDAO {
 
 	public Parameter getNewParameter();
 
-	public Parameter getParameterById(Long paramId);
+	public Parameter getParameterById(Long id);
 
 	public Parameter getParameterByParamName(String paramName);
 

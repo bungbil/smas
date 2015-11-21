@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+
+<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- Namespace dependent DataBinding Initiator.          -->
+<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./windowCompanyProfileDetail" ?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+	<window id="windowCompanyProfileDetail" apply="${companyProfileDetailCtrl}" border="none" width="100%">
+
+		<borderlayout id="borderlayout_CompanyProfileDetail">
+			<center border="none" autoscroll="true">
+
+				<hbox align="stretch" pack="stretch" sclass="FDCenterNoBorder" width="100%">
+
+					<!-- Left CONTENT AREA -->
+					<!-- simulates a columnLayout -->
+					<cell width="100%">
+						<vbox align="stretch" pack="stretch" width="100%">
+							<div>
+
+								<panel border="none">
+									<panelchildren>
+
+										<groupbox mold="3d" closable="false">
+											<caption image="/images/icons/view.gif" label="${c:l('common.Details')}" />
+
+											<grid sclass="GridLayoutNoBorder" fixedLayout="true"
+												style="border:0px; padding-left:5px; padding-right:5px;">
+												<columns>
+													<column width="150px" />
+													<column />
+												</columns>
+												<rows>
+													<row>
+														<hbox>
+															<label value="${c:l('label_CompanyProfileDialog_companyName.value')}" />
+															<label value="*" style="color:red;font-size:10px" />
+														</hbox>
+														<textbox id="txtb_CompanyName" value="@{controller.companyProfile.companyName}"
+															readonly="true" constraint="no empty" maxlength="100" width="500px" />
+													</row>
+													<row>
+														<separator bar="true"></separator>
+														<separator bar="true"></separator>
+													</row>
+													<row>
+														<hbox>
+															<label
+																value="${c:l('label_CompanyProfileDialog_address.value')}" />															
+														</hbox>
+														<textbox id="txtb_Address"
+															value="@{controller.companyProfile.address}" readonly="true" maxlength="254"
+															hflex="1" />
+													</row>
+													<row>
+														<label value="${c:l('label_CompanyProfileDialog_phone.value')}" />
+														<textbox id="txtb_Phone"
+															value="@{controller.companyProfile.phone}" readonly="true" maxlength="50" hflex="1" />
+													</row>
+													<row>
+														<label value="${c:l('label_CompanyProfileDialog_email.value')}" />
+														<textbox id="txtb_Email"
+															value="@{controller.companyProfile.email}" readonly="true" maxlength="50" hflex="1" />
+													</row>
+													<row>
+														<label value="${c:l('common.lastUpdate')}" />
+														<label id="txtb_LastUpdate"
+															value="@{controller.companyProfile.lastUpdate}"  hflex="1" />
+													</row>
+													<row>
+														<label value="${c:l('common.updatedBy')}" />
+														<label id="txtb_updatedBy"
+															value="@{controller.companyProfile.updatedBy}"  hflex="1" />
+													</row>
+												</rows>
+											</grid>
+										</groupbox>
+									</panelchildren>
+								</panel>
+
+							</div>
+						</vbox>
+					</cell>
+				</hbox>
+
+			</center>
+		</borderlayout>
+
+	</window>
+</zk>
