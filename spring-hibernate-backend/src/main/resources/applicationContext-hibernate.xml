@@ -61,6 +61,7 @@
 				</value>
 				<value>billy/backend/model/Parameter.hbm.xml</value>
 				<value>billy/backend/model/CompanyProfile.hbm.xml</value>
+				<value>billy/backend/model/Wilayah.hbm.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -270,6 +271,8 @@
 	<!-- ====================================================== -->
 	<bean id="parameterDAO" class="billy.backend.dao.impl.ParameterDAOImpl" parent="billyBasisDAO" />
 	<bean id="companyProfileDAO" class="billy.backend.dao.impl.CompanyProfileDAOImpl" parent="billyBasisDAO" />
+	<bean id="wilayahDAO" class="billy.backend.dao.impl.WilayahDAOImpl" parent="billyBasisDAO" />
+	<bean id="satuanBarangDAO" class="billy.backend.dao.impl.SatuanBarangDAOImpl" parent="billyBasisDAO" />
 	
 	<!-- ====================================================== -->
 	<!-- Billy SERVICE beans -->
@@ -279,5 +282,11 @@
 	</bean>
 	<bean name="companyProfileService" class="billy.backend.service.impl.CompanyProfileServiceImpl">
 		<property name="companyProfileDAO" ref="companyProfileDAO" />
+	</bean>
+	<bean name="wilayahService" class="billy.backend.service.impl.WilayahServiceImpl">
+		<property name="wilayahDAO" ref="wilayahDAO" />
+	</bean>
+	<bean name="satuanBarangService" class="billy.backend.service.impl.SatuanBarangServiceImpl">
+		<property name="satuanBarangDAO" ref="satuanBarangDAO" />
 	</bean>
 </beans>

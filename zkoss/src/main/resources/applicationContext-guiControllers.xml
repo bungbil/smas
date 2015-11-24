@@ -347,6 +347,33 @@
 		<property name="companyProfileService" ref="companyProfileService" />
 	</bean>
 
+	<!-- Wilayah -->
+	<bean id="wilayahMainCtrl" class="billy.webui.master.wilayah.WilayahMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="wilayahService" ref="wilayahService" />
+		<property name="wilayahListCtrl" ref="wilayahListCtrl" />
+		<property name="wilayahDetailCtrl" ref="wilayahDetailCtrl" />
+	</bean>
+	<bean id="wilayahListCtrl" class="billy.webui.master.wilayah.WilayahListCtrl" parent="basisCtrl" scope="prototype">
+		<property name="wilayahService" ref="wilayahService" />
+	</bean>
+	<bean id="wilayahDetailCtrl" class="billy.webui.master.wilayah.WilayahDetailCtrl" parent="basisCtrl" scope="prototype">
+		<property name="wilayahService" ref="wilayahService" />
+	</bean>
+		
+	<!-- SatuanBarang -->
+	<bean id="satuanBarangMainCtrl" class="billy.webui.master.satuanBarang.SatuanBarangMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="satuanBarangService" ref="satuanBarangService" />
+		<property name="satuanBarangListCtrl" ref="satuanBarangListCtrl" />
+		<property name="satuanBarangDetailCtrl" ref="satuanBarangDetailCtrl" />
+	</bean>
+	<bean id="satuanBarangListCtrl" class="billy.webui.master.satuanBarang.SatuanBarangListCtrl" parent="basisCtrl" scope="prototype">
+		<property name="satuanBarangService" ref="satuanBarangService" />
+	</bean>
+	<bean id="satuanBarangDetailCtrl" class="billy.webui.master.satuanBarang.SatuanBarangDetailCtrl" parent="basisCtrl" scope="prototype">
+		<property name="satuanBarangService" ref="satuanBarangService" />
+	</bean>
+	
+	
 </beans>
 
 

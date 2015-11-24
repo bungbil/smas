@@ -90,24 +90,24 @@
 			-->
 	</menu>
 	<!-- Master MenuTree -->
-	<menu id="menu_Category_Master" >
-		<menuItem id="menu_Item_Karyawan" zulNavigation="/WEB-INF/pages/master/karyawan/karyawanList.zul"
+	<menu id="menu_Category_Master" rightName="menuCat_Master">
+		<menuItem id="menu_Item_Karyawan" zulNavigation="/WEB-INF/pages/master/karyawan/karyawanMain.zul"
 			iconName="/images/icons/index_16x16.gif" />
-		<menuItem id="menu_Item_Barang" zulNavigation="/WEB-INF/pages/master/barang/barangList.zul"
+		<menuItem id="menu_Item_Barang" zulNavigation="/WEB-INF/pages/master/barang/barangMain.zul"
 			iconName="/images/icons/index_16x16.gif" />
-		<menuItem id="menu_Item_HargaBarang" zulNavigation="/WEB-INF/pages/master/hargabarang/hargaBarangList.zul"
+		<menuItem id="menu_Item_HargaBarang" zulNavigation="/WEB-INF/pages/master/hargabarang/hargaBarangMain.zul"
 			iconName="/images/icons/index_16x16.gif" />
-		<menuItem id="menu_Item_KategoriBarang" zulNavigation="/WEB-INF/pages/master/kategoribarang/kategoriBarangList.zul"
+		<menuItem id="menu_Item_KategoriBarang" zulNavigation="/WEB-INF/pages/master/kategoribarang/kategoriBarangMain.zul"
 			iconName="/images/icons/index_16x16.gif" />
-		<menuItem id="menu_Item_UnitBarang" zulNavigation="/WEB-INF/pages/master/unitbarang/unitBarangList.zul"
+		<menuItem id="menu_Item_SatuanBarang" zulNavigation="/WEB-INF/pages/master/satuanbarang/satuanBarangMain.zul"
+			iconName="/images/icons/index_16x16.gif" rightName="menuItem_Master_SatuanBarang" />			
+		<menuItem id="menu_Item_Wilayah" zulNavigation="/WEB-INF/pages/master/wilayah/wilayahMain.zul"
+			iconName="/images/icons/index_16x16.gif" rightName="menuItem_Master_Wilayah" />					
+		<menuItem id="menu_Item_Status" zulNavigation="/WEB-INF/pages/master/status/statusMain.zul"
 			iconName="/images/icons/index_16x16.gif" />			
-		<menuItem id="menu_Item_Wilayah" zulNavigation="/WEB-INF/pages/master/wilayah/wilayahList.zul"
-			iconName="/images/icons/index_16x16.gif" />					
-		<menuItem id="menu_Item_Status" zulNavigation="/WEB-INF/pages/master/status/statusList.zul"
+		<menuItem id="menu_Item_BonusTransport" zulNavigation="/WEB-INF/pages/master/bonustransport/bonusTransportMain.zul"
 			iconName="/images/icons/index_16x16.gif" />			
-		<menuItem id="menu_Item_BonusTransport" zulNavigation="/WEB-INF/pages/master/bonustransport/bonusTransportList.zul"
-			iconName="/images/icons/index_16x16.gif" />			
-		<menuItem id="menu_Item_Komisi" zulNavigation="/WEB-INF/pages/master/komisi/komisiList.zul"
+		<menuItem id="menu_Item_Komisi" zulNavigation="/WEB-INF/pages/master/komisi/komisiMain.zul"
 			iconName="/images/icons/index_16x16.gif" />			
 	</menu>
 	<!-- Transaction MenuTree -->
@@ -153,11 +153,11 @@
 			iconName="/images/icons/view.gif" />
 	</menu>
 	<!-- Report MenuTree -->
-	<menu id="menu_Category_Utility" >
+	<menu id="menu_Category_Utility" rightName="menuCat_Utility">
 		<menuItem id="menu_Item_CompanyProfile" zulNavigation="/WEB-INF/pages/utility/companyprofile/companyProfileMain.zul"
-			iconName="/images/icons/index_16x16.gif" />
+			iconName="/images/icons/index_16x16.gif" rightName="menuItem_Utility_CompanyProfile"/>
 		<menuItem id="menu_Item_Parameter" zulNavigation="/WEB-INF/pages/utility/parameter/parameterMain.zul"
-			iconName="/images/icons/index_16x16.gif" />
+			iconName="/images/icons/index_16x16.gif" rightName="menuItem_Utility_Parameter"/>
 	</menu>
 
 </ns2:XMLRootMenu>

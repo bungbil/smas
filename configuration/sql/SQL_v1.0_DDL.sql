@@ -261,6 +261,7 @@ usr_id,
 rol_id
 );
 
+
 /*==============================================================*/
 /* Table: Parameter                                             */
 /*==============================================================*/
@@ -315,4 +316,64 @@ CREATE SEQUENCE company_profile_seq START 100;
 ALTER SEQUENCE company_profile_seq OWNER TO smas;
 
 
+/*==============================================================*/
+/* Table: Wilayah                                             */
+/*==============================================================*/
+DROP TABLE IF EXISTS wilayah cascade;
+DROP SEQUENCE IF EXISTS wilayah_seq;
+
+CREATE TABLE wilayah (
+   wilayah_id           INT8                 not null,
+   kode_wilayah         varchar(50)          not null,
+   nama_wilayah       	varchar(50)          null,
+   status               varchar(50)          null,
+   last_update       	timestamp,          
+   updated_by       	varchar(50)          null,
+   version              int4                 not null default 0,
+   constraint pk_wilayah primary key (wilayah_id)
+)
+without oids;
+ALTER TABLE wilayah owner to smas;
+
+CREATE SEQUENCE wilayah_seq START 100;
+ALTER SEQUENCE wilayah_seq OWNER TO smas;
+
+CREATE UNIQUE INDEX ix_wilayah_id on wilayah using btree (
+wilayah_id
+);
+CREATE UNIQUE INDEX ix_kode_wilayah on wilayah (
+kode_wilayah
+);
+
+
+/*==============================================================*/
+/* Table: Satuan Barang                                         */
+/*==============================================================*/
+DROP TABLE IF EXISTS satuan_barang cascade;
+DROP SEQUENCE IF EXISTS satuan_barang_seq;
+
+CREATE TABLE satuan_barang (
+   satuan_barang_id           INT8                not null,
+   kode_satuan_barang         varchar(50)         not null,
+   deskripsi_satuan_barang    varchar(254)        null,
+   satuan_standar_barang      BOOL      	      not null default FALSE,
+   nilai_standar_satuan       INT8  	          not null default 0,
+   nilai_konversi             INT8	 			  not null default 0,
+   last_update       		  timestamp,          
+   updated_by       		  varchar(50)         null,
+   version                    int4                not null default 0,
+   constraint pk_satuan_barang primary key (satuan_barang_id)
+)
+without oids;
+ALTER TABLE satuan_barang owner to smas;
+
+CREATE SEQUENCE satuan_barang_seq START 100;
+ALTER SEQUENCE satuan_barang_seq OWNER TO smas;
+
+CREATE UNIQUE INDEX ix_satuan_barang_id on satuan_barang using btree (
+satuan_barang_id
+);
+CREATE UNIQUE INDEX ix_kode_satuan_barang on satuan_barang (
+kode_satuan_barang
+);
 

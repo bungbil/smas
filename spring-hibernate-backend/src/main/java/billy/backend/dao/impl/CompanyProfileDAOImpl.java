@@ -25,14 +25,6 @@ public class CompanyProfileDAOImpl extends BillyBasisDAO<CompanyProfile> impleme
 		return get(CompanyProfile.class, id);
 	}
 
-	@SuppressWarnings("unchecked")
-	public CompanyProfile getCompanyProfileByParamName(String paramName) {
-		DetachedCriteria criteria = DetachedCriteria.forClass(CompanyProfile.class);
-		criteria.add(Restrictions.eq("paramName", paramName));
-
-		return (CompanyProfile) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(criteria));
-	}
-
 	@Override
 	public List<CompanyProfile> getAllCompanyProfiles() {
 		return getHibernateTemplate().loadAll(CompanyProfile.class);

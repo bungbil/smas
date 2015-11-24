@@ -10,7 +10,7 @@ public interface ParameterDAO {
 
 	public Parameter getParameterById(Long id);
 
-	public Parameter getParameterByParamName(String paramName);
+	public Parameter getParameterByParamName(String string);
 
 	public List<Parameter> getAllParameters();
 

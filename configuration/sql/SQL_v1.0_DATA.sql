@@ -6,6 +6,10 @@ INSERT INTO PARAMETER (PARAM_ID,PARAM_NAME,PARAM_VALUE,DESCRIPTION,VERSION) valu
 INSERT INTO COMPANY_PROFILE (PROFILE_ID,COMPANY_NAME,ADDRESS,PHONE,EMAIL,VERSION) values
 (1,'SUMBER MAS','jl. abc','021-12324342','sumbermas@gmail.com',1);
 
+/******************** WILAYAH ********************/  
+INSERT INTO WILAYAH (WILAYAH_ID,KODE_WILAYAH,NAMA_WILAYAH,STATUS,VERSION) values
+(1,'W01','JAKARTA','PUSAT',1);
+
 /******************** Security: USERS ********************/  
 INSERT INTO SEC_USER (USR_ID, USR_LOGINNAME, USR_PASSWORD, USR_LASTNAME, USR_FIRSTNAME, USR_EMAIL, USR_LOCALE, USR_ENABLED, USR_ACCOUNTNONEXPIRED, USR_CREDENTIALSNONEXPIRED, USR_ACCOUNTNONLOCKED, USR_TOKEN,  VERSION) values 
 (1, 'admin', 'admin', 'Admin', 'Super', 'admin@super.admin', NULL, true, true, true, true, null, 0);
@@ -134,34 +138,6 @@ INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
 (67, 6, 'button_SecRightDialog_btnClose', 0),
 (68, 6, 'button_SecRightDialog_btnCancel', 0);
 
-/* PARAMETER */
-/* --> Page Parameter */
-(69, 0, 'windowParameterList', 0),
-(70, 0, 'windowParameterDetail', 0),
-/* window_ParameterList Buttons*/
-(71, 6, 'button_ParameterList_SearchName', 0),
-/* window_ParameterDialog BUTTONS */
-/* (71, 6, 'button_ParameterMain_btnNew', 0),*/
-(72, 6, 'button_ParameterMain_btnEdit', 0),
-/* (73, 6, 'button_ParameterMain_btnDelete', 0),*/
-(74, 6, 'button_ParameterMain_btnSave', 0),
-(75, 6, 'button_ParameterMain_btnClose', 0),
-/* Parameter navigation buttons */
-(76, 6, 'button_ParameterMain_btnCancel', 0),
-(77, 6, 'button_ParameterMain_btnFirst', 0),
-(78, 6, 'button_ParameterMain_btnPrevious', 0),
-(79, 6, 'button_ParameterMain_btnNext', 0),
-(80, 6, 'button_ParameterMain_btnLast', 0),
-
-/* COMPANY PROFILE */
-/* --> Page Company Profile */
-(81, 0, 'windowCompanyProfileDetail', 0),
-/* window_ParameterDialog BUTTONS */
-(82, 6, 'button_CompanyProfileMain_btnEdit', 0),
-(83, 6, 'button_CompanyProfileMain_btnSave', 0),
-(84, 6, 'button_CompanyProfileMain_btnClose', 0),
-(85, 6, 'button_CompanyProfileMain_btnCancel', 0),
-
 
 INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
 (1, 1, 1, 0),
@@ -231,17 +207,142 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 (65, 1, 65, 0),
 (66, 1, 66, 0),
 (67, 1, 67, 0),
-(68, 1, 68, 0),
+(68, 1, 68, 0);
+
+
+/* PARAMETER */
+/* --> Page Parameter */
+INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
+(69, 0, 'windowParameterList', 0),
+(70, 0, 'windowParameterDetail', 0),
+/* window_ParameterList Buttons*/
+(71, 6, 'button_ParameterList_SearchName', 0),
+/* window_ParameterDialog BUTTONS */
+/* (71, 6, 'button_ParameterMain_btnNew', 0),*/
+(72, 6, 'button_ParameterMain_btnEdit', 0),
+/* (73, 6, 'button_ParameterMain_btnDelete', 0),*/
+(74, 6, 'button_ParameterMain_btnSave', 0),
+(75, 6, 'button_ParameterMain_btnClose', 0),
+/* Parameter navigation buttons */
+(76, 6, 'button_ParameterMain_btnCancel', 0),
+(77, 6, 'button_ParameterMain_btnFirst', 0),
+(78, 6, 'button_ParameterMain_btnPrevious', 0),
+(79, 6, 'button_ParameterMain_btnNext', 0),
+(80, 6, 'button_ParameterMain_btnLast', 0);
+
+INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
 (69, 1, 69, 0),
 (70, 1, 70, 0),
-(71, 1, 71, 0),
 (72, 1, 72, 0),
-(73, 1, 73, 0),
 (74, 1, 74, 0),
 (75, 1, 75, 0),
 (76, 1, 76, 0),
 (77, 1, 77, 0),
 (78, 1, 78, 0),
 (79, 1, 79, 0),
-(80, 1, 80, 0),
-(81, 1, 81, 0);
+(80, 1, 80, 0);
+
+/* COMPANY PROFILE */
+/* --> Page Company Profile */
+INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
+(81, 0, 'windowCompanyProfileDetail', 0),
+/* window_ParameterDialog BUTTONS */
+(82, 6, 'button_CompanyProfileMain_btnEdit', 0),
+(83, 6, 'button_CompanyProfileMain_btnSave', 0),
+(84, 6, 'button_CompanyProfileMain_btnClose', 0),
+(85, 6, 'button_CompanyProfileMain_btnCancel', 0);
+
+INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
+(81, 1, 81, 0),
+(82, 1, 82, 0),
+(83, 1, 83, 0),
+(84, 1, 84, 0),
+(85, 1, 85, 0);
+
+/* WILAYAH */
+/* --> Page Wilayah */
+INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
+(86, 0, 'windowWilayahList', 0),
+(87, 0, 'windowWilayahDetail', 0),
+/* window_WilayahList Buttons*/
+(88, 6, 'button_WilayahList_SearchName', 0),
+/* window_WilayahDialog BUTTONS */
+(89, 6, 'button_WilayahMain_btnNew', 0),
+(90, 6, 'button_WilayahMain_btnEdit', 0),
+(91, 6, 'button_WilayahMain_btnDelete', 0),
+(92, 6, 'button_WilayahMain_btnSave', 0),
+(93, 6, 'button_WilayahMain_btnClose', 0),
+/* Wilayah navigation buttons */
+(94, 6, 'button_WilayahMain_btnCancel', 0),
+(95, 6, 'button_WilayahMain_btnFirst', 0),
+(96, 6, 'button_WilayahMain_btnPrevious', 0),
+(97, 6, 'button_WilayahMain_btnNext', 0),
+(98, 6, 'button_WilayahMain_btnLast', 0);
+
+INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
+(86, 1, 86, 0),
+(87, 1, 87, 0),
+(88, 1, 88, 0),
+(89, 1, 89, 0),
+(90, 1, 90, 0),
+(91, 1, 91, 0),
+(92, 1, 92, 0),
+(93, 1, 93, 0),
+(94, 1, 94, 0),
+(95, 1, 95, 0),
+(96, 1, 96, 0),
+(97, 1, 97, 0),
+(98, 1, 98, 0);
+
+
+
+/* SATUAN_BARANG */
+/* --> Page SatuanBarang */
+INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
+(99, 0, 'windowSatuanBarangList', 0),
+(100, 0, 'windowSatuanBarangDetail', 0),
+/* window_SatuanBarangList Buttons*/
+(101, 6, 'button_SatuanBarangList_SearchName', 0),
+/* window_SatuanBarangDialog BUTTONS */
+(102, 6, 'button_SatuanBarangMain_btnNew', 0),
+(103, 6, 'button_SatuanBarangMain_btnEdit', 0),
+(104, 6, 'button_SatuanBarangMain_btnDelete', 0),
+(105, 6, 'button_SatuanBarangMain_btnSave', 0),
+(106, 6, 'button_SatuanBarangMain_btnClose', 0),
+/* SatuanBarang navigation buttons */
+(107, 6, 'button_SatuanBarangMain_btnCancel', 0),
+(108, 6, 'button_SatuanBarangMain_btnFirst', 0),
+(109, 6, 'button_SatuanBarangMain_btnPrevious', 0),
+(110, 6, 'button_SatuanBarangMain_btnNext', 0),
+(111, 6, 'button_SatuanBarangMain_btnLast', 0);
+
+INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
+(99, 1, 99, 0),
+(100, 1, 100, 0),
+(101, 1, 101, 0),
+(102, 1, 102, 0),
+(103, 1, 103, 0),
+(104, 1, 104, 0),
+(105, 1, 105, 0),
+(106, 1, 106, 0),
+(107, 1, 107, 0),
+(108, 1, 108, 0),
+(109, 1, 109, 0),
+(110, 1, 110, 0),
+(111, 1, 111, 0);
+
+INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
+(112, 1, 'menuCat_Utility', 0),
+(113, 2, 'menuItem_Utility_CompanyProfile', 0),
+(114, 2, 'menuItem_Utility_Parameter', 0),
+(115, 1, 'menuCat_Master', 0),
+(116, 2, 'menuItem_Master_Wilayah', 0),
+(117, 2, 'menuItem_Master_SatuanBarang', 0);
+
+INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
+(112, 1, 112, 0),
+(113, 1, 113, 0),
+(114, 1, 114, 0),
+(115, 1, 115, 0),
+(116, 1, 116, 0),
+(117, 1, 117, 0);
