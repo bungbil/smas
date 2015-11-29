@@ -679,6 +679,12 @@ public class WilayahMainCtrl extends GFCBaseCtrl implements Serializable {
 		// refresh master-detail MASTERS data
 		getWilayahDetailCtrl().getBinder().loadAll();
 
+		if(getSelectedWilayah().getStatus().equals(getWilayahDetailCtrl().radioStatusPusat.getLabel())){
+			getWilayahDetailCtrl().radioStatusPusat.setSelected(true);
+		}
+		if(getSelectedWilayah().getStatus().equals(getWilayahDetailCtrl().radioStatusDaerah.getLabel())){
+			getWilayahDetailCtrl().radioStatusDaerah.setSelected(true);
+		}
 		// EXTRA: if we have a longtext field under the listbox, so we must
 		// refresh
 		// this binded component too

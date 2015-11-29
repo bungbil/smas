@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+	<class name="billy.backend.model.Status" table="Status">
+
+		<id name="id" type="long">
+			<column name="status_id" />
+			<generator class="sequence">
+				<param name="sequence">status_seq</param>
+			</generator>
+		</id>
+
+		<version name="version" column="VERSION" type="integer" />
+
+		<property name="kodeStatus" type="string">
+			<column name="kode_status" length="50" not-null="true" unique="true" />
+		</property>
+		<property name="deskripsiStatus" type="string">
+			<column name="deskripsi_status" length="254" />
+		</property>
+		<property name="statusType" type="string">
+			<column name="status_type" length="50" />
+		</property>		
+		<property name="lastUpdate" type="timestamp">
+			<column name="last_update" length="29" />
+		</property>	
+		<property name="updatedBy" type="string">
+			<column name="updated_by" length="50" />
+		</property>	
+		
+	</class>
+</hibernate-mapping>

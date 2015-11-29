@@ -346,3 +346,77 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 (115, 1, 115, 0),
 (116, 1, 116, 0),
 (117, 1, 117, 0);
+
+
+
+/* STATUS */
+/* --> Page Status */
+INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
+(118, 0, 'windowStatusList', 0),
+(119, 0, 'windowStatusDetail', 0),
+/* window_StatusList Buttons*/
+(120, 6, 'button_StatusList_SearchName', 0),
+/* window_StatusDialog BUTTONS */
+(121, 6, 'button_StatusMain_btnNew', 0),
+(122, 6, 'button_StatusMain_btnEdit', 0),
+(123, 6, 'button_StatusMain_btnDelete', 0),
+(124, 6, 'button_StatusMain_btnSave', 0),
+(125, 6, 'button_StatusMain_btnClose', 0),
+/* Status navigation buttons */
+(126, 6, 'button_StatusMain_btnCancel', 0),
+(127, 6, 'button_StatusMain_btnFirst', 0),
+(128, 6, 'button_StatusMain_btnPrevious', 0),
+(129, 6, 'button_StatusMain_btnNext', 0),
+(130, 6, 'button_StatusMain_btnLast', 0);
+
+INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
+(118, 1, 118, 0),
+(119, 1, 119, 0),
+(120, 1, 120, 0),
+(121, 1, 121, 0),
+(122, 1, 122, 0),
+(123, 1, 123, 0),
+(124, 1, 124, 0),
+(125, 1, 125, 0),
+(126, 1, 126, 0),
+(127, 1, 127, 0),
+(128, 1, 128, 0),
+(129, 1, 129, 0),
+(130, 1, 130, 0);
+
+
+
+/* KATEGORI BARANG */
+/* --> Page KategoriBarang */
+INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
+(131, 0, 'windowKategoriBarangList', 0),
+(132, 0, 'windowKategoriBarangDetail', 0),
+/* window_KategoriBarangList Buttons*/
+(133, 6, 'button_KategoriBarangList_SearchName', 0),
+/* window_KategoriBarangDialog BUTTONS */
+(134, 6, 'button_KategoriBarangMain_btnNew', 0),
+(135, 6, 'button_KategoriBarangMain_btnEdit', 0),
+(136, 6, 'button_KategoriBarangMain_btnDelete', 0),
+(137, 6, 'button_KategoriBarangMain_btnSave', 0),
+(138, 6, 'button_KategoriBarangMain_btnClose', 0),
+/* KategoriBarang navigation buttons */
+(139, 6, 'button_KategoriBarangMain_btnCancel', 0),
+(140, 6, 'button_KategoriBarangMain_btnFirst', 0),
+(141, 6, 'button_KategoriBarangMain_btnPrevious', 0),
+(142, 6, 'button_KategoriBarangMain_btnNext', 0),
+(143, 6, 'button_KategoriBarangMain_btnLast', 0);
+
+INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
+(131, 1, 131, 0),
+(132, 1, 132, 0),
+(133, 1, 133, 0),
+(134, 1, 134, 0),
+(135, 1, 135, 0),
+(136, 1, 136, 0),
+(137, 1, 137, 0),
+(138, 1, 138, 0),
+(139, 1, 139, 0),
+(140, 1, 140, 0),
+(141, 1, 141, 0),
+(142, 1, 142, 0),
+(143, 1, 143, 0);

@@ -1,4 +1,4 @@
-package billy.webui.master.satuanbarang;
+package billy.webui.master.status;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -29,8 +29,8 @@ import org.zkoss.zul.Window;
 import com.googlecode.genericdao.search.Filter;
 
 import de.forsthaus.UserWorkspace;
-import billy.backend.model.SatuanBarang;
-import billy.backend.service.SatuanBarangService;
+import billy.backend.model.Status;
+import billy.backend.service.StatusService;
 import de.forsthaus.backend.util.HibernateSearchObject;
 import de.forsthaus.backend.util.ZksampleBeanUtils;
 import de.forsthaus.policy.model.UserImpl;
@@ -40,29 +40,29 @@ import de.forsthaus.webui.util.MultiLineMessageBox;
 import de.forsthaus.webui.util.ZksampleCommonUtils;
 import de.forsthaus.webui.util.ZksampleMessageUtils;
 
-public class SatuanBarangMainCtrl extends GFCBaseCtrl implements Serializable {
+public class StatusMainCtrl extends GFCBaseCtrl implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(SatuanBarangMainCtrl.class);
+	private static final Logger logger = Logger.getLogger(StatusMainCtrl.class);
 
 	
-	protected Window windowSatuanBarangMain; // autowired
+	protected Window windowStatusMain; // autowired
 
 	// Tabs
-	protected Tabbox tabbox_SatuanBarangMain; // autowired
-	protected Tab tabSatuanBarangList; // autowired
-	protected Tab tabSatuanBarangDetail; // autowired
-	protected Tabpanel tabPanelSatuanBarangList; // autowired
-	protected Tabpanel tabPanelSatuanBarangDetail; // autowired
+	protected Tabbox tabbox_StatusMain; // autowired
+	protected Tab tabStatusList; // autowired
+	protected Tab tabStatusDetail; // autowired
+	protected Tabpanel tabPanelStatusList; // autowired
+	protected Tabpanel tabPanelStatusDetail; // autowired
 
 	// filter components
-	protected Checkbox checkbox_SatuanBarangList_ShowAll; // autowired
-	protected Textbox txtb_SatuanBarang_Name; // aurowired
-	protected Button button_SatuanBarangList_SearchName; // aurowired
+	protected Checkbox checkbox_StatusList_ShowAll; // autowired
+	protected Textbox txtb_Status_Name; // aurowired
+	protected Button button_StatusList_SearchName; // aurowired
 
 	// Button controller for the CRUD buttons
-	private final String btnCtroller_ClassPrefix = "button_SatuanBarangMain_";
-	private ButtonStatusCtrl btnCtrlSatuanBarang;
+	private final String btnCtroller_ClassPrefix = "button_StatusMain_";
+	private ButtonStatusCtrl btnCtrlStatus;
 	protected Button btnNew; // autowired
 	protected Button btnEdit; // autowired
 	protected Button btnDelete; // autowired
@@ -79,23 +79,23 @@ public class SatuanBarangMainCtrl extends GFCBaseCtrl implements Serializable {
 	protected Button btnHelp;
 
 	// Tab-Controllers for getting the binders
-	private SatuanBarangListCtrl satuanBarangListCtrl;
-	private SatuanBarangDetailCtrl satuanBarangDetailCtrl;
+	private StatusListCtrl statusListCtrl;
+	private StatusDetailCtrl statusDetailCtrl;
 
 	// Databinding
-	private SatuanBarang selectedSatuanBarang;
-	private BindingListModelList satuanBarangs;
+	private Status selectedStatus;
+	private BindingListModelList statuss;
 
 	// ServiceDAOs / Domain Classes
-	private SatuanBarangService satuanBarangService;
+	private StatusService statusService;
 
 	// always a copy from the bean before modifying. Used for reseting
-	private SatuanBarang originalSatuanBarang;
+	private Status originalStatus;
 
 	/**
 	 * default constructor.<br>
 	 */
-	public SatuanBarangMainCtrl() {
+	public StatusMainCtrl() {
 		super();
 	}
 
@@ -106,7 +106,7 @@ public class SatuanBarangMainCtrl extends GFCBaseCtrl implements Serializable {
 		/**
 		 * 1. Set an 'alias' for this composer name to access it in the
 		 * zul-file.<br>
-		 * 2. Set the satuanBarang 'recurse' to 'false' to avoid problems with
+		 * 2. Set the status 'recurse' to 'false' to avoid problems with
 		 * managing more than one zul-file in one page. Otherwise it would be
 		 * overridden and can ends in curious error messages.
 		 */
@@ -123,11 +123,11 @@ public class SatuanBarangMainCtrl extends GFCBaseCtrl implements Serializable {
 	 * @param event
 	 * @throws Exception
 	 */
-	public void onCreate$windowSatuanBarangMain(Event event) throws Exception {
-		windowSatuanBarangMain.setContentStyle("padding:0px;");
+	public void onCreate$windowStatusMain(Event event) throws Exception {
+		windowStatusMain.setContentStyle("padding:0px;");
 
 		// create the Button Controller. Disable not used buttons during working
-		btnCtrlSatuanBarang = new ButtonStatusCtrl(getUserWorkspace(), btnCtroller_ClassPrefix, true, null, btnPrint, btnFirst, btnPrevious, btnNext, btnLast, btnNew, btnEdit, btnDelete, btnSave,
+		btnCtrlStatus = new ButtonStatusCtrl(getUserWorkspace(), btnCtroller_ClassPrefix, true, null, btnPrint, btnFirst, btnPrevious, btnNext, btnLast, btnNew, btnEdit, btnDelete, btnSave,
 				btnCancel, null);
 
 		doCheckRights();
@@ -136,62 +136,73 @@ public class SatuanBarangMainCtrl extends GFCBaseCtrl implements Serializable {
 		 * Initiate the first loading by selecting the customerList tab and
 		 * create the components from the zul-file.
 		 */
-		tabSatuanBarangList.setSelected(true);
+		tabStatusList.setSelected(true);
 
-		if (tabPanelSatuanBarangList != null) {
-			ZksampleCommonUtils.createTabPanelContent(this.tabPanelSatuanBarangList, this, "ModuleMainController", "/WEB-INF/pages/master/satuanBarang/satuanBarangList.zul");
+		if (tabPanelStatusList != null) {
+			ZksampleCommonUtils.createTabPanelContent(this.tabPanelStatusList, this, "ModuleMainController", "/WEB-INF/pages/master/status/statusList.zul");
 		}
 
 		// init the buttons for editMode
-		btnCtrlSatuanBarang.setInitEdit();
+		btnCtrlStatus.setInitEdit();
 	}
 
 	/**
-	 * When the tab 'tabSatuanBarangList' is selected.<br>
+	 * When the tab 'tabStatusList' is selected.<br>
 	 * Loads the zul-file into the tab.
 	 * 
 	 * @param event
 	 * @throws IOException
 	 */
-	public void onSelect$tabSatuanBarangList(Event event) throws IOException {
+	public void onSelect$tabStatusList(Event event) throws IOException {
 		//logger.debug(event.toString());
 		
 		// Check if the tabpanel is already loaded
-		if (tabPanelSatuanBarangList.getFirstChild() != null) {
-			tabSatuanBarangList.setSelected(true);
+		if (tabPanelStatusList.getFirstChild() != null) {
+			tabStatusList.setSelected(true);
 
 			return;
 		}
 
-		if (tabPanelSatuanBarangList != null) {
-			ZksampleCommonUtils.createTabPanelContent(this.tabPanelSatuanBarangList, this, "ModuleMainController", "/WEB-INF/pages//satuanBarang/satuanBarangList.zul");
+		if (tabPanelStatusList != null) {
+			ZksampleCommonUtils.createTabPanelContent(this.tabPanelStatusList, this, "ModuleMainController", "/WEB-INF/pages//status/statusList.zul");
 		}
 
 	}
 
 	/**
-	 * When the tab 'tabPanelSatuanBarangDetail' is selected.<br>
+	 * When the tab 'tabPanelStatusDetail' is selected.<br>
 	 * Loads the zul-file into the tab.
 	 * 
 	 * @param event
 	 * @throws IOException
 	 */
-	public void onSelect$tabSatuanBarangDetail(Event event) throws IOException {
+	public void onSelect$tabStatusDetail(Event event) throws IOException {
 		// logger.debug(event.toString());
 
 		// Check if the tabpanel is already loaded
-		if (tabPanelSatuanBarangDetail.getFirstChild() != null) {
-			tabSatuanBarangDetail.setSelected(true);
+		if (tabPanelStatusDetail.getFirstChild() != null) {
+			tabStatusDetail.setSelected(true);
 
 			// refresh the Binding mechanism
-			getSatuanBarangDetailCtrl().setSatuanBarang(getSelectedSatuanBarang());
-			getSatuanBarangDetailCtrl().getBinder().loadAll();
-			
+			getStatusDetailCtrl().setStatus(getSelectedStatus());
+			getStatusDetailCtrl().getBinder().loadAll();
+			if(getSelectedStatus().getStatusType().equals(getStatusDetailCtrl().radioStatusTypeBatal.getLabel())){
+				getStatusDetailCtrl().radioStatusTypeBatal.setSelected(true);
+			}
+			if(getSelectedStatus().getStatusType().equals(getStatusDetailCtrl().radioStatusTypeLunas.getLabel())){
+				getStatusDetailCtrl().radioStatusTypeLunas.setSelected(true);
+			}
+			if(getSelectedStatus().getStatusType().equals(getStatusDetailCtrl().radioStatusTypeTarikBarang.getLabel())){
+				getStatusDetailCtrl().radioStatusTypeTarikBarang.setSelected(true);
+			}
+			if(getSelectedStatus().getStatusType().equals(getStatusDetailCtrl().radioStatusTypeKosong.getLabel())){
+				getStatusDetailCtrl().radioStatusTypeKosong.setSelected(true);
+			}
 			return;
 		}
 
-		if (tabPanelSatuanBarangDetail != null) {
-			ZksampleCommonUtils.createTabPanelContent(this.tabPanelSatuanBarangDetail, this, "ModuleMainController", "/WEB-INF/pages/master/satuanBarang/satuanBarangDetail.zul");
+		if (tabPanelStatusDetail != null) {
+			ZksampleCommonUtils.createTabPanelContent(this.tabPanelStatusDetail, this, "ModuleMainController", "/WEB-INF/pages/master/status/statusDetail.zul");
 		}
 	}
 
@@ -201,27 +212,27 @@ public class SatuanBarangMainCtrl extends GFCBaseCtrl implements Serializable {
 	 * 
 	 * @param event
 	 */
-	public void onCheck$checkbox_SatuanBarangList_ShowAll(Event event) {
+	public void onCheck$checkbox_StatusList_ShowAll(Event event) {
 		// logger.debug(event.toString());
 
 		// empty the text search boxes
-		txtb_SatuanBarang_Name.setValue(""); // clear
+		txtb_Status_Name.setValue(""); // clear
 
 		// ++ create the searchObject and init sorting ++//
-		HibernateSearchObject<SatuanBarang> soSatuanBarang = new HibernateSearchObject<SatuanBarang>(SatuanBarang.class, getSatuanBarangListCtrl().getCountRows());
-		soSatuanBarang.addSort("deskripsiSatuanBarang", false);
+		HibernateSearchObject<Status> soStatus = new HibernateSearchObject<Status>(Status.class, getStatusListCtrl().getCountRows());
+		soStatus.addSort("deskripsiStatus", false);
 
 		// Change the BindingListModel.
-		if (getSatuanBarangListCtrl().getBinder() != null) {
-			getSatuanBarangListCtrl().getPagedBindingListWrapper().setSearchObject(soSatuanBarang);
+		if (getStatusListCtrl().getBinder() != null) {
+			getStatusListCtrl().getPagedBindingListWrapper().setSearchObject(soStatus);
 
 			// get the current Tab for later checking if we must change it
-			Tab currentTab = tabbox_SatuanBarangMain.getSelectedTab();
+			Tab currentTab = tabbox_StatusMain.getSelectedTab();
 
 			// check if the tab is one of the Detail tabs. If so do not
 			// change the selection of it
-			if (!currentTab.equals(tabSatuanBarangList)) {
-				tabSatuanBarangList.setSelected(true);
+			if (!currentTab.equals(tabStatusList)) {
+				tabStatusList.setSelected(true);
 			} else {
 				currentTab.setSelected(true);
 			}
@@ -232,31 +243,31 @@ public class SatuanBarangMainCtrl extends GFCBaseCtrl implements Serializable {
 	
 
 	/**
-	 * Filter the satuanBarang list with 'like satuanBarang name'. <br>
+	 * Filter the status list with 'like status name'. <br>
 	 */
-	public void onClick$button_SatuanBarangList_SearchName(Event event) throws Exception {
+	public void onClick$button_StatusList_SearchName(Event event) throws Exception {
 		// logger.debug(event.toString());
 
 		// if not empty
-		if (!txtb_SatuanBarang_Name.getValue().isEmpty()) {
-			checkbox_SatuanBarangList_ShowAll.setChecked(false); // unCheck
+		if (!txtb_Status_Name.getValue().isEmpty()) {
+			checkbox_StatusList_ShowAll.setChecked(false); // unCheck
 	
 			// ++ create the searchObject and init sorting ++//
-			HibernateSearchObject<SatuanBarang> soSatuanBarang = new HibernateSearchObject<SatuanBarang>(SatuanBarang.class, getSatuanBarangListCtrl().getCountRows());
-			soSatuanBarang.addFilter(new Filter("deskripsiSatuanBarang", "%" + txtb_SatuanBarang_Name.getValue() + "%", Filter.OP_ILIKE));
-			soSatuanBarang.addSort("deskripsiSatuanBarang", false);
+			HibernateSearchObject<Status> soStatus = new HibernateSearchObject<Status>(Status.class, getStatusListCtrl().getCountRows());
+			soStatus.addFilter(new Filter("deskripsiStatus", "%" + txtb_Status_Name.getValue() + "%", Filter.OP_ILIKE));
+			soStatus.addSort("deskripsiStatus", false);
 
 			// Change the BindingListModel.
-			if (getSatuanBarangListCtrl().getBinder() != null) {
-				getSatuanBarangListCtrl().getPagedBindingListWrapper().setSearchObject(soSatuanBarang);
+			if (getStatusListCtrl().getBinder() != null) {
+				getStatusListCtrl().getPagedBindingListWrapper().setSearchObject(soStatus);
 
 				// get the current Tab for later checking if we must change it
-				Tab currentTab = tabbox_SatuanBarangMain.getSelectedTab();
+				Tab currentTab = tabbox_StatusMain.getSelectedTab();
 
 				// check if the tab is one of the Detail tabs. If so do not
 				// change the selection of it
-				if (!currentTab.equals(tabSatuanBarangList)) {
-					tabSatuanBarangList.setSelected(true);
+				if (!currentTab.equals(tabStatusList)) {
+					tabStatusList.setSelected(true);
 				} else {
 					currentTab.setSelected(true);
 				}
@@ -395,15 +406,15 @@ public class SatuanBarangMainCtrl extends GFCBaseCtrl implements Serializable {
 		doResetToInitValues();
 
 		// check first, if the tabs are created
-		if (getSatuanBarangDetailCtrl().getBinder() != null) {
+		if (getStatusDetailCtrl().getBinder() != null) {
 
 			// refresh all dataBinder related controllers/components
-			getSatuanBarangDetailCtrl().getBinder().loadAll();
+			getStatusDetailCtrl().getBinder().loadAll();
 
 			// set editable Mode
-			getSatuanBarangDetailCtrl().doReadOnlyMode(true);
+			getStatusDetailCtrl().doReadOnlyMode(true);
 
-			btnCtrlSatuanBarang.setInitEdit();
+			btnCtrlStatus.setInitEdit();
 		}
 	}
 
@@ -418,21 +429,21 @@ public class SatuanBarangMainCtrl extends GFCBaseCtrl implements Serializable {
 	private void doEdit(Event event) {
 		// logger.debug(event.toString());
 		// get the current Tab for later checking if we must change it
-		Tab currentTab = tabbox_SatuanBarangMain.getSelectedTab();
+		Tab currentTab = tabbox_StatusMain.getSelectedTab();
 
 		// check first, if the tabs are created, if not than create it
-		if (getSatuanBarangDetailCtrl() == null) {
-			Events.sendEvent(new Event("onSelect", tabSatuanBarangDetail, null));
+		if (getStatusDetailCtrl() == null) {
+			Events.sendEvent(new Event("onSelect", tabStatusDetail, null));
 			// if we work with spring beanCreation than we must check a little
 			// bit deeper, because the Controller are preCreated ?
-		} else if (getSatuanBarangDetailCtrl().getBinder() == null) {
-			Events.sendEvent(new Event("onSelect", tabSatuanBarangDetail, null));
+		} else if (getStatusDetailCtrl().getBinder() == null) {
+			Events.sendEvent(new Event("onSelect", tabStatusDetail, null));
 		}
 
 		// check if the tab is one of the Detail tabs. If so do not change the
 		// selection of it
-		if (!currentTab.equals(tabSatuanBarangDetail)) {
-			tabSatuanBarangDetail.setSelected(true);
+		if (!currentTab.equals(tabStatusDetail)) {
+			tabStatusDetail.setSelected(true);
 		} else {
 			currentTab.setSelected(true);
 		}
@@ -440,15 +451,15 @@ public class SatuanBarangMainCtrl extends GFCBaseCtrl implements Serializable {
 		// remember the old vars
 		doStoreInitValues();
 
-		btnCtrlSatuanBarang.setBtnStatus_Edit();
+		btnCtrlStatus.setBtnStatus_Edit();
 
-		getSatuanBarangDetailCtrl().doReadOnlyMode(false);
+		getStatusDetailCtrl().doReadOnlyMode(false);
 
 		// refresh the UI, because we can click the EditBtn from every tab.
-		getSatuanBarangDetailCtrl().getBinder().loadAll();
+		getStatusDetailCtrl().getBinder().loadAll();
 
 		// set focus
-		getSatuanBarangDetailCtrl().txtb_KodeSatuanBarang.focus();
+		getStatusDetailCtrl().txtb_KodeStatus.focus();
 	}
 
 	/**
@@ -461,20 +472,20 @@ public class SatuanBarangMainCtrl extends GFCBaseCtrl implements Serializable {
 	private void doDelete(Event event) throws InterruptedException {
 		// logger.debug(event.toString());
 		// check first, if the tabs are created, if not than create them
-		if (getSatuanBarangDetailCtrl().getBinder() == null) {
-			Events.sendEvent(new Event("onSelect", tabSatuanBarangDetail, null));
+		if (getStatusDetailCtrl().getBinder() == null) {
+			Events.sendEvent(new Event("onSelect", tabStatusDetail, null));
 		}
 
 		// check first, if the tabs are created
-		if (getSatuanBarangDetailCtrl().getBinder() == null) {
+		if (getStatusDetailCtrl().getBinder() == null) {
 			return;
 		}
 
-		final SatuanBarang anSatuanBarang = getSelectedSatuanBarang();
-		if (anSatuanBarang != null) {
+		final Status anStatus = getSelectedStatus();
+		if (anStatus != null) {
 
 			// Show a confirm box
-			final String msg = Labels.getLabel("message.Question.Are_you_sure_to_delete_this_record") + "\n\n --> " + anSatuanBarang.getKodeSatuanBarang();
+			final String msg = Labels.getLabel("message.Question.Are_you_sure_to_delete_this_record") + "\n\n --> " + anStatus.getKodeStatus();
 			final String title = Labels.getLabel("message.Deleting.Record");
 
 			MultiLineMessageBox.doSetTemplate();
@@ -497,7 +508,7 @@ public class SatuanBarangMainCtrl extends GFCBaseCtrl implements Serializable {
 
 				private void deleteBean() throws InterruptedException {
 					try {
-						getSatuanBarangService().delete(anSatuanBarang);
+						getStatusService().delete(anStatus);
 					} catch (DataAccessException e) {
 						ZksampleMessageUtils.showErrorMessage(e.getMostSpecificCause().toString());
 					}
@@ -509,14 +520,14 @@ public class SatuanBarangMainCtrl extends GFCBaseCtrl implements Serializable {
 
 		}
 
-		btnCtrlSatuanBarang.setInitEdit();
+		btnCtrlStatus.setInitEdit();
 
-		setSelectedSatuanBarang(null);
+		setSelectedStatus(null);
 		// refresh the list
-		getSatuanBarangListCtrl().doFillListbox();
+		getStatusListCtrl().doFillListbox();
 
 		// refresh all dataBinder related controllers
-		getSatuanBarangDetailCtrl().getBinder().loadAll();
+		getStatusDetailCtrl().getBinder().loadAll();
 	}
 
 	/**
@@ -528,24 +539,36 @@ public class SatuanBarangMainCtrl extends GFCBaseCtrl implements Serializable {
 	private void doSave(Event event) throws InterruptedException {
 		// logger.debug(event.toString());
 		// save all components data in the several tabs to the bean
-		getSatuanBarangDetailCtrl().getBinder().saveAll();
+		getStatusDetailCtrl().getBinder().saveAll();
 
-		try {			
+		try {
+			if(getStatusDetailCtrl().radioStatusTypeBatal.isSelected()){
+				getStatusDetailCtrl().getStatus().setStatusType(getStatusDetailCtrl().radioStatusTypeBatal.getLabel());
+			}
+			if(getStatusDetailCtrl().radioStatusTypeLunas.isSelected()){
+				getStatusDetailCtrl().getStatus().setStatusType(getStatusDetailCtrl().radioStatusTypeLunas.getLabel());
+			}
+			if(getStatusDetailCtrl().radioStatusTypeKosong.isSelected()){
+				getStatusDetailCtrl().getStatus().setStatusType(getStatusDetailCtrl().radioStatusTypeKosong.getLabel());
+			}
+			if(getStatusDetailCtrl().radioStatusTypeTarikBarang.isSelected()){
+				getStatusDetailCtrl().getStatus().setStatusType(getStatusDetailCtrl().radioStatusTypeTarikBarang.getLabel());
+			}
 			String userName = ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();			
-			getSatuanBarangDetailCtrl().getSatuanBarang().setLastUpdate(new Date());			
-			getSatuanBarangDetailCtrl().getSatuanBarang().setUpdatedBy(userName);			
+			getStatusDetailCtrl().getStatus().setLastUpdate(new Date());			
+			getStatusDetailCtrl().getStatus().setUpdatedBy(userName);			
 			// save it to database
-			getSatuanBarangService().saveOrUpdate(getSatuanBarangDetailCtrl().getSatuanBarang());
+			getStatusService().saveOrUpdate(getStatusDetailCtrl().getStatus());
 			// if saving is successfully than actualize the beans as
 			// origins.
 			doStoreInitValues();
 			// refresh the list
-			getSatuanBarangListCtrl().doFillListbox();
+			getStatusListCtrl().doFillListbox();
 			// later refresh StatusBar
-			Events.postEvent("onSelect", getSatuanBarangListCtrl().getListBoxSatuanBarang(), getSelectedSatuanBarang());
+			Events.postEvent("onSelect", getStatusListCtrl().getListBoxStatus(), getSelectedStatus());
 
 			// show the objects data in the statusBar
-			String str = getSelectedSatuanBarang().getKodeSatuanBarang();
+			String str = getSelectedStatus().getKodeStatus();
 			EventQueues.lookup("selectedObjectEventQueue", EventQueues.DESKTOP, true).publish(new Event("onChangeSelectedObject", null, str));
 
 		} catch (DataAccessException e) {
@@ -557,8 +580,8 @@ public class SatuanBarangMainCtrl extends GFCBaseCtrl implements Serializable {
 			return;
 
 		} finally {
-			btnCtrlSatuanBarang.setInitEdit();
-			getSatuanBarangDetailCtrl().doReadOnlyMode(true);
+			btnCtrlStatus.setInitEdit();
+			getStatusDetailCtrl().doReadOnlyMode(true);
 		}
 	}
 
@@ -572,12 +595,12 @@ public class SatuanBarangMainCtrl extends GFCBaseCtrl implements Serializable {
 	private void doNew(Event event) {
 		// logger.debug(event.toString());
 		// check first, if the tabs are created
-		if (getSatuanBarangDetailCtrl() == null) {
-			Events.sendEvent(new Event("onSelect", tabSatuanBarangDetail, null));
+		if (getStatusDetailCtrl() == null) {
+			Events.sendEvent(new Event("onSelect", tabStatusDetail, null));
 			// if we work with spring beanCreation than we must check a little
 			// bit deeper, because the Controller are preCreated ?
-		} else if (getSatuanBarangDetailCtrl().getBinder() == null) {
-			Events.sendEvent(new Event("onSelect", tabSatuanBarangDetail, null));
+		} else if (getStatusDetailCtrl().getBinder() == null) {
+			Events.sendEvent(new Event("onSelect", tabStatusDetail, null));
 		}
 
 		// remember the current object
@@ -586,25 +609,25 @@ public class SatuanBarangMainCtrl extends GFCBaseCtrl implements Serializable {
 		/** !!! DO NOT BREAK THE TIERS !!! */
 		// We don't create a new DomainObject() in the frontend.
 		// We GET it from the backend.
-		final SatuanBarang anSatuanBarang = getSatuanBarangService().getNewSatuanBarang();
+		final Status anStatus = getStatusService().getNewStatus();
 
 		// set the beans in the related databinded controllers
-		getSatuanBarangDetailCtrl().setSatuanBarang(anSatuanBarang);
-		getSatuanBarangDetailCtrl().setSelectedSatuanBarang(anSatuanBarang);
+		getStatusDetailCtrl().setStatus(anStatus);
+		getStatusDetailCtrl().setSelectedStatus(anStatus);
 
 		// Refresh the binding mechanism
-		getSatuanBarangDetailCtrl().setSelectedSatuanBarang(getSelectedSatuanBarang());
-		getSatuanBarangDetailCtrl().getBinder().loadAll();
+		getStatusDetailCtrl().setSelectedStatus(getSelectedStatus());
+		getStatusDetailCtrl().getBinder().loadAll();
 
 		// set editable Mode
-		getSatuanBarangDetailCtrl().doReadOnlyMode(false);
+		getStatusDetailCtrl().doReadOnlyMode(false);
 
 		// set the ButtonStatus to New-Mode
-		btnCtrlSatuanBarang.setInitNew();
+		btnCtrlStatus.setInitNew();
 
-		tabSatuanBarangDetail.setSelected(true);
+		tabStatusDetail.setSelected(true);
 		// set focus
-		getSatuanBarangDetailCtrl().txtb_KodeSatuanBarang.focus();
+		getStatusDetailCtrl().txtb_KodeStatus.focus();
 
 	}
 
@@ -617,13 +640,13 @@ public class SatuanBarangMainCtrl extends GFCBaseCtrl implements Serializable {
 	private void doSkip(Event event) {
 
 		// get the model and the current selected record
-		BindingListModelList blml = (BindingListModelList) getSatuanBarangListCtrl().getListBoxSatuanBarang().getModel();
+		BindingListModelList blml = (BindingListModelList) getStatusListCtrl().getListBoxStatus().getModel();
 
 		// check if data exists
 		if (blml == null || blml.size() < 1)
 			return;
 
-		int index = blml.indexOf(getSelectedSatuanBarang());
+		int index = blml.indexOf(getSelectedStatus());
 
 		/**
 		 * Check, if all tabs with data binded components are created So we work
@@ -631,10 +654,10 @@ public class SatuanBarangMainCtrl extends GFCBaseCtrl implements Serializable {
 		 * the Controller are preCreated ? After that, go back to the
 		 * current/selected tab.
 		 */
-		Tab currentTab = tabbox_SatuanBarangMain.getSelectedTab();
+		Tab currentTab = tabbox_StatusMain.getSelectedTab();
 
-		if (getSatuanBarangDetailCtrl().getBinder() == null) {
-			Events.sendEvent(new Event(Events.ON_SELECT, tabSatuanBarangDetail, null));
+		if (getStatusDetailCtrl().getBinder() == null) {
+			Events.sendEvent(new Event(Events.ON_SELECT, tabStatusDetail, null));
 		}
 
 		// go back to selected tab
@@ -659,15 +682,28 @@ public class SatuanBarangMainCtrl extends GFCBaseCtrl implements Serializable {
 			}
 		}
 
-		getSatuanBarangListCtrl().getListBoxSatuanBarang().setSelectedIndex(index);
-		setSelectedSatuanBarang((SatuanBarang) blml.get(index));
+		getStatusListCtrl().getListBoxStatus().setSelectedIndex(index);
+		setSelectedStatus((Status) blml.get(index));
 
 		// call onSelect() for showing the objects data in the statusBar
-		Events.sendEvent(new Event(Events.ON_SELECT, getSatuanBarangListCtrl().getListBoxSatuanBarang(), getSelectedSatuanBarang()));
+		Events.sendEvent(new Event(Events.ON_SELECT, getStatusListCtrl().getListBoxStatus(), getSelectedStatus()));
 
 		// refresh master-detail MASTERS data
-		getSatuanBarangDetailCtrl().getBinder().loadAll();
+		getStatusDetailCtrl().getBinder().loadAll();
 
+		
+		if(getSelectedStatus().getStatusType().equals(getStatusDetailCtrl().radioStatusTypeBatal.getLabel())){
+			getStatusDetailCtrl().radioStatusTypeBatal.setSelected(true);
+		}
+		if(getSelectedStatus().getStatusType().equals(getStatusDetailCtrl().radioStatusTypeLunas.getLabel())){
+			getStatusDetailCtrl().radioStatusTypeLunas.setSelected(true);
+		}
+		if(getSelectedStatus().getStatusType().equals(getStatusDetailCtrl().radioStatusTypeTarikBarang.getLabel())){
+			getStatusDetailCtrl().radioStatusTypeTarikBarang.setSelected(true);
+		}
+		if(getSelectedStatus().getStatusType().equals(getStatusDetailCtrl().radioStatusTypeKosong.getLabel())){
+			getStatusDetailCtrl().radioStatusTypeKosong.setSelected(true);
+		}
 		// EXTRA: if we have a longtext field under the listbox, so we must
 		// refresh
 		// this binded component too
@@ -686,11 +722,11 @@ public class SatuanBarangMainCtrl extends GFCBaseCtrl implements Serializable {
 	private void doResizeSelectedTab(Event event) {
 		// logger.debug(event.toString());
 
-		if (tabbox_SatuanBarangMain.getSelectedTab() == tabSatuanBarangDetail) {
-			getSatuanBarangDetailCtrl().doFitSize(event);
-		} else if (tabbox_SatuanBarangMain.getSelectedTab() == tabSatuanBarangList) {
+		if (tabbox_StatusMain.getSelectedTab() == tabStatusDetail) {
+			getStatusDetailCtrl().doFitSize(event);
+		} else if (tabbox_StatusMain.getSelectedTab() == tabStatusList) {
 			// resize and fill Listbox new
-			getSatuanBarangListCtrl().doFillListbox();
+			getStatusListCtrl().doFillListbox();
 		}
 	}
 
@@ -714,10 +750,10 @@ public class SatuanBarangMainCtrl extends GFCBaseCtrl implements Serializable {
 	 */
 	public void doStoreInitValues() {
 
-		if (getSelectedSatuanBarang() != null) {
+		if (getSelectedStatus() != null) {
 
 			try {
-				setOriginalSatuanBarang((SatuanBarang) ZksampleBeanUtils.cloneBean(getSelectedSatuanBarang()));
+				setOriginalStatus((Status) ZksampleBeanUtils.cloneBean(getSelectedStatus()));
 			} catch (final IllegalAccessException e) {
 				throw new RuntimeException(e);
 			} catch (final InstantiationException e) {
@@ -738,12 +774,12 @@ public class SatuanBarangMainCtrl extends GFCBaseCtrl implements Serializable {
 	 */
 	public void doResetToInitValues() {
 
-		if (getOriginalSatuanBarang() != null) {
+		if (getOriginalStatus() != null) {
 
 			try {
-				setSelectedSatuanBarang((SatuanBarang) ZksampleBeanUtils.cloneBean(getOriginalSatuanBarang()));
+				setSelectedStatus((Status) ZksampleBeanUtils.cloneBean(getOriginalStatus()));
 				// TODO Bug in DataBinder??
-				windowSatuanBarangMain.invalidate();
+				windowStatusMain.invalidate();
 
 			} catch (final IllegalAccessException e) {
 				throw new RuntimeException(e);
@@ -769,7 +805,7 @@ public class SatuanBarangMainCtrl extends GFCBaseCtrl implements Serializable {
 	private void doCheckRights() {
 
 		final UserWorkspace workspace = getUserWorkspace();
-		button_SatuanBarangList_SearchName.setVisible(workspace.isAllowed("button_SatuanBarangList_SearchName"));
+		button_StatusList_SearchName.setVisible(workspace.isAllowed("button_StatusList_SearchName"));
 
 	}
 
@@ -778,54 +814,54 @@ public class SatuanBarangMainCtrl extends GFCBaseCtrl implements Serializable {
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
 	/* Master BEANS */
-	public void setOriginalSatuanBarang(SatuanBarang originalSatuanBarang) {
-		this.originalSatuanBarang = originalSatuanBarang;
+	public void setOriginalStatus(Status originalStatus) {
+		this.originalStatus = originalStatus;
 	}
 
-	public SatuanBarang getOriginalSatuanBarang() {
-		return this.originalSatuanBarang;
+	public Status getOriginalStatus() {
+		return this.originalStatus;
 	}
 
-	public void setSelectedSatuanBarang(SatuanBarang selectedSatuanBarang) {
-		this.selectedSatuanBarang = selectedSatuanBarang;
+	public void setSelectedStatus(Status selectedStatus) {
+		this.selectedStatus = selectedStatus;
 	}
 
-	public SatuanBarang getSelectedSatuanBarang() {
-		return this.selectedSatuanBarang;
+	public Status getSelectedStatus() {
+		return this.selectedStatus;
 	}
 
-	public void setSatuanBarangs(BindingListModelList satuanBarangs) {
-		this.satuanBarangs = satuanBarangs;
+	public void setStatuss(BindingListModelList statuss) {
+		this.statuss = statuss;
 	}
 
-	public BindingListModelList getSatuanBarangs() {
-		return this.satuanBarangs;
+	public BindingListModelList getStatuss() {
+		return this.statuss;
 	}
 
 	/* CONTROLLERS */
-	public void setSatuanBarangListCtrl(SatuanBarangListCtrl satuanBarangListCtrl) {
-		this.satuanBarangListCtrl = satuanBarangListCtrl;
+	public void setStatusListCtrl(StatusListCtrl statusListCtrl) {
+		this.statusListCtrl = statusListCtrl;
 	}
 
-	public SatuanBarangListCtrl getSatuanBarangListCtrl() {
-		return this.satuanBarangListCtrl;
+	public StatusListCtrl getStatusListCtrl() {
+		return this.statusListCtrl;
 	}
 
-	public void setSatuanBarangDetailCtrl(SatuanBarangDetailCtrl satuanBarangDetailCtrl) {
-		this.satuanBarangDetailCtrl = satuanBarangDetailCtrl;
+	public void setStatusDetailCtrl(StatusDetailCtrl statusDetailCtrl) {
+		this.statusDetailCtrl = statusDetailCtrl;
 	}
 
-	public SatuanBarangDetailCtrl getSatuanBarangDetailCtrl() {
-		return this.satuanBarangDetailCtrl;
+	public StatusDetailCtrl getStatusDetailCtrl() {
+		return this.statusDetailCtrl;
 	}
 
 	/* SERVICES */
-	public SatuanBarangService getSatuanBarangService() {
-		return this.satuanBarangService;
+	public StatusService getStatusService() {
+		return this.statusService;
 	}
 
-	public void setSatuanBarangService(SatuanBarangService satuanBarangService) {
-		this.satuanBarangService = satuanBarangService;
+	public void setStatusService(StatusService statusService) {
+		this.statusService = statusService;
 	}
 
 	/* COMPONENTS and OTHERS */
