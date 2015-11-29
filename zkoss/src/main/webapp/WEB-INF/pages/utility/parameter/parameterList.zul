@@ -43,11 +43,11 @@
 							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
 							label="${c:l('listheader_ParameterList_Description.label')}" sort="auto"
 							width="40%" />
-						<listheader id="listheader_ParameterList_lastUpdate"
+						<listheader id="listheader_ParameterList_LastUpdate"
 							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
 							label="${c:l('common.lastUpdate')}" sort="auto"
 							width="10%" />
-						<listheader id="listheader_ParameterList_UpdateBy"
+						<listheader id="listheader_ParameterList_UpdatedBy"
 							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
 							label="${c:l('common.updatedBy')}" sort="auto"
 							width="10%" />

@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+	<class name="billy.backend.model.SatuanBarang" table="satuan_barang">
+
+		<id name="id" type="long">
+			<column name="satuan_barang_id" />
+			<generator class="sequence">
+				<param name="sequence">satuan_barang_seq</param>
+			</generator>
+		</id>
+
+		<version name="version" column="VERSION" type="integer" />
+
+		<property name="kodeSatuanBarang" type="string">
+			<column name="kode_satuan_barang" length="50" not-null="true" unique="true" />
+		</property>
+		<property name="deskripsiSatuanBarang" type="string">
+			<column name="deskripsi_satuan_barang" length="254" />
+		</property>
+		<property name="satuanStandarBarang" type="boolean">
+			<column name="satuan_standar_barang"  />
+		</property>	
+		<property name="nilaiStandarSatuan" type="long">
+			<column name="nilai_standar_satuan"  />
+		</property>		
+		<property name="nilaiKonversi" type="long">
+			<column name="nilai_konversi"/>
+		</property>			
+		<property name="lastUpdate" type="timestamp">
+			<column name="last_update" length="29" />
+		</property>	
+		<property name="updatedBy" type="string">
+			<column name="updated_by" length="50" />
+		</property>	
+		
+	</class>
+</hibernate-mapping>

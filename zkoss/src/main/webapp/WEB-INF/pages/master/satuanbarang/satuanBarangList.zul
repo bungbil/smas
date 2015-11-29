@@ -5,66 +5,60 @@
 <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 <!-- Namespace dependent DataBinding Initiator.          -->
 <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./windowWilayahList" ?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./windowSatuanBarangList" ?>
 
 <zk xmlns="http://www.zkoss.org/2005/zul"
 	xmlns:h="http://www.w3.org/1999/xhtml"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
-	<window id="windowWilayahList" apply="${wilayahListCtrl}"
+	<window id="windowSatuanBarangList" apply="${satuanBarangListCtrl}"
 		border="none" width="100%">
 
-		<borderlayout id="borderLayout_wilayahList">
+		<borderlayout id="borderLayout_satuanBarangList">
 
 			<!-- PAGING COMPONENT -->
 			<north border="none" height="26px">
-				<paging id="paging_WilayahList" />
+				<paging id="paging_SatuanBarangList" />
 			</north>
 
 			<center border="none">
 
-				<listbox id="listBoxWilayah"
+				<listbox id="listBoxSatuanBarang"
 					style="border-top-width: 0px; border-left-width: 0px; border-right-width: 0px; border-bottom-width: 1px;"
-					model="@{controller.wilayahs}"
-					selectedItem="@{controller.selectedWilayah}" vflex="true"
+					model="@{controller.satuanBarangs}"
+					selectedItem="@{controller.selectedSatuanBarang}" vflex="true"
 					tooltiptext="${c:l('listbox.tooltiptext')}" width="100%"
 					height="100%" multiple="false">
 					<listhead sizable="true">
-						<listheader id="listheader_WilayahList_Kode"
+						<listheader id="listheader_SatuanBarangList_Kode"
 							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
-							label="${c:l('listheader_WilayahList_Kode.label')}" sort="auto"
-							width="20%" />
-						<listheader id="listheader_WilayahList_Nama"
+							label="${c:l('listheader_SatuanBarangList_Kode.label')}" sort="auto"
+							width="30%" />
+						<listheader id="listheader_SatuanBarangList_Deskripsi"
 							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
-							label="${c:l('listheader_WilayahList_Nama.label')}" sort="auto"
-							width="20%" />
-						<listheader id="listheader_WilayahList_Status"
-							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
-							label="${c:l('listheader_WilayahList_Status.label')}" sort="auto"
-							width="40%" />
-						<listheader id="listheader_WilayahList_LastUpdate"
+							label="${c:l('listheader_SatuanBarangList_Deskripsi.label')}" sort="auto"
+							width="30%" />
+						<listheader id="listheader_SatuanBarangList_LastUpdate"
 							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
 							label="${c:l('common.lastUpdate')}" sort="auto"
-							width="10%" />
-						<listheader id="listheader_WilayahList_UpdatedBy"
+							width="20%" />
+						<listheader id="listheader_SatuanBarangList_UpdatedBy"
 							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
 							label="${c:l('common.updatedBy')}" sort="auto"
-							width="10%" />
+							width="20%" />
 					</listhead>
 
-					<listitem self="@{each='wilayah'}" value="@{wilayah}"
-						forward="onDoubleClick=onDoubleClickedWilayahItem">
+					<listitem self="@{each='satuanBarang'}" value="@{satuanBarang}"
+						forward="onDoubleClick=onDoubleClickedSatuanBarangItem">
 
-						<listcell label="@{wilayah.kodeWilayah}"
+						<listcell label="@{satuanBarang.kodeSatuanBarang}"
 							style="padding-left: 5px" />
-						<listcell label="@{wilayah.namaWilayah}"
+						<listcell label="@{satuanBarang.deskripsiSatuanBarang}"
 							style="padding-left: 5px" />
-						<listcell label="@{wilayah.status}"
-							style="padding-left: 5px" />
-						<listcell label="@{wilayah.lastUpdate}"
+						<listcell label="@{satuanBarang.lastUpdate}"
 							style="padding-left: 5px" />	
-						<listcell label="@{wilayah.updatedBy}"
+						<listcell label="@{satuanBarang.updatedBy}"
 							style="padding-left: 5px" />							
 					</listitem>
 				</listbox>

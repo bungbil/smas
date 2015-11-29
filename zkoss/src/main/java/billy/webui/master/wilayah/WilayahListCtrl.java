@@ -40,8 +40,9 @@ public class WilayahListCtrl extends GFCBaseListCtrl<Wilayah> implements Seriali
 	protected Listheader listheader_WilayahList_Kode; // autowired
 	protected Listheader listheader_WilayahList_Nama; // autowired
 	protected Listheader listheader_WilayahList_Status; // autowired
+	protected Listheader listheader_WilayahList_LastUpdate;
+	protected Listheader listheader_WilayahList_UpdatedBy;
 	
-
 	// NEEDED for ReUse in the SearchWindow
 	private HibernateSearchObject<Wilayah> searchObj;
 
@@ -117,6 +118,12 @@ public class WilayahListCtrl extends GFCBaseListCtrl<Wilayah> implements Seriali
 		
 		listheader_WilayahList_Status.setSortAscending(new FieldComparator("status", true));
 		listheader_WilayahList_Status.setSortDescending(new FieldComparator("status", false));
+		
+		listheader_WilayahList_LastUpdate.setSortAscending(new FieldComparator("lastUpdate", true));
+		listheader_WilayahList_LastUpdate.setSortDescending(new FieldComparator("lastUpdate", false));
+		
+		listheader_WilayahList_UpdatedBy.setSortAscending(new FieldComparator("updatedBy", true));
+		listheader_WilayahList_UpdatedBy.setSortDescending(new FieldComparator("updatedBy", false));
 		
 		
 		// ++ create the searchObject and init sorting ++//

@@ -40,7 +40,8 @@ public class ParameterListCtrl extends GFCBaseListCtrl<Parameter> implements Ser
 	protected Listheader listheader_ParameterList_Name; // autowired
 	protected Listheader listheader_ParameterList_Value; // autowired
 	protected Listheader listheader_ParameterList_Description; // autowired
-	
+	protected Listheader listheader_ParameterList_LastUpdate;
+	protected Listheader listheader_ParameterList_UpdatedBy;
 
 	// NEEDED for ReUse in the SearchWindow
 	private HibernateSearchObject<Parameter> searchObj;
@@ -111,6 +112,18 @@ public class ParameterListCtrl extends GFCBaseListCtrl<Parameter> implements Ser
 		// lh.setSortAscending(""); lh.setSortDescending("")
 		listheader_ParameterList_Name.setSortAscending(new FieldComparator("paramName", true));
 		listheader_ParameterList_Name.setSortDescending(new FieldComparator("paramName", false));
+		
+		listheader_ParameterList_Description.setSortAscending(new FieldComparator("description", true));
+		listheader_ParameterList_Description.setSortDescending(new FieldComparator("description", false));
+		
+		listheader_ParameterList_Value.setSortAscending(new FieldComparator("paramValue", true));
+		listheader_ParameterList_Value.setSortDescending(new FieldComparator("paramValue", false));
+		
+		listheader_ParameterList_LastUpdate.setSortAscending(new FieldComparator("lastUpdate", true));
+		listheader_ParameterList_LastUpdate.setSortDescending(new FieldComparator("lastUpdate", false));
+		
+		listheader_ParameterList_UpdatedBy.setSortAscending(new FieldComparator("updatedBy", true));
+		listheader_ParameterList_UpdatedBy.setSortDescending(new FieldComparator("updatedBy", false));
 		
 		// ++ create the searchObject and init sorting ++//
 		// ++ create the searchObject and init sorting ++//

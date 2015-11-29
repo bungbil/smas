@@ -361,18 +361,108 @@
 	</bean>
 		
 	<!-- SatuanBarang -->
-	<bean id="satuanBarangMainCtrl" class="billy.webui.master.satuanBarang.SatuanBarangMainCtrl" parent="basisCtrl" scope="prototype">
+	<bean id="satuanBarangMainCtrl" class="billy.webui.master.satuanbarang.SatuanBarangMainCtrl" parent="basisCtrl" scope="prototype">
 		<property name="satuanBarangService" ref="satuanBarangService" />
 		<property name="satuanBarangListCtrl" ref="satuanBarangListCtrl" />
 		<property name="satuanBarangDetailCtrl" ref="satuanBarangDetailCtrl" />
 	</bean>
-	<bean id="satuanBarangListCtrl" class="billy.webui.master.satuanBarang.SatuanBarangListCtrl" parent="basisCtrl" scope="prototype">
+	<bean id="satuanBarangListCtrl" class="billy.webui.master.satuanbarang.SatuanBarangListCtrl" parent="basisCtrl" scope="prototype">
 		<property name="satuanBarangService" ref="satuanBarangService" />
 	</bean>
-	<bean id="satuanBarangDetailCtrl" class="billy.webui.master.satuanBarang.SatuanBarangDetailCtrl" parent="basisCtrl" scope="prototype">
+	<bean id="satuanBarangDetailCtrl" class="billy.webui.master.satuanbarang.SatuanBarangDetailCtrl" parent="basisCtrl" scope="prototype">
 		<property name="satuanBarangService" ref="satuanBarangService" />
 	</bean>
 	
+	<!-- Status -->
+	<bean id="statusMainCtrl" class="billy.webui.master.status.StatusMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="statusService" ref="statusService" />
+		<property name="statusListCtrl" ref="statusListCtrl" />
+		<property name="statusDetailCtrl" ref="statusDetailCtrl" />
+	</bean>
+	<bean id="statusListCtrl" class="billy.webui.master.status.StatusListCtrl" parent="basisCtrl" scope="prototype">
+		<property name="statusService" ref="statusService" />
+	</bean>
+	<bean id="statusDetailCtrl" class="billy.webui.master.status.StatusDetailCtrl" parent="basisCtrl" scope="prototype">
+		<property name="statusService" ref="statusService" />
+	</bean>
+	
+	<!-- KategoriBarang -->
+	<bean id="kategoriBarangMainCtrl" class="billy.webui.master.kategoribarang.KategoriBarangMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="kategoriBarangService" ref="kategoriBarangService" />
+		<property name="kategoriBarangListCtrl" ref="kategoriBarangListCtrl" />
+		<property name="kategoriBarangDetailCtrl" ref="kategoriBarangDetailCtrl" />
+	</bean>
+	<bean id="kategoriBarangListCtrl" class="billy.webui.master.kategoribarang.KategoriBarangListCtrl" parent="basisCtrl" scope="prototype">
+		<property name="kategoriBarangService" ref="kategoriBarangService" />
+	</bean>
+	<bean id="kategoriBarangDetailCtrl" class="billy.webui.master.kategoribarang.KategoriBarangDetailCtrl" parent="basisCtrl" scope="prototype">
+		<property name="kategoriBarangService" ref="kategoriBarangService" />
+	</bean>
+	
+	<!-- Komisi -->
+	<bean id="komisiMainCtrl" class="billy.webui.master.komisi.KomisiMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="komisiService" ref="komisiService" />
+		<property name="komisiListCtrl" ref="komisiListCtrl" />
+		<property name="komisiDetailCtrl" ref="komisiDetailCtrl" />
+	</bean>
+	<bean id="komisiListCtrl" class="billy.webui.master.komisi.KomisiListCtrl" parent="basisCtrl" scope="prototype">
+		<property name="komisiService" ref="komisiService" />
+	</bean>
+	<bean id="komisiDetailCtrl" class="billy.webui.master.komisi.KomisiDetailCtrl" parent="basisCtrl" scope="prototype">
+		<property name="komisiService" ref="komisiService" />
+	</bean>
+	
+	<!-- Karyawan -->
+	<bean id="karyawanMainCtrl" class="billy.webui.master.karyawan.KaryawanMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="karyawanService" ref="karyawanService" />
+		<property name="karyawanListCtrl" ref="karyawanListCtrl" />
+		<property name="karyawanDetailCtrl" ref="karyawanDetailCtrl" />
+	</bean>
+	<bean id="karyawanListCtrl" class="billy.webui.master.karyawan.KaryawanListCtrl" parent="basisCtrl" scope="prototype">
+		<property name="karyawanService" ref="karyawanService" />
+	</bean>
+	<bean id="karyawanDetailCtrl" class="billy.webui.master.karyawan.KaryawanDetailCtrl" parent="basisCtrl" scope="prototype">
+		<property name="karyawanService" ref="karyawanService" />
+	</bean>
+	
+	<!-- HargaBarang -->
+	<bean id="hargaBarangMainCtrl" class="billy.webui.master.hargabarang.HargaBarangMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="hargaBarangService" ref="hargaBarangService" />
+		<property name="hargaBarangListCtrl" ref="hargaBarangListCtrl" />
+		<property name="hargaBarangDetailCtrl" ref="hargaBarangDetailCtrl" />
+	</bean>
+	<bean id="hargaBarangListCtrl" class="billy.webui.master.hargabarang.HargaBarangListCtrl" parent="basisCtrl" scope="prototype">
+		<property name="hargaBarangService" ref="hargaBarangService" />
+	</bean>
+	<bean id="hargaBarangDetailCtrl" class="billy.webui.master.hargabarang.HargaBarangDetailCtrl" parent="basisCtrl" scope="prototype">
+		<property name="hargaBarangService" ref="hargaBarangService" />
+	</bean>
+	
+	<!-- BonusTransport -->
+	<bean id="bonusTransportMainCtrl" class="billy.webui.master.bonustransport.BonusTransportMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="bonusTransportService" ref="bonusTransportService" />
+		<property name="bonusTransportListCtrl" ref="bonusTransportListCtrl" />
+		<property name="bonusTransportDetailCtrl" ref="bonusTransportDetailCtrl" />
+	</bean>
+	<bean id="bonusTransportListCtrl" class="billy.webui.master.bonustransport.BonusTransportListCtrl" parent="basisCtrl" scope="prototype">
+		<property name="bonusTransportService" ref="bonusTransportService" />
+	</bean>
+	<bean id="bonusTransportDetailCtrl" class="billy.webui.master.bonustransport.BonusTransportDetailCtrl" parent="basisCtrl" scope="prototype">
+		<property name="bonusTransportService" ref="bonusTransportService" />
+	</bean>
+	
+	<!-- Barang -->
+	<bean id="barangMainCtrl" class="billy.webui.master.barang.BarangMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="barangService" ref="barangService" />
+		<property name="barangListCtrl" ref="barangListCtrl" />
+		<property name="barangDetailCtrl" ref="barangDetailCtrl" />
+	</bean>
+	<bean id="barangListCtrl" class="billy.webui.master.barang.BarangListCtrl" parent="basisCtrl" scope="prototype">
+		<property name="barangService" ref="barangService" />
+	</bean>
+	<bean id="barangDetailCtrl" class="billy.webui.master.barang.BarangDetailCtrl" parent="basisCtrl" scope="prototype">
+		<property name="barangService" ref="barangService" />
+	</bean>
 	
 </beans>
 
