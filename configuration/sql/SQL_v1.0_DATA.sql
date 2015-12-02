@@ -420,3 +420,90 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 (141, 1, 141, 0),
 (142, 1, 142, 0),
 (143, 1, 143, 0);
+
+
+
+/* JOB TYPE */
+/* --> Page JobType */
+INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
+(144, 0, 'windowJobTypeList', 0),
+(145, 0, 'windowJobTypeDetail', 0),
+/* window_JobTypeList Buttons*/
+(146, 6, 'button_JobTypeList_SearchName', 0),
+/* window_JobTypeDialog BUTTONS */
+(147, 6, 'button_JobTypeMain_btnNew', 0),
+(148, 6, 'button_JobTypeMain_btnEdit', 0),
+(149, 6, 'button_JobTypeMain_btnDelete', 0),
+(150, 6, 'button_JobTypeMain_btnSave', 0),
+(151, 6, 'button_JobTypeMain_btnClose', 0),
+/* JobType navigation buttons */
+(152, 6, 'button_JobTypeMain_btnCancel', 0),
+(153, 6, 'button_JobTypeMain_btnFirst', 0),
+(154, 6, 'button_JobTypeMain_btnPrevious', 0),
+(155, 6, 'button_JobTypeMain_btnNext', 0),
+(156, 6, 'button_JobTypeMain_btnLast', 0);
+
+INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
+(144, 1, 144, 0),
+(145, 1, 145, 0),
+(146, 1, 146, 0),
+(147, 1, 147, 0),
+(148, 1, 148, 0),
+(149, 1, 149, 0),
+(150, 1, 150, 0),
+(151, 1, 151, 0),
+(152, 1, 152, 0),
+(153, 1, 153, 0),
+(154, 1, 154, 0),
+(155, 1, 155, 0),
+(156, 1, 156, 0);
+
+
+/* Bonus Transport */
+/* --> Page BonusTransport */
+INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
+(157, 0, 'windowBonusTransportList', 0),
+(158, 0, 'windowBonusTransportDetail', 0),
+/* window_BonusTransportList Buttons*/
+(159, 6, 'button_BonusTransportList_SearchName', 0),
+/* window_BonusTransportDialog BUTTONS */
+(160, 6, 'button_BonusTransportMain_btnNew', 0),
+(161, 6, 'button_BonusTransportMain_btnEdit', 0),
+(162, 6, 'button_BonusTransportMain_btnDelete', 0),
+(163, 6, 'button_BonusTransportMain_btnSave', 0),
+(164, 6, 'button_BonusTransportMain_btnClose', 0),
+/* BonusTransport navigation buttons */
+(165, 6, 'button_BonusTransportMain_btnCancel', 0),
+(166, 6, 'button_BonusTransportMain_btnFirst', 0),
+(167, 6, 'button_BonusTransportMain_btnPrevious', 0),
+(168, 6, 'button_BonusTransportMain_btnNext', 0),
+(169, 6, 'button_BonusTransportMain_btnLast', 0);
+
+
+INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
+(157, 1, 157, 0),
+(158, 1, 158, 0),
+(159, 1, 159, 0),
+(160, 1, 160, 0),
+(161, 1, 161, 0),
+(162, 1, 162, 0),
+(163, 1, 163, 0),
+(164, 1, 164, 0),
+(165, 1, 165, 0),
+(166, 1, 166, 0),
+(167, 1, 167, 0),
+(168, 1, 168, 0),
+(169, 1, 169, 0);
+
+
+INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
+(170, 2, 'menuItem_Master_Status', 0),
+(171, 2, 'menuItem_Master_KategoriBarang', 0),
+(172, 2, 'menuItem_Master_JobType', 0),
+(173, 2, 'menuItem_Master_BonusTransport', 0);
+
+INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
+(170, 1, 170, 0),
+(171, 1, 171, 0),
+(172, 1, 172, 0),
+(173, 1, 173, 0);

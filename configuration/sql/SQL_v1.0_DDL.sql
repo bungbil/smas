@@ -439,3 +439,66 @@ kode_kategori_barang
 
 
 
+/*==============================================================*/
+/* Table: Job Type                                              */
+/*==============================================================*/
+DROP TABLE IF EXISTS job_type cascade;
+DROP SEQUENCE IF EXISTS job_type_seq;
+
+CREATE TABLE job_type (
+   job_type_id           INT8                 not null,   
+   nama_job_type       	varchar(50)          null,   
+   last_update       	timestamp,          
+   updated_by       	varchar(50)          null,
+   version              int4                 not null default 0,
+   constraint pk_job_type primary key (job_type_id)
+)
+without oids;
+ALTER TABLE job_type owner to smas;
+
+CREATE SEQUENCE job_type_seq START 100;
+ALTER SEQUENCE job_type_seq OWNER TO smas;
+
+CREATE UNIQUE INDEX ix_job_type_id on job_type using btree (
+job_type_id
+);
+CREATE UNIQUE INDEX ix_kode_job_type on job_type (
+nama_job_type
+);
+
+
+/*==============================================================*/
+/* Table: Bonus Transport                                       */
+/*==============================================================*/
+DROP TABLE IF EXISTS bonus_transport cascade;
+DROP SEQUENCE IF EXISTS bonus_transport_seq;
+
+CREATE TABLE bonus_transport (
+   bonus_transport_id           INT8                not null,   
+   deskripsi_bonus_transport    varchar(254)        not null,   
+   job_type_id                  INT8        	    not null, 
+   unit_qty_start_range			int4				not null,
+   unit_qty_end_range			int4				not null,
+   honor						INT8				null,
+   OR							INT8				null,
+   transport					INT8				null,
+   bonus						INT8				null,      
+   last_update       		  timestamp,          
+   updated_by       		  varchar(50)         null,
+   version                    int4                not null default 0,
+   constraint pk_bonus_transport primary key (bonus_transport_id)
+)
+without oids;
+ALTER TABLE bonus_transport owner to smas;
+
+CREATE SEQUENCE bonus_transport_seq START 100;
+ALTER SEQUENCE bonus_transport_seq OWNER TO smas;
+
+CREATE UNIQUE INDEX ix_bonus_transport_id on bonus_transport using btree (
+bonus_transport_id
+);
+ALTER TABLE bonus_transport
+   add constraint ref_bonus_to_job foreign key (job_type_id)
+      references job_type (job_type_id)
+      on delete restrict on update restrict;
+

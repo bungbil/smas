@@ -399,17 +399,17 @@
 		<property name="kategoriBarangService" ref="kategoriBarangService" />
 	</bean>
 	
-	<!-- Komisi -->
-	<bean id="komisiMainCtrl" class="billy.webui.master.komisi.KomisiMainCtrl" parent="basisCtrl" scope="prototype">
-		<property name="komisiService" ref="komisiService" />
-		<property name="komisiListCtrl" ref="komisiListCtrl" />
-		<property name="komisiDetailCtrl" ref="komisiDetailCtrl" />
+	<!-- JobType -->
+	<bean id="jobTypeMainCtrl" class="billy.webui.master.jobtype.JobTypeMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="jobTypeService" ref="jobTypeService" />
+		<property name="jobTypeListCtrl" ref="jobTypeListCtrl" />
+		<property name="jobTypeDetailCtrl" ref="jobTypeDetailCtrl" />
 	</bean>
-	<bean id="komisiListCtrl" class="billy.webui.master.komisi.KomisiListCtrl" parent="basisCtrl" scope="prototype">
-		<property name="komisiService" ref="komisiService" />
+	<bean id="jobTypeListCtrl" class="billy.webui.master.jobtype.JobTypeListCtrl" parent="basisCtrl" scope="prototype">
+		<property name="jobTypeService" ref="jobTypeService" />
 	</bean>
-	<bean id="komisiDetailCtrl" class="billy.webui.master.komisi.KomisiDetailCtrl" parent="basisCtrl" scope="prototype">
-		<property name="komisiService" ref="komisiService" />
+	<bean id="jobTypeDetailCtrl" class="billy.webui.master.jobtype.JobTypeDetailCtrl" parent="basisCtrl" scope="prototype">
+		<property name="jobTypeService" ref="jobTypeService" />
 	</bean>
 	
 	<!-- Karyawan -->

@@ -98,17 +98,17 @@
 		<menuItem id="menu_Item_HargaBarang" zulNavigation="/WEB-INF/pages/master/hargabarang/hargaBarangMain.zul"
 			iconName="/images/icons/index_16x16.gif" />
 		<menuItem id="menu_Item_KategoriBarang" zulNavigation="/WEB-INF/pages/master/kategoribarang/kategoriBarangMain.zul"
-			iconName="/images/icons/index_16x16.gif" />
+			iconName="/images/icons/index_16x16.gif" rightName="menuItem_Master_KategoriBarang"  />
 		<menuItem id="menu_Item_SatuanBarang" zulNavigation="/WEB-INF/pages/master/satuanbarang/satuanBarangMain.zul"
 			iconName="/images/icons/index_16x16.gif" rightName="menuItem_Master_SatuanBarang" />			
 		<menuItem id="menu_Item_Wilayah" zulNavigation="/WEB-INF/pages/master/wilayah/wilayahMain.zul"
 			iconName="/images/icons/index_16x16.gif" rightName="menuItem_Master_Wilayah" />					
 		<menuItem id="menu_Item_Status" zulNavigation="/WEB-INF/pages/master/status/statusMain.zul"
-			iconName="/images/icons/index_16x16.gif" />			
+			iconName="/images/icons/index_16x16.gif" rightName="menuItem_Master_Status"  />			
 		<menuItem id="menu_Item_BonusTransport" zulNavigation="/WEB-INF/pages/master/bonustransport/bonusTransportMain.zul"
-			iconName="/images/icons/index_16x16.gif" />			
-		<menuItem id="menu_Item_Komisi" zulNavigation="/WEB-INF/pages/master/komisi/komisiMain.zul"
-			iconName="/images/icons/index_16x16.gif" />			
+			iconName="/images/icons/index_16x16.gif" rightName="menuItem_Master_BonusTransport"  />			
+		<menuItem id="menu_Item_JobType" zulNavigation="/WEB-INF/pages/master/jobtype/jobTypeMain.zul"
+			iconName="/images/icons/index_16x16.gif" rightName="menuItem_Master_JobType"  />			
 	</menu>
 	<!-- Transaction MenuTree -->
 	<menu id="menu_Category_Transaction" >
