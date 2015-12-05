@@ -17,8 +17,8 @@ public interface StatusService {
 	
 	public List<Status> getStatussLikeDeskripsiStatus(String string);
 
-	public void saveOrUpdate(Status ofice);
+	public void saveOrUpdate(Status entity);
 
-	public void delete(Status Status);
+	public void delete(Status entity);
 
 }

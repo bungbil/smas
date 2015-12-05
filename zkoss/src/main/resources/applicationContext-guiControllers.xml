@@ -412,6 +412,21 @@
 		<property name="jobTypeService" ref="jobTypeService" />
 	</bean>
 	
+	<!-- BonusTransport -->
+	<bean id="bonusTransportMainCtrl" class="billy.webui.master.bonustransport.BonusTransportMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="bonusTransportService" ref="bonusTransportService" />
+		<property name="bonusTransportListCtrl" ref="bonusTransportListCtrl" />
+		<property name="bonusTransportDetailCtrl" ref="bonusTransportDetailCtrl" />
+		<property name="jobTypeService" ref="jobTypeService" />
+	</bean>
+	<bean id="bonusTransportListCtrl" class="billy.webui.master.bonustransport.BonusTransportListCtrl" parent="basisCtrl" scope="prototype">
+		<property name="bonusTransportService" ref="bonusTransportService" />
+	</bean>
+	<bean id="bonusTransportDetailCtrl" class="billy.webui.master.bonustransport.BonusTransportDetailCtrl" parent="basisCtrl" scope="prototype">
+		<property name="bonusTransportService" ref="bonusTransportService" />	
+		<property name="jobTypeService" ref="jobTypeService" />	
+	</bean>
+	
 	<!-- Karyawan -->
 	<bean id="karyawanMainCtrl" class="billy.webui.master.karyawan.KaryawanMainCtrl" parent="basisCtrl" scope="prototype">
 		<property name="karyawanService" ref="karyawanService" />
@@ -438,18 +453,6 @@
 		<property name="hargaBarangService" ref="hargaBarangService" />
 	</bean>
 	
-	<!-- BonusTransport -->
-	<bean id="bonusTransportMainCtrl" class="billy.webui.master.bonustransport.BonusTransportMainCtrl" parent="basisCtrl" scope="prototype">
-		<property name="bonusTransportService" ref="bonusTransportService" />
-		<property name="bonusTransportListCtrl" ref="bonusTransportListCtrl" />
-		<property name="bonusTransportDetailCtrl" ref="bonusTransportDetailCtrl" />
-	</bean>
-	<bean id="bonusTransportListCtrl" class="billy.webui.master.bonustransport.BonusTransportListCtrl" parent="basisCtrl" scope="prototype">
-		<property name="bonusTransportService" ref="bonusTransportService" />
-	</bean>
-	<bean id="bonusTransportDetailCtrl" class="billy.webui.master.bonustransport.BonusTransportDetailCtrl" parent="basisCtrl" scope="prototype">
-		<property name="bonusTransportService" ref="bonusTransportService" />
-	</bean>
 	
 	<!-- Barang -->
 	<bean id="barangMainCtrl" class="billy.webui.master.barang.BarangMainCtrl" parent="basisCtrl" scope="prototype">

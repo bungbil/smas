@@ -8,14 +8,14 @@ import billy.backend.service.CompanyProfileService;
 
 public class CompanyProfileServiceImpl implements CompanyProfileService {
 
-	private CompanyProfileDAO CompanyProfileDAO;
+	private CompanyProfileDAO companyProfileDAO;
 
 	public CompanyProfileDAO getCompanyProfileDAO() {
-		return CompanyProfileDAO;
+		return companyProfileDAO;
 	}
 
-	public void setCompanyProfileDAO(CompanyProfileDAO CompanyProfileDAO) {
-		this.CompanyProfileDAO = CompanyProfileDAO;
+	public void setCompanyProfileDAO(CompanyProfileDAO companyProfileDAO) {
+		this.companyProfileDAO = companyProfileDAO;
 	}
 
 	@Override
@@ -34,13 +34,13 @@ public class CompanyProfileServiceImpl implements CompanyProfileService {
 	}
 
 	@Override
-	public void saveOrUpdate(CompanyProfile CompanyProfile) {
-		getCompanyProfileDAO().saveOrUpdate(CompanyProfile);
+	public void saveOrUpdate(CompanyProfile entity) {
+		getCompanyProfileDAO().saveOrUpdate(entity);
 	}
 
 	@Override
-	public void delete(CompanyProfile CompanyProfile) {
-		getCompanyProfileDAO().delete(CompanyProfile);
+	public void delete(CompanyProfile entity) {
+		getCompanyProfileDAO().delete(entity);
 	}
 
 	@Override

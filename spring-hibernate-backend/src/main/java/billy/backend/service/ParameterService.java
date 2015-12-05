@@ -17,8 +17,8 @@ public interface ParameterService {
 	
 	public List<Parameter> getParametersLikeDescription(String string);
 
-	public void saveOrUpdate(Parameter ofice);
+	public void saveOrUpdate(Parameter entity);
 
-	public void delete(Parameter Parameter);
+	public void delete(Parameter entity);
 
 }

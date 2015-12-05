@@ -8,14 +8,14 @@ import billy.backend.service.JobTypeService;
 
 public class JobTypeServiceImpl implements JobTypeService {
 
-	private JobTypeDAO JobTypeDAO;
+	private JobTypeDAO jobTypeDAO;
 
 	public JobTypeDAO getJobTypeDAO() {
-		return JobTypeDAO;
+		return jobTypeDAO;
 	}
 
-	public void setJobTypeDAO(JobTypeDAO JobTypeDAO) {
-		this.JobTypeDAO = JobTypeDAO;
+	public void setJobTypeDAO(JobTypeDAO jobTypeDAO) {
+		this.jobTypeDAO = jobTypeDAO;
 	}
 
 	@Override
@@ -34,13 +34,13 @@ public class JobTypeServiceImpl implements JobTypeService {
 	}
 
 	@Override
-	public void saveOrUpdate(JobType JobType) {
-		getJobTypeDAO().saveOrUpdate(JobType);
+	public void saveOrUpdate(JobType entity) {
+		getJobTypeDAO().saveOrUpdate(entity);
 	}
 
 	@Override
-	public void delete(JobType JobType) {
-		getJobTypeDAO().delete(JobType);
+	public void delete(JobType entity) {
+		getJobTypeDAO().delete(entity);
 	}
 
 	@Override

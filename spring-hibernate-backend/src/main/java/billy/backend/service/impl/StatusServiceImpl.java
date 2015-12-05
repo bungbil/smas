@@ -8,14 +8,14 @@ import billy.backend.service.StatusService;
 
 public class StatusServiceImpl implements StatusService {
 
-	private StatusDAO StatusDAO;
+	private StatusDAO statusDAO;
 
 	public StatusDAO getStatusDAO() {
-		return StatusDAO;
+		return statusDAO;
 	}
 
-	public void setStatusDAO(StatusDAO StatusDAO) {
-		this.StatusDAO = StatusDAO;
+	public void setStatusDAO(StatusDAO statusDAO) {
+		this.statusDAO = statusDAO;
 	}
 
 	@Override
@@ -34,13 +34,13 @@ public class StatusServiceImpl implements StatusService {
 	}
 
 	@Override
-	public void saveOrUpdate(Status Status) {
-		getStatusDAO().saveOrUpdate(Status);
+	public void saveOrUpdate(Status entity) {
+		getStatusDAO().saveOrUpdate(entity);
 	}
 
 	@Override
-	public void delete(Status Status) {
-		getStatusDAO().delete(Status);
+	public void delete(Status entity) {
+		getStatusDAO().delete(entity);
 	}
 
 	@Override

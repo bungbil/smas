@@ -15,8 +15,8 @@ public interface JobTypeService {
 	
 	public List<JobType> getJobTypesLikeNamaJobType(String string);
 
-	public void saveOrUpdate(JobType ofice);
+	public void saveOrUpdate(JobType entity);
 
-	public void delete(JobType JobType);
+	public void delete(JobType entity);
 
 }

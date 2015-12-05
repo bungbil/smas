@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+
+<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- Namespace dependent DataBinding Initiator.          -->
+<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./windowBonusTransportList" ?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+	<window id="windowBonusTransportList" apply="${bonusTransportListCtrl}"
+		border="none" width="100%">
+
+		<borderlayout id="borderLayout_bonusTransportList">
+
+			<!-- PAGING COMPONENT -->
+			<north border="none" height="26px">
+				<paging id="paging_BonusTransportList" />
+			</north>
+
+			<center border="none">
+
+				<listbox id="listBoxBonusTransport"
+					style="border-top-width: 0px; border-left-width: 0px; border-right-width: 0px; border-bottom-width: 1px;"
+					model="@{controller.bonusTransports}"
+					selectedItem="@{controller.selectedBonusTransport}" vflex="true"
+					tooltiptext="${c:l('listbox.tooltiptext')}" width="100%"
+					height="100%" multiple="false">
+					<listhead sizable="true">
+						<listheader id="listheader_BonusTransportList_Deskripsi"
+							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
+							label="${c:l('listheader_BonusTransportList_Deskripsi.label')}" sort="auto"
+							width="20%" />
+						<listheader id="listheader_BonusTransportList_Job"
+							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
+							label="${c:l('listheader_BonusTransportList_Job.label')}" sort="auto"
+							width="15%" />
+						<listheader id="listheader_BonusTransportList_MultipleUnit"
+							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
+							label="${c:l('listheader_BonusTransportList_MultipleUnit.label')}" sort="auto"
+							width="15%" />
+						<listheader id="listheader_BonusTransportList_StartRangeUnit"
+							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
+							label="${c:l('listheader_BonusTransportList_StartRangeUnit.label')}" sort="auto"
+							width="15%" />
+						<listheader id="listheader_BonusTransportList_EndRangeUnit"
+							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
+							label="${c:l('listheader_BonusTransportList_EndRangeUnit.label')}" sort="auto"
+							width="15%" />
+						<listheader id="listheader_BonusTransportList_LastUpdate"
+							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
+							label="${c:l('common.lastUpdate')}" sort="auto"
+							width="10%" />
+						<listheader id="listheader_BonusTransportList_UpdatedBy"
+							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
+							label="${c:l('common.updatedBy')}" sort="auto"
+							width="10%" />
+					</listhead>
+
+					<listitem self="@{each='bonusTransport'}" value="@{bonusTransport}"
+						forward="onDoubleClick=onDoubleClickedBonusTransportItem">
+
+						<listcell label="@{bonusTransport.deskripsiBonusTransport}"
+							style="padding-left: 5px" />
+						<listcell label="@{bonusTransport.jobType.namaJobType}"
+							style="padding-left: 5px" />
+						<listcell label="@{bonusTransport.multipleUnit}"
+							style="padding-left: 5px" />
+						<listcell label="@{bonusTransport.startRangeUnit}"
+							style="padding-left: 5px" />
+						<listcell label="@{bonusTransport.endRangeUnit}"
+							style="padding-left: 5px" />
+						<listcell label="@{bonusTransport.lastUpdate}"
+							style="padding-left: 5px" />	
+						<listcell label="@{bonusTransport.updatedBy}"
+							style="padding-left: 5px" />							
+					</listitem>
+				</listbox>
+			</center>
+		</borderlayout>
+	</window>
+</zk>

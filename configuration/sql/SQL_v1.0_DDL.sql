@@ -467,6 +467,7 @@ nama_job_type
 );
 
 
+
 /*==============================================================*/
 /* Table: Bonus Transport                                       */
 /*==============================================================*/
@@ -477,12 +478,14 @@ CREATE TABLE bonus_transport (
    bonus_transport_id           INT8                not null,   
    deskripsi_bonus_transport    varchar(254)        not null,   
    job_type_id                  INT8        	    not null, 
-   unit_qty_start_range			int4				not null,
-   unit_qty_end_range			int4				not null,
-   honor						INT8				null,
-   OR							INT8				null,
-   transport					INT8				null,
-   bonus						INT8				null,      
+   multiple_per_unit            BOOL                not null default FALSE,
+   start_range_unit  			int4				not null,
+   end_range_unit    			int4				not null,
+   honor						numeric(12,2)		null,
+   bonus_or						numeric(12,2)		null,
+   opr							numeric(12,2)		null,
+   transport					numeric(12,2)		null,
+   bonus						numeric(12,2)		null,      
    last_update       		  timestamp,          
    updated_by       		  varchar(50)         null,
    version                    int4                not null default 0,
@@ -497,8 +500,11 @@ ALTER SEQUENCE bonus_transport_seq OWNER TO smas;
 CREATE UNIQUE INDEX ix_bonus_transport_id on bonus_transport using btree (
 bonus_transport_id
 );
-ALTER TABLE bonus_transport
+alter table bonus_transport
    add constraint ref_bonus_to_job foreign key (job_type_id)
       references job_type (job_type_id)
       on delete restrict on update restrict;
+
+
+
 

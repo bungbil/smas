@@ -10,6 +10,15 @@ INSERT INTO COMPANY_PROFILE (PROFILE_ID,COMPANY_NAME,ADDRESS,PHONE,EMAIL,VERSION
 INSERT INTO WILAYAH (WILAYAH_ID,KODE_WILAYAH,NAMA_WILAYAH,STATUS,VERSION) values
 (1,'W01','JAKARTA','PUSAT',1);
 
+/******************** JOB TYPE ********************/  
+INSERT INTO JOB_TYPE (JOB_TYPE_ID,NAMA_JOB,VERSION) values
+(1,'Supervisor',1),
+(2,'Divisi',1),
+(3,'Leader',1),
+(4,'Sales',1),
+(5,'Sopir',1),
+(6,'Kolektor',1);
+
 /******************** Security: USERS ********************/  
 INSERT INTO SEC_USER (USR_ID, USR_LOGINNAME, USR_PASSWORD, USR_LASTNAME, USR_FIRSTNAME, USR_EMAIL, USR_LOCALE, USR_ENABLED, USR_ACCOUNTNONEXPIRED, USR_CREDENTIALSNONEXPIRED, USR_ACCOUNTNONLOCKED, USR_TOKEN,  VERSION) values 
 (1, 'admin', 'admin', 'Admin', 'Super', 'admin@super.admin', NULL, true, true, true, true, null, 0);

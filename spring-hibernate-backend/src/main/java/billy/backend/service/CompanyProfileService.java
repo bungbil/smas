@@ -13,8 +13,8 @@ public interface CompanyProfileService {
 
 	public List<CompanyProfile> getAllCompanyProfiles();
 
-	public void saveOrUpdate(CompanyProfile ofice);
+	public void saveOrUpdate(CompanyProfile entity);
 
-	public void delete(CompanyProfile CompanyProfile);
+	public void delete(CompanyProfile entity);
 
 }

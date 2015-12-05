@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+
+<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- Namespace dependent DataBinding Initiator.          -->
+<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./windowBonusTransportDetail" ?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+	<window id="windowBonusTransportDetail" apply="${bonusTransportDetailCtrl}" border="none" width="100%">
+
+		<borderlayout id="borderlayout_BonusTransportDetail">
+			<center border="none" autoscroll="true">
+
+				<hbox align="stretch" pack="stretch" sclass="FDCenterNoBorder" width="100%">
+
+					<!-- Left CONTENT AREA -->
+					<!-- simulates a columnLayout -->
+					<cell width="100%">
+						<vbox align="stretch" pack="stretch" width="100%">
+							<div>
+
+								<panel border="none">
+									<panelchildren>
+
+										<groupbox mold="3d" closable="false">
+											<caption image="/images/icons/view.gif" label="${c:l('common.Details')}" />
+
+											<grid sclass="GridLayoutNoBorder" fixedLayout="true"
+												style="border:0px; padding-left:5px; padding-right:5px;">
+												<columns>
+													<column width="150px" />
+													<column />
+												</columns>
+												<rows>
+													<row>
+														<hbox>
+															<label value="${c:l('label_BonusTransportDialog_deskripsiBonusTransport.value')}" />
+															<label value="*" style="color:red;font-size:10px" />
+														</hbox>
+														<textbox id="txtb_DeskripsiBonusTransport" value="@{controller.bonusTransport.deskripsiBonusTransport}"
+															readonly="true" constraint="no empty" maxlength="254" width="300px" />
+													</row>
+													<row>
+														<separator bar="true"></separator>
+														<separator bar="true"></separator>
+													</row>
+													<row>
+														<hbox>
+															<label
+																value="${c:l('label_BonusTransportDialog_jobType.value')}" />
+															<label value="*" style="color:red;font-size:10px" />
+														</hbox>
+														<listbox id="lbox_JobType" mold="select" disabled="true"
+																			multiple="false" rows="1" hflex="1" >
+															
+														</listbox>
+													</row>													
+													<row>
+														<label value="${c:l('label_BonusTransportDialog_multipleUnit.value')}" />
+														<checkbox id="txtb_MultipleUnit"
+															checked="@{controller.bonusTransport.multipleUnit}" disabled="true"
+															hflex="1" />										      		
+													</row>
+													
+													<row>
+														<label value="${c:l('label_BonusTransportDialog_startRangeUnit.value')}" />
+														<intbox id="txtb_StartRangeUnit" value="@{controller.bonusTransport.startRangeUnit}" readonly="true" format="0" width="100px" hflex="1" />									      		
+													</row>
+													<row>
+														<label value="${c:l('label_BonusTransportDialog_endRangeUnit.value')}" />
+														<intbox id="txtb_EndRangeUnit" value="@{controller.bonusTransport.endRangeUnit}" readonly="true" format="0" width="100px" hflex="1" />									      		
+													</row>
+													<row>
+														<label value="${c:l('label_BonusTransportDialog_honor.value')}" />
+														<decimalbox id="txtb_Honor" value="@{controller.bonusTransport.honor}" readonly="true" format=",###.#" constraint="no negative" width="100px" hflex="1" />									      		
+													</row>
+													<row>
+														<label value="${c:l('label_BonusTransportDialog_or.value')}" />
+														<decimalbox id="txtb_Or" value="@{controller.bonusTransport.or}" readonly="true" format=",###.#"  constraint="no negative" width="100px" hflex="1" />									      		
+													</row>
+													<row>
+														<label value="${c:l('label_BonusTransportDialog_opr.value')}" />
+														<decimalbox id="txtb_Opr" value="@{controller.bonusTransport.opr}" readonly="true" format=",###.#"  constraint="no negative" width="100px" hflex="1" />									      		
+													</row>
+													<row>
+														<label value="${c:l('label_BonusTransportDialog_transport.value')}" />
+														<decimalbox id="txtb_Transport" value="@{controller.bonusTransport.transport}" readonly="true" format=",###.#"  constraint="no negative" width="100px" hflex="1" />									      		
+													</row>
+													<row>
+														<label value="${c:l('label_BonusTransportDialog_bonus.value')}" />
+														<decimalbox id="txtb_Bonus" value="@{controller.bonusTransport.bonus}" readonly="true" format=",###.#"  constraint="no negative" width="100px" hflex="1" />									      		
+													</row>																									
+													
+												</rows>
+											</grid>
+										</groupbox>
+									</panelchildren>
+								</panel>
+
+							</div>
+						</vbox>
+					</cell>
+				</hbox>
+
+			</center>
+		</borderlayout>
+
+	</window>
+</zk>

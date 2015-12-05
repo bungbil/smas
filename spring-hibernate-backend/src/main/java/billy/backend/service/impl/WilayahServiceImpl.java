@@ -8,14 +8,14 @@ import billy.backend.service.WilayahService;
 
 public class WilayahServiceImpl implements WilayahService {
 
-	private WilayahDAO WilayahDAO;
+	private WilayahDAO wilayahDAO;
 
 	public WilayahDAO getWilayahDAO() {
-		return WilayahDAO;
+		return wilayahDAO;
 	}
 
-	public void setWilayahDAO(WilayahDAO WilayahDAO) {
-		this.WilayahDAO = WilayahDAO;
+	public void setWilayahDAO(WilayahDAO wilayahDAO) {
+		this.wilayahDAO = wilayahDAO;
 	}
 
 	@Override
@@ -34,13 +34,13 @@ public class WilayahServiceImpl implements WilayahService {
 	}
 
 	@Override
-	public void saveOrUpdate(Wilayah Wilayah) {
-		getWilayahDAO().saveOrUpdate(Wilayah);
+	public void saveOrUpdate(Wilayah entity) {
+		getWilayahDAO().saveOrUpdate(entity);
 	}
 
 	@Override
-	public void delete(Wilayah Wilayah) {
-		getWilayahDAO().delete(Wilayah);
+	public void delete(Wilayah entity) {
+		getWilayahDAO().delete(entity);
 	}
 
 	@Override

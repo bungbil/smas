@@ -17,8 +17,8 @@ public interface KategoriBarangService {
 	
 	public List<KategoriBarang> getKategoriBarangsLikeDeskripsiKategoriBarang(String string);
 
-	public void saveOrUpdate(KategoriBarang ofice);
+	public void saveOrUpdate(KategoriBarang entity);
 
-	public void delete(KategoriBarang KategoriBarang);
+	public void delete(KategoriBarang entity);
 
 }

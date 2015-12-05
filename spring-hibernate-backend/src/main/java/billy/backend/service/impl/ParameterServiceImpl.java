@@ -8,14 +8,14 @@ import billy.backend.service.ParameterService;
 
 public class ParameterServiceImpl implements ParameterService {
 
-	private ParameterDAO ParameterDAO;
+	private ParameterDAO parameterDAO;
 
 	public ParameterDAO getParameterDAO() {
-		return ParameterDAO;
+		return parameterDAO;
 	}
 
-	public void setParameterDAO(ParameterDAO ParameterDAO) {
-		this.ParameterDAO = ParameterDAO;
+	public void setParameterDAO(ParameterDAO parameterDAO) {
+		this.parameterDAO = parameterDAO;
 	}
 
 	@Override
@@ -34,13 +34,13 @@ public class ParameterServiceImpl implements ParameterService {
 	}
 
 	@Override
-	public void saveOrUpdate(Parameter Parameter) {
-		getParameterDAO().saveOrUpdate(Parameter);
+	public void saveOrUpdate(Parameter entity) {
+		getParameterDAO().saveOrUpdate(entity);
 	}
 
 	@Override
-	public void delete(Parameter Parameter) {
-		getParameterDAO().delete(Parameter);
+	public void delete(Parameter entity) {
+		getParameterDAO().delete(entity);
 	}
 
 	@Override

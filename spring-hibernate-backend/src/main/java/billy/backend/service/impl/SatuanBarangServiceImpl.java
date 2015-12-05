@@ -8,14 +8,14 @@ import billy.backend.service.SatuanBarangService;
 
 public class SatuanBarangServiceImpl implements SatuanBarangService {
 
-	private SatuanBarangDAO SatuanBarangDAO;
+	private SatuanBarangDAO satuanBarangDAO;
 
 	public SatuanBarangDAO getSatuanBarangDAO() {
-		return SatuanBarangDAO;
+		return satuanBarangDAO;
 	}
 
-	public void setSatuanBarangDAO(SatuanBarangDAO SatuanBarangDAO) {
-		this.SatuanBarangDAO = SatuanBarangDAO;
+	public void setSatuanBarangDAO(SatuanBarangDAO satuanBarangDAO) {
+		this.satuanBarangDAO = satuanBarangDAO;
 	}
 
 	@Override
@@ -34,13 +34,13 @@ public class SatuanBarangServiceImpl implements SatuanBarangService {
 	}
 
 	@Override
-	public void saveOrUpdate(SatuanBarang SatuanBarang) {
-		getSatuanBarangDAO().saveOrUpdate(SatuanBarang);
+	public void saveOrUpdate(SatuanBarang entity) {
+		getSatuanBarangDAO().saveOrUpdate(entity);
 	}
 
 	@Override
-	public void delete(SatuanBarang SatuanBarang) {
-		getSatuanBarangDAO().delete(SatuanBarang);
+	public void delete(SatuanBarang entity) {
+		getSatuanBarangDAO().delete(entity);
 	}
 
 	@Override

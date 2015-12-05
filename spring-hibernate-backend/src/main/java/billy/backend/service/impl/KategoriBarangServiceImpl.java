@@ -8,14 +8,14 @@ import billy.backend.service.KategoriBarangService;
 
 public class KategoriBarangServiceImpl implements KategoriBarangService {
 
-	private KategoriBarangDAO KategoriBarangDAO;
+	private KategoriBarangDAO kategoriBarangDAO;
 
 	public KategoriBarangDAO getKategoriBarangDAO() {
-		return KategoriBarangDAO;
+		return kategoriBarangDAO;
 	}
 
-	public void setKategoriBarangDAO(KategoriBarangDAO KategoriBarangDAO) {
-		this.KategoriBarangDAO = KategoriBarangDAO;
+	public void setKategoriBarangDAO(KategoriBarangDAO kategoriBarangDAO) {
+		this.kategoriBarangDAO = kategoriBarangDAO;
 	}
 
 	@Override
@@ -34,13 +34,13 @@ public class KategoriBarangServiceImpl implements KategoriBarangService {
 	}
 
 	@Override
-	public void saveOrUpdate(KategoriBarang KategoriBarang) {
-		getKategoriBarangDAO().saveOrUpdate(KategoriBarang);
+	public void saveOrUpdate(KategoriBarang entity) {
+		getKategoriBarangDAO().saveOrUpdate(entity);
 	}
 
 	@Override
-	public void delete(KategoriBarang KategoriBarang) {
-		getKategoriBarangDAO().delete(KategoriBarang);
+	public void delete(KategoriBarang entity) {
+		getKategoriBarangDAO().delete(entity);
 	}
 
 	@Override

@@ -17,8 +17,8 @@ public interface WilayahService {
 	
 	public List<Wilayah> getWilayahsLikeNamaWilayah(String string);
 
-	public void saveOrUpdate(Wilayah ofice);
+	public void saveOrUpdate(Wilayah entity);
 
-	public void delete(Wilayah Wilayah);
+	public void delete(Wilayah entity);
 
 }

@@ -17,8 +17,8 @@ public interface SatuanBarangService {
 	
 	public List<SatuanBarang> getSatuanBarangsLikeDeskripsiSatuanBarang(String string);
 
-	public void saveOrUpdate(SatuanBarang ofice);
+	public void saveOrUpdate(SatuanBarang entity);
 
-	public void delete(SatuanBarang SatuanBarang);
+	public void delete(SatuanBarang entity);
 
 }
