@@ -227,7 +227,7 @@ public class UserDialogCtrl extends GFCBaseCtrl implements Serializable {
 		tab_UserDialog_Details.setVisible(workspace.isAllowed("tab_UserDialog_Details"));
 		tabpanel_UserDialog_Details.setVisible(workspace.isAllowed("tab_UserDialog_Details"));
 
-		btnHelp.setVisible(workspace.isAllowed("button_UserDialog_btnHelp"));
+		//btnHelp.setVisible(workspace.isAllowed("button_UserDialog_btnHelp"));
 		btnNew.setVisible(workspace.isAllowed("button_UserDialog_btnNew"));
 		btnEdit.setVisible(workspace.isAllowed("button_UserDialog_btnEdit"));
 		btnDelete.setVisible(workspace.isAllowed("button_UserDialog_btnDelete"));

@@ -1,4 +1,4 @@
-package billy.webui.master.jobtype;
+package billy.webui.master.hargabarang;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -29,8 +29,8 @@ import org.zkoss.zul.Window;
 import com.googlecode.genericdao.search.Filter;
 
 import de.forsthaus.UserWorkspace;
-import billy.backend.model.JobType;
-import billy.backend.service.JobTypeService;
+import billy.backend.model.HargaBarang;
+import billy.backend.service.HargaBarangService;
 import de.forsthaus.backend.util.HibernateSearchObject;
 import de.forsthaus.backend.util.ZksampleBeanUtils;
 import de.forsthaus.policy.model.UserImpl;
@@ -40,29 +40,29 @@ import de.forsthaus.webui.util.MultiLineMessageBox;
 import de.forsthaus.webui.util.ZksampleCommonUtils;
 import de.forsthaus.webui.util.ZksampleMessageUtils;
 
-public class JobTypeMainCtrl extends GFCBaseCtrl implements Serializable {
+public class HargaBarangMainCtrl extends GFCBaseCtrl implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(JobTypeMainCtrl.class);
+	private static final Logger logger = Logger.getLogger(HargaBarangMainCtrl.class);
 
 	
-	protected Window windowJobTypeMain; // autowired
+	protected Window windowHargaBarangMain; // autowired
 
 	// Tabs
-	protected Tabbox tabbox_JobTypeMain; // autowired
-	protected Tab tabJobTypeList; // autowired
-	protected Tab tabJobTypeDetail; // autowired
-	protected Tabpanel tabPanelJobTypeList; // autowired
-	protected Tabpanel tabPanelJobTypeDetail; // autowired
+	protected Tabbox tabbox_HargaBarangMain; // autowired
+	protected Tab tabHargaBarangList; // autowired
+	protected Tab tabHargaBarangDetail; // autowired
+	protected Tabpanel tabPanelHargaBarangList; // autowired
+	protected Tabpanel tabPanelHargaBarangDetail; // autowired
 
 	// filter components
-	protected Checkbox checkbox_JobTypeList_ShowAll; // autowired
-	protected Textbox txtb_JobType_Name; // aurowired
-	protected Button button_JobTypeList_SearchName; // aurowired
+	protected Checkbox checkbox_HargaBarangList_ShowAll; // autowired
+	protected Textbox txtb_HargaBarang_Name; // aurowired
+	protected Button button_HargaBarangList_SearchName; // aurowired
 
 	// Button controller for the CRUD buttons
-	private final String btnCtroller_ClassPrefix = "button_JobTypeMain_";
-	private ButtonStatusCtrl btnCtrlJobType;
+	private final String btnCtroller_ClassPrefix = "button_HargaBarangMain_";
+	private ButtonStatusCtrl btnCtrlHargaBarang;
 	protected Button btnNew; // autowired
 	protected Button btnEdit; // autowired
 	protected Button btnDelete; // autowired
@@ -79,23 +79,23 @@ public class JobTypeMainCtrl extends GFCBaseCtrl implements Serializable {
 	protected Button btnHelp;
 
 	// Tab-Controllers for getting the binders
-	private JobTypeListCtrl jobTypeListCtrl;
-	private JobTypeDetailCtrl jobTypeDetailCtrl;
+	private HargaBarangListCtrl hargaBarangListCtrl;
+	private HargaBarangDetailCtrl hargaBarangDetailCtrl;
 
 	// Databinding
-	private JobType selectedJobType;
-	private BindingListModelList jobTypes;
+	private HargaBarang selectedHargaBarang;
+	private BindingListModelList hargaBarangs;
 
 	// ServiceDAOs / Domain Classes
-	private JobTypeService jobTypeService;
+	private HargaBarangService hargaBarangService;
 
 	// always a copy from the bean before modifying. Used for reseting
-	private JobType originalJobType;
+	private HargaBarang originalHargaBarang;
 
 	/**
 	 * default constructor.<br>
 	 */
-	public JobTypeMainCtrl() {
+	public HargaBarangMainCtrl() {
 		super();
 	}
 
@@ -106,7 +106,7 @@ public class JobTypeMainCtrl extends GFCBaseCtrl implements Serializable {
 		/**
 		 * 1. Set an 'alias' for this composer name to access it in the
 		 * zul-file.<br>
-		 * 2. Set the jobType 'recurse' to 'false' to avoid problems with
+		 * 2. Set the hargaBarang 'recurse' to 'false' to avoid problems with
 		 * managing more than one zul-file in one page. Otherwise it would be
 		 * overridden and can ends in curious error messages.
 		 */
@@ -123,11 +123,11 @@ public class JobTypeMainCtrl extends GFCBaseCtrl implements Serializable {
 	 * @param event
 	 * @throws Exception
 	 */
-	public void onCreate$windowJobTypeMain(Event event) throws Exception {
-		windowJobTypeMain.setContentStyle("padding:0px;");
+	public void onCreate$windowHargaBarangMain(Event event) throws Exception {
+		windowHargaBarangMain.setContentStyle("padding:0px;");
 
 		// create the Button Controller. Disable not used buttons during working
-		btnCtrlJobType = new ButtonStatusCtrl(getUserWorkspace(), btnCtroller_ClassPrefix, true, null, btnPrint, btnFirst, btnPrevious, btnNext, btnLast, btnNew, btnEdit, btnDelete, btnSave,
+		btnCtrlHargaBarang = new ButtonStatusCtrl(getUserWorkspace(), btnCtroller_ClassPrefix, true, null, btnPrint, btnFirst, btnPrevious, btnNext, btnLast, btnNew, btnEdit, btnDelete, btnSave,
 				btnCancel, null);
 
 		doCheckRights();
@@ -136,62 +136,67 @@ public class JobTypeMainCtrl extends GFCBaseCtrl implements Serializable {
 		 * Initiate the first loading by selecting the customerList tab and
 		 * create the components from the zul-file.
 		 */
-		tabJobTypeList.setSelected(true);
+		tabHargaBarangList.setSelected(true);
 
-		if (tabPanelJobTypeList != null) {
-			ZksampleCommonUtils.createTabPanelContent(this.tabPanelJobTypeList, this, "ModuleMainController", "/WEB-INF/pages/master/jobtype/jobTypeList.zul");
+		if (tabPanelHargaBarangList != null) {
+			ZksampleCommonUtils.createTabPanelContent(this.tabPanelHargaBarangList, this, "ModuleMainController", "/WEB-INF/pages/master/hargaBarang/hargaBarangList.zul");
 		}
 
 		// init the buttons for editMode
-		btnCtrlJobType.setInitEdit();
+		btnCtrlHargaBarang.setInitEdit();
 	}
 
 	/**
-	 * When the tab 'tabJobTypeList' is selected.<br>
+	 * When the tab 'tabHargaBarangList' is selected.<br>
 	 * Loads the zul-file into the tab.
 	 * 
 	 * @param event
 	 * @throws IOException
 	 */
-	public void onSelect$tabJobTypeList(Event event) throws IOException {
+	public void onSelect$tabHargaBarangList(Event event) throws IOException {
 		//logger.debug(event.toString());
 		
 		// Check if the tabpanel is already loaded
-		if (tabPanelJobTypeList.getFirstChild() != null) {
-			tabJobTypeList.setSelected(true);
+		if (tabPanelHargaBarangList.getFirstChild() != null) {
+			tabHargaBarangList.setSelected(true);
 
 			return;
 		}
 
-		if (tabPanelJobTypeList != null) {
-			ZksampleCommonUtils.createTabPanelContent(this.tabPanelJobTypeList, this, "ModuleMainController", "/WEB-INF/pages//jobtype/jobTypeList.zul");
+		if (tabPanelHargaBarangList != null) {
+			ZksampleCommonUtils.createTabPanelContent(this.tabPanelHargaBarangList, this, "ModuleMainController", "/WEB-INF/pages//hargaBarang/hargaBarangList.zul");
 		}
 
 	}
 
 	/**
-	 * When the tab 'tabPanelJobTypeDetail' is selected.<br>
+	 * When the tab 'tabPanelHargaBarangDetail' is selected.<br>
 	 * Loads the zul-file into the tab.
 	 * 
 	 * @param event
 	 * @throws IOException
 	 */
-	public void onSelect$tabJobTypeDetail(Event event) throws IOException {
+	public void onSelect$tabHargaBarangDetail(Event event) throws IOException {
 		// logger.debug(event.toString());
 
 		// Check if the tabpanel is already loaded
-		if (tabPanelJobTypeDetail.getFirstChild() != null) {
-			tabJobTypeDetail.setSelected(true);
+		if (tabPanelHargaBarangDetail.getFirstChild() != null) {
+			tabHargaBarangDetail.setSelected(true);
 
 			// refresh the Binding mechanism
-			getJobTypeDetailCtrl().setJobType(getSelectedJobType());
-			getJobTypeDetailCtrl().getBinder().loadAll();
-			
+			getHargaBarangDetailCtrl().setHargaBarang(getSelectedHargaBarang());
+			getHargaBarangDetailCtrl().getBinder().loadAll();
+			if(getSelectedHargaBarang().getStatus().equals(getHargaBarangDetailCtrl().radioStatusPusat.getLabel())){
+				getHargaBarangDetailCtrl().radioStatusPusat.setSelected(true);
+			}
+			if(getSelectedHargaBarang().getStatus().equals(getHargaBarangDetailCtrl().radioStatusDaerah.getLabel())){
+				getHargaBarangDetailCtrl().radioStatusDaerah.setSelected(true);
+			}
 			return;
 		}
 
-		if (tabPanelJobTypeDetail != null) {
-			ZksampleCommonUtils.createTabPanelContent(this.tabPanelJobTypeDetail, this, "ModuleMainController", "/WEB-INF/pages/master/jobtype/jobTypeDetail.zul");
+		if (tabPanelHargaBarangDetail != null) {
+			ZksampleCommonUtils.createTabPanelContent(this.tabPanelHargaBarangDetail, this, "ModuleMainController", "/WEB-INF/pages/master/hargaBarang/hargaBarangDetail.zul");
 		}
 	}
 
@@ -201,27 +206,27 @@ public class JobTypeMainCtrl extends GFCBaseCtrl implements Serializable {
 	 * 
 	 * @param event
 	 */
-	public void onCheck$checkbox_JobTypeList_ShowAll(Event event) {
+	public void onCheck$checkbox_HargaBarangList_ShowAll(Event event) {
 		// logger.debug(event.toString());
 
 		// empty the text search boxes
-		txtb_JobType_Name.setValue(""); // clear
+		txtb_HargaBarang_Name.setValue(""); // clear
 
 		// ++ create the searchObject and init sorting ++//
-		HibernateSearchObject<JobType> soJobType = new HibernateSearchObject<JobType>(JobType.class, getJobTypeListCtrl().getCountRows());
-		soJobType.addSort("namaJobType", false);
+		HibernateSearchObject<HargaBarang> soHargaBarang = new HibernateSearchObject<HargaBarang>(HargaBarang.class, getHargaBarangListCtrl().getCountRows());
+		soHargaBarang.addSort("namaHargaBarang", false);
 
 		// Change the BindingListModel.
-		if (getJobTypeListCtrl().getBinder() != null) {
-			getJobTypeListCtrl().getPagedBindingListWrapper().setSearchObject(soJobType);
+		if (getHargaBarangListCtrl().getBinder() != null) {
+			getHargaBarangListCtrl().getPagedBindingListWrapper().setSearchObject(soHargaBarang);
 
 			// get the current Tab for later checking if we must change it
-			Tab currentTab = tabbox_JobTypeMain.getSelectedTab();
+			Tab currentTab = tabbox_HargaBarangMain.getSelectedTab();
 
 			// check if the tab is one of the Detail tabs. If so do not
 			// change the selection of it
-			if (!currentTab.equals(tabJobTypeList)) {
-				tabJobTypeList.setSelected(true);
+			if (!currentTab.equals(tabHargaBarangList)) {
+				tabHargaBarangList.setSelected(true);
 			} else {
 				currentTab.setSelected(true);
 			}
@@ -232,31 +237,31 @@ public class JobTypeMainCtrl extends GFCBaseCtrl implements Serializable {
 	
 
 	/**
-	 * Filter the jobType list with 'like jobType name'. <br>
+	 * Filter the hargaBarang list with 'like hargaBarang name'. <br>
 	 */
-	public void onClick$button_JobTypeList_SearchName(Event event) throws Exception {
+	public void onClick$button_HargaBarangList_SearchName(Event event) throws Exception {
 		// logger.debug(event.toString());
 
 		// if not empty
-		if (!txtb_JobType_Name.getValue().isEmpty()) {
-			checkbox_JobTypeList_ShowAll.setChecked(false); // unCheck
+		if (!txtb_HargaBarang_Name.getValue().isEmpty()) {
+			checkbox_HargaBarangList_ShowAll.setChecked(false); // unCheck
 	
 			// ++ create the searchObject and init sorting ++//
-			HibernateSearchObject<JobType> soJobType = new HibernateSearchObject<JobType>(JobType.class, getJobTypeListCtrl().getCountRows());
-			soJobType.addFilter(new Filter("namaJobType", "%" + txtb_JobType_Name.getValue() + "%", Filter.OP_ILIKE));
-			soJobType.addSort("namaJobType", false);
+			HibernateSearchObject<HargaBarang> soHargaBarang = new HibernateSearchObject<HargaBarang>(HargaBarang.class, getHargaBarangListCtrl().getCountRows());
+			soHargaBarang.addFilter(new Filter("namaHargaBarang", "%" + txtb_HargaBarang_Name.getValue() + "%", Filter.OP_ILIKE));
+			soHargaBarang.addSort("namaHargaBarang", false);
 
 			// Change the BindingListModel.
-			if (getJobTypeListCtrl().getBinder() != null) {
-				getJobTypeListCtrl().getPagedBindingListWrapper().setSearchObject(soJobType);
+			if (getHargaBarangListCtrl().getBinder() != null) {
+				getHargaBarangListCtrl().getPagedBindingListWrapper().setSearchObject(soHargaBarang);
 
 				// get the current Tab for later checking if we must change it
-				Tab currentTab = tabbox_JobTypeMain.getSelectedTab();
+				Tab currentTab = tabbox_HargaBarangMain.getSelectedTab();
 
 				// check if the tab is one of the Detail tabs. If so do not
 				// change the selection of it
-				if (!currentTab.equals(tabJobTypeList)) {
-					tabJobTypeList.setSelected(true);
+				if (!currentTab.equals(tabHargaBarangList)) {
+					tabHargaBarangList.setSelected(true);
 				} else {
 					currentTab.setSelected(true);
 				}
@@ -395,15 +400,15 @@ public class JobTypeMainCtrl extends GFCBaseCtrl implements Serializable {
 		doResetToInitValues();
 
 		// check first, if the tabs are created
-		if (getJobTypeDetailCtrl().getBinder() != null) {
+		if (getHargaBarangDetailCtrl().getBinder() != null) {
 
 			// refresh all dataBinder related controllers/components
-			getJobTypeDetailCtrl().getBinder().loadAll();
+			getHargaBarangDetailCtrl().getBinder().loadAll();
 
 			// set editable Mode
-			getJobTypeDetailCtrl().doReadOnlyMode(true);
+			getHargaBarangDetailCtrl().doReadOnlyMode(true);
 
-			btnCtrlJobType.setInitEdit();
+			btnCtrlHargaBarang.setInitEdit();
 		}
 	}
 
@@ -418,21 +423,21 @@ public class JobTypeMainCtrl extends GFCBaseCtrl implements Serializable {
 	private void doEdit(Event event) {
 		// logger.debug(event.toString());
 		// get the current Tab for later checking if we must change it
-		Tab currentTab = tabbox_JobTypeMain.getSelectedTab();
+		Tab currentTab = tabbox_HargaBarangMain.getSelectedTab();
 
 		// check first, if the tabs are created, if not than create it
-		if (getJobTypeDetailCtrl() == null) {
-			Events.sendEvent(new Event("onSelect", tabJobTypeDetail, null));
+		if (getHargaBarangDetailCtrl() == null) {
+			Events.sendEvent(new Event("onSelect", tabHargaBarangDetail, null));
 			// if we work with spring beanCreation than we must check a little
 			// bit deeper, because the Controller are preCreated ?
-		} else if (getJobTypeDetailCtrl().getBinder() == null) {
-			Events.sendEvent(new Event("onSelect", tabJobTypeDetail, null));
+		} else if (getHargaBarangDetailCtrl().getBinder() == null) {
+			Events.sendEvent(new Event("onSelect", tabHargaBarangDetail, null));
 		}
 
 		// check if the tab is one of the Detail tabs. If so do not change the
 		// selection of it
-		if (!currentTab.equals(tabJobTypeDetail)) {
-			tabJobTypeDetail.setSelected(true);
+		if (!currentTab.equals(tabHargaBarangDetail)) {
+			tabHargaBarangDetail.setSelected(true);
 		} else {
 			currentTab.setSelected(true);
 		}
@@ -440,15 +445,15 @@ public class JobTypeMainCtrl extends GFCBaseCtrl implements Serializable {
 		// remember the old vars
 		doStoreInitValues();
 
-		btnCtrlJobType.setBtnStatus_Edit();
+		btnCtrlHargaBarang.setBtnStatus_Edit();
 
-		getJobTypeDetailCtrl().doReadOnlyMode(false);
+		getHargaBarangDetailCtrl().doReadOnlyMode(false);
 
 		// refresh the UI, because we can click the EditBtn from every tab.
-		getJobTypeDetailCtrl().getBinder().loadAll();
+		getHargaBarangDetailCtrl().getBinder().loadAll();
 
 		// set focus
-		getJobTypeDetailCtrl().txtb_NamaJobType.focus();
+		getHargaBarangDetailCtrl().txtb_KodeHargaBarang.focus();
 	}
 
 	/**
@@ -461,20 +466,20 @@ public class JobTypeMainCtrl extends GFCBaseCtrl implements Serializable {
 	private void doDelete(Event event) throws InterruptedException {
 		// logger.debug(event.toString());
 		// check first, if the tabs are created, if not than create them
-		if (getJobTypeDetailCtrl().getBinder() == null) {
-			Events.sendEvent(new Event("onSelect", tabJobTypeDetail, null));
+		if (getHargaBarangDetailCtrl().getBinder() == null) {
+			Events.sendEvent(new Event("onSelect", tabHargaBarangDetail, null));
 		}
 
 		// check first, if the tabs are created
-		if (getJobTypeDetailCtrl().getBinder() == null) {
+		if (getHargaBarangDetailCtrl().getBinder() == null) {
 			return;
 		}
 
-		final JobType anJobType = getSelectedJobType();
-		if (anJobType != null) {
+		final HargaBarang anHargaBarang = getSelectedHargaBarang();
+		if (anHargaBarang != null) {
 
 			// Show a confirm box
-			final String msg = Labels.getLabel("message.Question.Are_you_sure_to_delete_this_record") + "\n\n --> " + anJobType.getNamaJobType();
+			final String msg = Labels.getLabel("message.Question.Are_you_sure_to_delete_this_record") + "\n\n --> " + anHargaBarang.getKodeHargaBarang();
 			final String title = Labels.getLabel("message.Deleting.Record");
 
 			MultiLineMessageBox.doSetTemplate();
@@ -497,7 +502,7 @@ public class JobTypeMainCtrl extends GFCBaseCtrl implements Serializable {
 
 				private void deleteBean() throws InterruptedException {
 					try {
-						getJobTypeService().delete(anJobType);
+						getHargaBarangService().delete(anHargaBarang);
 					} catch (DataAccessException e) {
 						ZksampleMessageUtils.showErrorMessage(e.getMostSpecificCause().toString());
 					}
@@ -509,14 +514,14 @@ public class JobTypeMainCtrl extends GFCBaseCtrl implements Serializable {
 
 		}
 
-		btnCtrlJobType.setInitEdit();
+		btnCtrlHargaBarang.setInitEdit();
 
-		setSelectedJobType(null);
+		setSelectedHargaBarang(null);
 		// refresh the list
-		getJobTypeListCtrl().doFillListbox();
+		getHargaBarangListCtrl().doFillListbox();
 
 		// refresh all dataBinder related controllers
-		getJobTypeDetailCtrl().getBinder().loadAll();
+		getHargaBarangDetailCtrl().getBinder().loadAll();
 	}
 
 	/**
@@ -528,25 +533,30 @@ public class JobTypeMainCtrl extends GFCBaseCtrl implements Serializable {
 	private void doSave(Event event) throws InterruptedException {
 		// logger.debug(event.toString());
 		// save all components data in the several tabs to the bean
-		getJobTypeDetailCtrl().getBinder().saveAll();
+		getHargaBarangDetailCtrl().getBinder().saveAll();
 
 		try {
-			
+			if(getHargaBarangDetailCtrl().radioStatusPusat.isSelected()){
+				getHargaBarangDetailCtrl().getHargaBarang().setStatus(getHargaBarangDetailCtrl().radioStatusPusat.getLabel());
+			}
+			if(getHargaBarangDetailCtrl().radioStatusDaerah.isSelected()){
+				getHargaBarangDetailCtrl().getHargaBarang().setStatus(getHargaBarangDetailCtrl().radioStatusDaerah.getLabel());
+			}
 			String userName = ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();			
-			getJobTypeDetailCtrl().getJobType().setLastUpdate(new Date());			
-			getJobTypeDetailCtrl().getJobType().setUpdatedBy(userName);			
+			getHargaBarangDetailCtrl().getHargaBarang().setLastUpdate(new Date());			
+			getHargaBarangDetailCtrl().getHargaBarang().setUpdatedBy(userName);			
 			// save it to database
-			getJobTypeService().saveOrUpdate(getJobTypeDetailCtrl().getJobType());
+			getHargaBarangService().saveOrUpdate(getHargaBarangDetailCtrl().getHargaBarang());
 			// if saving is successfully than actualize the beans as
 			// origins.
 			doStoreInitValues();
 			// refresh the list
-			getJobTypeListCtrl().doFillListbox();
+			getHargaBarangListCtrl().doFillListbox();
 			// later refresh StatusBar
-			Events.postEvent("onSelect", getJobTypeListCtrl().getListBoxJobType(), getSelectedJobType());
+			Events.postEvent("onSelect", getHargaBarangListCtrl().getListBoxHargaBarang(), getSelectedHargaBarang());
 
 			// show the objects data in the statusBar
-			String str = getSelectedJobType().getNamaJobType();
+			String str = getSelectedHargaBarang().getKodeHargaBarang();
 			EventQueues.lookup("selectedObjectEventQueue", EventQueues.DESKTOP, true).publish(new Event("onChangeSelectedObject", null, str));
 
 		} catch (DataAccessException e) {
@@ -558,8 +568,8 @@ public class JobTypeMainCtrl extends GFCBaseCtrl implements Serializable {
 			return;
 
 		} finally {
-			btnCtrlJobType.setInitEdit();
-			getJobTypeDetailCtrl().doReadOnlyMode(true);
+			btnCtrlHargaBarang.setInitEdit();
+			getHargaBarangDetailCtrl().doReadOnlyMode(true);
 		}
 	}
 
@@ -573,12 +583,12 @@ public class JobTypeMainCtrl extends GFCBaseCtrl implements Serializable {
 	private void doNew(Event event) {
 		// logger.debug(event.toString());
 		// check first, if the tabs are created
-		if (getJobTypeDetailCtrl() == null) {
-			Events.sendEvent(new Event("onSelect", tabJobTypeDetail, null));
+		if (getHargaBarangDetailCtrl() == null) {
+			Events.sendEvent(new Event("onSelect", tabHargaBarangDetail, null));
 			// if we work with spring beanCreation than we must check a little
 			// bit deeper, because the Controller are preCreated ?
-		} else if (getJobTypeDetailCtrl().getBinder() == null) {
-			Events.sendEvent(new Event("onSelect", tabJobTypeDetail, null));
+		} else if (getHargaBarangDetailCtrl().getBinder() == null) {
+			Events.sendEvent(new Event("onSelect", tabHargaBarangDetail, null));
 		}
 
 		// remember the current object
@@ -587,29 +597,28 @@ public class JobTypeMainCtrl extends GFCBaseCtrl implements Serializable {
 		/** !!! DO NOT BREAK THE TIERS !!! */
 		// We don't create a new DomainObject() in the frontend.
 		// We GET it from the backend.
-		final JobType anJobType = getJobTypeService().getNewJobType();
+		final HargaBarang anHargaBarang = getHargaBarangService().getNewHargaBarang();
 
 		// set the beans in the related databinded controllers
-		getJobTypeDetailCtrl().setJobType(anJobType);
-		getJobTypeDetailCtrl().setSelectedJobType(anJobType);
+		getHargaBarangDetailCtrl().setHargaBarang(anHargaBarang);
+		getHargaBarangDetailCtrl().setSelectedHargaBarang(anHargaBarang);
 
 		// Refresh the binding mechanism
-		getJobTypeDetailCtrl().setSelectedJobType(getSelectedJobType());
+		getHargaBarangDetailCtrl().setSelectedHargaBarang(getSelectedHargaBarang());
 		try{
-			getJobTypeDetailCtrl().getBinder().loadAll();
+			getHargaBarangDetailCtrl().getBinder().loadAll();
 		}catch(Exception e){
 			//do nothing
 		}
-
 		// set editable Mode
-		getJobTypeDetailCtrl().doReadOnlyMode(false);
+		getHargaBarangDetailCtrl().doReadOnlyMode(false);
 
 		// set the ButtonStatus to New-Mode
-		btnCtrlJobType.setInitNew();
+		btnCtrlHargaBarang.setInitNew();
 
-		tabJobTypeDetail.setSelected(true);
+		tabHargaBarangDetail.setSelected(true);
 		// set focus
-		getJobTypeDetailCtrl().txtb_NamaJobType.focus();
+		getHargaBarangDetailCtrl().txtb_KodeHargaBarang.focus();
 
 	}
 
@@ -622,13 +631,13 @@ public class JobTypeMainCtrl extends GFCBaseCtrl implements Serializable {
 	private void doSkip(Event event) {
 
 		// get the model and the current selected record
-		BindingListModelList blml = (BindingListModelList) getJobTypeListCtrl().getListBoxJobType().getModel();
+		BindingListModelList blml = (BindingListModelList) getHargaBarangListCtrl().getListBoxHargaBarang().getModel();
 
 		// check if data exists
 		if (blml == null || blml.size() < 1)
 			return;
 
-		int index = blml.indexOf(getSelectedJobType());
+		int index = blml.indexOf(getSelectedHargaBarang());
 
 		/**
 		 * Check, if all tabs with data binded components are created So we work
@@ -636,10 +645,10 @@ public class JobTypeMainCtrl extends GFCBaseCtrl implements Serializable {
 		 * the Controller are preCreated ? After that, go back to the
 		 * current/selected tab.
 		 */
-		Tab currentTab = tabbox_JobTypeMain.getSelectedTab();
+		Tab currentTab = tabbox_HargaBarangMain.getSelectedTab();
 
-		if (getJobTypeDetailCtrl().getBinder() == null) {
-			Events.sendEvent(new Event(Events.ON_SELECT, tabJobTypeDetail, null));
+		if (getHargaBarangDetailCtrl().getBinder() == null) {
+			Events.sendEvent(new Event(Events.ON_SELECT, tabHargaBarangDetail, null));
 		}
 
 		// go back to selected tab
@@ -664,14 +673,14 @@ public class JobTypeMainCtrl extends GFCBaseCtrl implements Serializable {
 			}
 		}
 
-		getJobTypeListCtrl().getListBoxJobType().setSelectedIndex(index);
-		setSelectedJobType((JobType) blml.get(index));
+		getHargaBarangListCtrl().getListBoxHargaBarang().setSelectedIndex(index);
+		setSelectedHargaBarang((HargaBarang) blml.get(index));
 
 		// call onSelect() for showing the objects data in the statusBar
-		Events.sendEvent(new Event(Events.ON_SELECT, getJobTypeListCtrl().getListBoxJobType(), getSelectedJobType()));
+		Events.sendEvent(new Event(Events.ON_SELECT, getHargaBarangListCtrl().getListBoxHargaBarang(), getSelectedHargaBarang()));
 
 		// refresh master-detail MASTERS data
-		getJobTypeDetailCtrl().getBinder().loadAll();
+		getHargaBarangDetailCtrl().getBinder().loadAll();
 
 		// EXTRA: if we have a longtext field under the listbox, so we must
 		// refresh
@@ -691,11 +700,11 @@ public class JobTypeMainCtrl extends GFCBaseCtrl implements Serializable {
 	private void doResizeSelectedTab(Event event) {
 		// logger.debug(event.toString());
 
-		if (tabbox_JobTypeMain.getSelectedTab() == tabJobTypeDetail) {
-			getJobTypeDetailCtrl().doFitSize(event);
-		} else if (tabbox_JobTypeMain.getSelectedTab() == tabJobTypeList) {
+		if (tabbox_HargaBarangMain.getSelectedTab() == tabHargaBarangDetail) {
+			getHargaBarangDetailCtrl().doFitSize(event);
+		} else if (tabbox_HargaBarangMain.getSelectedTab() == tabHargaBarangList) {
 			// resize and fill Listbox new
-			getJobTypeListCtrl().doFillListbox();
+			getHargaBarangListCtrl().doFillListbox();
 		}
 	}
 
@@ -719,10 +728,10 @@ public class JobTypeMainCtrl extends GFCBaseCtrl implements Serializable {
 	 */
 	public void doStoreInitValues() {
 
-		if (getSelectedJobType() != null) {
+		if (getSelectedHargaBarang() != null) {
 
 			try {
-				setOriginalJobType((JobType) ZksampleBeanUtils.cloneBean(getSelectedJobType()));
+				setOriginalHargaBarang((HargaBarang) ZksampleBeanUtils.cloneBean(getSelectedHargaBarang()));
 			} catch (final IllegalAccessException e) {
 				throw new RuntimeException(e);
 			} catch (final InstantiationException e) {
@@ -743,12 +752,12 @@ public class JobTypeMainCtrl extends GFCBaseCtrl implements Serializable {
 	 */
 	public void doResetToInitValues() {
 
-		if (getOriginalJobType() != null) {
+		if (getOriginalHargaBarang() != null) {
 
 			try {
-				setSelectedJobType((JobType) ZksampleBeanUtils.cloneBean(getOriginalJobType()));
+				setSelectedHargaBarang((HargaBarang) ZksampleBeanUtils.cloneBean(getOriginalHargaBarang()));
 				// TODO Bug in DataBinder??
-				windowJobTypeMain.invalidate();
+				windowHargaBarangMain.invalidate();
 
 			} catch (final IllegalAccessException e) {
 				throw new RuntimeException(e);
@@ -774,16 +783,16 @@ public class JobTypeMainCtrl extends GFCBaseCtrl implements Serializable {
 	private void doCheckRights() {
 
 		final UserWorkspace workspace = getUserWorkspace();
-		button_JobTypeList_SearchName.setVisible(workspace.isAllowed("button_JobTypeList_SearchName"));
-		tabJobTypeList.setVisible(workspace.isAllowed("windowJobTypeList"));
-		tabJobTypeDetail.setVisible(workspace.isAllowed("windowJobTypeDetail"));
-		btnEdit.setVisible(workspace.isAllowed("button_JobTypeMain_btnEdit"));
-		btnSave.setVisible(workspace.isAllowed("button_JobTypeMain_btnSave"));		
-		btnCancel.setVisible(workspace.isAllowed("button_JobTypeMain_btnCancel"));
-		btnFirst.setVisible(workspace.isAllowed("button_JobTypeMain_btnFirst"));
-		btnPrevious.setVisible(workspace.isAllowed("button_JobTypeMain_btnPrevious"));
-		btnNext.setVisible(workspace.isAllowed("button_JobTypeMain_btnNext"));
-		btnLast.setVisible(workspace.isAllowed("button_JobTypeMain_btnLast"));
+		button_HargaBarangList_SearchName.setVisible(workspace.isAllowed("button_HargaBarangList_SearchName"));
+		tabHargaBarangList.setVisible(workspace.isAllowed("windowHargaBarangList"));
+		tabHargaBarangDetail.setVisible(workspace.isAllowed("windowHargaBarangDetail"));
+		btnEdit.setVisible(workspace.isAllowed("button_HargaBarangMain_btnEdit"));
+		btnSave.setVisible(workspace.isAllowed("button_HargaBarangMain_btnSave"));		
+		btnCancel.setVisible(workspace.isAllowed("button_HargaBarangMain_btnCancel"));
+		btnFirst.setVisible(workspace.isAllowed("button_HargaBarangMain_btnFirst"));
+		btnPrevious.setVisible(workspace.isAllowed("button_HargaBarangMain_btnPrevious"));
+		btnNext.setVisible(workspace.isAllowed("button_HargaBarangMain_btnNext"));
+		btnLast.setVisible(workspace.isAllowed("button_HargaBarangMain_btnLast"));
 	}
 
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
@@ -791,54 +800,54 @@ public class JobTypeMainCtrl extends GFCBaseCtrl implements Serializable {
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
 	/* Master BEANS */
-	public void setOriginalJobType(JobType originalJobType) {
-		this.originalJobType = originalJobType;
+	public void setOriginalHargaBarang(HargaBarang originalHargaBarang) {
+		this.originalHargaBarang = originalHargaBarang;
 	}
 
-	public JobType getOriginalJobType() {
-		return this.originalJobType;
+	public HargaBarang getOriginalHargaBarang() {
+		return this.originalHargaBarang;
 	}
 
-	public void setSelectedJobType(JobType selectedJobType) {
-		this.selectedJobType = selectedJobType;
+	public void setSelectedHargaBarang(HargaBarang selectedHargaBarang) {
+		this.selectedHargaBarang = selectedHargaBarang;
 	}
 
-	public JobType getSelectedJobType() {
-		return this.selectedJobType;
+	public HargaBarang getSelectedHargaBarang() {
+		return this.selectedHargaBarang;
 	}
 
-	public void setJobTypes(BindingListModelList jobTypes) {
-		this.jobTypes = jobTypes;
+	public void setHargaBarangs(BindingListModelList hargaBarangs) {
+		this.hargaBarangs = hargaBarangs;
 	}
 
-	public BindingListModelList getJobTypes() {
-		return this.jobTypes;
+	public BindingListModelList getHargaBarangs() {
+		return this.hargaBarangs;
 	}
 
 	/* CONTROLLERS */
-	public void setJobTypeListCtrl(JobTypeListCtrl jobTypeListCtrl) {
-		this.jobTypeListCtrl = jobTypeListCtrl;
+	public void setHargaBarangListCtrl(HargaBarangListCtrl hargaBarangListCtrl) {
+		this.hargaBarangListCtrl = hargaBarangListCtrl;
 	}
 
-	public JobTypeListCtrl getJobTypeListCtrl() {
-		return this.jobTypeListCtrl;
+	public HargaBarangListCtrl getHargaBarangListCtrl() {
+		return this.hargaBarangListCtrl;
 	}
 
-	public void setJobTypeDetailCtrl(JobTypeDetailCtrl jobTypeDetailCtrl) {
-		this.jobTypeDetailCtrl = jobTypeDetailCtrl;
+	public void setHargaBarangDetailCtrl(HargaBarangDetailCtrl hargaBarangDetailCtrl) {
+		this.hargaBarangDetailCtrl = hargaBarangDetailCtrl;
 	}
 
-	public JobTypeDetailCtrl getJobTypeDetailCtrl() {
-		return this.jobTypeDetailCtrl;
+	public HargaBarangDetailCtrl getHargaBarangDetailCtrl() {
+		return this.hargaBarangDetailCtrl;
 	}
 
 	/* SERVICES */
-	public JobTypeService getJobTypeService() {
-		return this.jobTypeService;
+	public HargaBarangService getHargaBarangService() {
+		return this.hargaBarangService;
 	}
 
-	public void setJobTypeService(JobTypeService jobTypeService) {
-		this.jobTypeService = jobTypeService;
+	public void setHargaBarangService(HargaBarangService hargaBarangService) {
+		this.hargaBarangService = hargaBarangService;
 	}
 
 	/* COMPONENTS and OTHERS */

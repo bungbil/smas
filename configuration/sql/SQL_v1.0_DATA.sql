@@ -87,19 +87,14 @@ INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
 /* --> userListWindow */
 (23, 0, 'userListWindow', 0),
 /* --> userListWindow BUTTONS*/
-(24, 6, 'button_UserList_btnHelp', 0),
 (25, 6, 'button_UserList_NewUser', 0),
-(26, 6, 'button_UserList_PrintUserList', 0),
 (27, 6, 'button_UserList_SearchLoginname', 0),
-(28, 6, 'button_UserList_SearchLastname', 0),
-(29, 6, 'button_UserList_SearchEmail', 0),
 (30, 6, 'checkbox_UserList_ShowAll', 0),
 /* --> Mehode onDoubleClick Listbox */
 (31, 3, 'UserList_listBoxUser.onDoubleClick', 0),
 /* --> userDialogWindow */
 (32, 0, 'userDialogWindow', 0),
 /* --> userDialogWindow BUTTONS*/
-(33, 6, 'button_UserDialog_btnHelp', 0),
 (34, 6, 'button_UserDialog_btnNew', 0),
 (35, 6, 'button_UserDialog_btnEdit', 0),
 (36, 6, 'button_UserDialog_btnDelete', 0),
@@ -118,7 +113,6 @@ INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
 /* --> secRoleDialogWindow */
 (45, 0, 'secRoleDialogWindow', 0),
 /* --> secRoleDialogWindow BUTTONS*/
-(46, 6, 'button_SecRoleDialog_btnHelp', 0),
 (47, 6, 'button_SecRoleDialog_btnNew', 0),
 (48, 6, 'button_SecRoleDialog_btnEdit', 0),
 (49, 6, 'button_SecRoleDialog_btnDelete', 0),
@@ -129,7 +123,6 @@ INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
 /* --> secGroupDialogWindow */
 (53, 0, 'secGroupDialogWindow', 0),
 /* --> secGroupDialogWindow BUTTONS*/
-(54, 6, 'button_SecGroupDialog_btnHelp', 0),
 (55, 6, 'button_SecGroupDialog_btnNew', 0),
 (56, 6, 'button_SecGroupDialog_btnEdit', 0),
 (57, 6, 'button_SecGroupDialog_btnDelete', 0),
@@ -140,7 +133,6 @@ INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
 /* --> secRightDialogWindow */
 (61, 0, 'secRightDialogWindow', 0),
 /* --> secRightDialogWindow BUTTONS*/
-(62, 6, 'button_SecRightDialog_btnHelp', 0),
 (63, 6, 'button_SecRightDialog_btnNew', 0),
 (64, 6, 'button_SecRightDialog_btnEdit', 0),
 (65, 6, 'button_SecRightDialog_btnDelete', 0),
@@ -173,16 +165,11 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 (21, 1, 21, 0),
 (22, 1, 22, 0),
 (23, 1, 23, 0),
-(24, 1, 24, 0),
 (25, 1, 25, 0),
-(26, 1, 26, 0),
 (27, 1, 27, 0),
-(28, 1, 28, 0),
-(29, 1, 29, 0),
 (30, 1, 30, 0),
 (31, 1, 31, 0),
 (32, 1, 32, 0),
-(33, 1, 33, 0),
 (34, 1, 34, 0),
 (35, 1, 35, 0),
 (36, 1, 36, 0),
@@ -195,7 +182,6 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 (43, 1, 43, 0),
 (44, 1, 44, 0),
 (45, 1, 45, 0),
-(46, 1, 46, 0),
 (47, 1, 47, 0),
 (48, 1, 48, 0),
 (49, 1, 49, 0),
@@ -203,7 +189,6 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 (51, 1, 51, 0),
 (52, 1, 52, 0),
 (53, 1, 53, 0),
-(54, 1, 54, 0),
 (55, 1, 55, 0),
 (56, 1, 56, 0),
 (57, 1, 57, 0),
@@ -211,7 +196,6 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 (59, 1, 59, 0),
 (60, 1, 60, 0),
 (61, 1, 61, 0),
-(62, 1, 62, 0),
 (63, 1, 63, 0),
 (64, 1, 64, 0),
 (65, 1, 65, 0),

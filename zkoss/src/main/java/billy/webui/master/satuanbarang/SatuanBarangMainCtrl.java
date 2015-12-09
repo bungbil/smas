@@ -774,7 +774,15 @@ public class SatuanBarangMainCtrl extends GFCBaseCtrl implements Serializable {
 
 		final UserWorkspace workspace = getUserWorkspace();
 		button_SatuanBarangList_SearchName.setVisible(workspace.isAllowed("button_SatuanBarangList_SearchName"));
-
+		tabSatuanBarangList.setVisible(workspace.isAllowed("windowSatuanBarangList"));
+		tabSatuanBarangDetail.setVisible(workspace.isAllowed("windowSatuanBarangDetail"));
+		btnEdit.setVisible(workspace.isAllowed("button_SatuanBarangMain_btnEdit"));
+		btnSave.setVisible(workspace.isAllowed("button_SatuanBarangMain_btnSave"));		
+		btnCancel.setVisible(workspace.isAllowed("button_SatuanBarangMain_btnCancel"));
+		btnFirst.setVisible(workspace.isAllowed("button_SatuanBarangMain_btnFirst"));
+		btnPrevious.setVisible(workspace.isAllowed("button_SatuanBarangMain_btnPrevious"));
+		btnNext.setVisible(workspace.isAllowed("button_SatuanBarangMain_btnNext"));
+		btnLast.setVisible(workspace.isAllowed("button_SatuanBarangMain_btnLast"));
 	}
 
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //

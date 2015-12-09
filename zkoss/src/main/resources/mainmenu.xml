@@ -107,8 +107,8 @@
 			iconName="/images/icons/index_16x16.gif" rightName="menuItem_Master_Status"  />			
 		<menuItem id="menu_Item_BonusTransport" zulNavigation="/WEB-INF/pages/master/bonustransport/bonusTransportMain.zul"
 			iconName="/images/icons/index_16x16.gif" rightName="menuItem_Master_BonusTransport"  />			
-		<menuItem id="menu_Item_JobType" zulNavigation="/WEB-INF/pages/master/jobtype/jobTypeMain.zul"
-			iconName="/images/icons/index_16x16.gif" rightName="menuItem_Master_JobType"  />			
+		<!-- <menuItem id="menu_Item_JobType" zulNavigation="/WEB-INF/pages/master/jobtype/jobTypeMain.zul"
+			iconName="/images/icons/index_16x16.gif" rightName="menuItem_Master_JobType"  /> -->			
 	</menu>
 	<!-- Transaction MenuTree -->
 	<menu id="menu_Category_Transaction" >

@@ -800,7 +800,15 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
 
 		final UserWorkspace workspace = getUserWorkspace();
 		button_KaryawanList_SearchName.setVisible(workspace.isAllowed("button_KaryawanList_SearchName"));
-
+		tabKaryawanList.setVisible(workspace.isAllowed("windowKaryawanList"));
+		tabKaryawanDetail.setVisible(workspace.isAllowed("windowKaryawanDetail"));
+		btnEdit.setVisible(workspace.isAllowed("button_KaryawanMain_btnEdit"));
+		btnSave.setVisible(workspace.isAllowed("button_KaryawanMain_btnSave"));		
+		btnCancel.setVisible(workspace.isAllowed("button_KaryawanMain_btnCancel"));
+		btnFirst.setVisible(workspace.isAllowed("button_KaryawanMain_btnFirst"));
+		btnPrevious.setVisible(workspace.isAllowed("button_KaryawanMain_btnPrevious"));
+		btnNext.setVisible(workspace.isAllowed("button_KaryawanMain_btnNext"));
+		btnLast.setVisible(workspace.isAllowed("button_KaryawanMain_btnLast"));
 	}
 
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
