@@ -215,9 +215,9 @@ public class UserListCtrl extends GFCBaseListCtrl<SecUser> implements Serializab
 
 		userListWindow.setVisible(workspace.isAllowed("userListWindow"));
 
-		btnHelp.setVisible(workspace.isAllowed("button_UserList_btnHelp"));
+		//btnHelp.setVisible(workspace.isAllowed("button_UserList_btnHelp"));
 		button_UserList_NewUser.setVisible(workspace.isAllowed("button_UserList_NewUser"));
-		button_UserList_PrintUserList.setVisible(workspace.isAllowed("button_UserList_PrintUserList"));
+		//button_UserList_PrintUserList.setVisible(workspace.isAllowed("button_UserList_PrintUserList"));
 
 		hbox_UserList_SearchUsers.setVisible(workspace.isAllowed("hbox_UserList_SearchUsers"));
 

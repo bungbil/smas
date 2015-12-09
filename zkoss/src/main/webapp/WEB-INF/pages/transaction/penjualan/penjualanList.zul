@@ -22,9 +22,9 @@
 						<!-- COMMON BUTTONS -->
 						<toolbar align="start"
 							style="float:left; border-style: none;">
-							<toolbarbutton id="btnHelp"
+							<!-- <toolbarbutton id="btnHelp"
 								image="/images/icons/light_16x16.gif"
-								tooltiptext="${c:l('btnHelp.tooltiptext')}" />
+								tooltiptext="${c:l('btnHelp.tooltiptext')}" /> -->
 							<toolbarbutton id="btnRefresh"
 								image="/images/icons/refresh2_yellow_16x16.gif"
 								tooltiptext="${c:l('btnRefresh.tooltiptext')}" />

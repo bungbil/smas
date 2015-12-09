@@ -156,7 +156,8 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 			(3,'Leader',1),
 			(4,'Sales',1),
 			(5,'Sopir',1),
-			(6,'Kolektor',1);*/
+			(6,'Kolektor',1),
+			(7,'Staf',1);*/
 			long supervisorDivisiId = 0;
 			boolean showSupervisorDivisi = false;
 			if(jobType.getId() == 1 ){
@@ -166,6 +167,9 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 				showSupervisorDivisi = false;
 				supervisorDivisiId = 0;
 			}else if(jobType.getId() == 2){
+				supervisorDivisiId = 1;
+				showSupervisorDivisi = true;
+			}else if(jobType.getId() == 7){
 				supervisorDivisiId = 1;
 				showSupervisorDivisi = true;
 			}else{
