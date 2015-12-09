@@ -1,4 +1,4 @@
-package billy.webui.master.kategoribarang;
+package billy.webui.master.karyawan;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -19,6 +19,8 @@ import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zkplus.databind.BindingListModelList;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Checkbox;
+import org.zkoss.zul.ListModelList;
+import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Tabbox;
@@ -29,8 +31,9 @@ import org.zkoss.zul.Window;
 import com.googlecode.genericdao.search.Filter;
 
 import de.forsthaus.UserWorkspace;
-import billy.backend.model.KategoriBarang;
-import billy.backend.service.KategoriBarangService;
+import billy.backend.model.JobType;
+import billy.backend.model.Karyawan;
+import billy.backend.service.KaryawanService;
 import de.forsthaus.backend.util.HibernateSearchObject;
 import de.forsthaus.backend.util.ZksampleBeanUtils;
 import de.forsthaus.policy.model.UserImpl;
@@ -40,29 +43,29 @@ import de.forsthaus.webui.util.MultiLineMessageBox;
 import de.forsthaus.webui.util.ZksampleCommonUtils;
 import de.forsthaus.webui.util.ZksampleMessageUtils;
 
-public class KategoriBarangMainCtrl extends GFCBaseCtrl implements Serializable {
+public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(KategoriBarangMainCtrl.class);
+	private static final Logger logger = Logger.getLogger(KaryawanMainCtrl.class);
 
 	
-	protected Window windowKategoriBarangMain; // autowired
+	protected Window windowKaryawanMain; // autowired
 
 	// Tabs
-	protected Tabbox tabbox_KategoriBarangMain; // autowired
-	protected Tab tabKategoriBarangList; // autowired
-	protected Tab tabKategoriBarangDetail; // autowired
-	protected Tabpanel tabPanelKategoriBarangList; // autowired
-	protected Tabpanel tabPanelKategoriBarangDetail; // autowired
+	protected Tabbox tabbox_KaryawanMain; // autowired
+	protected Tab tabKaryawanList; // autowired
+	protected Tab tabKaryawanDetail; // autowired
+	protected Tabpanel tabPanelKaryawanList; // autowired
+	protected Tabpanel tabPanelKaryawanDetail; // autowired
 
 	// filter components
-	protected Checkbox checkbox_KategoriBarangList_ShowAll; // autowired
-	protected Textbox txtb_KategoriBarang_Name; // aurowired
-	protected Button button_KategoriBarangList_SearchName; // aurowired
+	protected Checkbox checkbox_KaryawanList_ShowAll; // autowired
+	protected Textbox txtb_Karyawan_Name; // aurowired
+	protected Button button_KaryawanList_SearchName; // aurowired
 
 	// Button controller for the CRUD buttons
-	private final String btnCtroller_ClassPrefix = "button_KategoriBarangMain_";
-	private ButtonStatusCtrl btnCtrlKategoriBarang;
+	private final String btnCtroller_ClassPrefix = "button_KaryawanMain_";
+	private ButtonStatusCtrl btnCtrlKaryawan;
 	protected Button btnNew; // autowired
 	protected Button btnEdit; // autowired
 	protected Button btnDelete; // autowired
@@ -79,23 +82,23 @@ public class KategoriBarangMainCtrl extends GFCBaseCtrl implements Serializable 
 	protected Button btnHelp;
 
 	// Tab-Controllers for getting the binders
-	private KategoriBarangListCtrl kategoriBarangListCtrl;
-	private KategoriBarangDetailCtrl kategoriBarangDetailCtrl;
+	private KaryawanListCtrl karyawanListCtrl;
+	private KaryawanDetailCtrl karyawanDetailCtrl;
 
 	// Databinding
-	private KategoriBarang selectedKategoriBarang;
-	private BindingListModelList kategoriBarangs;
+	private Karyawan selectedKaryawan;
+	private BindingListModelList karyawans;
 
 	// ServiceDAOs / Domain Classes
-	private KategoriBarangService kategoriBarangService;
+	private KaryawanService karyawanService;
 
 	// always a copy from the bean before modifying. Used for reseting
-	private KategoriBarang originalKategoriBarang;
+	private Karyawan originalKaryawan;
 
 	/**
 	 * default constructor.<br>
 	 */
-	public KategoriBarangMainCtrl() {
+	public KaryawanMainCtrl() {
 		super();
 	}
 
@@ -106,7 +109,7 @@ public class KategoriBarangMainCtrl extends GFCBaseCtrl implements Serializable 
 		/**
 		 * 1. Set an 'alias' for this composer name to access it in the
 		 * zul-file.<br>
-		 * 2. Set the kategoriBarang 'recurse' to 'false' to avoid problems with
+		 * 2. Set the karyawan 'recurse' to 'false' to avoid problems with
 		 * managing more than one zul-file in one page. Otherwise it would be
 		 * overridden and can ends in curious error messages.
 		 */
@@ -123,11 +126,11 @@ public class KategoriBarangMainCtrl extends GFCBaseCtrl implements Serializable 
 	 * @param event
 	 * @throws Exception
 	 */
-	public void onCreate$windowKategoriBarangMain(Event event) throws Exception {
-		windowKategoriBarangMain.setContentStyle("padding:0px;");
+	public void onCreate$windowKaryawanMain(Event event) throws Exception {
+		windowKaryawanMain.setContentStyle("padding:0px;");
 
 		// create the Button Controller. Disable not used buttons during working
-		btnCtrlKategoriBarang = new ButtonStatusCtrl(getUserWorkspace(), btnCtroller_ClassPrefix, true, null, btnPrint, btnFirst, btnPrevious, btnNext, btnLast, btnNew, btnEdit, btnDelete, btnSave,
+		btnCtrlKaryawan = new ButtonStatusCtrl(getUserWorkspace(), btnCtroller_ClassPrefix, true, null, btnPrint, btnFirst, btnPrevious, btnNext, btnLast, btnNew, btnEdit, btnDelete, btnSave,
 				btnCancel, null);
 
 		doCheckRights();
@@ -136,62 +139,62 @@ public class KategoriBarangMainCtrl extends GFCBaseCtrl implements Serializable 
 		 * Initiate the first loading by selecting the customerList tab and
 		 * create the components from the zul-file.
 		 */
-		tabKategoriBarangList.setSelected(true);
+		tabKaryawanList.setSelected(true);
 
-		if (tabPanelKategoriBarangList != null) {
-			ZksampleCommonUtils.createTabPanelContent(this.tabPanelKategoriBarangList, this, "ModuleMainController", "/WEB-INF/pages/master/kategoriBarang/kategoriBarangList.zul");
+		if (tabPanelKaryawanList != null) {
+			ZksampleCommonUtils.createTabPanelContent(this.tabPanelKaryawanList, this, "ModuleMainController", "/WEB-INF/pages/master/karyawan/karyawanList.zul");
 		}
 
 		// init the buttons for editMode
-		btnCtrlKategoriBarang.setInitEdit();
+		btnCtrlKaryawan.setInitEdit();
 	}
 
 	/**
-	 * When the tab 'tabKategoriBarangList' is selected.<br>
+	 * When the tab 'tabKaryawanList' is selected.<br>
 	 * Loads the zul-file into the tab.
 	 * 
 	 * @param event
 	 * @throws IOException
 	 */
-	public void onSelect$tabKategoriBarangList(Event event) throws IOException {
+	public void onSelect$tabKaryawanList(Event event) throws IOException {
 		//logger.debug(event.toString());
 		
 		// Check if the tabpanel is already loaded
-		if (tabPanelKategoriBarangList.getFirstChild() != null) {
-			tabKategoriBarangList.setSelected(true);
+		if (tabPanelKaryawanList.getFirstChild() != null) {
+			tabKaryawanList.setSelected(true);
 
 			return;
 		}
 
-		if (tabPanelKategoriBarangList != null) {
-			ZksampleCommonUtils.createTabPanelContent(this.tabPanelKategoriBarangList, this, "ModuleMainController", "/WEB-INF/pages//kategoriBarang/kategoriBarangList.zul");
+		if (tabPanelKaryawanList != null) {
+			ZksampleCommonUtils.createTabPanelContent(this.tabPanelKaryawanList, this, "ModuleMainController", "/WEB-INF/pages//karyawan/karyawanList.zul");
 		}
 
 	}
 
 	/**
-	 * When the tab 'tabPanelKategoriBarangDetail' is selected.<br>
+	 * When the tab 'tabPanelKaryawanDetail' is selected.<br>
 	 * Loads the zul-file into the tab.
 	 * 
 	 * @param event
 	 * @throws IOException
 	 */
-	public void onSelect$tabKategoriBarangDetail(Event event) throws IOException {
+	public void onSelect$tabKaryawanDetail(Event event) throws IOException {
 		// logger.debug(event.toString());
 
 		// Check if the tabpanel is already loaded
-		if (tabPanelKategoriBarangDetail.getFirstChild() != null) {
-			tabKategoriBarangDetail.setSelected(true);
+		if (tabPanelKaryawanDetail.getFirstChild() != null) {
+			tabKaryawanDetail.setSelected(true);
 
 			// refresh the Binding mechanism
-			getKategoriBarangDetailCtrl().setKategoriBarang(getSelectedKategoriBarang());
-			getKategoriBarangDetailCtrl().getBinder().loadAll();
+			getKaryawanDetailCtrl().setKaryawan(getSelectedKaryawan());
+			getKaryawanDetailCtrl().getBinder().loadAll();
 			
 			return;
 		}
 
-		if (tabPanelKategoriBarangDetail != null) {
-			ZksampleCommonUtils.createTabPanelContent(this.tabPanelKategoriBarangDetail, this, "ModuleMainController", "/WEB-INF/pages/master/kategoriBarang/kategoriBarangDetail.zul");
+		if (tabPanelKaryawanDetail != null) {
+			ZksampleCommonUtils.createTabPanelContent(this.tabPanelKaryawanDetail, this, "ModuleMainController", "/WEB-INF/pages/master/karyawan/karyawanDetail.zul");
 		}
 	}
 
@@ -201,27 +204,27 @@ public class KategoriBarangMainCtrl extends GFCBaseCtrl implements Serializable 
 	 * 
 	 * @param event
 	 */
-	public void onCheck$checkbox_KategoriBarangList_ShowAll(Event event) {
+	public void onCheck$checkbox_KaryawanList_ShowAll(Event event) {
 		// logger.debug(event.toString());
 
 		// empty the text search boxes
-		txtb_KategoriBarang_Name.setValue(""); // clear
+		txtb_Karyawan_Name.setValue(""); // clear
 
 		// ++ create the searchObject and init sorting ++//
-		HibernateSearchObject<KategoriBarang> soKategoriBarang = new HibernateSearchObject<KategoriBarang>(KategoriBarang.class, getKategoriBarangListCtrl().getCountRows());
-		soKategoriBarang.addSort("deskripsiKategoriBarang", false);
+		HibernateSearchObject<Karyawan> soKaryawan = new HibernateSearchObject<Karyawan>(Karyawan.class, getKaryawanListCtrl().getCountRows());
+		soKaryawan.addSort("namaKaryawan", false);
 
 		// Change the BindingListModel.
-		if (getKategoriBarangListCtrl().getBinder() != null) {
-			getKategoriBarangListCtrl().getPagedBindingListWrapper().setSearchObject(soKategoriBarang);
+		if (getKaryawanListCtrl().getBinder() != null) {
+			getKaryawanListCtrl().getPagedBindingListWrapper().setSearchObject(soKaryawan);
 
 			// get the current Tab for later checking if we must change it
-			Tab currentTab = tabbox_KategoriBarangMain.getSelectedTab();
+			Tab currentTab = tabbox_KaryawanMain.getSelectedTab();
 
 			// check if the tab is one of the Detail tabs. If so do not
 			// change the selection of it
-			if (!currentTab.equals(tabKategoriBarangList)) {
-				tabKategoriBarangList.setSelected(true);
+			if (!currentTab.equals(tabKaryawanList)) {
+				tabKaryawanList.setSelected(true);
 			} else {
 				currentTab.setSelected(true);
 			}
@@ -232,31 +235,31 @@ public class KategoriBarangMainCtrl extends GFCBaseCtrl implements Serializable 
 	
 
 	/**
-	 * Filter the kategoriBarang list with 'like kategoriBarang name'. <br>
+	 * Filter the karyawan list with 'like karyawan name'. <br>
 	 */
-	public void onClick$button_KategoriBarangList_SearchName(Event event) throws Exception {
+	public void onClick$button_KaryawanList_SearchName(Event event) throws Exception {
 		// logger.debug(event.toString());
 
 		// if not empty
-		if (!txtb_KategoriBarang_Name.getValue().isEmpty()) {
-			checkbox_KategoriBarangList_ShowAll.setChecked(false); // unCheck
+		if (!txtb_Karyawan_Name.getValue().isEmpty()) {
+			checkbox_KaryawanList_ShowAll.setChecked(false); // unCheck
 	
 			// ++ create the searchObject and init sorting ++//
-			HibernateSearchObject<KategoriBarang> soKategoriBarang = new HibernateSearchObject<KategoriBarang>(KategoriBarang.class, getKategoriBarangListCtrl().getCountRows());
-			soKategoriBarang.addFilter(new Filter("deskripsiKategoriBarang", "%" + txtb_KategoriBarang_Name.getValue() + "%", Filter.OP_ILIKE));
-			soKategoriBarang.addSort("deskripsiKategoriBarang", false);
+			HibernateSearchObject<Karyawan> soKaryawan = new HibernateSearchObject<Karyawan>(Karyawan.class, getKaryawanListCtrl().getCountRows());
+			soKaryawan.addFilter(new Filter("namaKaryawan", "%" + txtb_Karyawan_Name.getValue() + "%", Filter.OP_ILIKE));
+			soKaryawan.addSort("namaKaryawan", false);
 
 			// Change the BindingListModel.
-			if (getKategoriBarangListCtrl().getBinder() != null) {
-				getKategoriBarangListCtrl().getPagedBindingListWrapper().setSearchObject(soKategoriBarang);
+			if (getKaryawanListCtrl().getBinder() != null) {
+				getKaryawanListCtrl().getPagedBindingListWrapper().setSearchObject(soKaryawan);
 
 				// get the current Tab for later checking if we must change it
-				Tab currentTab = tabbox_KategoriBarangMain.getSelectedTab();
+				Tab currentTab = tabbox_KaryawanMain.getSelectedTab();
 
 				// check if the tab is one of the Detail tabs. If so do not
 				// change the selection of it
-				if (!currentTab.equals(tabKategoriBarangList)) {
-					tabKategoriBarangList.setSelected(true);
+				if (!currentTab.equals(tabKaryawanList)) {
+					tabKaryawanList.setSelected(true);
 				} else {
 					currentTab.setSelected(true);
 				}
@@ -395,15 +398,15 @@ public class KategoriBarangMainCtrl extends GFCBaseCtrl implements Serializable 
 		doResetToInitValues();
 
 		// check first, if the tabs are created
-		if (getKategoriBarangDetailCtrl().getBinder() != null) {
+		if (getKaryawanDetailCtrl().getBinder() != null) {
 
 			// refresh all dataBinder related controllers/components
-			getKategoriBarangDetailCtrl().getBinder().loadAll();
+			getKaryawanDetailCtrl().getBinder().loadAll();
 
 			// set editable Mode
-			getKategoriBarangDetailCtrl().doReadOnlyMode(true);
+			getKaryawanDetailCtrl().doReadOnlyMode(true);
 
-			btnCtrlKategoriBarang.setInitEdit();
+			btnCtrlKaryawan.setInitEdit();
 		}
 	}
 
@@ -418,21 +421,21 @@ public class KategoriBarangMainCtrl extends GFCBaseCtrl implements Serializable 
 	private void doEdit(Event event) {
 		// logger.debug(event.toString());
 		// get the current Tab for later checking if we must change it
-		Tab currentTab = tabbox_KategoriBarangMain.getSelectedTab();
+		Tab currentTab = tabbox_KaryawanMain.getSelectedTab();
 
 		// check first, if the tabs are created, if not than create it
-		if (getKategoriBarangDetailCtrl() == null) {
-			Events.sendEvent(new Event("onSelect", tabKategoriBarangDetail, null));
+		if (getKaryawanDetailCtrl() == null) {
+			Events.sendEvent(new Event("onSelect", tabKaryawanDetail, null));
 			// if we work with spring beanCreation than we must check a little
 			// bit deeper, because the Controller are preCreated ?
-		} else if (getKategoriBarangDetailCtrl().getBinder() == null) {
-			Events.sendEvent(new Event("onSelect", tabKategoriBarangDetail, null));
+		} else if (getKaryawanDetailCtrl().getBinder() == null) {
+			Events.sendEvent(new Event("onSelect", tabKaryawanDetail, null));
 		}
 
 		// check if the tab is one of the Detail tabs. If so do not change the
 		// selection of it
-		if (!currentTab.equals(tabKategoriBarangDetail)) {
-			tabKategoriBarangDetail.setSelected(true);
+		if (!currentTab.equals(tabKaryawanDetail)) {
+			tabKaryawanDetail.setSelected(true);
 		} else {
 			currentTab.setSelected(true);
 		}
@@ -440,15 +443,15 @@ public class KategoriBarangMainCtrl extends GFCBaseCtrl implements Serializable 
 		// remember the old vars
 		doStoreInitValues();
 
-		btnCtrlKategoriBarang.setBtnStatus_Edit();
+		btnCtrlKaryawan.setBtnStatus_Edit();
 
-		getKategoriBarangDetailCtrl().doReadOnlyMode(false);
+		getKaryawanDetailCtrl().doReadOnlyMode(false);
 
 		// refresh the UI, because we can click the EditBtn from every tab.
-		getKategoriBarangDetailCtrl().getBinder().loadAll();
+		getKaryawanDetailCtrl().getBinder().loadAll();
 
 		// set focus
-		getKategoriBarangDetailCtrl().txtb_KodeKategoriBarang.focus();
+		getKaryawanDetailCtrl().txtb_KodeKaryawan.focus();
 	}
 
 	/**
@@ -461,20 +464,20 @@ public class KategoriBarangMainCtrl extends GFCBaseCtrl implements Serializable 
 	private void doDelete(Event event) throws InterruptedException {
 		// logger.debug(event.toString());
 		// check first, if the tabs are created, if not than create them
-		if (getKategoriBarangDetailCtrl().getBinder() == null) {
-			Events.sendEvent(new Event("onSelect", tabKategoriBarangDetail, null));
+		if (getKaryawanDetailCtrl().getBinder() == null) {
+			Events.sendEvent(new Event("onSelect", tabKaryawanDetail, null));
 		}
 
 		// check first, if the tabs are created
-		if (getKategoriBarangDetailCtrl().getBinder() == null) {
+		if (getKaryawanDetailCtrl().getBinder() == null) {
 			return;
 		}
 
-		final KategoriBarang anKategoriBarang = getSelectedKategoriBarang();
-		if (anKategoriBarang != null) {
+		final Karyawan anKaryawan = getSelectedKaryawan();
+		if (anKaryawan != null) {
 
 			// Show a confirm box
-			final String msg = Labels.getLabel("message.Question.Are_you_sure_to_delete_this_record") + "\n\n --> " + anKategoriBarang.getKodeKategoriBarang();
+			final String msg = Labels.getLabel("message.Question.Are_you_sure_to_delete_this_record") + "\n\n --> " + anKaryawan.getKodeKaryawan();
 			final String title = Labels.getLabel("message.Deleting.Record");
 
 			MultiLineMessageBox.doSetTemplate();
@@ -497,7 +500,7 @@ public class KategoriBarangMainCtrl extends GFCBaseCtrl implements Serializable 
 
 				private void deleteBean() throws InterruptedException {
 					try {
-						getKategoriBarangService().delete(anKategoriBarang);
+						getKaryawanService().delete(anKaryawan);
 					} catch (DataAccessException e) {
 						ZksampleMessageUtils.showErrorMessage(e.getMostSpecificCause().toString());
 					}
@@ -509,14 +512,14 @@ public class KategoriBarangMainCtrl extends GFCBaseCtrl implements Serializable 
 
 		}
 
-		btnCtrlKategoriBarang.setInitEdit();
+		btnCtrlKaryawan.setInitEdit();
 
-		setSelectedKategoriBarang(null);
+		setSelectedKaryawan(null);
 		// refresh the list
-		getKategoriBarangListCtrl().doFillListbox();
+		getKaryawanListCtrl().doFillListbox();
 
 		// refresh all dataBinder related controllers
-		getKategoriBarangDetailCtrl().getBinder().loadAll();
+		getKaryawanDetailCtrl().getBinder().loadAll();
 	}
 
 	/**
@@ -528,25 +531,41 @@ public class KategoriBarangMainCtrl extends GFCBaseCtrl implements Serializable 
 	private void doSave(Event event) throws InterruptedException {
 		// logger.debug(event.toString());
 		// save all components data in the several tabs to the bean
-		getKategoriBarangDetailCtrl().getBinder().saveAll();
+		getKaryawanDetailCtrl().getBinder().saveAll();
 
 		try {
+			/* if a job type is selected get the object from the listbox */
+			Listitem item = getKaryawanDetailCtrl().lbox_JobType.getSelectedItem();
+
+			if (item != null) {
+				ListModelList lml1 = (ListModelList) getKaryawanDetailCtrl().lbox_JobType.getListModel();
+				JobType jobType = (JobType) lml1.get(item.getIndex());
+				getKaryawanDetailCtrl().getKaryawan().setJobType(jobType);				
+			}
+			
+			Listitem item2 = getKaryawanDetailCtrl().lbox_SupervisorDivisi.getSelectedItem();
+
+			if (item2 != null) {
+				ListModelList lml2 = (ListModelList) getKaryawanDetailCtrl().lbox_SupervisorDivisi.getListModel();
+				Karyawan karyawan = (Karyawan) lml2.get(item2.getIndex());
+				getKaryawanDetailCtrl().getKaryawan().setSupervisorDivisi(karyawan);				
+			}
 			
 			String userName = ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();			
-			getKategoriBarangDetailCtrl().getKategoriBarang().setLastUpdate(new Date());			
-			getKategoriBarangDetailCtrl().getKategoriBarang().setUpdatedBy(userName);			
+			getKaryawanDetailCtrl().getKaryawan().setLastUpdate(new Date());			
+			getKaryawanDetailCtrl().getKaryawan().setUpdatedBy(userName);			
 			// save it to database
-			getKategoriBarangService().saveOrUpdate(getKategoriBarangDetailCtrl().getKategoriBarang());
+			getKaryawanService().saveOrUpdate(getKaryawanDetailCtrl().getKaryawan());
 			// if saving is successfully than actualize the beans as
 			// origins.
 			doStoreInitValues();
 			// refresh the list
-			getKategoriBarangListCtrl().doFillListbox();
+			getKaryawanListCtrl().doFillListbox();
 			// later refresh StatusBar
-			Events.postEvent("onSelect", getKategoriBarangListCtrl().getListBoxKategoriBarang(), getSelectedKategoriBarang());
+			Events.postEvent("onSelect", getKaryawanListCtrl().getListBoxKaryawan(), getSelectedKaryawan());
 
 			// show the objects data in the statusBar
-			String str = getSelectedKategoriBarang().getKodeKategoriBarang();
+			String str = getSelectedKaryawan().getKodeKaryawan();
 			EventQueues.lookup("selectedObjectEventQueue", EventQueues.DESKTOP, true).publish(new Event("onChangeSelectedObject", null, str));
 
 		} catch (DataAccessException e) {
@@ -558,8 +577,8 @@ public class KategoriBarangMainCtrl extends GFCBaseCtrl implements Serializable 
 			return;
 
 		} finally {
-			btnCtrlKategoriBarang.setInitEdit();
-			getKategoriBarangDetailCtrl().doReadOnlyMode(true);
+			btnCtrlKaryawan.setInitEdit();
+			getKaryawanDetailCtrl().doReadOnlyMode(true);
 		}
 	}
 
@@ -573,12 +592,12 @@ public class KategoriBarangMainCtrl extends GFCBaseCtrl implements Serializable 
 	private void doNew(Event event) {
 		// logger.debug(event.toString());
 		// check first, if the tabs are created
-		if (getKategoriBarangDetailCtrl() == null) {
-			Events.sendEvent(new Event("onSelect", tabKategoriBarangDetail, null));
+		if (getKaryawanDetailCtrl() == null) {
+			Events.sendEvent(new Event("onSelect", tabKaryawanDetail, null));
 			// if we work with spring beanCreation than we must check a little
 			// bit deeper, because the Controller are preCreated ?
-		} else if (getKategoriBarangDetailCtrl().getBinder() == null) {
-			Events.sendEvent(new Event("onSelect", tabKategoriBarangDetail, null));
+		} else if (getKaryawanDetailCtrl().getBinder() == null) {
+			Events.sendEvent(new Event("onSelect", tabKaryawanDetail, null));
 		}
 
 		// remember the current object
@@ -587,29 +606,34 @@ public class KategoriBarangMainCtrl extends GFCBaseCtrl implements Serializable 
 		/** !!! DO NOT BREAK THE TIERS !!! */
 		// We don't create a new DomainObject() in the frontend.
 		// We GET it from the backend.
-		final KategoriBarang anKategoriBarang = getKategoriBarangService().getNewKategoriBarang();
+		final Karyawan anKaryawan = getKaryawanService().getNewKaryawan();
 
 		// set the beans in the related databinded controllers
-		getKategoriBarangDetailCtrl().setKategoriBarang(anKategoriBarang);
-		getKategoriBarangDetailCtrl().setSelectedKategoriBarang(anKategoriBarang);
+		getKaryawanDetailCtrl().setKaryawan(anKaryawan);
+		getKaryawanDetailCtrl().setSelectedKaryawan(anKaryawan);
 
 		// Refresh the binding mechanism
-		getKategoriBarangDetailCtrl().setSelectedKategoriBarang(getSelectedKategoriBarang());
+		getKaryawanDetailCtrl().setSelectedKaryawan(getSelectedKaryawan());
 		try{
-			getKategoriBarangDetailCtrl().getBinder().loadAll();
+			getKaryawanDetailCtrl().getBinder().loadAll();
 		}catch(Exception e){
 			//do nothing
 		}
 
 		// set editable Mode
-		getKategoriBarangDetailCtrl().doReadOnlyMode(false);
-
+		getKaryawanDetailCtrl().doReadOnlyMode(false);
+		
+		// set listbox
+		getKaryawanDetailCtrl().lbox_JobType.setSelectedIndex(-1);
+		getKaryawanDetailCtrl().lbox_SupervisorDivisi.setSelectedIndex(-1);
+		getKaryawanDetailCtrl().lbox_SupervisorDivisi.setVisible(false);
+		getKaryawanDetailCtrl().label_SupervisorDivisi.setVisible(false);
 		// set the ButtonStatus to New-Mode
-		btnCtrlKategoriBarang.setInitNew();
+		btnCtrlKaryawan.setInitNew();
 
-		tabKategoriBarangDetail.setSelected(true);
+		tabKaryawanDetail.setSelected(true);
 		// set focus
-		getKategoriBarangDetailCtrl().txtb_KodeKategoriBarang.focus();
+		getKaryawanDetailCtrl().txtb_KodeKaryawan.focus();
 
 	}
 
@@ -622,13 +646,13 @@ public class KategoriBarangMainCtrl extends GFCBaseCtrl implements Serializable 
 	private void doSkip(Event event) {
 
 		// get the model and the current selected record
-		BindingListModelList blml = (BindingListModelList) getKategoriBarangListCtrl().getListBoxKategoriBarang().getModel();
+		BindingListModelList blml = (BindingListModelList) getKaryawanListCtrl().getListBoxKaryawan().getModel();
 
 		// check if data exists
 		if (blml == null || blml.size() < 1)
 			return;
 
-		int index = blml.indexOf(getSelectedKategoriBarang());
+		int index = blml.indexOf(getSelectedKaryawan());
 
 		/**
 		 * Check, if all tabs with data binded components are created So we work
@@ -636,10 +660,10 @@ public class KategoriBarangMainCtrl extends GFCBaseCtrl implements Serializable 
 		 * the Controller are preCreated ? After that, go back to the
 		 * current/selected tab.
 		 */
-		Tab currentTab = tabbox_KategoriBarangMain.getSelectedTab();
+		Tab currentTab = tabbox_KaryawanMain.getSelectedTab();
 
-		if (getKategoriBarangDetailCtrl().getBinder() == null) {
-			Events.sendEvent(new Event(Events.ON_SELECT, tabKategoriBarangDetail, null));
+		if (getKaryawanDetailCtrl().getBinder() == null) {
+			Events.sendEvent(new Event(Events.ON_SELECT, tabKaryawanDetail, null));
 		}
 
 		// go back to selected tab
@@ -664,15 +688,16 @@ public class KategoriBarangMainCtrl extends GFCBaseCtrl implements Serializable 
 			}
 		}
 
-		getKategoriBarangListCtrl().getListBoxKategoriBarang().setSelectedIndex(index);
-		setSelectedKategoriBarang((KategoriBarang) blml.get(index));
+		getKaryawanListCtrl().getListBoxKaryawan().setSelectedIndex(index);
+		setSelectedKaryawan((Karyawan) blml.get(index));
 
 		// call onSelect() for showing the objects data in the statusBar
-		Events.sendEvent(new Event(Events.ON_SELECT, getKategoriBarangListCtrl().getListBoxKategoriBarang(), getSelectedKategoriBarang()));
+		Events.sendEvent(new Event(Events.ON_SELECT, getKaryawanListCtrl().getListBoxKaryawan(), getSelectedKaryawan()));
 
 		// refresh master-detail MASTERS data
-		getKategoriBarangDetailCtrl().getBinder().loadAll();
-
+		getKaryawanDetailCtrl().getBinder().loadAll();
+		
+		getKaryawanDetailCtrl().loadListBox();
 		// EXTRA: if we have a longtext field under the listbox, so we must
 		// refresh
 		// this binded component too
@@ -691,11 +716,11 @@ public class KategoriBarangMainCtrl extends GFCBaseCtrl implements Serializable 
 	private void doResizeSelectedTab(Event event) {
 		// logger.debug(event.toString());
 
-		if (tabbox_KategoriBarangMain.getSelectedTab() == tabKategoriBarangDetail) {
-			getKategoriBarangDetailCtrl().doFitSize(event);
-		} else if (tabbox_KategoriBarangMain.getSelectedTab() == tabKategoriBarangList) {
+		if (tabbox_KaryawanMain.getSelectedTab() == tabKaryawanDetail) {
+			getKaryawanDetailCtrl().doFitSize(event);
+		} else if (tabbox_KaryawanMain.getSelectedTab() == tabKaryawanList) {
 			// resize and fill Listbox new
-			getKategoriBarangListCtrl().doFillListbox();
+			getKaryawanListCtrl().doFillListbox();
 		}
 	}
 
@@ -719,10 +744,10 @@ public class KategoriBarangMainCtrl extends GFCBaseCtrl implements Serializable 
 	 */
 	public void doStoreInitValues() {
 
-		if (getSelectedKategoriBarang() != null) {
+		if (getSelectedKaryawan() != null) {
 
 			try {
-				setOriginalKategoriBarang((KategoriBarang) ZksampleBeanUtils.cloneBean(getSelectedKategoriBarang()));
+				setOriginalKaryawan((Karyawan) ZksampleBeanUtils.cloneBean(getSelectedKaryawan()));
 			} catch (final IllegalAccessException e) {
 				throw new RuntimeException(e);
 			} catch (final InstantiationException e) {
@@ -743,12 +768,12 @@ public class KategoriBarangMainCtrl extends GFCBaseCtrl implements Serializable 
 	 */
 	public void doResetToInitValues() {
 
-		if (getOriginalKategoriBarang() != null) {
+		if (getOriginalKaryawan() != null) {
 
 			try {
-				setSelectedKategoriBarang((KategoriBarang) ZksampleBeanUtils.cloneBean(getOriginalKategoriBarang()));
+				setSelectedKaryawan((Karyawan) ZksampleBeanUtils.cloneBean(getOriginalKaryawan()));
 				// TODO Bug in DataBinder??
-				windowKategoriBarangMain.invalidate();
+				windowKaryawanMain.invalidate();
 
 			} catch (final IllegalAccessException e) {
 				throw new RuntimeException(e);
@@ -774,7 +799,7 @@ public class KategoriBarangMainCtrl extends GFCBaseCtrl implements Serializable 
 	private void doCheckRights() {
 
 		final UserWorkspace workspace = getUserWorkspace();
-		button_KategoriBarangList_SearchName.setVisible(workspace.isAllowed("button_KategoriBarangList_SearchName"));
+		button_KaryawanList_SearchName.setVisible(workspace.isAllowed("button_KaryawanList_SearchName"));
 
 	}
 
@@ -783,54 +808,54 @@ public class KategoriBarangMainCtrl extends GFCBaseCtrl implements Serializable 
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
 	/* Master BEANS */
-	public void setOriginalKategoriBarang(KategoriBarang originalKategoriBarang) {
-		this.originalKategoriBarang = originalKategoriBarang;
+	public void setOriginalKaryawan(Karyawan originalKaryawan) {
+		this.originalKaryawan = originalKaryawan;
 	}
 
-	public KategoriBarang getOriginalKategoriBarang() {
-		return this.originalKategoriBarang;
+	public Karyawan getOriginalKaryawan() {
+		return this.originalKaryawan;
 	}
 
-	public void setSelectedKategoriBarang(KategoriBarang selectedKategoriBarang) {
-		this.selectedKategoriBarang = selectedKategoriBarang;
+	public void setSelectedKaryawan(Karyawan selectedKaryawan) {
+		this.selectedKaryawan = selectedKaryawan;
 	}
 
-	public KategoriBarang getSelectedKategoriBarang() {
-		return this.selectedKategoriBarang;
+	public Karyawan getSelectedKaryawan() {
+		return this.selectedKaryawan;
 	}
 
-	public void setKategoriBarangs(BindingListModelList kategoriBarangs) {
-		this.kategoriBarangs = kategoriBarangs;
+	public void setKaryawans(BindingListModelList karyawans) {
+		this.karyawans = karyawans;
 	}
 
-	public BindingListModelList getKategoriBarangs() {
-		return this.kategoriBarangs;
+	public BindingListModelList getKaryawans() {
+		return this.karyawans;
 	}
 
 	/* CONTROLLERS */
-	public void setKategoriBarangListCtrl(KategoriBarangListCtrl kategoriBarangListCtrl) {
-		this.kategoriBarangListCtrl = kategoriBarangListCtrl;
+	public void setKaryawanListCtrl(KaryawanListCtrl karyawanListCtrl) {
+		this.karyawanListCtrl = karyawanListCtrl;
 	}
 
-	public KategoriBarangListCtrl getKategoriBarangListCtrl() {
-		return this.kategoriBarangListCtrl;
+	public KaryawanListCtrl getKaryawanListCtrl() {
+		return this.karyawanListCtrl;
 	}
 
-	public void setKategoriBarangDetailCtrl(KategoriBarangDetailCtrl kategoriBarangDetailCtrl) {
-		this.kategoriBarangDetailCtrl = kategoriBarangDetailCtrl;
+	public void setKaryawanDetailCtrl(KaryawanDetailCtrl karyawanDetailCtrl) {
+		this.karyawanDetailCtrl = karyawanDetailCtrl;
 	}
 
-	public KategoriBarangDetailCtrl getKategoriBarangDetailCtrl() {
-		return this.kategoriBarangDetailCtrl;
+	public KaryawanDetailCtrl getKaryawanDetailCtrl() {
+		return this.karyawanDetailCtrl;
 	}
 
 	/* SERVICES */
-	public KategoriBarangService getKategoriBarangService() {
-		return this.kategoriBarangService;
+	public KaryawanService getKaryawanService() {
+		return this.karyawanService;
 	}
 
-	public void setKategoriBarangService(KategoriBarangService kategoriBarangService) {
-		this.kategoriBarangService = kategoriBarangService;
+	public void setKaryawanService(KaryawanService karyawanService) {
+		this.karyawanService = karyawanService;
 	}
 
 	/* COMPONENTS and OTHERS */

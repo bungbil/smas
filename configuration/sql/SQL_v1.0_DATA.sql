@@ -11,7 +11,7 @@ INSERT INTO WILAYAH (WILAYAH_ID,KODE_WILAYAH,NAMA_WILAYAH,STATUS,VERSION) values
 (1,'W01','JAKARTA','PUSAT',1);
 
 /******************** JOB TYPE ********************/  
-INSERT INTO JOB_TYPE (JOB_TYPE_ID,NAMA_JOB,VERSION) values
+INSERT INTO JOB_TYPE (JOB_TYPE_ID,NAMA_JOB_TYPE,VERSION) values
 (1,'Supervisor',1),
 (2,'Divisi',1),
 (3,'Leader',1),
@@ -516,3 +516,43 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 (171, 1, 171, 0),
 (172, 1, 172, 0),
 (173, 1, 173, 0);
+
+
+
+/* Karyawan */
+/* --> Page Karyawan */
+INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
+(174, 2, 'menuItem_Master_Karyawan', 0),
+(175, 0, 'windowKaryawanList', 0),
+(176, 0, 'windowKaryawanDetail', 0),
+/* window_KaryawanList Buttons*/
+(177, 6, 'button_KaryawanList_SearchName', 0),
+/* window_KaryawanDialog BUTTONS */
+(178, 6, 'button_KaryawanMain_btnNew', 0),
+(179, 6, 'button_KaryawanMain_btnEdit', 0),
+(180, 6, 'button_KaryawanMain_btnDelete', 0),
+(181, 6, 'button_KaryawanMain_btnSave', 0),
+(182, 6, 'button_KaryawanMain_btnClose', 0),
+/* Karyawan navigation buttons */
+(183, 6, 'button_KaryawanMain_btnCancel', 0),
+(184, 6, 'button_KaryawanMain_btnFirst', 0),
+(185, 6, 'button_KaryawanMain_btnPrevious', 0),
+(186, 6, 'button_KaryawanMain_btnNext', 0),
+(187, 6, 'button_KaryawanMain_btnLast', 0);
+
+
+INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
+(174, 1, 174, 0),
+(175, 1, 175, 0),
+(176, 1, 176, 0),
+(177, 1, 177, 0),
+(178, 1, 178, 0),
+(179, 1, 179, 0),
+(180, 1, 180, 0),
+(181, 1, 181, 0),
+(182, 1, 182, 0),
+(183, 1, 183, 0),
+(184, 1, 184, 0),
+(185, 1, 185, 0),
+(186, 1, 186, 0),
+(187, 1, 187, 0);

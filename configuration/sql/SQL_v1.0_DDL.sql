@@ -507,4 +507,45 @@ alter table bonus_transport
 
 
 
+/*==============================================================*/
+/* Table: Karyawan                                              */
+/*==============================================================*/
+DROP TABLE IF EXISTS karyawan cascade;
+DROP SEQUENCE IF EXISTS karyawan_seq;
+
+CREATE TABLE karyawan (
+   karyawan_id          INT8                 not null,   
+   kode_karyawan       	varchar(50)          null,   
+   nama_karyawan       	varchar(100)         null,
+   tanggal_lahir 	 	date				 null,
+   telepon				varchar(50)   		 null,
+   handphone			varchar(50)   		 null,
+   email				varchar(100)   		 null,
+   alamat				varchar(500)   		 null,
+   job_type_id			INT8                 not null, 
+   atasan_id		    INT8                 null, 
+   last_update       	timestamp,          
+   updated_by       	varchar(50)          null,
+   version              int4                 not null default 0,
+   constraint pk_karyawan primary key (karyawan_id)
+)
+without oids;
+ALTER TABLE karyawan owner to smas;
+
+CREATE SEQUENCE karyawan_seq START 100;
+ALTER SEQUENCE karyawan_seq OWNER TO smas;
+
+CREATE UNIQUE INDEX ix_karyawan_id on karyawan using btree (
+karyawan_id
+);
+
+alter table karyawan
+   add constraint ref_karyawan_to_job foreign key (job_type_id)
+      references job_type (job_type_id)
+      on delete restrict on update restrict;
+	  
+alter table karyawan
+   add constraint ref_karyawan_to_atasan foreign key (atasan_id)
+      references karyawan (karyawan_id)
+      on delete restrict on update restrict;
 

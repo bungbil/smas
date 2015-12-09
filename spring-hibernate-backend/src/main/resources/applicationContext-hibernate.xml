@@ -67,8 +67,8 @@
 				<value>billy/backend/model/KategoriBarang.hbm.xml</value>
 				<value>billy/backend/model/JobType.hbm.xml</value>
 				<value>billy/backend/model/BonusTransport.hbm.xml</value>				
-				<!-- <value>billy/backend/model/Karyawan.hbm.xml</value>
-				<value>billy/backend/model/HargaBarang.hbm.xml</value>
+				<value>billy/backend/model/Karyawan.hbm.xml</value>
+				<!-- <value>billy/backend/model/HargaBarang.hbm.xml</value>
 				<value>billy/backend/model/Barang.hbm.xml</value>
 				 -->
 			</list>

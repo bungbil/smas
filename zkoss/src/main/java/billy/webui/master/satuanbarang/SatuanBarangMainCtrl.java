@@ -594,7 +594,11 @@ public class SatuanBarangMainCtrl extends GFCBaseCtrl implements Serializable {
 
 		// Refresh the binding mechanism
 		getSatuanBarangDetailCtrl().setSelectedSatuanBarang(getSelectedSatuanBarang());
-		getSatuanBarangDetailCtrl().getBinder().loadAll();
+		try{
+			getSatuanBarangDetailCtrl().getBinder().loadAll();
+		}catch(Exception e){
+			//do nothing
+		}
 
 		// set editable Mode
 		getSatuanBarangDetailCtrl().doReadOnlyMode(false);

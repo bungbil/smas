@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+
+<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- Namespace dependent DataBinding Initiator.          -->
+<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./windowKaryawanList" ?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+	<window id="windowKaryawanList" apply="${karyawanListCtrl}"
+		border="none" width="100%">
+
+		<borderlayout id="borderLayout_karyawanList">
+
+			<!-- PAGING COMPONENT -->
+			<north border="none" height="26px">
+				<paging id="paging_KaryawanList" />
+			</north>
+
+			<center border="none">
+
+				<listbox id="listBoxKaryawan"
+					style="border-top-width: 0px; border-left-width: 0px; border-right-width: 0px; border-bottom-width: 1px;"
+					model="@{controller.karyawans}"
+					selectedItem="@{controller.selectedKaryawan}" vflex="true"
+					tooltiptext="${c:l('listbox.tooltiptext')}" width="100%"
+					height="100%" multiple="false">
+					<listhead sizable="true">
+						<listheader id="listheader_KaryawanList_Kode"
+							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
+							label="${c:l('listheader_KaryawanList_Kode.label')}" sort="auto"
+							width="15%" />
+						<listheader id="listheader_KaryawanList_Nama"
+							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
+							label="${c:l('listheader_KaryawanList_Nama.label')}" sort="auto"
+							width="20%" />
+						<listheader id="listheader_KaryawanList_JobType"
+							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
+							label="${c:l('listheader_KaryawanList_JobType.label')}" sort="auto"
+							width="15%" />
+						<listheader id="listheader_KaryawanList_SupervisorDivisi"
+							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
+							label="${c:l('listheader_KaryawanList_SupervisorDivisi.label')}" sort="auto"
+							width="15%" />
+						<listheader id="listheader_KaryawanList_Handphone"
+							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
+							label="${c:l('listheader_KaryawanList_Handphone.label')}" sort="auto"
+							width="10%" />
+						<listheader id="listheader_KaryawanList_LastUpdate"
+							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
+							label="${c:l('common.lastUpdate')}" sort="auto"
+							width="15%" />
+						<listheader id="listheader_KaryawanList_UpdatedBy"
+							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
+							label="${c:l('common.updatedBy')}" sort="auto"
+							width="10%" />
+					</listhead>
+
+					<listitem self="@{each='karyawan'}" value="@{karyawan}"
+						forward="onDoubleClick=onDoubleClickedKaryawanItem">
+
+						<listcell label="@{karyawan.kodeKaryawan}"
+							style="padding-left: 5px" />
+						<listcell label="@{karyawan.namaKaryawan}"
+							style="padding-left: 5px" />
+						<listcell label="@{karyawan.jobType.namaJobType}"
+							style="padding-left: 5px" />
+						<listcell label="@{karyawan.supervisorDivisi.namaKaryawan}"
+							style="padding-left: 5px" />
+						<listcell label="@{karyawan.handphone}"
+							style="padding-left: 5px" />
+						<listcell label="@{karyawan.lastUpdate}"
+							style="padding-left: 5px" />	
+						<listcell label="@{karyawan.updatedBy}"
+							style="padding-left: 5px" />							
+					</listitem>
+				</listbox>
+			</center>
+		</borderlayout>
+	</window>
+</zk>

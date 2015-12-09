@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+	<class name="billy.backend.model.Karyawan" table="Karyawan">
+
+		<id name="id" type="long">
+			<column name="karyawan_id" />
+			<generator class="sequence">
+				<param name="sequence">karyawan_seq</param>
+			</generator>
+		</id>
+
+		<version name="version" column="VERSION" type="integer" />
+
+		<property name="kodeKaryawan" type="string">
+			<column name="kode_karyawan" length="50" not-null="true" unique="true" />
+		</property>
+		<property name="namaKaryawan" type="string">
+			<column name="nama_karyawan" length="100" />
+		</property>		
+		<property name="tanggalLahir" type="date">
+			<column name="tanggal_lahir"/>
+		</property>
+		<property name="telepon" type="string">
+			<column name="telepon" length="50" />
+		</property>	
+		<property name="handphone" type="string">
+			<column name="handphone" length="50" />
+		</property>	
+		<property name="email" type="string">
+			<column name="email" length="100" />
+		</property>	
+		<property name="alamat" type="string">
+			<column name="alamat" length="500" />
+		</property>	
+		
+		<many-to-one name="jobType" class="billy.backend.model.JobType"
+			fetch="select" lazy="false">
+			<column name="job_type_id" not-null="true" />
+		</many-to-one>
+		
+		<many-to-one name="supervisorDivisi" class="billy.backend.model.Karyawan"
+			fetch="select" lazy="false">
+			<column name="atasan_id" />
+		</many-to-one>
+		
+		<property name="lastUpdate" type="timestamp">
+			<column name="last_update" length="29" />
+		</property>	
+		<property name="updatedBy" type="string">
+			<column name="updated_by" length="50" />
+		</property>	
+		
+	</class>
+</hibernate-mapping>

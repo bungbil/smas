@@ -45,15 +45,15 @@
 			iconName="/images/icons/cardbox1_16x16.gif" />
 	</menu>-->
 
-	<!-- OfficeData MenuTree -->
+	<!-- OfficeData MenuTree
 	<menu id="menu_Category_OfficeData" rightName="menuCat_OfficeData">
 		<menuItem id="menu_Item_Customers" zulNavigation="/WEB-INF/pages/customer/customerList.zul"
 			iconName="/images/icons/view.gif" rightName="menuItem_OfficeData_Customers" />
 		<menuItem id="menu_Item_Orders" zulNavigation="/WEB-INF/pages/order/orderList.zul"
 			iconName="/images/icons/view.gif" rightName="menuItem_OfficeData_Orders" />
-	</menu>
+	</menu> -->
 
-	<!-- BaseData MenuTree -->
+	<!-- BaseData MenuTree 
 	<menu id="menu_Category_MainData" rightName="menuCat_MainData">
 		<menuItem id="menu_Item_Articles" zulNavigation="/WEB-INF/pages/article/articleMain.zul"
 			iconName="/images/icons/index_16x16.gif" rightName="menuItem_MainData_ArticleItems" />
@@ -61,7 +61,7 @@
 			iconName="/images/icons/index_16x16.gif" rightName="menuItem_MainData_Branch" />
 		<menuItem id="menu_Item_Offices" zulNavigation="/WEB-INF/pages/office/officeMain.zul"
 			iconName="/images/icons/index_16x16.gif" rightName="menuItem_MainData_Office" />
-	</menu>
+	</menu>-->
 
 	<!-- Administration MenuTree -->
 	<menu id="menu_Category_Administration" rightName="menuCat_Administration">
@@ -92,7 +92,7 @@
 	<!-- Master MenuTree -->
 	<menu id="menu_Category_Master" rightName="menuCat_Master">
 		<menuItem id="menu_Item_Karyawan" zulNavigation="/WEB-INF/pages/master/karyawan/karyawanMain.zul"
-			iconName="/images/icons/index_16x16.gif" />
+			iconName="/images/icons/index_16x16.gif" rightName="menuItem_Master_Karyawan" />
 		<menuItem id="menu_Item_Barang" zulNavigation="/WEB-INF/pages/master/barang/barangMain.zul"
 			iconName="/images/icons/index_16x16.gif" />
 		<menuItem id="menu_Item_HargaBarang" zulNavigation="/WEB-INF/pages/master/hargabarang/hargaBarangMain.zul"
@@ -116,6 +116,8 @@
 			iconName="/images/icons/view.gif" />
 		<menuItem id="menu_Item_ApprovalPenjualan" zulNavigation="/WEB-INF/pages/transaction/approvalpenjualan/approvalPenjualanList.zul"
 			iconName="/images/icons/view.gif" />
+		<menuItem id="menu_Item_TutupPenjualan" zulNavigation="/WEB-INF/pages/transaction/tutuppenjualan/tutupPenjualanList.zul"
+			iconName="/images/icons/view.gif" />			
 		<menuItem id="menu_Item_Piutang" zulNavigation="/WEB-INF/pages/transaction/piutang/piutangList.zul"
 			iconName="/images/icons/view.gif" />
 		<menuItem id="menu_Item_ApprovalPiutang" zulNavigation="/WEB-INF/pages/transaction/approvalpiutang/approvalPiutangList.zul"

@@ -604,7 +604,11 @@ public class ParameterMainCtrl extends GFCBaseCtrl implements Serializable {
 
 		// Refresh the binding mechanism
 		getParameterDetailCtrl().setSelectedParameter(getSelectedParameter());
-		getParameterDetailCtrl().getBinder().loadAll();
+		try{
+			getParameterDetailCtrl().getBinder().loadAll();
+		}catch(Exception e){
+			//do nothing
+		}
 
 		// set editable Mode
 		getParameterDetailCtrl().doReadOnlyMode(false);

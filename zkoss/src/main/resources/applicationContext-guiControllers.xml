@@ -416,8 +416,7 @@
 	<bean id="bonusTransportMainCtrl" class="billy.webui.master.bonustransport.BonusTransportMainCtrl" parent="basisCtrl" scope="prototype">
 		<property name="bonusTransportService" ref="bonusTransportService" />
 		<property name="bonusTransportListCtrl" ref="bonusTransportListCtrl" />
-		<property name="bonusTransportDetailCtrl" ref="bonusTransportDetailCtrl" />
-		<property name="jobTypeService" ref="jobTypeService" />
+		<property name="bonusTransportDetailCtrl" ref="bonusTransportDetailCtrl" />		
 	</bean>
 	<bean id="bonusTransportListCtrl" class="billy.webui.master.bonustransport.BonusTransportListCtrl" parent="basisCtrl" scope="prototype">
 		<property name="bonusTransportService" ref="bonusTransportService" />
@@ -438,6 +437,7 @@
 	</bean>
 	<bean id="karyawanDetailCtrl" class="billy.webui.master.karyawan.KaryawanDetailCtrl" parent="basisCtrl" scope="prototype">
 		<property name="karyawanService" ref="karyawanService" />
+		<property name="jobTypeService" ref="jobTypeService" />
 	</bean>
 	
 	<!-- HargaBarang -->

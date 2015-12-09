@@ -8,7 +8,7 @@
 	xmlns:w="http://www.zkoss.org/2005/zk/client"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
-	<window id="windowJobTypeMain" apply="${jobTypeMainCtrl}"
+	<window id="windowKaryawanMain" apply="${karyawanMainCtrl}"
 		border="none" width="100%">
 
 		<div sclass="z-toolbar" style="padding:0">
@@ -28,17 +28,17 @@
 					style="float:left; border-style: none;">
 					<hbox align="center" style="padding: 2px">
 						<space />
-						<checkbox id="checkbox_JobTypeList_ShowAll"
+						<checkbox id="checkbox_KaryawanList_ShowAll"
 							checked="true"
 							label="${c:l('common.showAll')}" />
 						<space />
 
-						<label value="${c:l('label_JobTypeList_Name')}"
+						<label value="${c:l('label_KaryawanList_Name')}"
 							style="padding-right: 3px" />
-						<textbox id="txtb_JobType_Name" width="100px" />
-						<button id="button_JobTypeList_SearchName"
+						<textbox id="txtb_Karyawan_Name" width="100px" />
+						<button id="button_KaryawanList_SearchName"
 							sclass="oT_ButtonWithIcon" image="/images/icons/search.gif"
-							tooltiptext="${c:l('button_JobTypeList_SearchName.tooltiptext')}" />												
+							tooltiptext="${c:l('button_KaryawanList_SearchName.tooltiptext')}" />												
 					</hbox>
 				</toolbar>
 				
@@ -58,8 +58,8 @@
 						tooltiptext="${c:l('btnNew.tooltiptext')}" />
 					<button id="btnEdit" sclass="oT_ButtonWithIcon"
 						tooltiptext="${c:l('btnEdit.tooltiptext')}" />
-					<!-- <button id="btnDelete" sclass="oT_ButtonWithIcon"
-						tooltiptext="${c:l('btnDelete.tooltiptext')}" /> -->
+					<button id="btnDelete" sclass="oT_ButtonWithIcon"
+						tooltiptext="${c:l('btnDelete.tooltiptext')}" />
 					<button id="btnSave" sclass="oT_ButtonWithIcon"
 						tooltiptext="${c:l('btnSave.tooltiptext')}" />
 					<button id="btnCancel" sclass="oT_ButtonWithIcon"
@@ -69,21 +69,21 @@
 		</div>
 
 
-		<tabbox id="tabbox_JobTypeMain">
+		<tabbox id="tabbox_KaryawanMain">
 			<tabs>
-				<tab id="tabJobTypeList" label="${c:l('common.List')}"
+				<tab id="tabKaryawanList" label="${c:l('common.List')}"
 					image="/images/icons/properties.gif" />
-				<tab id="tabJobTypeDetail"
+				<tab id="tabKaryawanDetail"
 					label="${c:l('common.Details')}" image="/images/icons/table.gif" />
 			</tabs>
 
 			<tabpanels>
 				<!-- TabPanel LIST / LISTE -->
-				<tabpanel id="tabPanelJobTypeList" height="100%"
+				<tabpanel id="tabPanelKaryawanList" height="100%"
 					style="border: none; padding: 0px; " />
 
 				<!-- TabPanel DETAILS / DETAILS -->
-				<tabpanel id="tabPanelJobTypeDetail" height="100%"
+				<tabpanel id="tabPanelKaryawanDetail" height="100%"
 					style="border: none; padding: 0px; " />
 			</tabpanels>
 		</tabbox>

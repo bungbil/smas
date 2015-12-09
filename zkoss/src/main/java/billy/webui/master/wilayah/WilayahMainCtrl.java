@@ -605,7 +605,11 @@ public class WilayahMainCtrl extends GFCBaseCtrl implements Serializable {
 
 		// Refresh the binding mechanism
 		getWilayahDetailCtrl().setSelectedWilayah(getSelectedWilayah());
-		getWilayahDetailCtrl().getBinder().loadAll();
+		try{
+			getWilayahDetailCtrl().getBinder().loadAll();
+		}catch(Exception e){
+			//do nothing
+		}
 
 		// set editable Mode
 		getWilayahDetailCtrl().doReadOnlyMode(false);

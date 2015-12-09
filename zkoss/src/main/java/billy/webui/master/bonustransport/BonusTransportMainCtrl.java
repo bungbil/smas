@@ -99,7 +99,7 @@ public class BonusTransportMainCtrl extends GFCBaseCtrl implements Serializable 
 
 	// ServiceDAOs / Domain Classes
 	private BonusTransportService bonusTransportService;
-	private JobTypeService jobTypeService;
+	
 	// always a copy from the bean before modifying. Used for reseting
 	private BonusTransport originalBonusTransport;
 
@@ -615,8 +615,11 @@ public class BonusTransportMainCtrl extends GFCBaseCtrl implements Serializable 
 
 		// Refresh the binding mechanism
 		getBonusTransportDetailCtrl().setSelectedBonusTransport(getSelectedBonusTransport());
-		getBonusTransportDetailCtrl().getBinder().loadAll();
-
+		try{
+			getBonusTransportDetailCtrl().getBinder().loadAll();
+		}catch(Exception e){
+			//do nothing
+		}
 		// set editable Mode
 		getBonusTransportDetailCtrl().doReadOnlyMode(false);
 		
@@ -852,13 +855,6 @@ public class BonusTransportMainCtrl extends GFCBaseCtrl implements Serializable 
 		this.bonusTransportService = bonusTransportService;
 	}
 
-	public JobTypeService getJobTypeService() {
-		return jobTypeService;
-	}
-
-	public void setJobTypeService(JobTypeService jobTypeService) {
-		this.jobTypeService = jobTypeService;
-	}
 
 	/* COMPONENTS and OTHERS */
 }

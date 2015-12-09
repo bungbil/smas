@@ -617,7 +617,11 @@ public class StatusMainCtrl extends GFCBaseCtrl implements Serializable {
 
 		// Refresh the binding mechanism
 		getStatusDetailCtrl().setSelectedStatus(getSelectedStatus());
-		getStatusDetailCtrl().getBinder().loadAll();
+		try{
+			getStatusDetailCtrl().getBinder().loadAll();
+		}catch(Exception e){
+			//do nothing
+		}
 
 		// set editable Mode
 		getStatusDetailCtrl().doReadOnlyMode(false);

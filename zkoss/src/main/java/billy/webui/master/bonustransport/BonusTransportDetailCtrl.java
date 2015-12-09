@@ -70,29 +70,30 @@ public class BonusTransportDetailCtrl extends GFCBaseCtrl implements Serializabl
 
 			// SET THIS CONTROLLER TO THE module's Parent/MainController
 			getBonusTransportMainCtrl().setBonusTransportDetailCtrl(this);
+			lbox_JobType.setModel(new ListModelList(getJobTypeService().getAllJobTypes()));
+			lbox_JobType.setItemRenderer(new JobTypeListModelItemRenderer());
 			
 			// Get the selected object.
 			// Check if this Controller if created on first time. If so,
 			// than the selectedXXXBean should be null
 			if (getBonusTransportMainCtrl().getSelectedBonusTransport() != null) {
-				setSelectedBonusTransport(getBonusTransportMainCtrl().getSelectedBonusTransport());				
+				setSelectedBonusTransport(getBonusTransportMainCtrl().getSelectedBonusTransport());		
+				// +++++++++ DropDown ListBox
+				// set listModel and itemRenderer for the dropdown listbox
+				
+				// if available, select the object
+				if(getSelectedBonusTransport().getJobType() != null){
+					ListModelList lml = (ListModelList) lbox_JobType.getModel();		
+					JobType jobType = getJobTypeService().getJobTypeByID(getSelectedBonusTransport().getJobType().getId());
+					lbox_JobType.setSelectedIndex(lml.indexOf(jobType));					
+				}	
 			} else
 				setSelectedBonusTransport(null);
 		} else {
 			setSelectedBonusTransport(null);
 		}
 		
-		// +++++++++ DropDown ListBox
-		// set listModel and itemRenderer for the dropdown listbox
-		lbox_JobType.setModel(new ListModelList(getJobTypeService().getAllJobTypes()));
-		lbox_JobType.setItemRenderer(new JobTypeListModelItemRenderer());
 		
-		// if available, select the object
-		if(getSelectedBonusTransport() != null){
-			ListModelList lml = (ListModelList) lbox_JobType.getModel();		
-			JobType jobType = getJobTypeService().getJobTypeByID(getSelectedBonusTransport().getJobType().getId());
-			lbox_JobType.setSelectedIndex(lml.indexOf(jobType));					
-		}	
 
 	}
 

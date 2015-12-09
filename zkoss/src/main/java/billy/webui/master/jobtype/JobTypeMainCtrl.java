@@ -595,7 +595,11 @@ public class JobTypeMainCtrl extends GFCBaseCtrl implements Serializable {
 
 		// Refresh the binding mechanism
 		getJobTypeDetailCtrl().setSelectedJobType(getSelectedJobType());
-		getJobTypeDetailCtrl().getBinder().loadAll();
+		try{
+			getJobTypeDetailCtrl().getBinder().loadAll();
+		}catch(Exception e){
+			//do nothing
+		}
 
 		// set editable Mode
 		getJobTypeDetailCtrl().doReadOnlyMode(false);
