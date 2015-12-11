@@ -149,9 +149,9 @@
 																			hflex="1" />
 																	</row>
 																	<row>
-																		<label id="label_UserDialog_usrLocale"
-																			value="${c:l('label_UserDialog_usrLocale.value')}" />
-																		<listbox id="lbox_usrLocale" mold="select"
+																		<label id="label_UserDialog_usrKaryawan"
+																			value="${c:l('label_UserDialog_usrKaryawan.value')}" />
+																		<listbox id="lbox_usrKaryawan" mold="select"
 																			multiple="false" rows="1" hflex="1" />
 																	</row>
 
@@ -183,36 +183,7 @@
 
 																		<checkbox id="usrEnabled" />
 																	</row>
-																	<row>
-																		<hbox>
-																			<label
-																				value="${c:l('label_UserDialog_usrAccountnonexpired.value')}" />
-																			<label value="*"
-																				style="color:red;font-size:10px" />
-																		</hbox>
-
-																		<checkbox id="usrAccountnonexpired" />
-																	</row>
-																	<row>
-																		<hbox>
-																			<label
-																				value="${c:l('label_UserDialog_usrCredentialsnonexpired.value')}" />
-																			<label value="*"
-																				style="color:red;font-size:10px" />
-																		</hbox>
-
-																		<checkbox id="usrCredentialsnonexpired" />
-																	</row>
-																	<row>
-																		<hbox>
-																			<label
-																				value="${c:l('label_UserDialog_usrAccountnonlocked.value')}" />
-																			<label value="*"
-																				style="color:red;font-size:10px" />
-																		</hbox>
-
-																		<checkbox id="usrAccountnonlocked" />
-																	</row>
+																	
 																</rows>
 															</grid>
 														</groupbox>
@@ -229,32 +200,7 @@
 										<vbox align="stretch" pack="stretch" width="100%">
 											<div>
 
-												<panel id="panel_UserDialog_SecurityToken" border="none">
-													<panelchildren>
-
-														<groupbox mold="3d" closable="false">
-															<caption image="/images/icons/view.gif"
-																label="${c:l('panel_UserDialog_SecurityToken.title')}" />
-
-															<grid sclass="GridPlain">
-
-																<columns>
-																	<column width="150px" />
-																	<column width="100%" />
-																</columns>
-																<rows>
-																	<row>
-																		<label id="label_UserDialog_usrToken"
-																			value="${c:l('label_UserDialog_usrToken.value')}" />
-																		<textbox id="usrToken" type="password"
-																			maxlength="20" hflex="1" />
-																	</row>
-																</rows>
-															</grid>
-														</groupbox>
-													</panelchildren>
-												</panel>
-
+												
 												<panel border="none">
 													<panelchildren>
 

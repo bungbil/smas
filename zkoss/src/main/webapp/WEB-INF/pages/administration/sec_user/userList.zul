@@ -71,10 +71,10 @@
 				<!-- CRUD BUTTONS -->
 				<toolbar align="end"
 					style="float:right; border-style: none;">
-					<button id="button_UserList_PrintUserList"
+					<!-- <button id="button_UserList_PrintUserList"
 						sclass="oT_ButtonWithIcon"
 						image="/images/icons/btn_print2_16x16.gif"
-						tooltiptext="${c:l('button_UserList_PrintUserList.tooltiptext')}" />
+						tooltiptext="${c:l('button_UserList_PrintUserList.tooltiptext')}" /> -->
 					<button id="button_UserList_NewUser"
 						sclass="oT_ButtonWithIcon"
 						image="/images/icons/btn_new2_16x16.gif"
@@ -113,30 +113,17 @@
 								value="${c:l('label_lh_UserList_usrEnabled.value')}" width="85%"
 								sclass="word-wrap" multiline="true" />
 						</listheader>
-						<listheader
-							id="listheader_UserList_usrAccountnonexpired"
-							sclass="FDListBoxHeader1" sort="auto">
-							<label
-								id="label_lh_UserList_usrAccountnonexpired"
-								value="${c:l('label_lh_UserList_usrAccountnonexpired.value')}"
-								width="85%" sclass="word-wrap" multiline="true" />
-						</listheader>
-						<listheader
-							id="listheader_UserList_usrCredentialsnonexpired"
-							sclass="FDListBoxHeader1" sort="auto">
-							<label
-								id="label_lh_UserList_usrCredentialsnonexpired"
-								value="${c:l('label_lh_UserList_usrCredentialsnonexpired.value')}"
-								width="85%" sclass="word-wrap" multiline="true" />
-						</listheader>
-						<listheader
-							id="listheader_UserList_usrAccountnonlocked"
-							sclass="FDListBoxHeader1" sort="auto">
-							<label
-								id="label_lh_UserList_usrAccountnonlocked"
-								value="${c:l('label_lh_UserList_usrAccountnonlocked.value')}"
-								width="85%" sclass="word-wrap" multiline="true" />
-						</listheader>
+						<listheader id="listheader_UserList_namaKaryawan"
+							sclass="FDListBoxHeader1" image="/images/icons/mail16x16.gif"
+							sort="auto" width="20%" label="${c:l('label_UserList_namaKaryawan')}" />
+						<listheader id="listheader_UserList_LastUpdate"
+							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
+							label="${c:l('common.lastUpdate')}" sort="auto"
+							width="15%" />
+						<listheader id="listheader_UserList_UpdatedBy"
+							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
+							label="${c:l('common.updatedBy')}" sort="auto"
+							width="10%" />
 					</listhead>
 				</listbox>
 

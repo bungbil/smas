@@ -101,9 +101,13 @@ public class UserListCtrl extends GFCBaseListCtrl<SecUser> implements Serializab
 	protected Listheader listheader_UserList_usrLastname; // autowired
 	protected Listheader listheader_UserList_usrEmail; // autowired
 	protected Listheader listheader_UserList_usrEnabled; // autowired
-	protected Listheader listheader_UserList_usrAccountnonexpired; // autowired
-	protected Listheader listheader_UserList_usrCredentialsnonexpired; // autowired
-	protected Listheader listheader_UserList_usrAccountnonlocked; // autowired
+	protected Listheader listheader_UserList_namaKaryawan; // autowired
+	protected Listheader listheader_UserList_LastUpdate; // autowired
+	protected Listheader listheader_UserList_UpdatedBy; // autowired
+	
+//	protected Listheader listheader_UserList_usrAccountnonexpired; // autowired
+//	protected Listheader listheader_UserList_usrCredentialsnonexpired; // autowired
+//	protected Listheader listheader_UserList_usrAccountnonlocked; // autowired
 
 	// checkRights
 	protected Button btnHelp; // autowired
@@ -166,12 +170,21 @@ public class UserListCtrl extends GFCBaseListCtrl<SecUser> implements Serializab
 		listheader_UserList_usrEmail.setSortDescending(new FieldComparator("usrEmail", false));
 		listheader_UserList_usrEnabled.setSortAscending(new FieldComparator("usrEnabled", true));
 		listheader_UserList_usrEnabled.setSortDescending(new FieldComparator("usrEnabled", false));
-		listheader_UserList_usrAccountnonexpired.setSortAscending(new FieldComparator("usrAccountnonexpired", true));
-		listheader_UserList_usrAccountnonexpired.setSortDescending(new FieldComparator("usrAccountnonexpired", false));
-		listheader_UserList_usrCredentialsnonexpired.setSortAscending(new FieldComparator("usrCredentialsnonexpired", true));
-		listheader_UserList_usrCredentialsnonexpired.setSortDescending(new FieldComparator("usrCredentialsnonexpired", false));
-		listheader_UserList_usrAccountnonlocked.setSortAscending(new FieldComparator("usrAccountnonlocked", true));
-		listheader_UserList_usrAccountnonlocked.setSortDescending(new FieldComparator("usrAccountnonlocked", false));
+		
+		listheader_UserList_namaKaryawan.setSortAscending(new FieldComparator("karyawan.namaKaryawan", true));
+		listheader_UserList_namaKaryawan.setSortDescending(new FieldComparator("karyawan.namaKaryawan", false));
+		listheader_UserList_LastUpdate.setSortAscending(new FieldComparator("lastUpdate", true));
+		listheader_UserList_LastUpdate.setSortDescending(new FieldComparator("lastUpdate", false));
+		listheader_UserList_UpdatedBy.setSortAscending(new FieldComparator("updatedBy", true));
+		listheader_UserList_UpdatedBy.setSortDescending(new FieldComparator("updatedBy", false));
+		
+		
+//		listheader_UserList_usrAccountnonexpired.setSortAscending(new FieldComparator("usrAccountnonexpired", true));
+//		listheader_UserList_usrAccountnonexpired.setSortDescending(new FieldComparator("usrAccountnonexpired", false));
+//		listheader_UserList_usrCredentialsnonexpired.setSortAscending(new FieldComparator("usrCredentialsnonexpired", true));
+//		listheader_UserList_usrCredentialsnonexpired.setSortDescending(new FieldComparator("usrCredentialsnonexpired", false));
+//		listheader_UserList_usrAccountnonlocked.setSortAscending(new FieldComparator("usrAccountnonlocked", true));
+//		listheader_UserList_usrAccountnonlocked.setSortDescending(new FieldComparator("usrAccountnonlocked", false));
 
 		// set the paging params
 		paging_UserList.setPageSize(getCountRows());

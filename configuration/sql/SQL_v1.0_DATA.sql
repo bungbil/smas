@@ -89,6 +89,8 @@ INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
 /* --> userListWindow BUTTONS*/
 (25, 6, 'button_UserList_NewUser', 0),
 (27, 6, 'button_UserList_SearchLoginname', 0),
+(28, 6, 'button_UserList_SearchLastname', 0),
+(29, 6, 'button_UserList_SearchEmail', 0),
 (30, 6, 'checkbox_UserList_ShowAll', 0),
 /* --> Mehode onDoubleClick Listbox */
 (31, 3, 'UserList_listBoxUser.onDoubleClick', 0),
@@ -103,7 +105,7 @@ INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
 (39, 6, 'button_UserDialog_btnCancel', 0),
 /* --> userDialogWindow Special Admin Panels */
 (40, 6, 'panel_UserDialog_Status', 0),
-(41, 6, 'panel_UserDialog_SecurityToken', 0),
+
 /* --> userListWindow Search panel */
 (42, 6, 'hbox_UserList_SearchUsers', 0),
 /* Tab Details */
@@ -167,6 +169,8 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 (23, 1, 23, 0),
 (25, 1, 25, 0),
 (27, 1, 27, 0),
+(28, 1, 27, 0),
+(29, 1, 27, 0),
 (30, 1, 30, 0),
 (31, 1, 31, 0),
 (32, 1, 32, 0),
@@ -176,7 +180,6 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 (37, 1, 37, 0),
 (38, 1, 38, 0),
 (39, 1, 39, 0),
-(40, 1, 40, 0),
 (41, 1, 41, 0),
 (42, 1, 42, 0),
 (43, 1, 43, 0),

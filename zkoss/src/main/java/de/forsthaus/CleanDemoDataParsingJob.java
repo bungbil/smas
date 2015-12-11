@@ -48,7 +48,7 @@ public class CleanDemoDataParsingJob implements Runnable, Serializable {
 	public void run() {
 
 		try {
-			doResetAdminUser();
+			//doResetAdminUser();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -58,18 +58,18 @@ public class CleanDemoDataParsingJob implements Runnable, Serializable {
 	 * Resets the admin user name and password because some guys are changing
 	 * these names and forgot to reset to the original values. :-(
 	 */
-	private void doResetAdminUser() {
-		log.debug("###### ==> Run Job for resetting the demo data.");
-
-		ApplicationContext ctx = ApplicationContextProvider.getApplicationContext();
-
-		if (ctx != null && ctx.containsBean("userService")) {
-			NonWebRequestDBAction nonWebRequestDBAction = (NonWebRequestDBAction) ctx.getBean("nonWebRequestDBAction");
-			if (nonWebRequestDBAction != null) {
-				System.out.println("###### ==> Reset admin name/password.");
-				nonWebRequestDBAction.resetAdminPassword();
-			}
-		}
-	}
+//	private void doResetAdminUser() {
+//		log.debug("###### ==> Run Job for resetting the demo data.");
+//
+//		ApplicationContext ctx = ApplicationContextProvider.getApplicationContext();
+//
+//		if (ctx != null && ctx.containsBean("userService")) {
+//			NonWebRequestDBAction nonWebRequestDBAction = (NonWebRequestDBAction) ctx.getBean("nonWebRequestDBAction");
+//			if (nonWebRequestDBAction != null) {
+//				System.out.println("###### ==> Reset admin name/password.");
+//				nonWebRequestDBAction.resetAdminPassword();
+//			}
+//		}
+//	}
 
 }

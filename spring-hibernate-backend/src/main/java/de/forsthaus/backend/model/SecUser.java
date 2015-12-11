@@ -18,10 +18,13 @@
  */
 package de.forsthaus.backend.model;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+
+import billy.backend.model.Karyawan;
 
 /**
  * EN: Model class for <b>SecUser</b>.<br>
@@ -47,6 +50,26 @@ public class SecUser implements java.io.Serializable, Entity {
 	private boolean usrCredentialsnonexpired = true;
 	private boolean usrAccountnonlocked = true;
 	private String usrToken;
+	private Karyawan karyawan;
+	private Date lastUpdate;
+	private String updatedBy;
+	
+	public Date getLastUpdate() {
+		return lastUpdate;
+	}
+
+	public void setLastUpdate(Date lastUpdate) {
+		this.lastUpdate = lastUpdate;
+	}
+
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
 	private Set<SecUserrole> secUserroles = new HashSet<SecUserrole>(0);
 
 	public boolean isNew() {
@@ -88,6 +111,14 @@ public class SecUser implements java.io.Serializable, Entity {
 
 	public long getId() {
 		return id;
+	}
+
+	public Karyawan getKaryawan() {
+		return karyawan;
+	}
+
+	public void setKaryawan(Karyawan karyawan) {
+		this.karyawan = karyawan;
 	}
 
 	/**

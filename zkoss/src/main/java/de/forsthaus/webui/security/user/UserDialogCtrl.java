@@ -19,12 +19,14 @@
 package de.forsthaus.webui.security.user;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -41,10 +43,15 @@ import org.zkoss.zul.Tabpanel;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
+import billy.backend.model.Karyawan;
+import billy.backend.service.KaryawanService;
+import billy.webui.master.karyawan.model.KaryawanListModelItemRenderer;
+
 import de.forsthaus.UserWorkspace;
 import de.forsthaus.backend.model.Language;
 import de.forsthaus.backend.model.SecUser;
 import de.forsthaus.backend.service.UserService;
+import de.forsthaus.policy.model.UserImpl;
 import de.forsthaus.webui.security.user.model.LanguageListModelItemRenderer;
 import de.forsthaus.webui.security.user.model.UserRolesListModelItemRenderer;
 import de.forsthaus.webui.util.ButtonStatusCtrl;
@@ -90,16 +97,10 @@ public class UserDialogCtrl extends GFCBaseCtrl implements Serializable {
 	protected Textbox usrFirstname; // autowired
 	protected Textbox usrLastname; // autowired
 	protected Textbox usrEmail; // autowired
-	protected Listbox lbox_usrLocale; // autowired
+	protected Listbox lbox_usrKaryawan; // autowired
 
 	// panel status
 	protected Checkbox usrEnabled; // autowired
-	protected Checkbox usrAccountnonexpired; // autowired
-	protected Checkbox usrCredentialsnonexpired; // autowired
-	protected Checkbox usrAccountnonlocked; // autowired
-
-	// panel security token, SORRY logic it's internally
-	protected Textbox usrToken; // autowired
 
 	// panel granted roles
 	protected Listbox listBoxDetails_UserRoles; // autowired
@@ -118,12 +119,8 @@ public class UserDialogCtrl extends GFCBaseCtrl implements Serializable {
 	private transient String oldVar_usrFirstname;
 	private transient String oldVar_usrLastname;
 	private transient String oldVar_usrEmail;
-	private transient Listitem oldVar_usrLangauge;
+	private transient Listitem oldVar_usrKaryawan;
 	private transient boolean oldVar_usrEnabled;
-	private transient boolean oldVar_usrAccountnonexpired;
-	private transient boolean oldVar_usrCredentialsnonexpired;
-	private transient boolean oldVar_usrAccountnonlocked;
-	private transient String oldVar_usrToken;
 
 	private transient boolean validationOn;
 
@@ -145,6 +142,7 @@ public class UserDialogCtrl extends GFCBaseCtrl implements Serializable {
 
 	// ServiceDAOs
 	private transient UserService userService;
+	private transient KaryawanService karyawanService;
 
 	/**
 	 * default constructor.<br>
@@ -188,11 +186,11 @@ public class UserDialogCtrl extends GFCBaseCtrl implements Serializable {
 
 		// +++++++++ DropDown ListBox
 		// set listModel and itemRenderer for the dropdown listbox
-		lbox_usrLocale.setModel(new ListModelList(getUserService().getAllLanguages()));
-		lbox_usrLocale.setItemRenderer(new LanguageListModelItemRenderer());
+		lbox_usrKaryawan.setModel(new ListModelList(getKaryawanService().getAllKaryawans()));
+		lbox_usrKaryawan.setItemRenderer(new KaryawanListModelItemRenderer());
 
 		// if available, select the object
-		ListModelList lml = (ListModelList) lbox_usrLocale.getModel();
+		ListModelList lml = (ListModelList) lbox_usrKaryawan.getModel();
 
 		/**
 		 * check if the user is new ( means: userID == Long.MIN_VALUE )<br>
@@ -200,15 +198,15 @@ public class UserDialogCtrl extends GFCBaseCtrl implements Serializable {
 		 * by using this ID for a hibernate query<br>
 		 */
 		if (user.isNew()) {
-			lbox_usrLocale.setSelectedIndex(-1);
+			lbox_usrKaryawan.setSelectedIndex(-1);
 		} else {
 			// Set the ListModel and the itemRenderer.
 			listBoxDetails_UserRoles.setModel(new ListModelList(getUserService().getRolesByUser(getUser())));
 			listBoxDetails_UserRoles.setItemRenderer(new UserRolesListModelItemRenderer());
 
-			if (!StringUtils.isEmpty(user.getUsrLocale())) {
-				Language lang = getUserService().getLanguageByLocale(user.getUsrLocale());
-				lbox_usrLocale.setSelectedIndex(lml.indexOf(lang));
+			if (user.getKaryawan()!= null) {
+				Karyawan karyawan = getKaryawanService().getKaryawanByID(user.getKaryawan().getId());
+				lbox_usrKaryawan.setSelectedIndex(lml.indexOf(karyawan));
 			}
 		}
 
@@ -235,7 +233,7 @@ public class UserDialogCtrl extends GFCBaseCtrl implements Serializable {
 		btnClose.setVisible(workspace.isAllowed("button_UserDialog_btnClose"));
 
 		panel_UserDialog_Status.setVisible(workspace.isAllowed("panel_UserDialog_Status"));
-		panel_UserDialog_SecurityToken.setVisible(workspace.isAllowed("panel_UserDialog_SecurityToken"));
+		//panel_UserDialog_SecurityToken.setVisible(workspace.isAllowed("panel_UserDialog_SecurityToken"));
 	}
 
 	// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -409,12 +407,7 @@ public class UserDialogCtrl extends GFCBaseCtrl implements Serializable {
 		usrEmail.setValue(anUser.getUsrEmail());
 
 		usrEnabled.setChecked(anUser.isUsrEnabled());
-		usrAccountnonexpired.setChecked(anUser.isUsrAccountnonexpired());
-		usrAccountnonlocked.setChecked(anUser.isUsrAccountnonlocked());
-		usrCredentialsnonexpired.setChecked(anUser.isUsrCredentialsnonexpired());
-
-		usrToken.setValue(anUser.getUsrToken());
-
+		
 	}
 
 	/**
@@ -436,25 +429,11 @@ public class UserDialogCtrl extends GFCBaseCtrl implements Serializable {
 			anUser.setUsrEnabled(false);
 		}
 
-		if (usrAccountnonexpired.isChecked() == true) {
-			anUser.setUsrAccountnonexpired(true);
-		} else {
-			anUser.setUsrAccountnonexpired(false);
-		}
-
-		if (usrAccountnonlocked.isChecked() == true) {
-			anUser.setUsrAccountnonlocked(true);
-		} else {
-			anUser.setUsrAccountnonlocked(false);
-		}
-
-		if (usrCredentialsnonexpired.isChecked() == true) {
-			anUser.setUsrCredentialsnonexpired(true);
-		} else {
-			anUser.setUsrCredentialsnonexpired(false);
-		}
-
-		anUser.setUsrToken(usrToken.getValue());
+		anUser.setUsrAccountnonexpired(true);
+		anUser.setUsrAccountnonlocked(true);
+		anUser.setUsrCredentialsnonexpired(true);
+		
+		anUser.setUsrToken("");
 
 	}
 
@@ -516,12 +495,9 @@ public class UserDialogCtrl extends GFCBaseCtrl implements Serializable {
 		oldVar_usrFirstname = usrFirstname.getValue();
 		oldVar_usrLastname = usrLastname.getValue();
 		oldVar_usrEmail = usrEmail.getValue();
-		oldVar_usrLangauge = lbox_usrLocale.getSelectedItem();
+		oldVar_usrKaryawan = lbox_usrKaryawan.getSelectedItem();
 		oldVar_usrEnabled = usrEnabled.isChecked();
-		oldVar_usrAccountnonexpired = usrAccountnonexpired.isChecked();
-		oldVar_usrCredentialsnonexpired = usrCredentialsnonexpired.isChecked();
-		oldVar_usrAccountnonlocked = usrAccountnonlocked.isChecked();
-		oldVar_usrToken = usrToken.getValue();
+		
 	}
 
 	/**
@@ -534,12 +510,9 @@ public class UserDialogCtrl extends GFCBaseCtrl implements Serializable {
 		usrFirstname.setValue(oldVar_usrFirstname);
 		usrLastname.setValue(oldVar_usrLastname);
 		usrEmail.setValue(oldVar_usrEmail);
-		lbox_usrLocale.setSelectedItem(oldVar_usrLangauge);
+		lbox_usrKaryawan.setSelectedItem(oldVar_usrKaryawan);
 		usrEnabled.setChecked(oldVar_usrEnabled);
-		usrAccountnonexpired.setChecked(oldVar_usrAccountnonexpired);
-		usrCredentialsnonexpired.setChecked(oldVar_usrCredentialsnonexpired);
-		usrAccountnonlocked.setChecked(oldVar_usrAccountnonlocked);
-		usrToken.setValue(oldVar_usrToken);
+		
 	}
 
 	/**
@@ -569,22 +542,10 @@ public class UserDialogCtrl extends GFCBaseCtrl implements Serializable {
 		if (oldVar_usrEmail != usrEmail.getValue()) {
 			changed = true;
 		}
-		if (oldVar_usrLangauge != lbox_usrLocale.getSelectedItem()) {
+		if (oldVar_usrKaryawan != lbox_usrKaryawan.getSelectedItem()) {
 			changed = true;
 		}
 		if (oldVar_usrEnabled != usrEnabled.isChecked()) {
-			changed = true;
-		}
-		if (oldVar_usrAccountnonexpired != usrAccountnonexpired.isChecked()) {
-			changed = true;
-		}
-		if (oldVar_usrCredentialsnonexpired != usrCredentialsnonexpired.isChecked()) {
-			changed = true;
-		}
-		if (oldVar_usrAccountnonlocked != usrAccountnonlocked.isChecked()) {
-			changed = true;
-		}
-		if (oldVar_usrToken != usrToken.getValue()) {
 			changed = true;
 		}
 
@@ -634,15 +595,10 @@ public class UserDialogCtrl extends GFCBaseCtrl implements Serializable {
 		usrFirstname.setReadonly(false);
 		usrLastname.setReadonly(false);
 		usrEmail.setReadonly(false);
-		lbox_usrLocale.setDisabled(false);
+		lbox_usrKaryawan.setDisabled(false);
 
 		usrEnabled.setDisabled(false);
-		usrAccountnonexpired.setDisabled(false);
-		usrAccountnonlocked.setDisabled(false);
-		usrCredentialsnonexpired.setDisabled(false);
-
-		usrToken.setReadonly(false);
-
+		
 		btnCtrl.setBtnStatus_Edit();
 		usrLoginname.focus();
 
@@ -661,14 +617,10 @@ public class UserDialogCtrl extends GFCBaseCtrl implements Serializable {
 		usrFirstname.setReadonly(true);
 		usrLastname.setReadonly(true);
 		usrEmail.setReadonly(true);
-		lbox_usrLocale.setDisabled(true);
+		lbox_usrKaryawan.setDisabled(true);
 
 		usrEnabled.setDisabled(true);
-		usrAccountnonexpired.setDisabled(true);
-		usrAccountnonlocked.setDisabled(true);
-		usrCredentialsnonexpired.setDisabled(true);
-
-		usrToken.setReadonly(true);
+		
 	}
 
 	/**
@@ -687,11 +639,7 @@ public class UserDialogCtrl extends GFCBaseCtrl implements Serializable {
 		usrEmail.setValue("");
 
 		usrEnabled.setChecked(false);
-		usrAccountnonexpired.setChecked(true);
-		usrAccountnonlocked.setChecked(true);
-		usrCredentialsnonexpired.setChecked(true);
-
-		usrToken.setValue("");
+		
 	}
 
 	// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -725,35 +673,27 @@ public class UserDialogCtrl extends GFCBaseCtrl implements Serializable {
 			}
 
 			private void deleteUser() {
-
-				/**
-				 * Prevent the deleting of the demo users
-				 */
-				try {
-					if (anUser.getId() <= 14 && anUser.getId() >= 10) {
-						ZksampleMessageUtils.doShowNotAllowedForDemoRecords();
-						return;
-					} else {
-
-						// delete from database
-						try {
-							getUserService().delete(anUser);
-						} catch (DataAccessException e) {
-							ZksampleMessageUtils.showErrorMessage(e.getMostSpecificCause().toString());
-						}
-
-						// now synchronize the listBox
-						final ListModelList lml = (ListModelList) listBoxUser.getListModel();
-
-						// Check if the object is new or updated
-						// -1 means that the obj is not in the list, so
-						// it's
-						// new..
-						if (lml.indexOf(anUser) == -1) {
-						} else {
-							lml.remove(lml.indexOf(anUser));
-						}
+				
+				try {				
+					// delete from database
+					try {
+						getUserService().delete(anUser);
+					} catch (DataAccessException e) {
+						ZksampleMessageUtils.showErrorMessage(e.getMostSpecificCause().toString());
 					}
+
+					// now synchronize the listBox
+					final ListModelList lml = (ListModelList) listBoxUser.getListModel();
+
+					// Check if the object is new or updated
+					// -1 means that the obj is not in the list, so
+					// it's
+					// new..
+					if (lml.indexOf(anUser) == -1) {
+					} else {
+						lml.remove(lml.indexOf(anUser));
+					}
+				
 				} catch (final Exception e) {
 					// TODO: handle exception
 				}
@@ -782,10 +722,7 @@ public class UserDialogCtrl extends GFCBaseCtrl implements Serializable {
 
 		// these comps needed to be init
 		usrEnabled.setChecked(false);
-		usrAccountnonexpired.setChecked(true);
-		usrAccountnonlocked.setChecked(true);
-		usrCredentialsnonexpired.setChecked(true);
-
+		
 		doClear(); // clear all commponents
 		doEdit(); // edit mode
 
@@ -800,8 +737,7 @@ public class UserDialogCtrl extends GFCBaseCtrl implements Serializable {
 	 */
 	@Secured( { btnCtroller_ClassPrefix + "btnSave" })
 	public void doSave() throws InterruptedException {
-		System.out.println("doSave");
-
+		
 		final SecUser anUser = getUser();
 
 		// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -819,16 +755,21 @@ public class UserDialogCtrl extends GFCBaseCtrl implements Serializable {
 		usrPasswordRetype.getValue();
 
 		/* if a language is selected get the object from the listbox */
-		Listitem item = lbox_usrLocale.getSelectedItem();
+		Listitem item = lbox_usrKaryawan.getSelectedItem();
 
 		if (item != null) {
-			ListModelList lml1 = (ListModelList) lbox_usrLocale.getListModel();
-			Language lang = (Language) lml1.get(item.getIndex());
-			anUser.setUsrLocale(lang.getLanLocale());
+			ListModelList lml1 = (ListModelList) lbox_usrKaryawan.getListModel();
+			Karyawan karyawan = (Karyawan) lml1.get(item.getIndex());
+			anUser.setKaryawan(karyawan);
 		}
 
 		// save it to database
 		try {
+			anUser.setUsrLocale("en_EN");
+			String userName = ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();			
+			anUser.setLastUpdate(new Date());			
+			anUser.setUpdatedBy(userName);			
+			
 			getUserService().saveOrUpdate(anUser);
 		} catch (DataAccessException e) {
 			ZksampleMessageUtils.showErrorMessage(e.getMostSpecificCause().toString());
@@ -884,6 +825,14 @@ public class UserDialogCtrl extends GFCBaseCtrl implements Serializable {
 
 	public void setUserService(UserService userService) {
 		this.userService = userService;
+	}
+
+	public KaryawanService getKaryawanService() {
+		return karyawanService;
+	}
+
+	public void setKaryawanService(KaryawanService karyawanService) {
+		this.karyawanService = karyawanService;
 	}
 
 }

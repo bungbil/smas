@@ -60,27 +60,51 @@ public class UserListModelItemRenderer implements ListitemRenderer, Serializable
 		cb.setDisabled(true);
 		lc.appendChild(cb);
 		lc.setParent(item);
-
-		lc = new Listcell();
-		cb = new Checkbox();
-		cb.setChecked(user.isUsrAccountnonexpired());
-		cb.setDisabled(true);
-		lc.appendChild(cb);
-		lc.setParent(item);
-
-		lc = new Listcell();
-		cb = new Checkbox();
-		cb.setChecked(user.isUsrCredentialsnonexpired());
-		cb.setDisabled(true);
-		lc.appendChild(cb);
-		lc.setParent(item);
-
-		lc = new Listcell();
-		cb = new Checkbox();
-		cb.setChecked(user.isUsrAccountnonlocked());
-		cb.setDisabled(true);
-		lc.appendChild(cb);
-		lc.setParent(item);
+		
+		if(user.getKaryawan()!=null){
+			lc = new Listcell(user.getKaryawan().getNamaKaryawan());
+			lc.setParent(item);				
+		}else{
+			lc = new Listcell("");
+			lc.setParent(item);
+		}
+		
+		if(user.getLastUpdate()!=null){
+			lc = new Listcell(user.getLastUpdate().toString());
+			lc.setParent(item);
+		}else{
+			lc = new Listcell("");
+			lc.setParent(item);
+		}
+		
+		if(user.getUpdatedBy()!=null){
+			lc = new Listcell(user.getUpdatedBy());
+			lc.setParent(item);				
+		}else{
+			lc = new Listcell("");
+			lc.setParent(item);
+		}
+		
+//		lc = new Listcell();
+//		cb = new Checkbox();
+//		cb.setChecked(user.isUsrAccountnonexpired());
+//		cb.setDisabled(true);
+//		lc.appendChild(cb);
+//		lc.setParent(item);
+//
+//		lc = new Listcell();
+//		cb = new Checkbox();
+//		cb.setChecked(user.isUsrCredentialsnonexpired());
+//		cb.setDisabled(true);
+//		lc.appendChild(cb);
+//		lc.setParent(item);
+//
+//		lc = new Listcell();
+//		cb = new Checkbox();
+//		cb.setChecked(user.isUsrAccountnonlocked());
+//		cb.setDisabled(true);
+//		lc.appendChild(cb);
+//		lc.setParent(item);
 
 		// lc = new Listcell();
 		// Image img = new Image();

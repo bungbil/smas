@@ -549,3 +549,16 @@ alter table karyawan
       references karyawan (karyawan_id)
       on delete restrict on update restrict;
 
+=================
+Alter SEC_USER
+=================
+alter table sec_user
+	add column karyawan_id 			INT8 				null,
+	add column last_update       	timestamp,          
+   	add column updated_by       	varchar(50)          null;
+   	
+alter table karyawan
+   add constraint ref_karyawan_to_sec_user foreign key (karyawan_id)
+      references karyawan (karyawan_id)
+      on delete restrict on update restrict;
+	

@@ -164,6 +164,7 @@
 	</bean>
 	<bean id="userDialogCtrl" class="de.forsthaus.webui.security.user.UserDialogCtrl" parent="basisCtrl" scope="prototype">
 		<property name="userService" ref="userService" />
+		<property name="karyawanService" ref="karyawanService" />
 	</bean>
 	<bean id="myUserSettingsCtrl" class="de.forsthaus.webui.security.user.MyUserSettingsCtrl" parent="basisCtrl"
 		scope="prototype">

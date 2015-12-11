@@ -41,6 +41,16 @@
 		<property name="usrLocale" type="string">
 			<column name="usr_locale" length="200" />
 		</property>
+		<many-to-one name="karyawan" class="billy.backend.model.Karyawan"
+			fetch="select" lazy="false">
+			<column name="karyawan_id" />
+		</many-to-one>
+		<property name="lastUpdate" type="timestamp">
+			<column name="last_update" length="29" />
+		</property>	
+		<property name="updatedBy" type="string">
+			<column name="updated_by" length="50" />
+		</property>	
 		<property name="usrEnabled" type="boolean">
 			<column name="usr_enabled" not-null="true" />
 		</property>
