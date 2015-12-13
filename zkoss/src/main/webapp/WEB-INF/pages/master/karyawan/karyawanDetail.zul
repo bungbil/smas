@@ -52,11 +52,31 @@
 													<row>
 														<hbox>
 															<label
-																value="${c:l('label_KaryawanDialog_namaKaryawan.value')}" />
+																value="${c:l('label_KaryawanDialog_namaPanggilan.value')}" />
+															
+														</hbox>
+														<textbox id="txtb_NamaPanggilan"
+															value="@{controller.karyawan.namaPanggilan}" readonly="true" maxlength="100"
+															hflex="1" />
+													</row>
+													<row>
+														<hbox>
+															<label
+																value="${c:l('label_KaryawanDialog_namaKtp.value')}" />
 															<label value="*" style="color:red;font-size:10px" />
 														</hbox>
-														<textbox id="txtb_NamaKaryawan"
-															value="@{controller.karyawan.namaKaryawan}" readonly="true" constraint="no empty" maxlength="254"
+														<textbox id="txtb_NamaKtp"
+															value="@{controller.karyawan.namaKtp}" readonly="true" constraint="no empty" maxlength="100"
+															hflex="1" />
+													</row>
+													<row>
+														<hbox>
+															<label
+																value="${c:l('label_KaryawanDialog_ktp.value')}" />
+															<label value="*" style="color:red;font-size:10px" />
+														</hbox>
+														<textbox id="txtb_Ktp"
+															value="@{controller.karyawan.ktp}" readonly="true" constraint="no empty" maxlength="100"
 															hflex="1" />
 													</row>													
 													<row>
@@ -132,6 +152,28 @@
 														<listbox id="lbox_SupervisorDivisi" mold="select" disabled="true"
 																			multiple="false" rows="1" hflex="1" width="100px">															
 														</listbox>
+													</row>
+													<row>
+														<hbox>
+															<label id="label_InisialDivisi"
+																value="${c:l('label_KaryawanDialog_inisialDivisi.value')}" />
+														</hbox>
+														<textbox id="txtb_InisialDivisi"
+															value="@{controller.karyawan.inisialDivisi}" readonly="true" maxlength="20" width="200px"
+															hflex="1" />
+													</row>	
+													<row>
+														<label id="label_StatusDivisi" value="${c:l('label_KaryawanDialog_status.value')}" />
+														<radiogroup id="radiogroup_Status" >
+															<grid>
+														        <rows>													            
+														            <row>
+														                 <radio id="radioStatusPusat" label="Pusat" radiogroup="radiogroup_Status" disabled="true"/>
+												               			 <radio id="radioStatusDaerah" label="Daerah" radiogroup="radiogroup_Status" disabled="true"/>												               			 
+														            </row>													            
+														        </rows>
+														    </grid>
+											      		</radiogroup>											      		
 													</row>												
 													
 												</rows>

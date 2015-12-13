@@ -22,7 +22,7 @@ import billy.backend.model.BonusTransport;
 import billy.backend.model.JobType;
 import billy.backend.service.BonusTransportService;
 import billy.backend.service.JobTypeService;
-import billy.webui.master.bonustransport.model.JobTypeListModelItemRenderer;
+import billy.webui.master.jobtype.model.JobTypeListModelItemRenderer;
 import de.forsthaus.webui.util.GFCBaseCtrl;
 
 public class BonusTransportDetailCtrl extends GFCBaseCtrl implements Serializable {
@@ -36,12 +36,14 @@ public class BonusTransportDetailCtrl extends GFCBaseCtrl implements Serializabl
 	
 	protected Textbox txtb_DeskripsiBonusTransport; // autowired	
 	protected Listbox lbox_JobType; // autowired
-	protected Checkbox txtb_MultipleUnit; // autowired	
+	protected Checkbox txtb_MultipleUnit; // autowired
+	protected Checkbox pusatCheckbox; // autowired
+	protected Checkbox daerahCheckbox; // autowired
+	
 	protected Intbox txtb_StartRangeUnit; // autowired
 	protected Intbox txtb_EndRangeUnit; // autowired
 	protected Decimalbox txtb_Honor;
-	protected Decimalbox txtb_Or;
-	protected Decimalbox txtb_Opr;
+	protected Decimalbox txtb_Or;	
 	protected Decimalbox txtb_Transport;
 	protected Decimalbox txtb_Bonus;
 	
@@ -138,11 +140,12 @@ public class BonusTransportDetailCtrl extends GFCBaseCtrl implements Serializabl
 		txtb_DeskripsiBonusTransport.setReadonly(b);
 		lbox_JobType.setDisabled(b);		
 		txtb_MultipleUnit.setDisabled(b);
+		pusatCheckbox.setDisabled(b);
+		daerahCheckbox.setDisabled(b);
 		txtb_StartRangeUnit.setReadonly(b);
 		txtb_EndRangeUnit.setReadonly(b);
 		txtb_Honor.setReadonly(b);
-		txtb_Or.setReadonly(b);
-		txtb_Opr.setReadonly(b);
+		txtb_Or.setReadonly(b);		
 		txtb_Transport.setReadonly(b);
 		txtb_Bonus.setReadonly(b);
 	}

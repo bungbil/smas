@@ -62,7 +62,7 @@ public class UserListModelItemRenderer implements ListitemRenderer, Serializable
 		lc.setParent(item);
 		
 		if(user.getKaryawan()!=null){
-			lc = new Listcell(user.getKaryawan().getNamaKaryawan());
+			lc = new Listcell(user.getKaryawan().getNamaKtp());
 			lc.setParent(item);				
 		}else{
 			lc = new Listcell("");

@@ -31,36 +31,24 @@
 					tooltiptext="${c:l('listbox.tooltiptext')}" width="100%"
 					height="100%" multiple="false">
 					<listhead sizable="true">
-						<listheader id="listheader_StatusList_Kode"
-							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
-							label="${c:l('listheader_StatusList_Kode.label')}" sort="auto"
-							width="20%" />
 						<listheader id="listheader_StatusList_Deskripsi"
 							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
 							label="${c:l('listheader_StatusList_Deskripsi.label')}" sort="auto"
-							width="30%" />
-						<listheader id="listheader_StatusList_StatusType"
-							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
-							label="${c:l('listheader_StatusList_StatusType.label')}" sort="auto"
-							width="30%" />
+							width="40%" />
 						<listheader id="listheader_StatusList_LastUpdate"
 							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
 							label="${c:l('common.lastUpdate')}" sort="auto"
-							width="15%" />
+							width="30%" />
 						<listheader id="listheader_StatusList_UpdatedBy"
 							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
 							label="${c:l('common.updatedBy')}" sort="auto"
-							width="15%" />
+							width="30%" />
 					</listhead>
 
 					<listitem self="@{each='status'}" value="@{status}"
 						forward="onDoubleClick=onDoubleClickedStatusItem">
 
-						<listcell label="@{status.kodeStatus}"
-							style="padding-left: 5px" />
 						<listcell label="@{status.deskripsiStatus}"
-							style="padding-left: 5px" />
-						<listcell label="@{status.statusType}"
 							style="padding-left: 5px" />
 						<listcell label="@{status.lastUpdate}"
 							style="padding-left: 5px" />	

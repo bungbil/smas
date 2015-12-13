@@ -28,6 +28,10 @@ public class KaryawanServiceImpl implements KaryawanService {
 		return getKaryawanDAO().getKaryawanById(id);
 	}
 
+	public Karyawan getKaryawanByKtp(String string) {
+		return getKaryawanDAO().getKaryawanByKtp(string);
+	}
+
 	@Override
 	public List<Karyawan> getAllKaryawans() {
 		return getKaryawanDAO().getAllKaryawans();
@@ -49,8 +53,18 @@ public class KaryawanServiceImpl implements KaryawanService {
 	}
 
 	@Override
-	public List<Karyawan> getKaryawansLikeNamaKaryawan(String string) {
-		return getKaryawanDAO().getKaryawansLikeNamaKaryawan(string);
+	public List<Karyawan> getKaryawansLikeNamaPanggilan(String string) {
+		return getKaryawanDAO().getKaryawansLikeNamaPanggilan(string);
+	}
+
+	@Override
+	public List<Karyawan> getKaryawansLikeNamaKtp(String string) {
+		return getKaryawanDAO().getKaryawansLikeNamaKtp(string);
+	}
+
+	@Override
+	public List<Karyawan> getKaryawansLikeKtp(String string) {
+		return getKaryawanDAO().getKaryawansLikeKtp(string);
 	}
 
 	@Override

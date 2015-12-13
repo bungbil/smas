@@ -15,14 +15,8 @@
 
 		<version name="version" column="VERSION" type="integer" />
 
-		<property name="kodeStatus" type="string">
-			<column name="kode_status" length="50" not-null="true" unique="true" />
-		</property>
 		<property name="deskripsiStatus" type="string">
-			<column name="deskripsi_status" length="254" />
-		</property>
-		<property name="statusType" type="string">
-			<column name="status_type" length="50" />
+			<column name="deskripsi_status" length="50" not-null="true" unique="true" />
 		</property>		
 		<property name="lastUpdate" type="timestamp">
 			<column name="last_update" length="29" />

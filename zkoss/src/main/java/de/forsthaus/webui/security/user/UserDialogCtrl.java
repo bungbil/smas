@@ -185,8 +185,8 @@ public class UserDialogCtrl extends GFCBaseCtrl implements Serializable {
 		}
 
 		// +++++++++ DropDown ListBox
-		// set listModel and itemRenderer for the dropdown listbox
-		lbox_usrKaryawan.setModel(new ListModelList(getKaryawanService().getAllKaryawans()));
+		// set listModel and itemRenderer for the dropdown listbox staff only
+		lbox_usrKaryawan.setModel(new ListModelList(getKaryawanService().getKaryawansByJobTypeId(new Long(7))));
 		lbox_usrKaryawan.setItemRenderer(new KaryawanListModelItemRenderer());
 
 		// if available, select the object

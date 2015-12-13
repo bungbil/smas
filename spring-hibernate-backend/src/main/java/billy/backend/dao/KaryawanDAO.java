@@ -11,6 +11,7 @@ public interface KaryawanDAO {
 	public Karyawan getKaryawanById(Long id);
 
 	public Karyawan getKaryawanByKodeKaryawan(String string);
+	public Karyawan getKaryawanByKtp(String string);
 
 	public List<Karyawan> getAllKaryawans();
 
@@ -18,7 +19,9 @@ public interface KaryawanDAO {
 
 	public List<Karyawan> getKaryawansLikeKodeKaryawan(String string);
 
-	public List<Karyawan> getKaryawansLikeNamaKaryawan(String string);
+	public List<Karyawan> getKaryawansLikeNamaPanggilan(String string);
+	public List<Karyawan> getKaryawansLikeKtp(String string);
+	public List<Karyawan> getKaryawansLikeNamaKtp(String string);
 	
 	public List<Karyawan> getKaryawansByJobTypeId(Long id);
 	

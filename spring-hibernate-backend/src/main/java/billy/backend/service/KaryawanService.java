@@ -10,12 +10,18 @@ public interface KaryawanService {
 	public int getCountAllKaryawans();
 
 	public Karyawan getKaryawanByID(Long id);
+	
+	public Karyawan getKaryawanByKtp(String string);
 
 	public List<Karyawan> getAllKaryawans();
 
 	public List<Karyawan> getKaryawansLikeKodeKaryawan(String string);
 	
-	public List<Karyawan> getKaryawansLikeNamaKaryawan(String string);
+	public List<Karyawan> getKaryawansLikeNamaPanggilan(String string);
+	
+	public List<Karyawan> getKaryawansLikeNamaKtp(String string);
+	
+	public List<Karyawan> getKaryawansLikeKtp(String string);
 	
 	public List<Karyawan> getKaryawansByJobTypeId(Long id);
 	

@@ -386,9 +386,7 @@ DROP SEQUENCE IF EXISTS status_seq;
 
 CREATE TABLE status (
    status_id           INT8                not null,
-   kode_status         varchar(50)         not null,
-   deskripsi_status    varchar(254)        null,
-   status_type         varchar(254)        not null,
+   deskripsi_status         varchar(50)         not null,
    last_update       		  timestamp,          
    updated_by       		  varchar(50)         null,
    version                    int4                not null default 0,
@@ -404,7 +402,7 @@ CREATE UNIQUE INDEX ix_status_id on status using btree (
 status_id
 );
 CREATE UNIQUE INDEX ix_kode_status on status (
-kode_status
+deskripsi_status
 );
 
 
@@ -482,10 +480,11 @@ CREATE TABLE bonus_transport (
    start_range_unit  			int4				not null,
    end_range_unit    			int4				not null,
    honor						numeric(12,2)		null,
-   bonus_or						numeric(12,2)		null,
-   opr							numeric(12,2)		null,
+   bonus_or						numeric(12,2)		null,   
    transport					numeric(12,2)		null,
-   bonus						numeric(12,2)		null,      
+   bonus						numeric(12,2)		null,  
+   status_pusat					BOOL				not null default FALSE,
+   status_daerah				BOOL				not null default FALSE,    
    last_update       		  timestamp,          
    updated_by       		  varchar(50)         null,
    version                    int4                not null default 0,
@@ -500,6 +499,11 @@ ALTER SEQUENCE bonus_transport_seq OWNER TO smas;
 CREATE UNIQUE INDEX ix_bonus_transport_id on bonus_transport using btree (
 bonus_transport_id
 );
+
+CREATE UNIQUE INDEX ix_deskripsi_bonus_transport on bonus_transport (
+deskripsi_bonus_transport
+);
+
 alter table bonus_transport
    add constraint ref_bonus_to_job foreign key (job_type_id)
       references job_type (job_type_id)
@@ -515,14 +519,18 @@ DROP SEQUENCE IF EXISTS karyawan_seq;
 
 CREATE TABLE karyawan (
    karyawan_id          INT8                 not null,   
-   kode_karyawan       	varchar(50)          null,   
-   nama_karyawan       	varchar(100)         null,
+   kode_karyawan       	varchar(50)          not null,   
+   nama_panggilan      	varchar(100)         null,
+   nama_ktp     	  	varchar(100)         not null,
+   ktp			       	varchar(100)         not null,
    tanggal_lahir 	 	date				 null,
    telepon				varchar(50)   		 null,
    handphone			varchar(50)   		 null,
    email				varchar(100)   		 null,
    alamat				varchar(500)   		 null,
    job_type_id			INT8                 not null, 
+   inisial_divisi		varchar(20)   		 null,
+   status_divisi		varchar(20)   		 null,
    atasan_id		    INT8                 null, 
    last_update       	timestamp,          
    updated_by       	varchar(50)          null,
@@ -539,6 +547,14 @@ CREATE UNIQUE INDEX ix_karyawan_id on karyawan using btree (
 karyawan_id
 );
 
+
+CREATE UNIQUE INDEX ix_kode_karyawan on karyawan (
+kode_karyawan
+);
+
+CREATE UNIQUE INDEX ix_ktp on karyawan (
+ktp
+);
 alter table karyawan
    add constraint ref_karyawan_to_job foreign key (job_type_id)
       references job_type (job_type_id)
@@ -557,7 +573,7 @@ alter table sec_user
 	add column last_update       	timestamp,          
    	add column updated_by       	varchar(50)          null;
    	
-alter table karyawan
+alter table sec_user
    add constraint ref_karyawan_to_sec_user foreign key (karyawan_id)
       references karyawan (karyawan_id)
       on delete restrict on update restrict;

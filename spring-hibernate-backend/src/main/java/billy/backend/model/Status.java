@@ -10,9 +10,7 @@ public class Status implements java.io.Serializable, Entity {
 
 	private long id = Long.MIN_VALUE +1;
 	private int version;
-	private String kodeStatus;
 	private String deskripsiStatus;
-	private String statusType;
 	private Date lastUpdate;
 	private String updatedBy;
 	
@@ -24,19 +22,12 @@ public class Status implements java.io.Serializable, Entity {
 	public Status() {
 	}
 
-	public Status(long id, String kodeStatus) {
+	public Status(long id, String deskripsiStatus) {
 		this.setId(id);
-		this.kodeStatus = kodeStatus;
-	}
-
-	public Status(long id, String kodeStatus, String deskripsiStatus, String statusType) {
-		this.setId(id);
-		this.kodeStatus = kodeStatus;
 		this.deskripsiStatus = deskripsiStatus;
-		this.statusType = statusType;	
-		
 	}
 
+	
 	public void setId(long id) {
 		this.id = id;
 	}
@@ -53,28 +44,12 @@ public class Status implements java.io.Serializable, Entity {
 		this.version = version;
 	}
 
-	public String getKodeStatus() {
-		return kodeStatus;
-	}
-
-	public void setKodeStatus(String kodeStatus) {
-		this.kodeStatus = kodeStatus;
-	}
-
 	public String getDeskripsiStatus() {
 		return deskripsiStatus;
 	}
 
 	public void setDeskripsiStatus(String deskripsiStatus) {
 		this.deskripsiStatus = deskripsiStatus;
-	}
-
-	public String getStatusType() {
-		return statusType;
-	}
-
-	public void setStatusType(String statusType) {
-		this.statusType = statusType;
 	}
 
 	public Date getLastUpdate() {

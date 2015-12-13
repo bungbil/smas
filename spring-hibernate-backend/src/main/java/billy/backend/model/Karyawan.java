@@ -11,13 +11,17 @@ public class Karyawan implements java.io.Serializable, Entity {
 	private long id = Long.MIN_VALUE +1;
 	private int version;
 	private String kodeKaryawan;
-	private String namaKaryawan;
+	private String namaPanggilan;
+	private String namaKtp;
+	private String ktp;
 	private Date tanggalLahir;
 	private String telepon;
 	private String handphone;
 	private String email;
 	private String alamat;
 	private JobType jobType;
+	private String inisialDivisi;
+	private String statusDivisi;
 	private Karyawan supervisorDivisi;
 	private Date lastUpdate;
 	private String updatedBy;
@@ -35,10 +39,10 @@ public class Karyawan implements java.io.Serializable, Entity {
 		this.kodeKaryawan = kodeKaryawan;
 	}
 
-	public Karyawan(long id, String kodeKaryawan, String namaKaryawan) {
+	public Karyawan(long id, String kodeKaryawan, String namaPanggilan) {
 		this.setId(id);
 		this.kodeKaryawan = kodeKaryawan;
-		this.namaKaryawan = namaKaryawan;		
+		this.namaPanggilan = namaPanggilan;		
 	}
 
 	public void setId(long id) {
@@ -65,12 +69,45 @@ public class Karyawan implements java.io.Serializable, Entity {
 		this.kodeKaryawan = kodeKaryawan;
 	}
 
-	public String getNamaKaryawan() {
-		return namaKaryawan;
+
+	public String getNamaPanggilan() {
+		return namaPanggilan;
 	}
 
-	public void setNamaKaryawan(String namaKaryawan) {
-		this.namaKaryawan = namaKaryawan;
+	public void setNamaPanggilan(String namaPanggilan) {
+		this.namaPanggilan = namaPanggilan;
+	}
+
+	public String getNamaKtp() {
+		return namaKtp;
+	}
+
+	public void setNamaKtp(String namaKtp) {
+		this.namaKtp = namaKtp;
+	}
+
+	public String getKtp() {
+		return ktp;
+	}
+
+	public void setKtp(String ktp) {
+		this.ktp = ktp;
+	}
+
+	public String getInisialDivisi() {
+		return inisialDivisi;
+	}
+
+	public void setInisialDivisi(String inisialDivisi) {
+		this.inisialDivisi = inisialDivisi;
+	}
+
+	public String getStatusDivisi() {
+		return statusDivisi;
+	}
+
+	public void setStatusDivisi(String statusDivisi) {
+		this.statusDivisi = statusDivisi;
 	}
 
 	public Date getTanggalLahir() {

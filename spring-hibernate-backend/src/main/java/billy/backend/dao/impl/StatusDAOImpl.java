@@ -27,9 +27,9 @@ public class StatusDAOImpl extends BillyBasisDAO<Status> implements StatusDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Status getStatusByKodeStatus(String string) {
+	public Status getStatusByDeskripsiStatus(String string) {
 		DetachedCriteria criteria = DetachedCriteria.forClass(Status.class);
-		criteria.add(Restrictions.eq("kodeStatus", string));
+		criteria.add(Restrictions.eq("deskripsiStatus", string));
 
 		return (Status) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(criteria));
 	}
@@ -45,16 +45,6 @@ public class StatusDAOImpl extends BillyBasisDAO<Status> implements StatusDAO {
 		if (Status != null) {
 			delete(Status);
 		}
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Status> getStatussLikeKodeStatus(String string) {
-
-		DetachedCriteria criteria = DetachedCriteria.forClass(Status.class);
-		criteria.add(Restrictions.ilike("kodeStatus", string, MatchMode.ANYWHERE));
-
-		return getHibernateTemplate().findByCriteria(criteria);
 	}
 
 	@SuppressWarnings("unchecked")

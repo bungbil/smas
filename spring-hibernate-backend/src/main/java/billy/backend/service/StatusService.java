@@ -12,8 +12,6 @@ public interface StatusService {
 	public Status getStatusByID(Long id);
 
 	public List<Status> getAllStatuss();
-
-	public List<Status> getStatussLikeKodeStatus(String string);
 	
 	public List<Status> getStatussLikeDeskripsiStatus(String string);
 

@@ -76,7 +76,15 @@
 															checked="@{controller.bonusTransport.multipleUnit}" disabled="true"
 															hflex="1" />										      		
 													</row>
-													
+													<row>
+										                Status :
+										                <hlayout id="status">
+										                    <checkbox id="pusatCheckbox" label="Pusat" disabled="true"
+										                        checked="@{controller.bonusTransport.statusPusat}" />
+										                    <checkbox id="daerahCheckbox" label="Daerah" disabled="true"
+										                        checked="@{controller.bonusTransport.statusDaerah}" />										                    
+										                </hlayout>
+										            </row>
 													<row>
 														<label value="${c:l('label_BonusTransportDialog_startRangeUnit.value')}" />
 														<intbox id="txtb_StartRangeUnit" value="@{controller.bonusTransport.startRangeUnit}" readonly="true" format="0" width="100px" hflex="1" />									      		
@@ -92,11 +100,7 @@
 													<row>
 														<label value="${c:l('label_BonusTransportDialog_or.value')}" />
 														<decimalbox id="txtb_Or" value="@{controller.bonusTransport.or}" readonly="true" format=",###.#"  constraint="no negative" width="100px" hflex="1" />									      		
-													</row>
-													<row>
-														<label value="${c:l('label_BonusTransportDialog_opr.value')}" />
-														<decimalbox id="txtb_Opr" value="@{controller.bonusTransport.opr}" readonly="true" format=",###.#"  constraint="no negative" width="100px" hflex="1" />									      		
-													</row>
+													</row>													
 													<row>
 														<label value="${c:l('label_BonusTransportDialog_transport.value')}" />
 														<decimalbox id="txtb_Transport" value="@{controller.bonusTransport.transport}" readonly="true" format=",###.#"  constraint="no negative" width="100px" hflex="1" />									      		

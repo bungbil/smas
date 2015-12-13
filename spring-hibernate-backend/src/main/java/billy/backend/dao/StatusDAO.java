@@ -10,13 +10,11 @@ public interface StatusDAO {
 
 	public Status getStatusById(Long id);
 
-	public Status getStatusByKodeStatus(String string);
+	public Status getStatusByDeskripsiStatus(String string);
 
 	public List<Status> getAllStatuss();
 
 	public int getCountAllStatuss();
-
-	public List<Status> getStatussLikeKodeStatus(String string);
 
 	public List<Status> getStatussLikeDeskripsiStatus(String string);	
 

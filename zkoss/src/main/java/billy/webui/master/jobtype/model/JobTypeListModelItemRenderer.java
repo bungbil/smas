@@ -1,4 +1,4 @@
-package billy.webui.master.bonustransport.model;
+package billy.webui.master.jobtype.model;
 
 import java.io.Serializable;
 

@@ -186,18 +186,7 @@ public class StatusMainCtrl extends GFCBaseCtrl implements Serializable {
 			// refresh the Binding mechanism
 			getStatusDetailCtrl().setStatus(getSelectedStatus());
 			getStatusDetailCtrl().getBinder().loadAll();
-			if(getSelectedStatus().getStatusType().equals(getStatusDetailCtrl().radioStatusTypeBatal.getLabel())){
-				getStatusDetailCtrl().radioStatusTypeBatal.setSelected(true);
-			}
-			if(getSelectedStatus().getStatusType().equals(getStatusDetailCtrl().radioStatusTypeLunas.getLabel())){
-				getStatusDetailCtrl().radioStatusTypeLunas.setSelected(true);
-			}
-			if(getSelectedStatus().getStatusType().equals(getStatusDetailCtrl().radioStatusTypeTarikBarang.getLabel())){
-				getStatusDetailCtrl().radioStatusTypeTarikBarang.setSelected(true);
-			}
-			if(getSelectedStatus().getStatusType().equals(getStatusDetailCtrl().radioStatusTypeKosong.getLabel())){
-				getStatusDetailCtrl().radioStatusTypeKosong.setSelected(true);
-			}
+			
 			return;
 		}
 
@@ -459,7 +448,7 @@ public class StatusMainCtrl extends GFCBaseCtrl implements Serializable {
 		getStatusDetailCtrl().getBinder().loadAll();
 
 		// set focus
-		getStatusDetailCtrl().txtb_KodeStatus.focus();
+		getStatusDetailCtrl().txtb_DeskripsiStatus.focus();
 	}
 
 	/**
@@ -485,7 +474,7 @@ public class StatusMainCtrl extends GFCBaseCtrl implements Serializable {
 		if (anStatus != null) {
 
 			// Show a confirm box
-			final String msg = Labels.getLabel("message.Question.Are_you_sure_to_delete_this_record") + "\n\n --> " + anStatus.getKodeStatus();
+			final String msg = Labels.getLabel("message.Question.Are_you_sure_to_delete_this_record") + "\n\n --> " + anStatus.getDeskripsiStatus();
 			final String title = Labels.getLabel("message.Deleting.Record");
 
 			MultiLineMessageBox.doSetTemplate();
@@ -541,19 +530,7 @@ public class StatusMainCtrl extends GFCBaseCtrl implements Serializable {
 		// save all components data in the several tabs to the bean
 		getStatusDetailCtrl().getBinder().saveAll();
 
-		try {
-			if(getStatusDetailCtrl().radioStatusTypeBatal.isSelected()){
-				getStatusDetailCtrl().getStatus().setStatusType(getStatusDetailCtrl().radioStatusTypeBatal.getLabel());
-			}
-			if(getStatusDetailCtrl().radioStatusTypeLunas.isSelected()){
-				getStatusDetailCtrl().getStatus().setStatusType(getStatusDetailCtrl().radioStatusTypeLunas.getLabel());
-			}
-			if(getStatusDetailCtrl().radioStatusTypeKosong.isSelected()){
-				getStatusDetailCtrl().getStatus().setStatusType(getStatusDetailCtrl().radioStatusTypeKosong.getLabel());
-			}
-			if(getStatusDetailCtrl().radioStatusTypeTarikBarang.isSelected()){
-				getStatusDetailCtrl().getStatus().setStatusType(getStatusDetailCtrl().radioStatusTypeTarikBarang.getLabel());
-			}
+		try {			
 			String userName = ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();			
 			getStatusDetailCtrl().getStatus().setLastUpdate(new Date());			
 			getStatusDetailCtrl().getStatus().setUpdatedBy(userName);			
@@ -568,7 +545,7 @@ public class StatusMainCtrl extends GFCBaseCtrl implements Serializable {
 			Events.postEvent("onSelect", getStatusListCtrl().getListBoxStatus(), getSelectedStatus());
 
 			// show the objects data in the statusBar
-			String str = getSelectedStatus().getKodeStatus();
+			String str = getSelectedStatus().getDeskripsiStatus();
 			EventQueues.lookup("selectedObjectEventQueue", EventQueues.DESKTOP, true).publish(new Event("onChangeSelectedObject", null, str));
 
 		} catch (DataAccessException e) {
@@ -631,7 +608,7 @@ public class StatusMainCtrl extends GFCBaseCtrl implements Serializable {
 
 		tabStatusDetail.setSelected(true);
 		// set focus
-		getStatusDetailCtrl().txtb_KodeStatus.focus();
+		getStatusDetailCtrl().txtb_DeskripsiStatus.focus();
 
 	}
 
@@ -695,19 +672,6 @@ public class StatusMainCtrl extends GFCBaseCtrl implements Serializable {
 		// refresh master-detail MASTERS data
 		getStatusDetailCtrl().getBinder().loadAll();
 
-		
-		if(getSelectedStatus().getStatusType().equals(getStatusDetailCtrl().radioStatusTypeBatal.getLabel())){
-			getStatusDetailCtrl().radioStatusTypeBatal.setSelected(true);
-		}
-		if(getSelectedStatus().getStatusType().equals(getStatusDetailCtrl().radioStatusTypeLunas.getLabel())){
-			getStatusDetailCtrl().radioStatusTypeLunas.setSelected(true);
-		}
-		if(getSelectedStatus().getStatusType().equals(getStatusDetailCtrl().radioStatusTypeTarikBarang.getLabel())){
-			getStatusDetailCtrl().radioStatusTypeTarikBarang.setSelected(true);
-		}
-		if(getSelectedStatus().getStatusType().equals(getStatusDetailCtrl().radioStatusTypeKosong.getLabel())){
-			getStatusDetailCtrl().radioStatusTypeKosong.setSelected(true);
-		}
 		// EXTRA: if we have a longtext field under the listbox, so we must
 		// refresh
 		// this binded component too

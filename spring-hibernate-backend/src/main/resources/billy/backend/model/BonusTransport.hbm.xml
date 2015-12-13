@@ -37,17 +37,19 @@
 		</property>
 		<property name="or" type="big_decimal">
 			<column name="bonus_or" precision="12" />
-		</property>
-		<property name="opr" type="big_decimal">
-			<column name="opr" precision="12" />
-		</property>
+		</property>		
 		<property name="transport" type="big_decimal">
 			<column name="transport" precision="12" />
 		</property>
 		<property name="bonus" type="big_decimal">
 			<column name="bonus" precision="12" />
 		</property>
-				
+		<property name="statusPusat" type="boolean">
+			<column name="status_pusat" />
+		</property>
+		<property name="statusDaerah" type="boolean">
+			<column name="status_daerah" />
+		</property>
 		<property name="lastUpdate" type="timestamp">
 			<column name="last_update" length="29" />
 		</property>	

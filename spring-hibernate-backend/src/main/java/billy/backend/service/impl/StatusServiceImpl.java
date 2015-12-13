@@ -44,11 +44,6 @@ public class StatusServiceImpl implements StatusService {
 	}
 
 	@Override
-	public List<Status> getStatussLikeKodeStatus(String string) {
-		return getStatusDAO().getStatussLikeKodeStatus(string);
-	}
-
-	@Override
 	public List<Status> getStatussLikeDeskripsiStatus(String string) {
 		return getStatusDAO().getStatussLikeDeskripsiStatus(string);
 	}

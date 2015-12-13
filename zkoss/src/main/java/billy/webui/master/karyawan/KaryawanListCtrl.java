@@ -38,7 +38,8 @@ public class KaryawanListCtrl extends GFCBaseListCtrl<Karyawan> implements Seria
 	protected Paging paging_KaryawanList; // autowired
 	protected Listbox listBoxKaryawan; // autowired
 	protected Listheader listheader_KaryawanList_Kode; // autowired
-	protected Listheader listheader_KaryawanList_Nama; // autowired
+	protected Listheader listheader_KaryawanList_NamaKtp; // autowired
+	protected Listheader listheader_KaryawanList_Ktp; // autowired
 	protected Listheader listheader_KaryawanList_JobType; // autowired
 	protected Listheader listheader_KaryawanList_SupervisorDivisi; // autowired
 	protected Listheader listheader_KaryawanList_Handphone; // autowired
@@ -116,8 +117,11 @@ public class KaryawanListCtrl extends GFCBaseListCtrl<Karyawan> implements Seria
 		listheader_KaryawanList_Kode.setSortAscending(new FieldComparator("kodeKaryawan", true));
 		listheader_KaryawanList_Kode.setSortDescending(new FieldComparator("kodeKaryawan", false));
 		
-		listheader_KaryawanList_Nama.setSortAscending(new FieldComparator("namaKaryawan", true));
-		listheader_KaryawanList_Nama.setSortDescending(new FieldComparator("namaKaryawan", false));
+		listheader_KaryawanList_NamaKtp.setSortAscending(new FieldComparator("namaKtp", true));
+		listheader_KaryawanList_NamaKtp.setSortDescending(new FieldComparator("namaKtp", false));
+		
+		listheader_KaryawanList_Ktp.setSortAscending(new FieldComparator("ktp", true));
+		listheader_KaryawanList_Ktp.setSortDescending(new FieldComparator("ktp", false));
 		
 		listheader_KaryawanList_JobType.setSortAscending(new FieldComparator("jobType.namaJobType", true));
 		listheader_KaryawanList_JobType.setSortDescending(new FieldComparator("jobType.namaJobType", false));

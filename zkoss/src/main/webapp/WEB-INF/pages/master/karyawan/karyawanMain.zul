@@ -38,7 +38,14 @@
 						<textbox id="txtb_Karyawan_Name" width="100px" />
 						<button id="button_KaryawanList_SearchName"
 							sclass="oT_ButtonWithIcon" image="/images/icons/search.gif"
-							tooltiptext="${c:l('button_KaryawanList_SearchName.tooltiptext')}" />												
+							tooltiptext="${c:l('button_KaryawanList_SearchName.tooltiptext')}" />	
+							
+						<label value="${c:l('label_KaryawanList_Ktp')}"
+							style="padding-right: 3px" />
+						<textbox id="txtb_Karyawan_Ktp" width="100px" />
+						<button id="button_KaryawanList_SearchKtp"
+							sclass="oT_ButtonWithIcon" image="/images/icons/search.gif"
+							tooltiptext="${c:l('button_KaryawanList_SearchKtp.tooltiptext')}" />												
 					</hbox>
 				</toolbar>
 				

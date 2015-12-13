@@ -17,10 +17,11 @@ public class BonusTransport implements java.io.Serializable, Entity {
 	private Integer startRangeUnit;
 	private Integer endRangeUnit;
 	private BigDecimal honor;
-	private BigDecimal or;
-	private BigDecimal opr;
+	private BigDecimal or;	
 	private BigDecimal transport;
-	private BigDecimal bonus;	
+	private BigDecimal bonus;
+	private boolean statusPusat;
+	private boolean statusDaerah;
 	private Date lastUpdate;
 	private String updatedBy;
 	
@@ -40,7 +41,7 @@ public class BonusTransport implements java.io.Serializable, Entity {
 	public BonusTransport(long id, String deskripsiBonusTransport,
 			JobType jobType, boolean multipleUnit, Integer startRangeUnit,
 			Integer endRangeUnit, BigDecimal honor, BigDecimal or,
-			BigDecimal opr, BigDecimal transport, BigDecimal bonus) {
+			BigDecimal transport, BigDecimal bonus) {
 		
 		this.id = id;
 		this.deskripsiBonusTransport = deskripsiBonusTransport;
@@ -49,8 +50,7 @@ public class BonusTransport implements java.io.Serializable, Entity {
 		this.startRangeUnit = startRangeUnit;
 		this.endRangeUnit = endRangeUnit;
 		this.honor = honor;
-		this.or = or;
-		this.opr = opr;
+		this.or = or;		
 		this.transport = transport;
 		this.bonus = bonus;
 	}
@@ -128,12 +128,21 @@ public class BonusTransport implements java.io.Serializable, Entity {
 		this.or = or;
 	}
 
-	public BigDecimal getOpr() {
-		return opr;
+	
+	public boolean isStatusPusat() {
+		return statusPusat;
 	}
 
-	public void setOpr(BigDecimal opr) {
-		this.opr = opr;
+	public void setStatusPusat(boolean statusPusat) {
+		this.statusPusat = statusPusat;
+	}
+
+	public boolean isStatusDaerah() {
+		return statusDaerah;
+	}
+
+	public void setStatusDaerah(boolean statusDaerah) {
+		this.statusDaerah = statusDaerah;
 	}
 
 	public BigDecimal getTransport() {

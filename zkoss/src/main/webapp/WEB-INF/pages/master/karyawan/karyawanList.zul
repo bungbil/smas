@@ -34,11 +34,15 @@
 						<listheader id="listheader_KaryawanList_Kode"
 							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
 							label="${c:l('listheader_KaryawanList_Kode.label')}" sort="auto"
-							width="15%" />
-						<listheader id="listheader_KaryawanList_Nama"
+							width="10%" />
+						<listheader id="listheader_KaryawanList_NamaKtp"
 							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
-							label="${c:l('listheader_KaryawanList_Nama.label')}" sort="auto"
-							width="20%" />
+							label="${c:l('listheader_KaryawanList_NamaKtp.label')}" sort="auto"
+							width="15%" />
+						<listheader id="listheader_KaryawanList_Ktp"
+							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
+							label="${c:l('listheader_KaryawanList_Ktp.label')}" sort="auto"
+							width="15%" />
 						<listheader id="listheader_KaryawanList_JobType"
 							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
 							label="${c:l('listheader_KaryawanList_JobType.label')}" sort="auto"
@@ -54,7 +58,7 @@
 						<listheader id="listheader_KaryawanList_LastUpdate"
 							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
 							label="${c:l('common.lastUpdate')}" sort="auto"
-							width="15%" />
+							width="10%" />
 						<listheader id="listheader_KaryawanList_UpdatedBy"
 							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
 							label="${c:l('common.updatedBy')}" sort="auto"
@@ -66,11 +70,13 @@
 
 						<listcell label="@{karyawan.kodeKaryawan}"
 							style="padding-left: 5px" />
-						<listcell label="@{karyawan.namaKaryawan}"
+						<listcell label="@{karyawan.namaKtp}"
+							style="padding-left: 5px" />
+						<listcell label="@{karyawan.ktp}"
 							style="padding-left: 5px" />
 						<listcell label="@{karyawan.jobType.namaJobType}"
 							style="padding-left: 5px" />
-						<listcell label="@{karyawan.supervisorDivisi.namaKaryawan}"
+						<listcell label="@{karyawan.supervisorDivisi.namaKtp}"
 							style="padding-left: 5px" />
 						<listcell label="@{karyawan.handphone}"
 							style="padding-left: 5px" />

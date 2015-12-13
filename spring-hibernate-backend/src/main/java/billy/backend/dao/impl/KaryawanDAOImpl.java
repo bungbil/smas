@@ -33,6 +33,14 @@ public class KaryawanDAOImpl extends BillyBasisDAO<Karyawan> implements Karyawan
 
 		return (Karyawan) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(criteria));
 	}
+	
+	@SuppressWarnings("unchecked")
+	public Karyawan getKaryawanByKtp(String string) {
+		DetachedCriteria criteria = DetachedCriteria.forClass(Karyawan.class);
+		criteria.add(Restrictions.eq("ktp", string));
+
+		return (Karyawan) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(criteria));
+	}
 
 	@Override
 	public List<Karyawan> getAllKaryawans() {
@@ -56,13 +64,33 @@ public class KaryawanDAOImpl extends BillyBasisDAO<Karyawan> implements Karyawan
 
 		return getHibernateTemplate().findByCriteria(criteria);
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Karyawan> getKaryawansLikeKtp(String string) {
+
+		DetachedCriteria criteria = DetachedCriteria.forClass(Karyawan.class);
+		criteria.add(Restrictions.ilike("ktp", string, MatchMode.ANYWHERE));
+
+		return getHibernateTemplate().findByCriteria(criteria);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Karyawan> getKaryawansLikeNamaKtp(String string) {
+
+		DetachedCriteria criteria = DetachedCriteria.forClass(Karyawan.class);
+		criteria.add(Restrictions.ilike("namaKtp", string, MatchMode.ANYWHERE));
+
+		return getHibernateTemplate().findByCriteria(criteria);
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Karyawan> getKaryawansLikeNamaKaryawan(String string) {
+	public List<Karyawan> getKaryawansLikeNamaPanggilan(String string) {
 
 		DetachedCriteria criteria = DetachedCriteria.forClass(Karyawan.class);
-		criteria.add(Restrictions.ilike("namaKaryawan", string, MatchMode.ANYWHERE));
+		criteria.add(Restrictions.ilike("namaPanggilan", string, MatchMode.ANYWHERE));
 
 		return getHibernateTemplate().findByCriteria(criteria);
 	}

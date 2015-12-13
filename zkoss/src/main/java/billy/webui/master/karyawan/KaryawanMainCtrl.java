@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
@@ -62,6 +63,10 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
 	protected Checkbox checkbox_KaryawanList_ShowAll; // autowired
 	protected Textbox txtb_Karyawan_Name; // aurowired
 	protected Button button_KaryawanList_SearchName; // aurowired
+
+	protected Textbox txtb_Karyawan_Ktp; // aurowired
+	protected Button button_KaryawanList_SearchKtp; // aurowired
+
 
 	// Button controller for the CRUD buttons
 	private final String btnCtroller_ClassPrefix = "button_KaryawanMain_";
@@ -189,7 +194,14 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
 			// refresh the Binding mechanism
 			getKaryawanDetailCtrl().setKaryawan(getSelectedKaryawan());
 			getKaryawanDetailCtrl().getBinder().loadAll();
-			
+			if(getSelectedKaryawan().getStatusDivisi()!=null){
+				if(getSelectedKaryawan().getStatusDivisi().equals(getKaryawanDetailCtrl().radioStatusPusat.getLabel())){
+					getKaryawanDetailCtrl().radioStatusPusat.setSelected(true);
+				}
+				if(getSelectedKaryawan().getStatusDivisi().equals(getKaryawanDetailCtrl().radioStatusDaerah.getLabel())){
+					getKaryawanDetailCtrl().radioStatusDaerah.setSelected(true);
+				}
+			}
 			return;
 		}
 
@@ -243,11 +255,11 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
 		// if not empty
 		if (!txtb_Karyawan_Name.getValue().isEmpty()) {
 			checkbox_KaryawanList_ShowAll.setChecked(false); // unCheck
-	
+			txtb_Karyawan_Ktp.setValue("");
 			// ++ create the searchObject and init sorting ++//
 			HibernateSearchObject<Karyawan> soKaryawan = new HibernateSearchObject<Karyawan>(Karyawan.class, getKaryawanListCtrl().getCountRows());
-			soKaryawan.addFilter(new Filter("namaKaryawan", "%" + txtb_Karyawan_Name.getValue() + "%", Filter.OP_ILIKE));
-			soKaryawan.addSort("namaKaryawan", false);
+			soKaryawan.addFilter(new Filter("namaKtp", "%" + txtb_Karyawan_Name.getValue() + "%", Filter.OP_ILIKE));
+			soKaryawan.addSort("namaKtp", false);
 
 			// Change the BindingListModel.
 			if (getKaryawanListCtrl().getBinder() != null) {
@@ -267,7 +279,38 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
 		}
 	}
 
-	
+	/**
+	 * Filter the karyawan list with 'like karyawan ktp'. <br>
+	 */
+	public void onClick$button_KaryawanList_SearchKtp(Event event) throws Exception {
+		// logger.debug(event.toString());
+		
+		// if not empty
+		if (!txtb_Karyawan_Ktp.getValue().isEmpty()) {
+			checkbox_KaryawanList_ShowAll.setChecked(false); // unCheck
+			txtb_Karyawan_Name.setValue("");
+			// ++ create the searchObject and init sorting ++//
+			HibernateSearchObject<Karyawan> soKaryawan = new HibernateSearchObject<Karyawan>(Karyawan.class, getKaryawanListCtrl().getCountRows());
+			soKaryawan.addFilter(new Filter("ktp", "%" + txtb_Karyawan_Ktp.getValue() + "%", Filter.OP_ILIKE));
+			soKaryawan.addSort("ktp", false);
+
+			// Change the BindingListModel.
+			if (getKaryawanListCtrl().getBinder() != null) {
+				getKaryawanListCtrl().getPagedBindingListWrapper().setSearchObject(soKaryawan);
+
+				// get the current Tab for later checking if we must change it
+				Tab currentTab = tabbox_KaryawanMain.getSelectedTab();
+
+				// check if the tab is one of the Detail tabs. If so do not
+				// change the selection of it
+				if (!currentTab.equals(tabKaryawanList)) {
+					tabKaryawanList.setSelected(true);
+				} else {
+					currentTab.setSelected(true);
+				}
+			}
+		}
+	}
 	/**
 	 * When the "help" button is clicked.
 	 * 
@@ -532,8 +575,28 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
 		// logger.debug(event.toString());
 		// save all components data in the several tabs to the bean
 		getKaryawanDetailCtrl().getBinder().saveAll();
-
+		
+		boolean duplicateKtp = false;
+		Karyawan karyawanCheckKtp = null;
+		karyawanCheckKtp = getKaryawanService().getKaryawanByKtp(getKaryawanDetailCtrl().getKaryawan().getKtp());
+		
+		
+		if(karyawanCheckKtp!=null){
+			if(karyawanCheckKtp.getId()!=getKaryawanDetailCtrl().getKaryawan().getId()){
+				ZksampleMessageUtils.showErrorMessage("No KTP sudah digunakan oleh karyawan bernama panggilan : " +karyawanCheckKtp.getNamaPanggilan());
+				return;
+			}
+		}		
+		
 		try {
+			
+			if(getKaryawanDetailCtrl().radioStatusPusat.isSelected()){
+				getKaryawanDetailCtrl().getKaryawan().setStatusDivisi(getKaryawanDetailCtrl().radioStatusPusat.getLabel());
+			}
+			if(getKaryawanDetailCtrl().radioStatusDaerah.isSelected()){
+				getKaryawanDetailCtrl().getKaryawan().setStatusDivisi(getKaryawanDetailCtrl().radioStatusDaerah.getLabel());
+			}
+			
 			/* if a job type is selected get the object from the listbox */
 			Listitem item = getKaryawanDetailCtrl().lbox_JobType.getSelectedItem();
 
@@ -628,6 +691,14 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
 		getKaryawanDetailCtrl().lbox_SupervisorDivisi.setSelectedIndex(-1);
 		getKaryawanDetailCtrl().lbox_SupervisorDivisi.setVisible(false);
 		getKaryawanDetailCtrl().label_SupervisorDivisi.setVisible(false);
+		
+		getKaryawanDetailCtrl().txtb_InisialDivisi.setVisible(false);
+		getKaryawanDetailCtrl().label_InisialDivisi.setVisible(false);
+		
+		getKaryawanDetailCtrl().radiogroup_Status.setVisible(false);
+		getKaryawanDetailCtrl().label_StatusDivisi.setVisible(false);
+		
+		
 		// set the ButtonStatus to New-Mode
 		btnCtrlKaryawan.setInitNew();
 

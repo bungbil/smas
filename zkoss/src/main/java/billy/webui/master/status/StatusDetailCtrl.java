@@ -33,13 +33,7 @@ public class StatusDetailCtrl extends GFCBaseCtrl implements Serializable {
 
 	protected Borderlayout borderlayout_StatusDetail; // autowired
 
-	protected Textbox txtb_KodeStatus; // autowired
 	protected Textbox txtb_DeskripsiStatus; // autowired	
-	protected Radiogroup radiogroup_StatusType; // autowired
-	protected Radio radioStatusTypeBatal;
-	protected Radio radioStatusTypeLunas;
-	protected Radio radioStatusTypeTarikBarang;
-	protected Radio radioStatusTypeKosong;
 	// Databinding
 	protected transient AnnotateDataBinder binder;
 	private StatusMainCtrl statusMainCtrl;
@@ -117,12 +111,7 @@ public class StatusDetailCtrl extends GFCBaseCtrl implements Serializable {
 	}
 
 	public void doReadOnlyMode(boolean b) {
-		txtb_KodeStatus.setReadonly(b);
 		txtb_DeskripsiStatus.setReadonly(b);		
-		radioStatusTypeBatal.setDisabled(b);
-		radioStatusTypeLunas.setDisabled(b);
-		radioStatusTypeTarikBarang.setDisabled(b);
-		radioStatusTypeKosong.setDisabled(b);
 		
 	}
 

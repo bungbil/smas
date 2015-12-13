@@ -18,8 +18,14 @@
 		<property name="kodeKaryawan" type="string">
 			<column name="kode_karyawan" length="50" not-null="true" unique="true" />
 		</property>
-		<property name="namaKaryawan" type="string">
-			<column name="nama_karyawan" length="100" />
+		<property name="namaPanggilan" type="string">
+			<column name="nama_panggilan" length="100" />
+		</property>
+		<property name="namaKtp" type="string">
+			<column name="nama_ktp" length="100" />
+		</property>
+		<property name="ktp" type="string">
+			<column name="ktp" length="100" />
 		</property>		
 		<property name="tanggalLahir" type="date">
 			<column name="tanggal_lahir"/>
@@ -41,7 +47,12 @@
 			fetch="select" lazy="false">
 			<column name="job_type_id" not-null="true" />
 		</many-to-one>
-		
+		<property name="inisialDivisi" type="string">
+			<column name="inisial_divisi" length="20" />
+		</property>	
+		<property name="statusDivisi" type="string">
+			<column name="status_divisi" length="20" />
+		</property>	
 		<many-to-one name="supervisorDivisi" class="billy.backend.model.Karyawan"
 			fetch="select" lazy="false">
 			<column name="atasan_id" />

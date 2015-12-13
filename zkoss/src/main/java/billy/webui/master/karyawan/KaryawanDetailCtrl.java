@@ -29,7 +29,7 @@ import billy.backend.model.JobType;
 import billy.backend.model.Karyawan;
 import billy.backend.service.JobTypeService;
 import billy.backend.service.KaryawanService;
-import billy.webui.master.bonustransport.model.JobTypeListModelItemRenderer;
+import billy.webui.master.jobtype.model.JobTypeListModelItemRenderer;
 import billy.webui.master.karyawan.model.KaryawanListModelItemRenderer;
 import de.forsthaus.webui.util.GFCBaseCtrl;
 
@@ -43,7 +43,9 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 	protected Borderlayout borderlayout_KaryawanDetail; // autowired
 
 	protected Textbox txtb_KodeKaryawan; // autowired
-	protected Textbox txtb_NamaKaryawan; // autowired
+	protected Textbox txtb_NamaPanggilan; // autowired
+	protected Textbox txtb_NamaKtp; // autowired
+	protected Textbox txtb_Ktp; // autowired	
 	protected Datebox txtb_TanggalLahir; // autowired	
 	protected Textbox txtb_Telepon; // autowired
 	protected Textbox txtb_Handphone; // autowired
@@ -52,6 +54,12 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 	protected Listbox lbox_JobType; // autowired
 	protected Listbox lbox_SupervisorDivisi; // autowired
 	protected Label label_SupervisorDivisi;
+	protected Label label_InisialDivisi;
+	protected Textbox txtb_InisialDivisi; // autowired
+	protected Label label_StatusDivisi;
+	protected Radiogroup radiogroup_Status; // autowired
+	protected Radio radioStatusPusat;
+	protected Radio radioStatusDaerah;
 	// Databinding
 	protected transient AnnotateDataBinder binder;
 	private KaryawanMainCtrl karyawanMainCtrl;
@@ -132,7 +140,9 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 
 	public void doReadOnlyMode(boolean b) {
 		txtb_KodeKaryawan.setReadonly(b);
-		txtb_NamaKaryawan.setReadonly(b);
+		txtb_NamaPanggilan.setReadonly(b);
+		txtb_NamaKtp.setReadonly(b);
+		txtb_Ktp.setReadonly(b);
 		txtb_TanggalLahir.setDisabled(b);
 		txtb_Telepon.setReadonly(b);
 		txtb_Handphone.setReadonly(b);
@@ -140,10 +150,13 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 		txtb_Alamat.setReadonly(b);
 		lbox_JobType.setDisabled(b);
 		lbox_SupervisorDivisi.setDisabled(b);
+		txtb_InisialDivisi.setReadonly(b);
+		radioStatusPusat.setDisabled(b);
+		radioStatusDaerah.setDisabled(b);
 		
 	}
 	public void onSelect$lbox_JobType(Event event) throws InterruptedException {
-		logger.info("masuk onchange jobtype");
+		
 		/* if a job type is selected get the object from the listbox */
 		Listitem item = lbox_JobType.getSelectedItem();
 
@@ -160,30 +173,46 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 			(7,'Staf',1);*/
 			long supervisorDivisiId = 0;
 			boolean showSupervisorDivisi = false;
+			boolean showDivisiData = false;
 			if(jobType.getId() == 1 ){
 				showSupervisorDivisi = false;
+				showDivisiData=false;
 				supervisorDivisiId = 0;
 			}else if(jobType.getId() == 6){
 				showSupervisorDivisi = false;
+				showDivisiData=false;
 				supervisorDivisiId = 0;
 			}else if(jobType.getId() == 2){
 				supervisorDivisiId = 1;
-				showSupervisorDivisi = true;
+				showSupervisorDivisi = true;				
+				showDivisiData=true;
 			}else if(jobType.getId() == 7){
 				supervisorDivisiId = 1;
 				showSupervisorDivisi = true;
+				showDivisiData=false;
 			}else{
 				supervisorDivisiId = 2;
 				showSupervisorDivisi = true;
+				showDivisiData=false;
 			}
 			label_SupervisorDivisi.setVisible(showSupervisorDivisi);
 			lbox_SupervisorDivisi.setVisible(showSupervisorDivisi);
+			
+			label_InisialDivisi.setVisible(showDivisiData);
+			txtb_InisialDivisi.setVisible(showDivisiData);
+			label_StatusDivisi.setVisible(showDivisiData);
+			radiogroup_Status.setVisible(showDivisiData);
+			
 			
 			if(supervisorDivisiId > 0){
 				lbox_SupervisorDivisi.setModel(new ListModelList(getKaryawanService().getKaryawansByJobTypeId(supervisorDivisiId)));						
 				lbox_SupervisorDivisi.setItemRenderer(new KaryawanListModelItemRenderer());				
 			}else{
 				getKaryawan().setSupervisorDivisi(null);
+				getKaryawan().setStatusDivisi(null);
+				getKaryawan().setInisialDivisi(null);
+				radioStatusPusat.setChecked(false);
+				radioStatusDaerah.setChecked(false);
 			}
 		}
 	}
@@ -226,6 +255,10 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 			}
 			label_SupervisorDivisi.setVisible(showSupervisorDivisi);
 			lbox_SupervisorDivisi.setVisible(showSupervisorDivisi);
+			label_InisialDivisi.setVisible(showSupervisorDivisi);
+			txtb_InisialDivisi.setVisible(showSupervisorDivisi);
+			label_StatusDivisi.setVisible(showSupervisorDivisi);
+			radiogroup_Status.setVisible(showSupervisorDivisi);
 			
 			if(supervisorDivisiId > 0){
 				lbox_SupervisorDivisi.setModel(new ListModelList(getKaryawanService().getKaryawansByJobTypeId(supervisorDivisiId)));						

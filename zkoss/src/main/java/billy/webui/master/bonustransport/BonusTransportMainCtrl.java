@@ -40,7 +40,7 @@ import billy.backend.model.BonusTransport;
 import billy.backend.model.JobType;
 import billy.backend.service.BonusTransportService;
 import billy.backend.service.JobTypeService;
-import billy.webui.master.bonustransport.model.JobTypeListModelItemRenderer;
+import billy.webui.master.jobtype.model.JobTypeListModelItemRenderer;
 import de.forsthaus.backend.model.Language;
 import de.forsthaus.backend.util.HibernateSearchObject;
 import de.forsthaus.backend.util.ZksampleBeanUtils;
@@ -625,6 +625,9 @@ public class BonusTransportMainCtrl extends GFCBaseCtrl implements Serializable 
 		
 		// set listbox
 		getBonusTransportDetailCtrl().lbox_JobType.setSelectedIndex(-1);
+		
+		getBonusTransportDetailCtrl().pusatCheckbox.setChecked(true);
+		getBonusTransportDetailCtrl().daerahCheckbox.setChecked(true);
 		
 		// set the ButtonStatus to New-Mode
 		btnCtrlBonusTransport.setInitNew();

@@ -441,18 +441,6 @@
 		<property name="jobTypeService" ref="jobTypeService" />
 	</bean>
 	
-	<!-- HargaBarang -->
-	<bean id="hargaBarangMainCtrl" class="billy.webui.master.hargabarang.HargaBarangMainCtrl" parent="basisCtrl" scope="prototype">
-		<property name="hargaBarangService" ref="hargaBarangService" />
-		<property name="hargaBarangListCtrl" ref="hargaBarangListCtrl" />
-		<property name="hargaBarangDetailCtrl" ref="hargaBarangDetailCtrl" />
-	</bean>
-	<bean id="hargaBarangListCtrl" class="billy.webui.master.hargabarang.HargaBarangListCtrl" parent="basisCtrl" scope="prototype">
-		<property name="hargaBarangService" ref="hargaBarangService" />
-	</bean>
-	<bean id="hargaBarangDetailCtrl" class="billy.webui.master.hargabarang.HargaBarangDetailCtrl" parent="basisCtrl" scope="prototype">
-		<property name="hargaBarangService" ref="hargaBarangService" />
-	</bean>
 	
 	
 	<!-- Barang -->

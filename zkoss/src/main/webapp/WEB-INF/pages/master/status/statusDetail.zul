@@ -39,47 +39,16 @@
 												<rows>
 													<row>
 														<hbox>
-															<label value="${c:l('label_StatusDialog_kodeStatus.value')}" />
+															<label value="${c:l('label_StatusDialog_deskripsiStatus.value')}" />
 															<label value="*" style="color:red;font-size:10px" />
 														</hbox>
-														<textbox id="txtb_KodeStatus" value="@{controller.status.kodeStatus}"
+														<textbox id="txtb_DeskripsiStatus" value="@{controller.status.deskripsiStatus}"
 															readonly="true" constraint="no empty" maxlength="50" width="300px" />
 													</row>
 													<row>
 														<separator bar="true"></separator>
 														<separator bar="true"></separator>
-													</row>
-													<row>
-														<hbox>
-															<label
-																value="${c:l('label_StatusDialog_deskripsiStatus.value')}" />
-															<label value="*" style="color:red;font-size:10px" />
-														</hbox>
-														<textbox id="txtb_DeskripsiStatus"
-															value="@{controller.status.deskripsiStatus}" readonly="true" constraint="no empty" maxlength="254"
-															hflex="1" />
 													</row>													
-													<row>
-														<label value="${c:l('label_StatusDialog_statusType.value')}" />
-														<radiogroup id="radiogroup_StatusType" >
-															<grid>
-														        <rows>													            
-														            <row>
-														                 <radio id="radioStatusTypeBatal" label="Batal" radiogroup="radiogroup_StatusType" disabled="true"/>												               			 												               			
-														            </row>
-														            <row>
-														           		 <radio id="radioStatusTypeLunas" label="Lunas" radiogroup="radiogroup_StatusType" disabled="true"/>
-														            </row>								
-														            <row>
-														           		 <radio id="radioStatusTypeTarikBarang" label="Tarik Barang" radiogroup="radiogroup_StatusType" disabled="true"/>
-														            </row>
-														            <row>
-														           		 <radio id="radioStatusTypeKosong" label="Kosong" radiogroup="radiogroup_StatusType" disabled="true"/>
-														            </row>														            					           
-														        </rows>
-														    </grid>
-											      		</radiogroup>											      		
-													</row>
 												</rows>
 											</grid>
 										</groupbox>

@@ -36,10 +36,8 @@ public class StatusListCtrl extends GFCBaseListCtrl<Status> implements Serializa
 
 	protected Borderlayout borderLayout_statusList; // autowired
 	protected Paging paging_StatusList; // autowired
-	protected Listbox listBoxStatus; // autowired
-	protected Listheader listheader_StatusList_Kode; // autowired
+	protected Listbox listBoxStatus; // autowired	
 	protected Listheader listheader_StatusList_Deskripsi; // autowired
-	protected Listheader listheader_StatusList_StatusType; // autowired
 	protected Listheader listheader_StatusList_LastUpdate;
 	protected Listheader listheader_StatusList_UpdatedBy;
 
@@ -110,14 +108,9 @@ public class StatusListCtrl extends GFCBaseListCtrl<Status> implements Serializa
 
 		// not used listheaders must be declared like ->
 		// lh.setSortAscending(""); lh.setSortDescending("")
-		listheader_StatusList_Kode.setSortAscending(new FieldComparator("kodeStatus", true));
-		listheader_StatusList_Kode.setSortDescending(new FieldComparator("kodeStatus", false));
 		
 		listheader_StatusList_Deskripsi.setSortAscending(new FieldComparator("deskripsiStatus", true));
 		listheader_StatusList_Deskripsi.setSortDescending(new FieldComparator("deskripsiStatus", false));
-		
-		listheader_StatusList_StatusType.setSortAscending(new FieldComparator("statusType", true));
-		listheader_StatusList_StatusType.setSortDescending(new FieldComparator("statusType", false));
 		
 		listheader_StatusList_LastUpdate.setSortAscending(new FieldComparator("lastUpdate", true));
 		listheader_StatusList_LastUpdate.setSortDescending(new FieldComparator("lastUpdate", false));
@@ -129,7 +122,7 @@ public class StatusListCtrl extends GFCBaseListCtrl<Status> implements Serializa
 		// ++ create the searchObject and init sorting ++//
 		// ++ create the searchObject and init sorting ++//
 		searchObj = new HibernateSearchObject<Status>(Status.class, getCountRows());
-		searchObj.addSort("kodeStatus", false);
+		searchObj.addSort("deskripsiStatus", false);
 		setSearchObj(searchObj);
 
 		// Set the BindingListModel
@@ -216,7 +209,7 @@ public class StatusListCtrl extends GFCBaseListCtrl<Status> implements Serializa
 		getStatusMainCtrl().doStoreInitValues();
 
 		// show the objects data in the statusBar
-		String str = Labels.getLabel("common.Status") + ": " + anStatus.getKodeStatus();
+		String str = Labels.getLabel("common.Status") + ": " + anStatus.getDeskripsiStatus();
 		EventQueues.lookup("selectedObjectEventQueue", EventQueues.DESKTOP, true).publish(new Event("onChangeSelectedObject", null, str));
 
 	}

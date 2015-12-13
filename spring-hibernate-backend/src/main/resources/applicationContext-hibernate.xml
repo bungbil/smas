@@ -68,7 +68,7 @@
 				<value>billy/backend/model/JobType.hbm.xml</value>
 				<value>billy/backend/model/BonusTransport.hbm.xml</value>				
 				<value>billy/backend/model/Karyawan.hbm.xml</value>
-				<!-- <value>billy/backend/model/HargaBarang.hbm.xml</value>
+				<!--
 				<value>billy/backend/model/Barang.hbm.xml</value>
 				 -->
 			</list>
@@ -285,7 +285,7 @@
 	<bean id="satuanBarangDAO" class="billy.backend.dao.impl.SatuanBarangDAOImpl" parent="billyBasisDAO" />
 	<bean id="statusDAO" class="billy.backend.dao.impl.StatusDAOImpl" parent="billyBasisDAO" />
 	<bean id="kategoriBarangDAO" class="billy.backend.dao.impl.KategoriBarangDAOImpl" parent="billyBasisDAO" />
-	<bean id="hargaBarangDAO" class="billy.backend.dao.impl.HargaBarangDAOImpl" parent="billyBasisDAO" />
+	
 	<bean id="barangDAO" class="billy.backend.dao.impl.BarangDAOImpl" parent="billyBasisDAO" />
 	<bean id="jobTypeDAO" class="billy.backend.dao.impl.JobTypeDAOImpl" parent="billyBasisDAO" />
 	<bean id="bonusTransportDAO" class="billy.backend.dao.impl.BonusTransportDAOImpl" parent="billyBasisDAO" />
@@ -310,9 +310,7 @@
 	<bean name="kategoriBarangService" class="billy.backend.service.impl.KategoriBarangServiceImpl">
 		<property name="kategoriBarangDAO" ref="kategoriBarangDAO" />
 	</bean>
-	<bean name="hargaBarangService" class="billy.backend.service.impl.HargaBarangServiceImpl">
-		<property name="hargaBarangDAO" ref="hargaBarangDAO" />
-	</bean>
+	
 	<bean name="barangService" class="billy.backend.service.impl.BarangServiceImpl">
 		<property name="barangDAO" ref="barangDAO" />
 	</bean>
