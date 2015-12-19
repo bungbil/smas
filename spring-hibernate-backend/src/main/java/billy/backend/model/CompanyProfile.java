@@ -109,8 +109,8 @@ public class CompanyProfile implements java.io.Serializable, Entity {
 		return Long.valueOf(getId()).hashCode();
 	}
 
-	public boolean equals(CompanyProfile Parameter) {
-		return getId() == Parameter.getId();
+	public boolean equals(CompanyProfile companyProfile) {
+		return getId() == companyProfile.getId();
 	}
 
 	@Override
@@ -120,8 +120,8 @@ public class CompanyProfile implements java.io.Serializable, Entity {
 		}
 
 		if (obj instanceof CompanyProfile) {
-			CompanyProfile Parameter = (CompanyProfile) obj;
-			return equals(Parameter);
+			CompanyProfile companyProfile = (CompanyProfile) obj;
+			return equals(companyProfile);
 		}
 
 		return false;

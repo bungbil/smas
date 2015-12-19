@@ -404,6 +404,8 @@ public class CompanyProfileMainCtrl extends GFCBaseCtrl implements Serializable 
 		tabCompanyProfileList.setVisible(workspace.isAllowed("windowCompanyProfileList"));
 		tabCompanyProfileDetail.setVisible(workspace.isAllowed("windowCompanyProfileDetail"));
 		btnEdit.setVisible(workspace.isAllowed("button_CompanyProfileMain_btnEdit"));
+		btnNew.setVisible(workspace.isAllowed("button_CompanyProfileMain_btnNew"));
+		btnDelete.setVisible(workspace.isAllowed("button_CompanyProfileMain_btnDelete"));
 		btnSave.setVisible(workspace.isAllowed("button_CompanyProfileMain_btnSave"));		
 		btnCancel.setVisible(workspace.isAllowed("button_CompanyProfileMain_btnCancel"));
 		btnFirst.setVisible(workspace.isAllowed("button_CompanyProfileMain_btnFirst"));

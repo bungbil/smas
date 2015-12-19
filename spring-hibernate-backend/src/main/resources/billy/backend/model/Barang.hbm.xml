@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+	<class name="billy.backend.model.Barang" table="Barang">
+
+		<id name="id" type="long">
+			<column name="barang_id" />
+			<generator class="sequence">
+				<param name="sequence">barang_seq</param>
+			</generator>
+		</id>
+
+		<version name="version" column="VERSION" type="integer" />
+
+		<property name="kodeBarang" type="string">
+			<column name="kode_barang" length="50" not-null="true" unique="true" />
+		</property>
+		<property name="namaBarang" type="string">
+			<column name="nama_barang" length="254" />
+		</property>
+		<many-to-one name="wilayah" class="billy.backend.model.Wilayah"
+			fetch="select" lazy="false">
+			<column name="wilayah_id" not-null="true" />
+		</many-to-one>
+		<property name="divisiOr" type="big_decimal">
+			<column name="divisi_or" precision="12" />
+		</property>
+		<property name="divisiOpr" type="big_decimal">
+			<column name="divisi_opr" precision="12" />
+		</property>
+		<set name="hargaBarang" fetch="select" inverse="true">
+			<key>
+				<column name="harga_barang_id" not-null="true" />
+			</key>
+			<one-to-many class="billy.backend.model.HargaBarang" />
+		</set>				
+		<property name="lastUpdate" type="timestamp">
+			<column name="last_update" length="29" />
+		</property>	
+		<property name="updatedBy" type="string">
+			<column name="updated_by" length="50" />
+		</property>	
+		
+	</class>
+</hibernate-mapping>

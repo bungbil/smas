@@ -98,8 +98,8 @@ public class Wilayah implements java.io.Serializable, Entity {
 		return Long.valueOf(getId()).hashCode();
 	}
 
-	public boolean equals(Wilayah Parameter) {
-		return getId() == Parameter.getId();
+	public boolean equals(Wilayah wilayah) {
+		return getId() == wilayah.getId();
 	}
 
 	@Override
@@ -109,8 +109,8 @@ public class Wilayah implements java.io.Serializable, Entity {
 		}
 
 		if (obj instanceof Wilayah) {
-			Wilayah Parameter = (Wilayah) obj;
-			return equals(Parameter);
+			Wilayah wilayah = (Wilayah) obj;
+			return equals(wilayah);
 		}
 
 		return false;

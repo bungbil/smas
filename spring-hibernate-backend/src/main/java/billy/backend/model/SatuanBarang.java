@@ -117,8 +117,8 @@ public class SatuanBarang implements java.io.Serializable, Entity {
 		return Long.valueOf(getId()).hashCode();
 	}
 
-	public boolean equals(SatuanBarang Parameter) {
-		return getId() == Parameter.getId();
+	public boolean equals(SatuanBarang satuanBarang) {
+		return getId() == satuanBarang.getId();
 	}
 
 	@Override
@@ -128,8 +128,8 @@ public class SatuanBarang implements java.io.Serializable, Entity {
 		}
 
 		if (obj instanceof SatuanBarang) {
-			SatuanBarang Parameter = (SatuanBarang) obj;
-			return equals(Parameter);
+			SatuanBarang satuanBarang = (SatuanBarang) obj;
+			return equals(satuanBarang);
 		}
 
 		return false;

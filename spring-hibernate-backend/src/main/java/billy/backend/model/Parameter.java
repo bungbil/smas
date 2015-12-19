@@ -99,8 +99,8 @@ public class Parameter implements java.io.Serializable, Entity {
 		return Long.valueOf(getId()).hashCode();
 	}
 
-	public boolean equals(Parameter Parameter) {
-		return getId() == Parameter.getId();
+	public boolean equals(Parameter parameter) {
+		return getId() == parameter.getId();
 	}
 
 	@Override
@@ -110,8 +110,8 @@ public class Parameter implements java.io.Serializable, Entity {
 		}
 
 		if (obj instanceof Parameter) {
-			Parameter Parameter = (Parameter) obj;
-			return equals(Parameter);
+			Parameter parameter = (Parameter) obj;
+			return equals(parameter);
 		}
 
 		return false;

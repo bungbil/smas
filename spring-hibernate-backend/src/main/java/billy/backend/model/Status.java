@@ -73,8 +73,8 @@ public class Status implements java.io.Serializable, Entity {
 		return Long.valueOf(getId()).hashCode();
 	}
 
-	public boolean equals(Status Parameter) {
-		return getId() == Parameter.getId();
+	public boolean equals(Status status) {
+		return getId() == status.getId();
 	}
 
 	@Override
@@ -84,8 +84,8 @@ public class Status implements java.io.Serializable, Entity {
 		}
 
 		if (obj instanceof Status) {
-			Status Parameter = (Status) obj;
-			return equals(Parameter);
+			Status status = (Status) obj;
+			return equals(status);
 		}
 
 		return false;

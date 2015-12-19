@@ -778,6 +778,8 @@ public class KategoriBarangMainCtrl extends GFCBaseCtrl implements Serializable 
 		tabKategoriBarangList.setVisible(workspace.isAllowed("windowKategoriBarangList"));
 		tabKategoriBarangDetail.setVisible(workspace.isAllowed("windowKategoriBarangDetail"));
 		btnEdit.setVisible(workspace.isAllowed("button_KategoriBarangMain_btnEdit"));
+		btnNew.setVisible(workspace.isAllowed("button_KategoriBarangMain_btnNew"));
+		btnDelete.setVisible(workspace.isAllowed("button_KategoriBarangMain_btnDelete"));
 		btnSave.setVisible(workspace.isAllowed("button_KategoriBarangMain_btnSave"));		
 		btnCancel.setVisible(workspace.isAllowed("button_KategoriBarangMain_btnCancel"));
 		btnFirst.setVisible(workspace.isAllowed("button_KategoriBarangMain_btnFirst"));

@@ -87,8 +87,8 @@ public class KategoriBarang implements java.io.Serializable, Entity {
 		return Long.valueOf(getId()).hashCode();
 	}
 
-	public boolean equals(KategoriBarang Parameter) {
-		return getId() == Parameter.getId();
+	public boolean equals(KategoriBarang kategoriBarang) {
+		return getId() == kategoriBarang.getId();
 	}
 
 	@Override
@@ -98,8 +98,8 @@ public class KategoriBarang implements java.io.Serializable, Entity {
 		}
 
 		if (obj instanceof KategoriBarang) {
-			KategoriBarang Parameter = (KategoriBarang) obj;
-			return equals(Parameter);
+			KategoriBarang kategoriBarang = (KategoriBarang) obj;
+			return equals(kategoriBarang);
 		}
 
 		return false;

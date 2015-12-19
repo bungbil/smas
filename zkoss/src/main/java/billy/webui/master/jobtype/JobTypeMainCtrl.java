@@ -778,6 +778,8 @@ public class JobTypeMainCtrl extends GFCBaseCtrl implements Serializable {
 		tabJobTypeList.setVisible(workspace.isAllowed("windowJobTypeList"));
 		tabJobTypeDetail.setVisible(workspace.isAllowed("windowJobTypeDetail"));
 		btnEdit.setVisible(workspace.isAllowed("button_JobTypeMain_btnEdit"));
+		btnNew.setVisible(workspace.isAllowed("button_JobTypeMain_btnNew"));
+		btnDelete.setVisible(workspace.isAllowed("button_JobTypeMain_btnDelete"));
 		btnSave.setVisible(workspace.isAllowed("button_JobTypeMain_btnSave"));		
 		btnCancel.setVisible(workspace.isAllowed("button_JobTypeMain_btnCancel"));
 		btnFirst.setVisible(workspace.isAllowed("button_JobTypeMain_btnFirst"));

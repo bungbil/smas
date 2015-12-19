@@ -777,6 +777,8 @@ public class StatusMainCtrl extends GFCBaseCtrl implements Serializable {
 		tabStatusList.setVisible(workspace.isAllowed("windowStatusList"));
 		tabStatusDetail.setVisible(workspace.isAllowed("windowStatusDetail"));
 		btnEdit.setVisible(workspace.isAllowed("button_StatusMain_btnEdit"));
+		btnNew.setVisible(workspace.isAllowed("button_StatusMain_btnNew"));
+		btnDelete.setVisible(workspace.isAllowed("button_StatusMain_btnDelete"));
 		btnSave.setVisible(workspace.isAllowed("button_StatusMain_btnSave"));		
 		btnCancel.setVisible(workspace.isAllowed("button_StatusMain_btnCancel"));
 		btnFirst.setVisible(workspace.isAllowed("button_StatusMain_btnFirst"));

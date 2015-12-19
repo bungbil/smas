@@ -8,7 +8,7 @@
 	xmlns:w="http://www.zkoss.org/2005/zk/client"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
-	<window id="windowArticleMain" apply="${articleMainCtrl}"
+	<window id="windowBarangMain" apply="${barangMainCtrl}"
 		border="none" width="100%">
 
 		<div sclass="z-toolbar" style="padding:0">
@@ -17,10 +17,7 @@
 
 				<!-- COMMON BUTTONS -->
 				<toolbar align="start"
-					style="float:left; border-style: none;">
-					<toolbarbutton id="btnHelp"
-						image="/images/icons/light_16x16.gif"
-						tooltiptext="${c:l('btnHelp.tooltiptext')}" />
+					style="float:left; border-style: none;">					
 					<toolbarbutton id="btnRefresh"
 						image="/images/icons/refresh2_yellow_16x16.gif"
 						tooltiptext="${c:l('btnRefresh.tooltiptext')}" />
@@ -31,39 +28,23 @@
 					style="float:left; border-style: none;">
 					<hbox align="center" style="padding: 2px">
 						<space />
-						<checkbox id="checkbox_ArticleList_ShowAll"
+						<checkbox id="checkbox_BarangList_ShowAll"
 							checked="true"
-							label="${c:l('checkbox_ArticleList_ShowAll.label')}" />
+							label="${c:l('common.showAll')}" />
 						<space />
 
-						<label
-							value="${c:l('label_ArticleList_ArticleID.value')}"
+						<label value="${c:l('label_BarangList_Name')}"
 							style="padding-right: 3px" />
-						<textbox id="tb_Article_ArticleID"
-							width="120px" />
-						<button id="button_ArticleList_SearchArticleID"
+						<textbox id="txtb_Barang_Name" width="100px" />
+						<button id="button_BarangList_SearchName"
 							sclass="oT_ButtonWithIcon" image="/images/icons/search.gif"
-							tooltiptext="${c:l('button_ArticleList_SearchArticleID.tooltiptext')}" />
-						<space width="20px" />
-
-						<label
-							value="${c:l('label_ArticleList_Name.value')}"
-							style="padding-right: 3px" />
-						<textbox id="tb_Article_Name" width="120px" />
-						<button id="button_ArticleList_SearchName"
-							sclass="oT_ButtonWithIcon" image="/images/icons/search.gif"
-							tooltiptext="${c:l('button_ArticleList_SearchName.tooltiptext')}" />
-						<space width="20px" />
-
+							tooltiptext="${c:l('button_BarangList_SearchName.tooltiptext')}" />												
 					</hbox>
 				</toolbar>
-
+				
 				<!-- CRUD BUTTONS -->
 				<toolbar align="end"
-					style="float:right; border-style: none;">
-					<button id="btnPrint" sclass="oT_ButtonWithIcon"
-						tooltiptext="${c:l('btnPrint.tooltiptext')}" />
-					<separator bar="true" orient="vertical" />
+					style="float:right; border-style: none;">					
 					<button id="btnFirst" sclass="oT_ButtonWithIcon"
 						tooltiptext="${c:l('btnFirst.tooltiptext')}" />
 					<button id="btnPrevious" sclass="oT_ButtonWithIcon"
@@ -87,22 +68,22 @@
 			</hbox>
 		</div>
 
-		<!-- Tabbox Container -->
-		<tabbox id="tabbox_ArticleMain">
+
+		<tabbox id="tabbox_BarangMain">
 			<tabs>
-				<tab id="tabArticleList" label="${c:l('common.List')}"
+				<tab id="tabBarangList" label="${c:l('common.List')}"
 					image="/images/icons/properties.gif" />
-				<tab id="tabArticleDetail"
+				<tab id="tabBarangDetail"
 					label="${c:l('common.Details')}" image="/images/icons/table.gif" />
 			</tabs>
 
 			<tabpanels>
 				<!-- TabPanel LIST / LISTE -->
-				<tabpanel id="tabPanelArticleList" height="100%"
+				<tabpanel id="tabPanelBarangList" height="100%"
 					style="border: none; padding: 0px; " />
 
 				<!-- TabPanel DETAILS / DETAILS -->
-				<tabpanel id="tabPanelArticleDetail" height="100%"
+				<tabpanel id="tabPanelBarangDetail" height="100%"
 					style="border: none; padding: 0px; " />
 			</tabpanels>
 		</tabbox>

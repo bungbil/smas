@@ -454,6 +454,7 @@
 	</bean>
 	<bean id="barangDetailCtrl" class="billy.webui.master.barang.BarangDetailCtrl" parent="basisCtrl" scope="prototype">
 		<property name="barangService" ref="barangService" />
+		<property name="wilayahService" ref="wilayahService" />
 	</bean>
 	
 </beans>

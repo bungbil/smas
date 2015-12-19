@@ -187,8 +187,8 @@ public class Karyawan implements java.io.Serializable, Entity {
 		return Long.valueOf(getId()).hashCode();
 	}
 
-	public boolean equals(Karyawan Parameter) {
-		return getId() == Parameter.getId();
+	public boolean equals(Karyawan karyawan) {
+		return getId() == karyawan.getId();
 	}
 
 	@Override
@@ -198,8 +198,8 @@ public class Karyawan implements java.io.Serializable, Entity {
 		}
 
 		if (obj instanceof Karyawan) {
-			Karyawan Parameter = (Karyawan) obj;
-			return equals(Parameter);
+			Karyawan karyawan = (Karyawan) obj;
+			return equals(karyawan);
 		}
 
 		return false;

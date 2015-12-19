@@ -795,6 +795,8 @@ public class WilayahMainCtrl extends GFCBaseCtrl implements Serializable {
 		tabWilayahList.setVisible(workspace.isAllowed("windowWilayahList"));
 		tabWilayahDetail.setVisible(workspace.isAllowed("windowWilayahDetail"));
 		btnEdit.setVisible(workspace.isAllowed("button_WilayahMain_btnEdit"));
+		btnNew.setVisible(workspace.isAllowed("button_WilayahMain_btnNew"));
+		btnDelete.setVisible(workspace.isAllowed("button_WilayahMain_btnDelete"));
 		btnSave.setVisible(workspace.isAllowed("button_WilayahMain_btnSave"));		
 		btnCancel.setVisible(workspace.isAllowed("button_WilayahMain_btnCancel"));
 		btnFirst.setVisible(workspace.isAllowed("button_WilayahMain_btnFirst"));

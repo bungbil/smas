@@ -788,6 +788,8 @@ public class ParameterMainCtrl extends GFCBaseCtrl implements Serializable {
 		tabParameterList.setVisible(workspace.isAllowed("windowParameterList"));
 		tabParameterDetail.setVisible(workspace.isAllowed("windowParameterDetail"));
 		btnEdit.setVisible(workspace.isAllowed("button_ParameterMain_btnEdit"));
+		btnNew.setVisible(workspace.isAllowed("button_ParameterMain_btnNew"));
+		btnDelete.setVisible(workspace.isAllowed("button_ParameterMain_btnDelete"));
 		btnSave.setVisible(workspace.isAllowed("button_ParameterMain_btnSave"));		
 		btnCancel.setVisible(workspace.isAllowed("button_ParameterMain_btnCancel"));
 		btnFirst.setVisible(workspace.isAllowed("button_ParameterMain_btnFirst"));

@@ -578,3 +578,82 @@ alter table sec_user
       references karyawan (karyawan_id)
       on delete restrict on update restrict;
 	
+
+	
+
+/*==============================================================*/
+/* Table: Barang                                              */
+/*==============================================================*/
+DROP TABLE IF EXISTS barang cascade;
+DROP SEQUENCE IF EXISTS barang_seq;
+
+CREATE TABLE barang (
+   barang_id          	INT8                 not null,   
+   kode_barang       	varchar(50)          not null,   
+   nama_barang       	varchar(254)         not null,
+   wilayah_id			INT8                 null,
+   divisi_opr 			numeric(12,2)		 null,
+   divisi_or 			numeric(12,2)		 null,   
+   last_update       	timestamp,          
+   updated_by       	varchar(50)          null,
+   version              int4                 not null default 0,
+   constraint pk_barang primary key (barang_id)
+)
+without oids;
+ALTER TABLE barang owner to smas;
+
+CREATE SEQUENCE barang_seq START 100;
+ALTER SEQUENCE barang_seq OWNER TO smas;
+
+CREATE UNIQUE INDEX ix_barang_id on barang using btree (
+barang_id
+);
+
+CREATE UNIQUE INDEX ix_kode_barang on barang (
+kode_barang
+);
+
+alter table barang
+   add constraint ref_barang_to_wilayah foreign key (wilayah_id)
+      references wilayah (wilayah_id)
+      on delete restrict on update restrict;	
+	
+	
+
+/*==============================================================*/
+/* Table: Harga Barang                                              */
+/*==============================================================*/
+DROP TABLE IF EXISTS harga_barang_kredit cascade;
+DROP SEQUENCE IF EXISTS harga_barang_kredit_seq;
+
+CREATE TABLE harga_barang (
+   harga_barang_id 		INT8                 not null,   
+   barang_id          	INT8                 not null,   
+   interval_kredit		INT4                 not null,
+   harga_barang			numeric(12,2)		 null,
+   cicilan_per_bulan	numeric(12,2)		 null,
+   komisi_sales			numeric(12,2)		 null,
+   tabungan_sales		numeric(12,2)		 null,   
+   last_update       	timestamp,          
+   updated_by       	varchar(50)          null,
+   version              int4                 not null default 0,
+   constraint pk_harga_barang primary key (harga_barang_id)
+)
+without oids;
+ALTER TABLE harga_barang owner to smas;
+
+CREATE SEQUENCE harga_barang_seq START 100;
+ALTER SEQUENCE harga_barang_seq OWNER TO smas;
+
+CREATE UNIQUE INDEX ix_harga_barang_id on harga_barang using btree (
+harga_barang_id
+);
+
+CREATE UNIQUE INDEX ix_kode_harga_barang on harga_barang (
+harga_barang,interval_kredit
+);
+
+alter table harga_barang
+   add constraint ref_barang_to_harga_barang foreign key (barang_id)
+      references barang (barang_id)
+      on delete cascade on update cascade;

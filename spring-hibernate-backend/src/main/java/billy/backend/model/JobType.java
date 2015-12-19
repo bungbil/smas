@@ -72,8 +72,8 @@ public class JobType implements java.io.Serializable, Entity {
 		return Long.valueOf(getId()).hashCode();
 	}
 
-	public boolean equals(JobType Parameter) {
-		return getId() == Parameter.getId();
+	public boolean equals(JobType jobType) {
+		return getId() == jobType.getId();
 	}
 
 	@Override
@@ -83,8 +83,8 @@ public class JobType implements java.io.Serializable, Entity {
 		}
 
 		if (obj instanceof JobType) {
-			JobType Parameter = (JobType) obj;
-			return equals(Parameter);
+			JobType jobType = (JobType) obj;
+			return equals(jobType);
 		}
 
 		return false;

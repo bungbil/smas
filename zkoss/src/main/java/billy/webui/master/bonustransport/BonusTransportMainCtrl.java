@@ -803,6 +803,8 @@ public class BonusTransportMainCtrl extends GFCBaseCtrl implements Serializable 
 		tabBonusTransportList.setVisible(workspace.isAllowed("windowBonusTransportList"));
 		tabBonusTransportDetail.setVisible(workspace.isAllowed("windowBonusTransportDetail"));
 		btnEdit.setVisible(workspace.isAllowed("button_BonusTransportMain_btnEdit"));
+		btnNew.setVisible(workspace.isAllowed("button_BonusTransportMain_btnNew"));
+		btnDelete.setVisible(workspace.isAllowed("button_BonusTransportMain_btnDelete"));
 		btnSave.setVisible(workspace.isAllowed("button_BonusTransportMain_btnSave"));		
 		btnCancel.setVisible(workspace.isAllowed("button_BonusTransportMain_btnCancel"));
 		btnFirst.setVisible(workspace.isAllowed("button_BonusTransportMain_btnFirst"));

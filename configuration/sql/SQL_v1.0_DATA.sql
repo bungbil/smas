@@ -544,3 +544,43 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 (185, 1, 185, 0),
 (186, 1, 186, 0),
 (187, 1, 187, 0);
+
+
+
+/* Barang */
+/* --> Page Barang */
+INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
+(188, 2, 'menuItem_Master_Barang', 0),
+(189, 0, 'windowBarangList', 0),
+(190, 0, 'windowBarangDetail', 0),
+/* window_BarangList Buttons*/
+(191, 6, 'button_BarangList_SearchName', 0),
+/* window_BarangDialog BUTTONS */
+(192, 6, 'button_BarangMain_btnNew', 0),
+(193, 6, 'button_BarangMain_btnEdit', 0),
+(194, 6, 'button_BarangMain_btnDelete', 0),
+(195, 6, 'button_BarangMain_btnSave', 0),
+(196, 6, 'button_BarangMain_btnClose', 0),
+/* Barang navigation buttons */
+(197, 6, 'button_BarangMain_btnCancel', 0),
+(198, 6, 'button_BarangMain_btnFirst', 0),
+(199, 6, 'button_BarangMain_btnPrevious', 0),
+(200, 6, 'button_BarangMain_btnNext', 0),
+(201, 6, 'button_BarangMain_btnLast', 0);
+
+
+INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
+(188, 1, 188, 0),
+(189, 1, 189, 0),
+(190, 1, 190, 0),
+(191, 1, 191, 0),
+(192, 1, 192, 0),
+(193, 1, 193, 0),
+(194, 1, 194, 0),
+(195, 1, 195, 0),
+(196, 1, 196, 0),
+(197, 1, 197, 0),
+(198, 1, 198, 0),
+(199, 1, 199, 0),
+(200, 1, 200, 0),
+(201, 1, 201, 0);
