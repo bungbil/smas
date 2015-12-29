@@ -349,6 +349,7 @@ kode_wilayah
 /*==============================================================*/
 /* Table: Satuan Barang                                         */
 /*==============================================================*/
+/*
 DROP TABLE IF EXISTS satuan_barang cascade;
 DROP SEQUENCE IF EXISTS satuan_barang_seq;
 
@@ -376,7 +377,7 @@ satuan_barang_id
 CREATE UNIQUE INDEX ix_kode_satuan_barang on satuan_barang (
 kode_satuan_barang
 );
-
+*/
 
 /*==============================================================*/
 /* Table: Status                                                */
@@ -410,6 +411,7 @@ deskripsi_status
 /*==============================================================*/
 /* Table: Kategori Barang                                       */
 /*==============================================================*/
+/*
 DROP TABLE IF EXISTS kartegori_barang cascade;
 DROP SEQUENCE IF EXISTS kategori_barang_seq;
 
@@ -434,7 +436,7 @@ kategori_barang_id
 CREATE UNIQUE INDEX ix_kode_kategori_barang on kategori_barang (
 kode_kategori_barang
 );
-
+*/
 
 
 /*==============================================================*/
@@ -565,9 +567,9 @@ alter table karyawan
       references karyawan (karyawan_id)
       on delete restrict on update restrict;
 
-=================
-Alter SEC_USER
-=================
+/*=================*/
+/* Alter SEC_USER  */
+/*=================*/
 alter table sec_user
 	add column karyawan_id 			INT8 				null,
 	add column last_update       	timestamp,          
@@ -594,6 +596,46 @@ CREATE TABLE barang (
    wilayah_id			INT8                 null,
    divisi_opr 			numeric(12,2)		 null,
    divisi_or 			numeric(12,2)		 null,   
+   harga_barang_1x			numeric(12,2)		 null,
+   cicilan_per_bulan_1x		numeric(12,2)		 null,
+   komisi_sales_1x			numeric(12,2)		 null,
+   tabungan_sales_1x		numeric(12,2)		 null, 
+   harga_barang_2x			numeric(12,2)		 null,
+   cicilan_per_bulan_2x		numeric(12,2)		 null,
+   komisi_sales_2x			numeric(12,2)		 null,
+   tabungan_sales_2x		numeric(12,2)		 null, 
+   harga_barang_3x			numeric(12,2)		 null,
+   cicilan_per_bulan_3x		numeric(12,2)		 null,
+   komisi_sales_3x			numeric(12,2)		 null,
+   tabungan_sales_3x		numeric(12,2)		 null, 
+   harga_barang_4x			numeric(12,2)		 null,
+   cicilan_per_bulan_4x		numeric(12,2)		 null,
+   komisi_sales_4x			numeric(12,2)		 null,
+   tabungan_sales_4x		numeric(12,2)		 null, 
+   harga_barang_5x			numeric(12,2)		 null,
+   cicilan_per_bulan_5x		numeric(12,2)		 null,
+   komisi_sales_5x			numeric(12,2)		 null,
+   tabungan_sales_5x		numeric(12,2)		 null, 
+   harga_barang_6x			numeric(12,2)		 null,
+   cicilan_per_bulan_6x		numeric(12,2)		 null,
+   komisi_sales_6x			numeric(12,2)		 null,
+   tabungan_sales_6x		numeric(12,2)		 null, 
+   harga_barang_7x			numeric(12,2)		 null,
+   cicilan_per_bulan_7x		numeric(12,2)		 null,
+   komisi_sales_7x			numeric(12,2)		 null,
+   tabungan_sales_7x		numeric(12,2)		 null, 
+   harga_barang_8x			numeric(12,2)		 null,
+   cicilan_per_bulan_8x		numeric(12,2)		 null,
+   komisi_sales_8x			numeric(12,2)		 null,
+   tabungan_sales_8x		numeric(12,2)		 null, 
+   harga_barang_9x			numeric(12,2)		 null,
+   cicilan_per_bulan_9x		numeric(12,2)		 null,
+   komisi_sales_9x			numeric(12,2)		 null,
+   tabungan_sales_9x		numeric(12,2)		 null, 
+   harga_barang_10x			numeric(12,2)		 null,
+   cicilan_per_bulan_10x	numeric(12,2)		 null,
+   komisi_sales_10x			numeric(12,2)		 null,
+   tabungan_sales_10x		numeric(12,2)		 null, 
    last_update       	timestamp,          
    updated_by       	varchar(50)          null,
    version              int4                 not null default 0,
@@ -618,42 +660,3 @@ alter table barang
       references wilayah (wilayah_id)
       on delete restrict on update restrict;	
 	
-	
-
-/*==============================================================*/
-/* Table: Harga Barang                                              */
-/*==============================================================*/
-DROP TABLE IF EXISTS harga_barang_kredit cascade;
-DROP SEQUENCE IF EXISTS harga_barang_kredit_seq;
-
-CREATE TABLE harga_barang (
-   harga_barang_id 		INT8                 not null,   
-   barang_id          	INT8                 not null,   
-   interval_kredit		INT4                 not null,
-   harga_barang			numeric(12,2)		 null,
-   cicilan_per_bulan	numeric(12,2)		 null,
-   komisi_sales			numeric(12,2)		 null,
-   tabungan_sales		numeric(12,2)		 null,   
-   last_update       	timestamp,          
-   updated_by       	varchar(50)          null,
-   version              int4                 not null default 0,
-   constraint pk_harga_barang primary key (harga_barang_id)
-)
-without oids;
-ALTER TABLE harga_barang owner to smas;
-
-CREATE SEQUENCE harga_barang_seq START 100;
-ALTER SEQUENCE harga_barang_seq OWNER TO smas;
-
-CREATE UNIQUE INDEX ix_harga_barang_id on harga_barang using btree (
-harga_barang_id
-);
-
-CREATE UNIQUE INDEX ix_kode_harga_barang on harga_barang (
-harga_barang,interval_kredit
-);
-
-alter table harga_barang
-   add constraint ref_barang_to_harga_barang foreign key (barang_id)
-      references barang (barang_id)
-      on delete cascade on update cascade;

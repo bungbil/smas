@@ -93,6 +93,100 @@
 													
 												</rows>
 											</grid>
+											
+											<grid sclass="GridLayoutNoBorder" fixedLayout="true"
+												style="border:0px; padding-left:5px; padding-right:5px;">
+									            <columns>
+									                <column label="Interval Cicilan"  width="150px" />
+									                <column label="Harga Barang" />
+									                <column label="Cicilan Per Bulan" />
+									                <column label="Komisi Sales"  />
+									                <column label="Tabungan Sales" />
+									            </columns>
+									            <rows>
+										            <row>
+														<separator bar="true"></separator>
+														<separator bar="true"></separator>
+														<separator bar="true"></separator>
+														<separator bar="true"></separator>
+														<separator bar="true"></separator>
+													</row>
+									                <row>
+									                    <label value="1"/>
+									                    <decimalbox id="txtb_HargaBarang1x" value="@{controller.barang.hargaBarang1x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_CicilanPerBulan1x" value="@{controller.barang.cicilanPerBulan1x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_KomisiSales1x" value="@{controller.barang.komisiSales1x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_TabunganSales1x" value="@{controller.barang.tabunganSales1x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />									                    											                        
+									                </row>
+									                <row>
+									                    <label value="2"/>
+									                    <decimalbox id="txtb_HargaBarang2x" value="@{controller.barang.hargaBarang2x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_CicilanPerBulan2x" value="@{controller.barang.cicilanPerBulan2x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_KomisiSales2x" value="@{controller.barang.komisiSales2x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_TabunganSales2x" value="@{controller.barang.tabunganSales2x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />									                    											                        
+									                </row>
+									                <row>
+									                    <label value="3"/>
+									                    <decimalbox id="txtb_HargaBarang3x" value="@{controller.barang.hargaBarang3x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_CicilanPerBulan3x" value="@{controller.barang.cicilanPerBulan3x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_KomisiSales3x" value="@{controller.barang.komisiSales3x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_TabunganSales3x" value="@{controller.barang.tabunganSales3x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />									                    											                        
+									                </row>
+									                <row>
+									                    <label value="4"/>
+									                    <decimalbox id="txtb_HargaBarang4x" value="@{controller.barang.hargaBarang4x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_CicilanPerBulan4x" value="@{controller.barang.cicilanPerBulan4x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_KomisiSales4x" value="@{controller.barang.komisiSales4x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_TabunganSales4x" value="@{controller.barang.tabunganSales4x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />									                    											                        
+									                </row>
+									                <row>
+									                    <label value="5"/>
+									                    <decimalbox id="txtb_HargaBarang5x" value="@{controller.barang.hargaBarang5x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_CicilanPerBulan5x" value="@{controller.barang.cicilanPerBulan5x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_KomisiSales5x" value="@{controller.barang.komisiSales5x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_TabunganSales5x" value="@{controller.barang.tabunganSales5x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />									                    											                        
+									                </row>
+									                <row>
+									                    <label value="6"/>
+									                    <decimalbox id="txtb_HargaBarang6x" value="@{controller.barang.hargaBarang6x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_CicilanPerBulan6x" value="@{controller.barang.cicilanPerBulan6x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_KomisiSales6x" value="@{controller.barang.komisiSales6x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_TabunganSales6x" value="@{controller.barang.tabunganSales6x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />									                    											                        
+									                </row>
+									                <row>
+									                    <label value="7"/>
+									                    <decimalbox id="txtb_HargaBarang7x" value="@{controller.barang.hargaBarang7x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_CicilanPerBulan7x" value="@{controller.barang.cicilanPerBulan7x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_KomisiSales7x" value="@{controller.barang.komisiSales7x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_TabunganSales7x" value="@{controller.barang.tabunganSales7x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />									                    											                        
+									                </row>
+									                <row>
+									                    <label value="8"/>
+									                    <decimalbox id="txtb_HargaBarang8x" value="@{controller.barang.hargaBarang8x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_CicilanPerBulan8x" value="@{controller.barang.cicilanPerBulan8x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_KomisiSales8x" value="@{controller.barang.komisiSales8x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_TabunganSales8x" value="@{controller.barang.tabunganSales8x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />									                    											                        
+									                </row>
+									                <row>
+									                    <label value="9"/>
+									                    <decimalbox id="txtb_HargaBarang9x" value="@{controller.barang.hargaBarang9x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_CicilanPerBulan9x" value="@{controller.barang.cicilanPerBulan9x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_KomisiSales9x" value="@{controller.barang.komisiSales9x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_TabunganSales9x" value="@{controller.barang.tabunganSales9x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />									                    											                        
+									                </row>
+									                <row>
+									                    <label value="10"/>
+									                    <decimalbox id="txtb_HargaBarang10x" value="@{controller.barang.hargaBarang10x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_CicilanPerBulan10x" value="@{controller.barang.cicilanPerBulan10x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_KomisiSales10x" value="@{controller.barang.komisiSales10x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                    <decimalbox id="txtb_TabunganSales10x" value="@{controller.barang.tabunganSales10x}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />									                    											                        
+									                </row>
+									                
+												</rows>
+											</grid>
+											
+											
+											
 										</groupbox>
 									</panelchildren>
 								</panel>

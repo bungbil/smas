@@ -31,12 +31,138 @@
 		<property name="divisiOpr" type="big_decimal">
 			<column name="divisi_opr" precision="12" />
 		</property>
-		<set name="hargaBarang" fetch="select" inverse="true">
-			<key>
-				<column name="harga_barang_id" not-null="true" />
-			</key>
-			<one-to-many class="billy.backend.model.HargaBarang" />
-		</set>				
+		
+		<property name="hargaBarang1x" type="big_decimal">
+			<column name="harga_barang_1x" precision="12" />
+		</property>
+		<property name="cicilanPerBulan1x" type="big_decimal">
+			<column name="cicilan_per_bulan_1x" precision="12" />
+		</property>
+		<property name="komisiSales1x" type="big_decimal">
+			<column name="komisi_sales_1x" precision="12" />
+		</property>
+		<property name="tabunganSales1x" type="big_decimal">
+			<column name="tabungan_sales_1x" precision="12" />
+		</property>
+		
+		<property name="hargaBarang2x" type="big_decimal">
+			<column name="harga_barang_2x" precision="12" />
+		</property>
+		<property name="cicilanPerBulan2x" type="big_decimal">
+			<column name="cicilan_per_bulan_2x" precision="12" />
+		</property>
+		<property name="komisiSales2x" type="big_decimal">
+			<column name="komisi_sales_2x" precision="12" />
+		</property>
+		<property name="tabunganSales2x" type="big_decimal">
+			<column name="tabungan_sales_2x" precision="12" />
+		</property>
+		
+		<property name="hargaBarang3x" type="big_decimal">
+			<column name="harga_barang_3x" precision="12" />
+		</property>
+		<property name="cicilanPerBulan3x" type="big_decimal">
+			<column name="cicilan_per_bulan_3x" precision="12" />
+		</property>
+		<property name="komisiSales3x" type="big_decimal">
+			<column name="komisi_sales_3x" precision="12" />
+		</property>
+		<property name="tabunganSales3x" type="big_decimal">
+			<column name="tabungan_sales_3x" precision="12" />
+		</property>
+		
+		<property name="hargaBarang4x" type="big_decimal">
+			<column name="harga_barang_4x" precision="12" />
+		</property>
+		<property name="cicilanPerBulan4x" type="big_decimal">
+			<column name="cicilan_per_bulan_4x" precision="12" />
+		</property>
+		<property name="komisiSales4x" type="big_decimal">
+			<column name="komisi_sales_4x" precision="12" />
+		</property>
+		<property name="tabunganSales4x" type="big_decimal">
+			<column name="tabungan_sales_4x" precision="12" />
+		</property>
+		
+		<property name="hargaBarang5x" type="big_decimal">
+			<column name="harga_barang_5x" precision="12" />
+		</property>
+		<property name="cicilanPerBulan5x" type="big_decimal">
+			<column name="cicilan_per_bulan_5x" precision="12" />
+		</property>
+		<property name="komisiSales5x" type="big_decimal">
+			<column name="komisi_sales_5x" precision="12" />
+		</property>
+		<property name="tabunganSales5x" type="big_decimal">
+			<column name="tabungan_sales_5x" precision="12" />
+		</property>
+		
+		<property name="hargaBarang6x" type="big_decimal">
+			<column name="harga_barang_6x" precision="12" />
+		</property>
+		<property name="cicilanPerBulan6x" type="big_decimal">
+			<column name="cicilan_per_bulan_6x" precision="12" />
+		</property>
+		<property name="komisiSales6x" type="big_decimal">
+			<column name="komisi_sales_6x" precision="12" />
+		</property>
+		<property name="tabunganSales6x" type="big_decimal">
+			<column name="tabungan_sales_6x" precision="12" />
+		</property>
+		
+		<property name="hargaBarang7x" type="big_decimal">
+			<column name="harga_barang_7x" precision="12" />
+		</property>
+		<property name="cicilanPerBulan7x" type="big_decimal">
+			<column name="cicilan_per_bulan_7x" precision="12" />
+		</property>
+		<property name="komisiSales7x" type="big_decimal">
+			<column name="komisi_sales_7x" precision="12" />
+		</property>
+		<property name="tabunganSales7x" type="big_decimal">
+			<column name="tabungan_sales_7x" precision="12" />
+		</property>
+		
+		<property name="hargaBarang8x" type="big_decimal">
+			<column name="harga_barang_8x" precision="12" />
+		</property>
+		<property name="cicilanPerBulan8x" type="big_decimal">
+			<column name="cicilan_per_bulan_8x" precision="12" />
+		</property>
+		<property name="komisiSales8x" type="big_decimal">
+			<column name="komisi_sales_8x" precision="12" />
+		</property>
+		<property name="tabunganSales8x" type="big_decimal">
+			<column name="tabungan_sales_8x" precision="12" />
+		</property>
+		
+		<property name="hargaBarang9x" type="big_decimal">
+			<column name="harga_barang_9x" precision="12" />
+		</property>
+		<property name="cicilanPerBulan9x" type="big_decimal">
+			<column name="cicilan_per_bulan_9x" precision="12" />
+		</property>
+		<property name="komisiSales9x" type="big_decimal">
+			<column name="komisi_sales_9x" precision="12" />
+		</property>
+		<property name="tabunganSales9x" type="big_decimal">
+			<column name="tabungan_sales_9x" precision="12" />
+		</property>
+		
+		<property name="hargaBarang10x" type="big_decimal">
+			<column name="harga_barang_10x" precision="12" />
+		</property>
+		<property name="cicilanPerBulan10x" type="big_decimal">
+			<column name="cicilan_per_bulan_10x" precision="12" />
+		</property>
+		<property name="komisiSales10x" type="big_decimal">
+			<column name="komisi_sales_10x" precision="12" />
+		</property>
+		<property name="tabunganSales10x" type="big_decimal">
+			<column name="tabungan_sales_10x" precision="12" />
+		</property>
+		
+					
 		<property name="lastUpdate" type="timestamp">
 			<column name="last_update" length="29" />
 		</property>	

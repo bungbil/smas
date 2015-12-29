@@ -169,8 +169,8 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 (23, 1, 23, 0),
 (25, 1, 25, 0),
 (27, 1, 27, 0),
-(28, 1, 27, 0),
-(29, 1, 27, 0),
+(28, 1, 28, 0),
+(29, 1, 29, 0),
 (30, 1, 30, 0),
 (31, 1, 31, 0),
 (32, 1, 32, 0),
@@ -294,19 +294,19 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 
 
 /* SATUAN_BARANG */
-/* --> Page SatuanBarang */
+/* --> Page SatuanBarang 
 INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
 (99, 0, 'windowSatuanBarangList', 0),
-(100, 0, 'windowSatuanBarangDetail', 0),
-/* window_SatuanBarangList Buttons*/
-(101, 6, 'button_SatuanBarangList_SearchName', 0),
-/* window_SatuanBarangDialog BUTTONS */
+(100, 0, 'windowSatuanBarangDetail', 0),*/
+/* window_SatuanBarangList Buttons
+(101, 6, 'button_SatuanBarangList_SearchName', 0),*/
+/* window_SatuanBarangDialog BUTTONS 
 (102, 6, 'button_SatuanBarangMain_btnNew', 0),
 (103, 6, 'button_SatuanBarangMain_btnEdit', 0),
 (104, 6, 'button_SatuanBarangMain_btnDelete', 0),
 (105, 6, 'button_SatuanBarangMain_btnSave', 0),
-(106, 6, 'button_SatuanBarangMain_btnClose', 0),
-/* SatuanBarang navigation buttons */
+(106, 6, 'button_SatuanBarangMain_btnClose', 0),*/
+/* SatuanBarang navigation buttons 
 (107, 6, 'button_SatuanBarangMain_btnCancel', 0),
 (108, 6, 'button_SatuanBarangMain_btnFirst', 0),
 (109, 6, 'button_SatuanBarangMain_btnPrevious', 0),
@@ -326,23 +326,23 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 (108, 1, 108, 0),
 (109, 1, 109, 0),
 (110, 1, 110, 0),
-(111, 1, 111, 0);
+(111, 1, 111, 0);*/
 
 INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
 (112, 1, 'menuCat_Utility', 0),
 (113, 2, 'menuItem_Utility_CompanyProfile', 0),
 (114, 2, 'menuItem_Utility_Parameter', 0),
 (115, 1, 'menuCat_Master', 0),
-(116, 2, 'menuItem_Master_Wilayah', 0),
-(117, 2, 'menuItem_Master_SatuanBarang', 0);
+(116, 2, 'menuItem_Master_Wilayah', 0);
+/*(117, 2, 'menuItem_Master_SatuanBarang', 0);*/
 
 INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
 (112, 1, 112, 0),
 (113, 1, 113, 0),
 (114, 1, 114, 0),
 (115, 1, 115, 0),
-(116, 1, 116, 0),
-(117, 1, 117, 0);
+(116, 1, 116, 0);
+/*(117, 1, 117, 0);*/
 
 
 
@@ -384,19 +384,19 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 
 
 /* KATEGORI BARANG */
-/* --> Page KategoriBarang */
+/* --> Page KategoriBarang 
 INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
 (131, 0, 'windowKategoriBarangList', 0),
-(132, 0, 'windowKategoriBarangDetail', 0),
+(132, 0, 'windowKategoriBarangDetail', 0),*/
 /* window_KategoriBarangList Buttons*/
 (133, 6, 'button_KategoriBarangList_SearchName', 0),
-/* window_KategoriBarangDialog BUTTONS */
+/* window_KategoriBarangDialog BUTTONS 
 (134, 6, 'button_KategoriBarangMain_btnNew', 0),
 (135, 6, 'button_KategoriBarangMain_btnEdit', 0),
 (136, 6, 'button_KategoriBarangMain_btnDelete', 0),
 (137, 6, 'button_KategoriBarangMain_btnSave', 0),
-(138, 6, 'button_KategoriBarangMain_btnClose', 0),
-/* KategoriBarang navigation buttons */
+(138, 6, 'button_KategoriBarangMain_btnClose', 0),*/
+/* KategoriBarang navigation buttons 
 (139, 6, 'button_KategoriBarangMain_btnCancel', 0),
 (140, 6, 'button_KategoriBarangMain_btnFirst', 0),
 (141, 6, 'button_KategoriBarangMain_btnPrevious', 0),
@@ -416,7 +416,7 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 (140, 1, 140, 0),
 (141, 1, 141, 0),
 (142, 1, 142, 0),
-(143, 1, 143, 0);
+(143, 1, 143, 0);*/
 
 
 
@@ -495,13 +495,13 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 
 INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
 (170, 2, 'menuItem_Master_Status', 0),
-(171, 2, 'menuItem_Master_KategoriBarang', 0),
+/*(171, 2, 'menuItem_Master_KategoriBarang', 0),*/
 (172, 2, 'menuItem_Master_JobType', 0),
 (173, 2, 'menuItem_Master_BonusTransport', 0);
 
 INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
 (170, 1, 170, 0),
-(171, 1, 171, 0),
+/*(171, 1, 171, 0),*/
 (172, 1, 172, 0),
 (173, 1, 173, 0);
 
