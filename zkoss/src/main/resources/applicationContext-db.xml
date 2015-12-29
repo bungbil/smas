@@ -100,7 +100,7 @@
 	<!-- ====================================================== -->
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location" value="classpath:jdbc.properties" />
+		<property name="location" value="file:///${SMAS_CONF_DIR}jdbc.properties" />
 	</bean>
 
 </beans>
