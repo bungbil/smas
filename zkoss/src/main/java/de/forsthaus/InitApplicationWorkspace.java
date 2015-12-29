@@ -19,7 +19,7 @@ public class InitApplicationWorkspace implements ServletContextListener {
 		// init the ApplicationWorkspace
 		String s = sce.getServletContext().getRealPath("/");
 		ApplicationWorkspace.getInstance().setApplicationRealPath(s);
-		System.out.println("###### ==> InitApplicationWorkspace -> RealPath=" + s);
+		//System.out.println("###### ==> InitApplicationWorkspace -> RealPath=" + s);
 
 		// scheduler period
 		//int period = new Integer(1);

@@ -108,7 +108,7 @@
 		<!-- <menuItem id="menu_Item_JobType" zulNavigation="/WEB-INF/pages/master/jobtype/jobTypeMain.zul"
 			iconName="/images/icons/index_16x16.gif" rightName="menuItem_Master_JobType"  /> -->			
 	</menu>
-	<!-- Transaction MenuTree -->
+	<!-- Transaction MenuTree 
 	<menu id="menu_Category_Transaction" >
 		<menuItem id="menu_Item_Penjualan" zulNavigation="/WEB-INF/pages/transaction/penjualan/penjualanList.zul"
 			iconName="/images/icons/view.gif" />
@@ -124,8 +124,8 @@
 			iconName="/images/icons/view.gif" />
 		<menuItem id="menu_Item_TabunganSales" zulNavigation="/WEB-INF/pages/transaction/tabungansales/tabungansalesList.zul"
 			iconName="/images/icons/view.gif" />
-	</menu>
-	<!-- Report MenuTree -->
+	</menu>-->
+	<!-- Report MenuTree
 	<menu id="menu_Category_Report" >
 		<menuItem id="menu_Item_ReportSummaryPenjualan" zulNavigation="/WEB-INF/pages/report/summarypenjualan/summaryPenjualanFilterPage.zul"
 			iconName="/images/icons/view.gif" />
@@ -151,8 +151,8 @@
 			iconName="/images/icons/view.gif" />
 		<menuItem id="menu_Item_ReportM3" zulNavigation="/WEB-INF/pages/report/m3/M3FilterPage.zul"
 			iconName="/images/icons/view.gif" />
-	</menu>
-	<!-- Report MenuTree -->
+	</menu> -->
+	<!-- Utility MenuTree -->
 	<menu id="menu_Category_Utility" rightName="menuCat_Utility">
 		<menuItem id="menu_Item_CompanyProfile" zulNavigation="/WEB-INF/pages/utility/companyprofile/companyProfileMain.zul"
 			iconName="/images/icons/index_16x16.gif" rightName="menuItem_Utility_CompanyProfile"/>

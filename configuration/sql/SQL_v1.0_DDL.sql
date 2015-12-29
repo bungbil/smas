@@ -79,6 +79,13 @@ rig_id
 /*==============================================================*/
 /* Table: sec_loginlog                                          */
 /*==============================================================*/
+
+DROP TABLE IF EXISTS sec_loginlog cascade;
+DROP SEQUENCE IF EXISTS sec_loginlog_seq;
+ 
+CREATE SEQUENCE sec_loginlog_seq START 100;
+ALTER SEQUENCE sec_loginlog_seq OWNER TO smas;
+
 create table sec_loginlog (
    lgl_id               INT8                 not null,
    i2c_id               INT8                 null,
@@ -107,6 +114,8 @@ create  index idx_lgl_i2c_id on sec_loginlog (
 i2c_id
 );
 
+
+      
 /*==============================================================*/
 /* Table: sec_right                                             */
 /*==============================================================*/
@@ -660,3 +669,278 @@ alter table barang
       references wilayah (wilayah_id)
       on delete restrict on update restrict;	
 	
+
+
+/*TAMBAHAN*/
+
+
+DROP TABLE IF EXISTS hibernate_statistics cascade;
+DROP SEQUENCE IF EXISTS hibernate_statistics_seq;
+
+CREATE SEQUENCE hibernate_statistics_seq START 100;
+ALTER SEQUENCE hibernate_statistics_seq OWNER TO smas;
+
+
+/*==============================================================*/
+/* Table: Hibernate_Statistics                                  */
+/*==============================================================*/
+CREATE TABLE hibernate_statistics
+(
+  id bigint NOT NULL,
+  flushcount integer NOT NULL,
+  preparestatementcount integer NOT NULL,
+  entityloadcount integer NOT NULL,
+  entityupdatecount integer NOT NULL,
+  entityinsertcount integer NOT NULL,
+  entitydeletecount integer NOT NULL,
+  entityfetchcount integer NOT NULL,
+  collectionloadcount integer NOT NULL,
+  collectionupdatecount integer NOT NULL,
+  collectionremovecount integer NOT NULL,
+  collectionrecreatecount integer NOT NULL,
+  collectionfetchcount integer NOT NULL,
+  queryexecutioncount integer NOT NULL,
+  queryexecutionmaxtime integer NOT NULL,
+  optimisticfailurecount integer NOT NULL,
+  queryexecutionmaxtimequerystring text,
+  callmethod text NOT NULL,
+  javafinishms bigint NOT NULL,
+  finishtime timestamp without time zone NOT NULL,
+  CONSTRAINT hibernatestatistics_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE hibernate_statistics OWNER TO smas;
+
+
+
+
+DROP TABLE IF EXISTS hibernate_entity_statistics cascade;
+DROP SEQUENCE IF EXISTS hibernate_entity_statistics_seq;
+
+
+CREATE SEQUENCE hibernate_entity_statistics_seq START 100;
+ALTER SEQUENCE hibernate_entity_statistics_seq OWNER TO smas;
+/*==============================================================*/
+/* Table: Hibernate_                                               */
+/*==============================================================*/
+CREATE TABLE hibernate_entity_statistics
+(
+  id bigint NOT NULL,
+  hibernateentitystatisticsid bigint NOT NULL,
+  entityname text NOT NULL,
+  loadcount integer NOT NULL,
+  updatecount integer NOT NULL,
+  insertcount integer NOT NULL,
+  deletecount integer NOT NULL,
+  fetchcount integer NOT NULL,
+  optimisticfailurecount integer NOT NULL,
+  CONSTRAINT hibernateentitystatistics_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE hibernate_entity_statistics OWNER TO smas;
+
+CREATE INDEX fki_
+  ON hibernate_entity_statistics
+  USING btree
+  (hibernateentitystatisticsid);
+  
+ 
+/*==============================================================*/
+/* Table: ipc_ip2country                                        */
+/*==============================================================*/
+DROP TABLE IF EXISTS ipc_ip2country cascade;
+DROP SEQUENCE IF EXISTS ipc_ip2country_seq;
+ 
+CREATE SEQUENCE ipc_ip2country_seq START 100;
+ALTER SEQUENCE ipc_ip2country_seq OWNER TO smas;
+
+create table ipc_ip2country (
+   ipc_id               INT8                 not null,
+   ipc_ip_from          INT8                 null,
+   ipc_ip_to            INT8                 null,
+   ipc_country_code2    VARCHAR(2)           null,
+   ipc_country_code3    VARCHAR(3)           null,
+   ipc_country_name     VARCHAR(50)          null,
+   version              INT4                 not null default 0,
+   constraint PK_IPC_IP2COUNTRY primary key (ipc_id)
+)
+without oids;
+
+-- set table ownership
+alter table ipc_ip2country owner to smas
+;
+/*==============================================================*/
+/* Index: idx_ipc_id                                            */
+/*==============================================================*/
+create unique index idx_ipc_id on ipc_ip2country (
+ipc_id
+);
+
+/*==============================================================*/
+/* Index: idx_ipc_ip_from                                       */
+/*==============================================================*/
+create  index idx_ipc_ip_from on ipc_ip2country (
+ipc_ip_from
+);
+
+/*==============================================================*/
+/* Index: idx_ipc_ip_to                                         */
+/*==============================================================*/
+create  index idx_ipc_ip_to on ipc_ip2country (
+ipc_ip_to
+);
+
+/*==============================================================*/
+/* Index: idx_ipc_country_code2                                 */
+/*==============================================================*/
+create  index idx_ipc_country_code2 on ipc_ip2country (
+ipc_country_code2
+);
+
+/*==============================================================*/
+/* Index: idx_ipc_country_code3                                 */
+/*==============================================================*/
+create  index idx_ipc_country_code3 on ipc_ip2country (
+ipc_country_code3
+);
+
+/*==============================================================*/
+/* Index: idx_ipc_country_name                                  */
+/*==============================================================*/
+create  index idx_ipc_country_name on ipc_ip2country (
+ipc_country_name
+);
+
+
+/*==============================================================*/
+/* Table: log_ip2country                                        */
+/*==============================================================*/
+DROP TABLE IF EXISTS log_ip2country cascade;
+DROP SEQUENCE IF EXISTS log_ip2country_seq;
+ 
+CREATE SEQUENCE log_ip2country_seq START 100;
+ALTER SEQUENCE log_ip2country_seq OWNER TO smas;
+
+create table log_ip2country (
+   i2c_id               INT8                 not null,
+   ccd_id               INT8                 null,
+   i2c_city             VARCHAR(50)          null,
+   i2c_latitude         FLOAT4               null,
+   i2c_longitude        FLOAT4               null,
+   version              INT4                 null default 0,
+   constraint PK_LOG_IP2COUNTRY primary key (i2c_id)
+)
+without oids;
+
+-- set table ownership
+alter table log_ip2country owner to smas
+;
+/*==============================================================*/
+/* Index: idx_i2c_id                                            */
+/*==============================================================*/
+create unique index idx_i2c_id on log_ip2country (
+i2c_id
+);
+
+/*==============================================================*/
+/* Index: idx_i2c_ccd_id                                        */
+/*==============================================================*/
+create  index idx_i2c_ccd_id on log_ip2country (
+ccd_id
+);
+
+      
+alter table sec_loginlog
+   add constraint ref_lgl_to_i2c foreign key (i2c_id)
+      references log_ip2country (i2c_id)
+      on delete cascade on update cascade;
+      
+
+/*==============================================================*/
+/* Table: sys_countrycode                                       */
+/*==============================================================*/
+
+DROP TABLE IF EXISTS sys_countrycode cascade;
+DROP SEQUENCE IF EXISTS sys_countrycode_seq;
+
+CREATE SEQUENCE sys_countrycode_seq START 300;
+ALTER SEQUENCE sys_countrycode_seq OWNER TO smas;
+
+create table sys_countrycode (
+   ccd_id               INT8                 not null,
+   ccd_name             VARCHAR(48)          null,
+   ccd_code2            VARCHAR(2)           not null,
+   version              INT4                 null default 0,
+   constraint PK_SYS_COUNTRYCODE primary key (ccd_id)
+)
+without oids;
+
+-- set table ownership
+alter table sys_countrycode owner to smas
+;
+/*==============================================================*/
+/* Index: idx_ccd_id                                            */
+/*==============================================================*/
+create unique index idx_ccd_id on sys_countrycode (
+ccd_id
+);
+
+/*==============================================================*/
+/* Index: idx_ccd_code2                                         */
+/*==============================================================*/
+create unique index idx_ccd_code2 on sys_countrycode (
+ccd_code2
+);
+
+/*==============================================================*/
+/* Table: sys_ip4country                                        */
+/*==============================================================*/
+
+DROP TABLE IF EXISTS sys_ip4country cascade;
+DROP SEQUENCE IF EXISTS sys_ip4country_seq;
+
+CREATE SEQUENCE sys_ip4country_seq START 100;
+ALTER SEQUENCE sys_ip4country_seq OWNER TO smas;
+
+create table sys_ip4country (
+   i4co_id              INT8                 not null,
+   i4co_ip              INT8                 null,
+   i4co_ccd_id          INT8                 null,
+   version              INT4                 null default 0,
+   constraint PK_SYS_IP4COUNTRY primary key (i4co_id)
+)
+without oids;
+
+-- set table ownership
+alter table sys_ip4country owner to smas
+;
+/*==============================================================*/
+/* Index: idx_i4co_id                                           */
+/*==============================================================*/
+create unique index idx_i4co_id on sys_ip4country (
+i4co_id
+);
+
+/*==============================================================*/
+/* Index: idx_i4co_ip                                           */
+/*==============================================================*/
+create  index idx_i4co_ip on sys_ip4country (
+i4co_ip
+);
+
+/*==============================================================*/
+/* Index: idx_i4co_ccd_id                                       */
+/*==============================================================*/
+create  index idx_i4co_ccd_id on sys_ip4country (
+i4co_ccd_id
+);
+      
+alter table log_ip2country
+   add constraint ref_i2c_to_ccd foreign key (ccd_id)
+      references sys_countrycode (ccd_id)
+      on delete restrict on update restrict;
+      

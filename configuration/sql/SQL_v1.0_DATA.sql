@@ -20,6 +20,11 @@ INSERT INTO JOB_TYPE (JOB_TYPE_ID,NAMA_JOB_TYPE,VERSION) values
 (6,'Kolektor',1),
 (7,'Staf',1);
 
+INSERT INTO STATUS (STATUS_ID,DESKRIPSI_STATUS,VERSION) values
+(1,'Lunas',1),
+(2,'Tarik Barang',1),
+(3,'Diskon',1);
+
 /******************** Security: USERS ********************/  
 INSERT INTO SEC_USER (USR_ID, USR_LOGINNAME, USR_PASSWORD, USR_LASTNAME, USR_FIRSTNAME, USR_EMAIL, USR_LOCALE, USR_ENABLED, USR_ACCOUNTNONEXPIRED, USR_CREDENTIALSNONEXPIRED, USR_ACCOUNTNONLOCKED, USR_TOKEN,  VERSION) values 
 (1, 'admin', 'admin', 'Admin', 'Super', 'admin@super.admin', NULL, true, true, true, true, null, 0);
@@ -421,19 +426,19 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 
 
 /* JOB TYPE */
-/* --> Page JobType */
+/* --> Page JobType 
 INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
 (144, 0, 'windowJobTypeList', 0),
-(145, 0, 'windowJobTypeDetail', 0),
+(145, 0, 'windowJobTypeDetail', 0),*/
 /* window_JobTypeList Buttons*/
 (146, 6, 'button_JobTypeList_SearchName', 0),
-/* window_JobTypeDialog BUTTONS */
+/* window_JobTypeDialog BUTTONS 
 (147, 6, 'button_JobTypeMain_btnNew', 0),
 (148, 6, 'button_JobTypeMain_btnEdit', 0),
 (149, 6, 'button_JobTypeMain_btnDelete', 0),
 (150, 6, 'button_JobTypeMain_btnSave', 0),
-(151, 6, 'button_JobTypeMain_btnClose', 0),
-/* JobType navigation buttons */
+(151, 6, 'button_JobTypeMain_btnClose', 0),*/
+/* JobType navigation buttons 
 (152, 6, 'button_JobTypeMain_btnCancel', 0),
 (153, 6, 'button_JobTypeMain_btnFirst', 0),
 (154, 6, 'button_JobTypeMain_btnPrevious', 0),
@@ -453,7 +458,7 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 (153, 1, 153, 0),
 (154, 1, 154, 0),
 (155, 1, 155, 0),
-(156, 1, 156, 0);
+(156, 1, 156, 0);*/
 
 
 /* Bonus Transport */
@@ -495,14 +500,14 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 
 INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
 (170, 2, 'menuItem_Master_Status', 0),
-/*(171, 2, 'menuItem_Master_KategoriBarang', 0),*/
-(172, 2, 'menuItem_Master_JobType', 0),
+/*(171, 2, 'menuItem_Master_KategoriBarang', 0),
+(172, 2, 'menuItem_Master_JobType', 0),*/
 (173, 2, 'menuItem_Master_BonusTransport', 0);
 
 INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
 (170, 1, 170, 0),
-/*(171, 1, 171, 0),*/
-(172, 1, 172, 0),
+/*(171, 1, 171, 0),
+(172, 1, 172, 0),*/
 (173, 1, 173, 0);
 
 

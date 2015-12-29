@@ -401,17 +401,17 @@ public class CompanyProfileMainCtrl extends GFCBaseCtrl implements Serializable 
 
 		final UserWorkspace workspace = getUserWorkspace();
 		
-		tabCompanyProfileList.setVisible(workspace.isAllowed("windowCompanyProfileList"));
+		//tabCompanyProfileList.setVisible(workspace.isAllowed("windowCompanyProfileList"));
 		tabCompanyProfileDetail.setVisible(workspace.isAllowed("windowCompanyProfileDetail"));
 		btnEdit.setVisible(workspace.isAllowed("button_CompanyProfileMain_btnEdit"));
-		btnNew.setVisible(workspace.isAllowed("button_CompanyProfileMain_btnNew"));
-		btnDelete.setVisible(workspace.isAllowed("button_CompanyProfileMain_btnDelete"));
+		//btnNew.setVisible(workspace.isAllowed("button_CompanyProfileMain_btnNew"));
+		//btnDelete.setVisible(workspace.isAllowed("button_CompanyProfileMain_btnDelete"));
 		btnSave.setVisible(workspace.isAllowed("button_CompanyProfileMain_btnSave"));		
 		btnCancel.setVisible(workspace.isAllowed("button_CompanyProfileMain_btnCancel"));
-		btnFirst.setVisible(workspace.isAllowed("button_CompanyProfileMain_btnFirst"));
-		btnPrevious.setVisible(workspace.isAllowed("button_CompanyProfileMain_btnPrevious"));
-		btnNext.setVisible(workspace.isAllowed("button_CompanyProfileMain_btnNext"));
-		btnLast.setVisible(workspace.isAllowed("button_CompanyProfileMain_btnLast"));
+		//btnFirst.setVisible(workspace.isAllowed("button_CompanyProfileMain_btnFirst"));
+		//btnPrevious.setVisible(workspace.isAllowed("button_CompanyProfileMain_btnPrevious"));
+		//btnNext.setVisible(workspace.isAllowed("button_CompanyProfileMain_btnNext"));
+		//btnLast.setVisible(workspace.isAllowed("button_CompanyProfileMain_btnLast"));
 	}
 
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
