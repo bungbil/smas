@@ -393,8 +393,8 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
 (131, 0, 'windowKategoriBarangList', 0),
 (132, 0, 'windowKategoriBarangDetail', 0),*/
-/* window_KategoriBarangList Buttons*/
-(133, 6, 'button_KategoriBarangList_SearchName', 0),
+/* window_KategoriBarangList Buttons
+(133, 6, 'button_KategoriBarangList_SearchName', 0),*/
 /* window_KategoriBarangDialog BUTTONS 
 (134, 6, 'button_KategoriBarangMain_btnNew', 0),
 (135, 6, 'button_KategoriBarangMain_btnEdit', 0),
@@ -430,8 +430,8 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
 (144, 0, 'windowJobTypeList', 0),
 (145, 0, 'windowJobTypeDetail', 0),*/
-/* window_JobTypeList Buttons*/
-(146, 6, 'button_JobTypeList_SearchName', 0),
+/* window_JobTypeList Buttons
+(146, 6, 'button_JobTypeList_SearchName', 0),*/
 /* window_JobTypeDialog BUTTONS 
 (147, 6, 'button_JobTypeMain_btnNew', 0),
 (148, 6, 'button_JobTypeMain_btnEdit', 0),

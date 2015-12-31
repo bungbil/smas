@@ -75,10 +75,6 @@ public class ZkLoginDialogCtrl extends WindowBaseCtrl implements Serializable {
 	public void onCreate$loginwin(Event event) throws Exception {
 		doOnCreateCommon(this.loginwin); // do the autowire
 
-		// only for testing
-		this.txtbox_Username.setValue("admin");
-		this.txtbox_Password.setValue("admin");
-
 		this.txtbox_Username.focus(); // set the focus on UserName
 
 		this.loginwin.setShadow(false);
