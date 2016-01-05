@@ -438,7 +438,7 @@
 	</bean>
 	<bean id="karyawanDetailCtrl" class="billy.webui.master.karyawan.KaryawanDetailCtrl" parent="basisCtrl" scope="prototype">
 		<property name="karyawanService" ref="karyawanService" />
-		<property name="jobTypeService" ref="jobTypeService" />
+		<property name="jobTypeService" ref="jobTypeService" />		
 	</bean>
 	
 	

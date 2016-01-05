@@ -25,7 +25,9 @@ public class Karyawan implements java.io.Serializable, Entity {
 	private Karyawan supervisorDivisi;
 	private Date lastUpdate;
 	private String updatedBy;
-	
+	private String catatan;
+	private byte[] profileImage;
+	private byte[] ktpImage;
 
 	public boolean isNew() {
 		return (getId() == Long.MIN_VALUE +1);
@@ -180,6 +182,30 @@ public class Karyawan implements java.io.Serializable, Entity {
 
 	public void setUpdatedBy(String updatedBy) {
 		this.updatedBy = updatedBy;
+	}
+
+	public String getCatatan() {
+		return catatan;
+	}
+
+	public void setCatatan(String catatan) {
+		this.catatan = catatan;
+	}
+
+	public byte[] getProfileImage() {
+		return profileImage;
+	}
+
+	public void setProfileImage(byte[] profileImage) {
+		this.profileImage = profileImage;
+	}
+
+	public byte[] getKtpImage() {
+		return ktpImage;
+	}
+
+	public void setKtpImage(byte[] ktpImage) {
+		this.ktpImage = ktpImage;
 	}
 
 	@Override

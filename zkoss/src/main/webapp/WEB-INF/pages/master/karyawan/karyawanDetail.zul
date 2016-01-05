@@ -20,7 +20,7 @@
 
 					<!-- Left CONTENT AREA -->
 					<!-- simulates a columnLayout -->
-					<cell width="100%">
+					<cell width="80%">
 						<vbox align="stretch" pack="stretch" width="100%">
 							<div>
 
@@ -29,164 +29,234 @@
 
 										<groupbox mold="3d" closable="false">
 											<caption image="/images/icons/view.gif" label="${c:l('common.Details')}" />
-
-											<grid sclass="GridLayoutNoBorder" fixedLayout="true"
-												style="border:0px; padding-left:5px; padding-right:5px;">
-												<columns>
-													<column width="150px" />
-													<column />
-												</columns>
-												<rows>
-													<row>
-														<hbox>
-															<label value="${c:l('label_KaryawanDialog_kodeKaryawan.value')}" />
-															<label value="*" style="color:red;font-size:10px" />
-														</hbox>
-														<textbox id="txtb_KodeKaryawan" value="@{controller.karyawan.kodeKaryawan}"
-															readonly="true" constraint="no empty" maxlength="50" width="300px" />
-													</row>
-													<row>
-														<separator bar="true"></separator>
-														<separator bar="true"></separator>
-													</row>
-													<row>
-														<hbox>
-															<label
-																value="${c:l('label_KaryawanDialog_namaPanggilan.value')}" />
+											
+											<hbox>
+												<grid sclass="GridLayoutNoBorder" fixedLayout="true"
+													style="border:0px; padding-left:5px; padding-right:5px;">
+													<columns>
+														<column width="150px" />
+														<column />
+													</columns>
+													<rows>
+														<row>
+															<hbox>
+																<label value="${c:l('label_KaryawanDialog_kodeKaryawan.value')}" />
+																<label value="*" style="color:red;font-size:10px" />
+															</hbox>
+															<textbox id="txtb_KodeKaryawan" value="@{controller.karyawan.kodeKaryawan}"
+																readonly="true" constraint="no empty" maxlength="50" width="300px" hflex="1"/>
+														</row>
+														<row>
+															<separator bar="true"></separator>
+															<separator bar="true"></separator>
+														</row>
+														<row>
+															<hbox>
+																<label
+																	value="${c:l('label_KaryawanDialog_namaPanggilan.value')}" />
+																
+															</hbox>
 															
-														</hbox>
-														<textbox id="txtb_NamaPanggilan"
-															value="@{controller.karyawan.namaPanggilan}" readonly="true" maxlength="100"
-															hflex="1" />
-													</row>
-													<row>
-														<hbox>
-															<label
-																value="${c:l('label_KaryawanDialog_namaKtp.value')}" />
-															<label value="*" style="color:red;font-size:10px" />
-														</hbox>
-														<textbox id="txtb_NamaKtp"
-															value="@{controller.karyawan.namaKtp}" readonly="true" constraint="no empty" maxlength="100"
-															hflex="1" />
-													</row>
-													<row>
-														<hbox>
-															<label
-																value="${c:l('label_KaryawanDialog_ktp.value')}" />
-															<label value="*" style="color:red;font-size:10px" />
-														</hbox>
-														<textbox id="txtb_Ktp"
-															value="@{controller.karyawan.ktp}" readonly="true" constraint="no empty" maxlength="100"
-															hflex="1" />
-													</row>													
-													<row>
-														<hbox>
-															<label
-																value="${c:l('label_KaryawanDialog_tanggalLahir.value')}" />															
-														</hbox>
-														<datebox id="txtb_TanggalLahir"
-															value="@{controller.karyawan.tanggalLahir}" format="dd/MM/yyyy" disabled="true" width="100px"
-															hflex="1" />														
-													</row>													
-													<row>
-														<hbox>
-															<label
-																value="${c:l('label_KaryawanDialog_telepon.value')}" />
-														</hbox>
-														<textbox id="txtb_Telepon"
-															value="@{controller.karyawan.telepon}" readonly="true" maxlength="50" width="200px"
-															hflex="1" />
-													</row>													
-													<row>
-														<hbox>
-															<label
-																value="${c:l('label_KaryawanDialog_handphone.value')}" />
-														</hbox>
-														<textbox id="txtb_Handphone"
-															value="@{controller.karyawan.handphone}" readonly="true" maxlength="50" width="200px"
-															hflex="1" />
-													</row>													
-													<row>
-														<hbox>
-															<label
-																value="${c:l('label_KaryawanDialog_email.value')}" />															
-														</hbox>
-														<textbox id="txtb_Email"
-															value="@{controller.karyawan.email}" readonly="true" maxlength="100" width="200px"
-															hflex="1" />
-													</row>													
-													<row>
-														<hbox>
-															<label
-																value="${c:l('label_KaryawanDialog_alamat.value')}" />															
-														</hbox>
-														<textbox id="txtb_Alamat"
-															value="@{controller.karyawan.alamat}" readonly="true" maxlength="500"
-															hflex="1" rows="4" />
-													</row>													
-													<row>
-														<hbox>
-															<label
-																value="${c:l('label_KaryawanDialog_jobType.value')}" />
-															<label value="*" style="color:red;font-size:10px" />
-														</hbox>
-														<listbox id="lbox_JobType" mold="select" disabled="true" 
-																			multiple="false" rows="1" hflex="1" width="100px" xmlns:w="client">
-																 <attribute w:name="doBlur_"><![CDATA[
-														            function(evt) {
-														                this.$doBlur_(evt);
-														                if (this.$n().value == '') {
-														                    zAu.wrongValue_(this, 'Please select.....');
-														                } else {
-														                    zAu.cmd0.clearWrongValue(this.uuid);
-														                }
-														            }
-														        ]]></attribute>															
-														</listbox>
-													</row>
-													<row>
-														<hbox>
-															<label id="label_SupervisorDivisi"
-																value="${c:l('label_KaryawanDialog_supervisorDivisi.value')}" />
-														</hbox>
-														<listbox id="lbox_SupervisorDivisi" mold="select" disabled="true"
-																			multiple="false" rows="1" hflex="1" width="100px">															
-														</listbox>
-													</row>
-													<row>
-														<hbox>
-															<label id="label_InisialDivisi"
-																value="${c:l('label_KaryawanDialog_inisialDivisi.value')}" />
-														</hbox>
-														<textbox id="txtb_InisialDivisi"
-															value="@{controller.karyawan.inisialDivisi}" readonly="true" maxlength="20" width="200px"
-															hflex="1" />
-													</row>	
-													<row>
-														<label id="label_StatusDivisi" value="${c:l('label_KaryawanDialog_status.value')}" />
-														<radiogroup id="radiogroup_Status" >
-															<grid>
-														        <rows>													            
-														            <row>
-														                 <radio id="radioStatusPusat" label="Pusat" radiogroup="radiogroup_Status" disabled="true"/>
-												               			 <radio id="radioStatusDaerah" label="Daerah" radiogroup="radiogroup_Status" disabled="true"/>												               			 
-														            </row>													            
-														        </rows>
-														    </grid>
-											      		</radiogroup>											      		
-													</row>												
-													
-												</rows>
-											</grid>
+																<textbox id="txtb_NamaPanggilan"
+																	value="@{controller.karyawan.namaPanggilan}" readonly="true" maxlength="100"
+																	hflex="1" />
+																													</row>
+														<row>
+															<hbox>
+																<label
+																	value="${c:l('label_KaryawanDialog_namaKtp.value')}" />
+																<label value="*" style="color:red;font-size:10px" />
+															</hbox>
+															<textbox id="txtb_NamaKtp"
+																value="@{controller.karyawan.namaKtp}" readonly="true" constraint="no empty" maxlength="100"
+																hflex="1" />
+														</row>
+														<row>
+															<hbox>
+																<label
+																	value="${c:l('label_KaryawanDialog_ktp.value')}" />
+																<label value="*" style="color:red;font-size:10px" />
+															</hbox>
+															
+																<textbox id="txtb_Ktp"
+																	value="@{controller.karyawan.ktp}" readonly="true" constraint="no empty" maxlength="100"
+																	hflex="1" />
+																
+															
+														</row>													
+														<row>
+															<hbox>
+																<label
+																	value="${c:l('label_KaryawanDialog_tanggalLahir.value')}" />															
+															</hbox>
+															<datebox id="txtb_TanggalLahir"
+																value="@{controller.karyawan.tanggalLahir}" format="dd/MM/yyyy" disabled="true" width="150px"
+																 />														
+														</row>													
+														<row>
+															<hbox>
+																<label
+																	value="${c:l('label_KaryawanDialog_telepon.value')}" />
+															</hbox>
+															<textbox id="txtb_Telepon"
+																value="@{controller.karyawan.telepon}" readonly="true" maxlength="50" width="200px"
+																hflex="1" />
+														</row>													
+														<row>
+															<hbox>
+																<label
+																	value="${c:l('label_KaryawanDialog_handphone.value')}" />
+															</hbox>
+															<textbox id="txtb_Handphone"
+																value="@{controller.karyawan.handphone}" readonly="true" maxlength="50" width="200px"
+																hflex="1" />
+														</row>													
+														<row>
+															<hbox>
+																<label
+																	value="${c:l('label_KaryawanDialog_email.value')}" />															
+															</hbox>
+															<textbox id="txtb_Email"
+																value="@{controller.karyawan.email}" readonly="true" maxlength="100" width="200px"
+																hflex="1" />
+														</row>													
+														<row>
+															<hbox>
+																<label
+																	value="${c:l('label_KaryawanDialog_alamat.value')}" />															
+															</hbox>
+															<textbox id="txtb_Alamat"
+																value="@{controller.karyawan.alamat}" readonly="true" maxlength="500"
+																hflex="1" rows="4" />
+														</row>													
+														<row>
+															<hbox>
+																<label
+																	value="${c:l('label_KaryawanDialog_jobType.value')}" />
+																<label value="*" style="color:red;font-size:10px" />
+															</hbox>
+															<listbox id="lbox_JobType" mold="select" disabled="true" 
+																				multiple="false" rows="1" width="150px" xmlns:w="client">
+																	 <attribute w:name="doBlur_"><![CDATA[
+															            function(evt) {
+															                this.$doBlur_(evt);
+															                if (this.$n().value == '') {
+															                    zAu.wrongValue_(this, 'Please select.....');
+															                } else {
+															                    zAu.cmd0.clearWrongValue(this.uuid);
+															                }
+															            }
+															        ]]></attribute>															
+															</listbox>
+														</row>
+														<row>
+															<hbox>
+																<label id="label_SupervisorDivisi"
+																	value="${c:l('label_KaryawanDialog_supervisorDivisi.value')}" />
+															</hbox>
+															<listbox id="lbox_SupervisorDivisi" mold="select" disabled="true"
+																				multiple="false" rows="1" hflex="1" width="100px">															
+															</listbox>
+														</row>
+														<row>
+															<hbox>
+																<label id="label_InisialDivisi"
+																	value="${c:l('label_KaryawanDialog_inisialDivisi.value')}" />
+															</hbox>
+															<textbox id="txtb_InisialDivisi"
+																value="@{controller.karyawan.inisialDivisi}" readonly="true" maxlength="20" width="200px"
+																hflex="1" />
+														</row>	
+														<row>
+															<label id="label_StatusDivisi" value="${c:l('label_KaryawanDialog_status.value')}" />
+															<radiogroup id="radiogroup_Status" >
+																<grid>
+															        <rows>													            
+															            <row>
+															                 <radio id="radioStatusPusat" label="Pusat" radiogroup="radiogroup_Status" disabled="true"/>
+													               			 <radio id="radioStatusDaerah" label="Daerah" radiogroup="radiogroup_Status" disabled="true"/>												               			 
+															            </row>													            
+															        </rows>
+															    </grid>
+												      		</radiogroup>											      		
+														</row>												
+														<row>
+															<hbox>
+																<label
+																	value="${c:l('label_KaryawanDialog_catatan.value')}" />															
+															</hbox>
+															<textbox id="txtb_Catatan"
+																value="@{controller.karyawan.catatan}" readonly="true" maxlength="1000"
+																hflex="1" rows="4" />
+														</row>	
+														
+														<row>
+														<separator bar="true"></separator>
+														<separator bar="true"></separator>
+														</row>	
+														
+														<row>
+															<button id="uploadKtp" label="Upload KTP" upload="true,maxsize=4000" disabled="true">
+																<attribute name="onUpload"><![CDATA[
+																	org.zkoss.util.media.Media media = event.getMedia();
+														            if (media instanceof org.zkoss.image.Image) {
+														            	ktpImage.setContent(media);
+														            } else {
+														                Messagebox.show("Not an image: "+media, "Error", Messagebox.OK, Messagebox.ERROR);
+														                break;
+														            }																	
+																	]]>
+																</attribute>
+															</button>
+															
+															<image id="ktpImage" style="padding-top:5px; padding-bottom:5px;" src="/images/icon-no-image.png" width="200px" height="150px">
+																<attribute name="onMouseOver">
+																	ktpImage.setStyle("zoom:3;");
+																	
+																</attribute>
+																<attribute name="onMouseOut">
+																	ktpImage.setStyle("zoom:1;");
+																</attribute>
+															</image>
+														</row>														
+													</rows>
+												</grid>												
+											</hbox>
 										</groupbox>
 									</panelchildren>
 								</panel>
-
 							</div>
 						</vbox>
 					</cell>
+					<cell width="20%">
+						<vbox align="stretch" pack="stretch" width="100%">
+							<panel border="none">
+									<panelchildren>
+										<groupbox mold="3d" closable="false">
+											<caption image="/images/icons/view.gif" label="Profile Picture" />
+									
+											<div style="border:2px; padding-left:5px; padding-right:5px;">
+												<button id="uploadProfile" label="Upload Profile Picture" upload="true,maxsize=4000" disabled="true">
+													<attribute name="onUpload"><![CDATA[
+														org.zkoss.util.media.Media media = event.getMedia();
+											            if (media instanceof org.zkoss.image.Image) {
+											               	profileImage.setContent(media);											               
+											            } else {
+											                Messagebox.show("Not an image: "+media, "Error", Messagebox.OK, Messagebox.ERROR);
+											                break;
+											            }														
+														]]>
+													</attribute>												
+												</button>
+												<image id="profileImage" style="padding-top:5px; padding-bottom:5px;" src="/images/icon-no-image.png" width="200px" height="200px">													
+												</image>														
+											</div>												
+										</groupbox>
+									</panelchildren>	
+							</panel>
+						</vbox>					
+					</cell>					
 				</hbox>
-
 			</center>
 		</borderlayout>
 

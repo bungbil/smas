@@ -1,11 +1,10 @@
 package billy.webui.master.karyawan;
 
+import java.io.IOException;
 import java.io.Serializable;
 
-import javax.swing.plaf.basic.BasicBorders.RadioButtonBorder;
-
 import org.apache.log4j.Logger;
-import org.jfree.util.Log;
+import org.zkoss.image.AImage;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.event.Event;
@@ -14,6 +13,7 @@ import org.zkoss.zkplus.databind.BindingListModelList;
 import org.zkoss.zul.Borderlayout;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Datebox;
+import org.zkoss.zul.Image;
 import org.zkoss.zul.Intbox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModelList;
@@ -51,6 +51,7 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 	protected Textbox txtb_Handphone; // autowired
 	protected Textbox txtb_Email; // autowired
 	protected Textbox txtb_Alamat; // autowired
+	protected Textbox txtb_Catatan; // autowired
 	protected Listbox lbox_JobType; // autowired
 	protected Listbox lbox_SupervisorDivisi; // autowired
 	protected Label label_SupervisorDivisi;
@@ -60,6 +61,13 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 	protected Radiogroup radiogroup_Status; // autowired
 	protected Radio radioStatusPusat;
 	protected Radio radioStatusDaerah;
+	
+	protected Button uploadProfile;
+	protected Button uploadKtp;
+	
+	protected Image profileImage;
+	protected Image ktpImage;
+	
 	// Databinding
 	protected transient AnnotateDataBinder binder;
 	private KaryawanMainCtrl karyawanMainCtrl;
@@ -93,18 +101,27 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 			if (getKaryawanMainCtrl().getSelectedKaryawan() != null) {
 				setSelectedKaryawan(getKaryawanMainCtrl().getSelectedKaryawan());		
 				loadListBox();
+				
+				try {
+					profileImage.setContent(new AImage("profileImage",getSelectedKaryawan().getProfileImage()));
+					ktpImage.setContent(new AImage("ktpImage",getSelectedKaryawan().getKtpImage()));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			} else
 				setSelectedKaryawan(null);
 		} else {
 			setSelectedKaryawan(null);
 		}
 		
+		
 	}
 
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
 	// +++++++++++++++ Component Events ++++++++++++++++ //
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
-
+	
 	/**
 	 * Automatically called method from zk.
 	 * 
@@ -148,13 +165,16 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 		txtb_Handphone.setReadonly(b);
 		txtb_Email.setReadonly(b);
 		txtb_Alamat.setReadonly(b);
+		txtb_Catatan.setReadonly(b);
 		lbox_JobType.setDisabled(b);
 		lbox_SupervisorDivisi.setDisabled(b);
 		txtb_InisialDivisi.setReadonly(b);
 		radioStatusPusat.setDisabled(b);
 		radioStatusDaerah.setDisabled(b);
-		
+		uploadProfile.setDisabled(b);
+		uploadKtp.setDisabled(b);
 	}
+		
 	public void onSelect$lbox_JobType(Event event) throws InterruptedException {
 		
 		/* if a job type is selected get the object from the listbox */
@@ -170,11 +190,17 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 			(4,'Sales',1),
 			(5,'Sopir',1),
 			(6,'Kolektor',1),
-			(7,'Staf',1);*/
+			(7,'Staf',1);
+			(8,'Auditor',1);
+			*/
 			long supervisorDivisiId = 0;
 			boolean showSupervisorDivisi = false;
 			boolean showDivisiData = false;
 			if(jobType.getId() == 1 ){
+				showSupervisorDivisi = false;
+				showDivisiData=false;
+				supervisorDivisiId = 0;
+			}else if(jobType.getId() == 8){
 				showSupervisorDivisi = false;
 				showDivisiData=false;
 				supervisorDivisiId = 0;
@@ -280,6 +306,7 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
 	/* Master BEANS */
+	
 	public Karyawan getKaryawan() {
 		// STORED IN THE module's MainController
 		return getKaryawanMainCtrl().getSelectedKaryawan();

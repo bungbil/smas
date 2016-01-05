@@ -27,6 +27,11 @@ public class ParameterServiceImpl implements ParameterService {
 	public Parameter getParameterByID(Long id) {
 		return getParameterDAO().getParameterById(id);
 	}
+	
+	@Override
+	public Parameter getParameterByParamName(String string) {
+		return getParameterDAO().getParameterByParamName(string);
+	}
 
 	@Override
 	public List<Parameter> getAllParameters() {

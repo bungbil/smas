@@ -9,6 +9,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.zkoss.image.AImage;
+import org.zkoss.image.Image;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Path;
@@ -614,6 +616,15 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
 				getKaryawanDetailCtrl().getKaryawan().setSupervisorDivisi(karyawan);				
 			}
 			
+			//save image to database
+			Image profileImage = getKaryawanDetailCtrl().profileImage.getContent();
+			getKaryawanDetailCtrl().getKaryawan().setProfileImage(profileImage.getByteData());
+			
+			//save image to database
+			Image ktpImage = getKaryawanDetailCtrl().ktpImage.getContent();
+			getKaryawanDetailCtrl().getKaryawan().setKtpImage(ktpImage.getByteData());
+			
+			
 			String userName = ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();			
 			getKaryawanDetailCtrl().getKaryawan().setLastUpdate(new Date());			
 			getKaryawanDetailCtrl().getKaryawan().setUpdatedBy(userName);			
@@ -697,7 +708,8 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
 		
 		getKaryawanDetailCtrl().radiogroup_Status.setVisible(false);
 		getKaryawanDetailCtrl().label_StatusDivisi.setVisible(false);
-		
+		getKaryawanDetailCtrl().ktpImage.setSrc("/images/icon-no-image.png");
+		getKaryawanDetailCtrl().profileImage.setSrc("/images/icon-no-image.png");
 		
 		// set the ButtonStatus to New-Mode
 		btnCtrlKaryawan.setInitNew();
@@ -769,6 +781,14 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
 		getKaryawanDetailCtrl().getBinder().loadAll();
 		
 		getKaryawanDetailCtrl().loadListBox();
+		
+		try {
+			getKaryawanDetailCtrl().profileImage.setContent(new AImage("profileImage",getSelectedKaryawan().getProfileImage()));
+			getKaryawanDetailCtrl().ktpImage.setContent(new AImage("ktpImage",getSelectedKaryawan().getKtpImage()));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// EXTRA: if we have a longtext field under the listbox, so we must
 		// refresh
 		// this binded component too

@@ -42,8 +42,16 @@
 		<property name="alamat" type="string">
 			<column name="alamat" length="500" />
 		</property>	
-		
-		<many-to-one name="jobType" class="billy.backend.model.JobType"
+		<property name="catatan" type="string">
+			<column name="catatan" length="1000" />
+		</property>	
+		<property name="profileImage" type="binary">
+            <column name="profile_image" />
+        </property>
+        <property name="ktpImage" type="binary">
+            <column name="ktp_image" />
+        </property>
+        <many-to-one name="jobType" class="billy.backend.model.JobType"
 			fetch="select" lazy="false">
 			<column name="job_type_id" not-null="true" />
 		</many-to-one>
