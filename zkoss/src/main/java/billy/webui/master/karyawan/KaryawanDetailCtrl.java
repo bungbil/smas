@@ -103,8 +103,12 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 				loadListBox();
 				
 				try {
-					profileImage.setContent(new AImage("profileImage",getSelectedKaryawan().getProfileImage()));
-					ktpImage.setContent(new AImage("ktpImage",getSelectedKaryawan().getKtpImage()));
+					if(getSelectedKaryawan().getProfileImage()!=null){
+						profileImage.setContent(new AImage("profileImage",getSelectedKaryawan().getProfileImage()));
+					}
+					if(getSelectedKaryawan().getKtpImage()!=null){
+						ktpImage.setContent(new AImage("ktpImage",getSelectedKaryawan().getKtpImage()));
+					}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
