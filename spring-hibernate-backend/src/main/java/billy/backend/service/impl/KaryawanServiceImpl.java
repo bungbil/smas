@@ -28,6 +28,10 @@ public class KaryawanServiceImpl implements KaryawanService {
 		return getKaryawanDAO().getKaryawanById(id);
 	}
 
+	public Karyawan getKaryawanByKodeKaryawan(String string) {
+		return getKaryawanDAO().getKaryawanByKodeKaryawan(string);
+	}
+
 	public Karyawan getKaryawanByKtp(String string) {
 		return getKaryawanDAO().getKaryawanByKtp(string);
 	}

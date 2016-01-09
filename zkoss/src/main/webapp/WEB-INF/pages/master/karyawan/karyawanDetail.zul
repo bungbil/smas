@@ -92,7 +92,25 @@
 															<datebox id="txtb_TanggalLahir"
 																value="@{controller.karyawan.tanggalLahir}" format="dd/MM/yyyy" disabled="true" width="150px"
 																 />														
-														</row>													
+														</row>		
+														<row>
+															<hbox>
+																<label
+																	value="Tanggal Mulai Kerja" />															
+															</hbox>
+															<datebox id="txtb_TanggalMulaiKerja"
+																value="@{controller.karyawan.tanggalMulaiKerja}" format="dd/MM/yyyy" disabled="true" width="150px"
+																 />														
+														</row>
+														<row>
+															<hbox>
+																<label
+																	value="Tanggal Berhenti Kerja" />															
+															</hbox>
+															<datebox id="txtb_TanggalBerhentiKerja"
+																value="@{controller.karyawan.tanggalBerhentiKerja}" format="dd/MM/yyyy" disabled="true" width="150px"
+																 />														
+														</row>											
 														<row>
 															<hbox>
 																<label

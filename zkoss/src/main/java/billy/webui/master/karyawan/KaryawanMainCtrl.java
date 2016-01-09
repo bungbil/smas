@@ -578,10 +578,17 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
 		// save all components data in the several tabs to the bean
 		getKaryawanDetailCtrl().getBinder().saveAll();
 		
-		boolean duplicateKtp = false;
+		Karyawan karyawanCheckKode = null;
+		karyawanCheckKode = getKaryawanService().getKaryawanByKodeKaryawan(getKaryawanDetailCtrl().getKaryawan().getKodeKaryawan());
+		
+		if(karyawanCheckKode!=null){
+			if(karyawanCheckKode.getId()!=getKaryawanDetailCtrl().getKaryawan().getId()){
+				ZksampleMessageUtils.showErrorMessage("Kode Karyawan sudah digunakan oleh karyawan bernama panggilan : " +karyawanCheckKode.getNamaPanggilan());
+				return;
+			}
+		}	
 		Karyawan karyawanCheckKtp = null;
 		karyawanCheckKtp = getKaryawanService().getKaryawanByKtp(getKaryawanDetailCtrl().getKaryawan().getKtp());
-		
 		
 		if(karyawanCheckKtp!=null){
 			if(karyawanCheckKtp.getId()!=getKaryawanDetailCtrl().getKaryawan().getId()){
@@ -618,12 +625,15 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
 			
 			//save image to database
 			Image profileImage = getKaryawanDetailCtrl().profileImage.getContent();
-			getKaryawanDetailCtrl().getKaryawan().setProfileImage(profileImage.getByteData());
-			
+			if(profileImage!=null){
+				getKaryawanDetailCtrl().getKaryawan().setProfileImage(profileImage.getByteData());
+			}
 			//save image to database
-			Image ktpImage = getKaryawanDetailCtrl().ktpImage.getContent();
-			getKaryawanDetailCtrl().getKaryawan().setKtpImage(ktpImage.getByteData());
 			
+			Image ktpImage = getKaryawanDetailCtrl().ktpImage.getContent();
+			if(ktpImage!=null){
+				getKaryawanDetailCtrl().getKaryawan().setKtpImage(ktpImage.getByteData());
+			}
 			
 			String userName = ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();			
 			getKaryawanDetailCtrl().getKaryawan().setLastUpdate(new Date());			

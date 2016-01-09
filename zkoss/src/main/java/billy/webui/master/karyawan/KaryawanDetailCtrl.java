@@ -32,6 +32,7 @@ import billy.backend.service.KaryawanService;
 import billy.webui.master.jobtype.model.JobTypeListModelItemRenderer;
 import billy.webui.master.karyawan.model.KaryawanListModelItemRenderer;
 import de.forsthaus.webui.util.GFCBaseCtrl;
+import de.forsthaus.webui.util.ZksampleMessageUtils;
 
 public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 
@@ -47,6 +48,8 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 	protected Textbox txtb_NamaKtp; // autowired
 	protected Textbox txtb_Ktp; // autowired	
 	protected Datebox txtb_TanggalLahir; // autowired	
+	protected Datebox txtb_TanggalMulaiKerja; // autowired	
+	protected Datebox txtb_TanggalBerhentiKerja; // autowired	
 	protected Textbox txtb_Telepon; // autowired
 	protected Textbox txtb_Handphone; // autowired
 	protected Textbox txtb_Email; // autowired
@@ -165,6 +168,8 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 		txtb_NamaKtp.setReadonly(b);
 		txtb_Ktp.setReadonly(b);
 		txtb_TanggalLahir.setDisabled(b);
+		txtb_TanggalMulaiKerja.setDisabled(b);
+		txtb_TanggalBerhentiKerja.setDisabled(b);
 		txtb_Telepon.setReadonly(b);
 		txtb_Handphone.setReadonly(b);
 		txtb_Email.setReadonly(b);
@@ -178,7 +183,33 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 		uploadProfile.setDisabled(b);
 		uploadKtp.setDisabled(b);
 	}
+	
+	public void onBlur$txtb_Ktp(Event event) throws InterruptedException {
 		
+		Karyawan karyawanCheckKtp = null;
+		karyawanCheckKtp = getKaryawanService().getKaryawanByKtp(getKaryawan().getKtp());
+		
+		
+		if(karyawanCheckKtp!=null){
+			if(karyawanCheckKtp.getId()!=getKaryawan().getId()){
+				ZksampleMessageUtils.showErrorMessage("No KTP sudah digunakan oleh karyawan bernama panggilan : " +karyawanCheckKtp.getNamaPanggilan());
+				return;
+			}
+		}		
+	}
+	
+	public void onBlur$txtb_KodeKaryawan(Event event) throws InterruptedException {
+		
+		Karyawan karyawanCheckKode = null;
+		karyawanCheckKode = getKaryawanService().getKaryawanByKodeKaryawan(getKaryawan().getKodeKaryawan());
+		
+		if(karyawanCheckKode!=null){
+			if(karyawanCheckKode.getId()!=getKaryawan().getId()){
+				ZksampleMessageUtils.showErrorMessage("Kode Karyawan sudah digunakan oleh karyawan bernama panggilan : " +karyawanCheckKode.getNamaPanggilan());
+				return;
+			}
+		}		
+	}
 	public void onSelect$lbox_JobType(Event event) throws InterruptedException {
 		
 		/* if a job type is selected get the object from the listbox */

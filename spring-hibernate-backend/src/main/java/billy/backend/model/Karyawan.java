@@ -28,6 +28,8 @@ public class Karyawan implements java.io.Serializable, Entity {
 	private String catatan;
 	private byte[] profileImage;
 	private byte[] ktpImage;
+	private Date tanggalMulaiKerja;
+	private Date tanggalBerhentiKerja;
 
 	public boolean isNew() {
 		return (getId() == Long.MIN_VALUE +1);
@@ -206,6 +208,22 @@ public class Karyawan implements java.io.Serializable, Entity {
 
 	public void setKtpImage(byte[] ktpImage) {
 		this.ktpImage = ktpImage;
+	}
+
+	public Date getTanggalMulaiKerja() {
+		return tanggalMulaiKerja;
+	}
+
+	public void setTanggalMulaiKerja(Date tanggalMulaiKerja) {
+		this.tanggalMulaiKerja = tanggalMulaiKerja;
+	}
+
+	public Date getTanggalBerhentiKerja() {
+		return tanggalBerhentiKerja;
+	}
+
+	public void setTanggalBerhentiKerja(Date tanggalBerhentiKerja) {
+		this.tanggalBerhentiKerja = tanggalBerhentiKerja;
 	}
 
 	@Override

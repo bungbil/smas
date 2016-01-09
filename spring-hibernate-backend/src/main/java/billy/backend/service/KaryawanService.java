@@ -12,6 +12,7 @@ public interface KaryawanService {
 	public Karyawan getKaryawanByID(Long id);
 	
 	public Karyawan getKaryawanByKtp(String string);
+	public Karyawan getKaryawanByKodeKaryawan(String string);
 
 	public List<Karyawan> getAllKaryawans();
 

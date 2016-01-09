@@ -65,7 +65,12 @@
 			fetch="select" lazy="false">
 			<column name="atasan_id" />
 		</many-to-one>
-		
+		<property name="tanggalMulaiKerja" type="date">
+			<column name="tanggal_mulai_kerja"/>
+		</property>
+				<property name="tanggalBerhentiKerja" type="date">
+			<column name="tanggal_berhenti_kerja"/>
+		</property>
 		<property name="lastUpdate" type="timestamp">
 			<column name="last_update" length="29" />
 		</property>	
