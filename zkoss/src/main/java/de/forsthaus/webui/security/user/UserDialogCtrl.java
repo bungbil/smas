@@ -44,6 +44,7 @@ import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 import billy.backend.model.Karyawan;
+import billy.backend.model.Wilayah;
 import billy.backend.service.KaryawanService;
 import billy.webui.master.karyawan.model.KaryawanListModelItemRenderer;
 
@@ -410,6 +411,41 @@ public class UserDialogCtrl extends GFCBaseCtrl implements Serializable {
 		
 	}
 
+	
+	public void onOK$usrLoginname(Event event) throws InterruptedException {		
+		usrPassword.focus();			
+	}
+	public void onOK$usrPassword(Event event) throws InterruptedException {		
+		usrPasswordRetype.focus();			
+	}
+	public void onOK$usrPasswordRetype(Event event) throws InterruptedException {		
+		usrFirstname.focus();			
+	}
+	public void onOK$usrFirstname(Event event) throws InterruptedException {		
+		usrLastname.focus();			
+	}
+	public void onOK$usrLastname(Event event) throws InterruptedException {		
+		usrEmail.focus();			
+	}
+	public void onOK$usrEmail(Event event) throws InterruptedException {		
+		lbox_usrKaryawan.focus();			
+	}
+	
+
+	public void onBlur$usrLoginname(Event event) throws InterruptedException {
+		
+		SecUser userCheckKode = null;
+		userCheckKode = getUserService().getUserByLoginname(getUser().getUsrLoginname());
+		
+		if(userCheckKode!=null){
+			if(userCheckKode.getId()!=getUser().getId()){
+				ZksampleMessageUtils.showErrorMessage("Loginname sudah digunakan");
+				return;
+			}
+		}		
+	}
+	
+	
 	/**
 	 * Writes the components values to the bean.<br>
 	 * 
@@ -762,7 +798,17 @@ public class UserDialogCtrl extends GFCBaseCtrl implements Serializable {
 			Karyawan karyawan = (Karyawan) lml1.get(item.getIndex());
 			anUser.setKaryawan(karyawan);
 		}
-
+		
+		SecUser userCheckKode = null;
+		userCheckKode = getUserService().getUserByLoginname(getUser().getUsrLoginname());
+		
+		if(userCheckKode!=null){
+			if(userCheckKode.getId()!=getUser().getId()){
+				ZksampleMessageUtils.showErrorMessage("Loginname sudah digunakan");
+				return;
+			}
+		}	
+		
 		// save it to database
 		try {
 			anUser.setUsrLocale("en_EN");

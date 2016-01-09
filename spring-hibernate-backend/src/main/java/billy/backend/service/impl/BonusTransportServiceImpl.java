@@ -27,6 +27,10 @@ public class BonusTransportServiceImpl implements BonusTransportService {
 	public BonusTransport getBonusTransportByID(Long id) {
 		return getBonusTransportDAO().getBonusTransportById(id);
 	}
+	@Override
+	public BonusTransport getBonusTransportByDeskripsiBonusTransport(String string) {
+		return getBonusTransportDAO().getBonusTransportByDeskripsiBonusTransport(string);
+	}
 
 	@Override
 	public List<BonusTransport> getAllBonusTransports() {

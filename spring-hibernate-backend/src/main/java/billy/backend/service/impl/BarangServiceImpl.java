@@ -27,6 +27,10 @@ public class BarangServiceImpl implements BarangService {
 	public Barang getBarangByID(Long id) {
 		return getBarangDAO().getBarangById(id);
 	}
+	@Override
+	public Barang getBarangByKodeBarang(String string) {
+		return getBarangDAO().getBarangByKodeBarang(string);
+	}
 
 	@Override
 	public List<Barang> getAllBarangs() {

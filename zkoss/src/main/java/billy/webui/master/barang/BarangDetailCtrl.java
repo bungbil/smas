@@ -24,6 +24,7 @@ import billy.backend.service.BarangService;
 import billy.backend.service.WilayahService;
 import billy.webui.master.wilayah.model.WilayahListModelItemRenderer;
 import de.forsthaus.webui.util.GFCBaseCtrl;
+import de.forsthaus.webui.util.ZksampleMessageUtils;
 
 public class BarangDetailCtrl extends GFCBaseCtrl implements Serializable {
 
@@ -239,6 +240,153 @@ public class BarangDetailCtrl extends GFCBaseCtrl implements Serializable {
 		
 	}
 
+	public void onOK$txtb_KodeBarang(Event event) throws InterruptedException {		
+		txtb_NamaBarang.focus();			
+	}
+	public void onOK$txtb_NamaBarang(Event event) throws InterruptedException {		
+		lbox_Wilayah.focus();			
+	}
+	
+	public void onOK$txtb_DivisiOpr(Event event) throws InterruptedException {		
+		txtb_DivisiOr.focus();			
+	}
+	public void onOK$txtb_DivisiOr(Event event) throws InterruptedException {		
+		txtb_HargaBarang1x.focus();			
+	}
+	public void onOK$txtb_HargaBarang1x(Event event) throws InterruptedException {		
+		txtb_CicilanPerBulan1x.focus();			
+	}
+	public void onOK$txtb_CicilanPerBulan1x(Event event) throws InterruptedException {		
+		txtb_KomisiSales1x.focus();			
+	}
+	public void onOK$txtb_KomisiSales1x(Event event) throws InterruptedException {		
+		txtb_TabunganSales1x.focus();			
+	}
+	public void onOK$txtb_TabunganSales1x(Event event) throws InterruptedException {		
+		txtb_HargaBarang2x.focus();			
+	}
+	public void onOK$txtb_HargaBarang2x(Event event) throws InterruptedException {		
+		txtb_CicilanPerBulan2x.focus();			
+	}
+	public void onOK$txtb_CicilanPerBulan2x(Event event) throws InterruptedException {		
+		txtb_KomisiSales2x.focus();			
+	}
+	public void onOK$txtb_KomisiSales2x(Event event) throws InterruptedException {		
+		txtb_TabunganSales2x.focus();			
+	}
+	
+	public void onOK$txtb_TabunganSales2x(Event event) throws InterruptedException {		
+		txtb_HargaBarang3x.focus();			
+	}
+	public void onOK$txtb_HargaBarang3x(Event event) throws InterruptedException {		
+		txtb_CicilanPerBulan3x.focus();			
+	}
+	public void onOK$txtb_CicilanPerBulan3x(Event event) throws InterruptedException {		
+		txtb_KomisiSales3x.focus();			
+	}
+	public void onOK$txtb_KomisiSales3x(Event event) throws InterruptedException {		
+		txtb_TabunganSales3x.focus();			
+	}
+	public void onOK$txtb_TabunganSales3x(Event event) throws InterruptedException {		
+		txtb_HargaBarang4x.focus();			
+	}
+	public void onOK$txtb_HargaBarang4x(Event event) throws InterruptedException {		
+		txtb_CicilanPerBulan4x.focus();			
+	}
+	public void onOK$txtb_CicilanPerBulan4x(Event event) throws InterruptedException {		
+		txtb_KomisiSales4x.focus();			
+	}
+	public void onOK$txtb_KomisiSales4x(Event event) throws InterruptedException {		
+		txtb_TabunganSales4x.focus();			
+	}
+	public void onOK$txtb_TabunganSales4x(Event event) throws InterruptedException {		
+		txtb_HargaBarang5x.focus();			
+	}
+	public void onOK$txtb_HargaBarang5x(Event event) throws InterruptedException {		
+		txtb_CicilanPerBulan5x.focus();			
+	}
+	public void onOK$txtb_CicilanPerBulan5x(Event event) throws InterruptedException {		
+		txtb_KomisiSales5x.focus();			
+	}
+	public void onOK$txtb_KomisiSales5x(Event event) throws InterruptedException {		
+		txtb_TabunganSales5x.focus();			
+	}
+	public void onOK$txtb_TabunganSales5x(Event event) throws InterruptedException {		
+		txtb_HargaBarang6x.focus();			
+	}
+	public void onOK$txtb_HargaBarang6x(Event event) throws InterruptedException {		
+		txtb_CicilanPerBulan6x.focus();			
+	}
+	public void onOK$txtb_CicilanPerBulan6x(Event event) throws InterruptedException {		
+		txtb_KomisiSales6x.focus();			
+	}
+	public void onOK$txtb_KomisiSales6x(Event event) throws InterruptedException {		
+		txtb_TabunganSales6x.focus();			
+	}
+	public void onOK$txtb_TabunganSales6x(Event event) throws InterruptedException {		
+		txtb_HargaBarang7x.focus();			
+	}
+	public void onOK$txtb_HargaBarang7x(Event event) throws InterruptedException {		
+		txtb_CicilanPerBulan7x.focus();			
+	}
+	public void onOK$txtb_CicilanPerBulan7x(Event event) throws InterruptedException {		
+		txtb_KomisiSales7x.focus();			
+	}
+	public void onOK$txtb_KomisiSales7x(Event event) throws InterruptedException {		
+		txtb_TabunganSales7x.focus();			
+	}
+	public void onOK$txtb_TabunganSales7x(Event event) throws InterruptedException {		
+		txtb_HargaBarang8x.focus();			
+	}
+	public void onOK$txtb_HargaBarang8x(Event event) throws InterruptedException {		
+		txtb_CicilanPerBulan8x.focus();			
+	}
+	public void onOK$txtb_CicilanPerBulan8x(Event event) throws InterruptedException {		
+		txtb_KomisiSales8x.focus();			
+	}
+	public void onOK$txtb_KomisiSales8x(Event event) throws InterruptedException {		
+		txtb_TabunganSales8x.focus();			
+	}
+	public void onOK$txtb_TabunganSales8x(Event event) throws InterruptedException {		
+		txtb_HargaBarang9x.focus();			
+	}
+	public void onOK$txtb_HargaBarang9x(Event event) throws InterruptedException {		
+		txtb_CicilanPerBulan9x.focus();			
+	}
+	public void onOK$txtb_CicilanPerBulan9x(Event event) throws InterruptedException {		
+		txtb_KomisiSales9x.focus();			
+	}
+	public void onOK$txtb_KomisiSales9x(Event event) throws InterruptedException {		
+		txtb_TabunganSales9x.focus();			
+	}
+	public void onOK$txtb_TabunganSales9x(Event event) throws InterruptedException {		
+		txtb_HargaBarang10x.focus();			
+	}
+	public void onOK$txtb_HargaBarang10x(Event event) throws InterruptedException {		
+		txtb_CicilanPerBulan10x.focus();			
+	}
+	public void onOK$txtb_CicilanPerBulan10x(Event event) throws InterruptedException {		
+		txtb_KomisiSales10x.focus();			
+	}
+	public void onOK$txtb_KomisiSales10x(Event event) throws InterruptedException {		
+		txtb_TabunganSales10x.focus();			
+	}
+	public void onOK$txtb_TabunganSales10x(Event event) throws InterruptedException {		
+		getBarangMainCtrl().btnSave.focus();			
+	}
+	
+	public void onBlur$txtb_KodeBarang(Event event) throws InterruptedException {
+		
+		Barang barangCheckKode = null;
+		barangCheckKode = getBarangService().getBarangByKodeBarang(getBarang().getKodeBarang());
+		
+		if(barangCheckKode!=null){
+			if(barangCheckKode.getId()!=getBarang().getId()){
+				ZksampleMessageUtils.showErrorMessage("Kode Barang sudah digunakan oleh barang : " +barangCheckKode.getNamaBarang());
+				return;
+			}
+		}		
+	}
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
 	// ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //

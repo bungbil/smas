@@ -10,7 +10,7 @@ public interface WilayahService {
 	public int getCountAllWilayahs();
 
 	public Wilayah getWilayahByID(Long id);
-
+	public Wilayah getWilayahByKodeWilayah(String string);
 	public List<Wilayah> getAllWilayahs();
 
 	public List<Wilayah> getWilayahsLikeKodeWilayah(String string);

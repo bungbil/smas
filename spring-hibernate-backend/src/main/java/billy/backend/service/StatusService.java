@@ -10,6 +10,7 @@ public interface StatusService {
 	public int getCountAllStatuss();
 
 	public Status getStatusByID(Long id);
+	public Status getStatusByDeskripsiStatus(String string);
 
 	public List<Status> getAllStatuss();
 	

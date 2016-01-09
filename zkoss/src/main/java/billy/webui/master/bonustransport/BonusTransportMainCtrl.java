@@ -555,6 +555,17 @@ public class BonusTransportMainCtrl extends GFCBaseCtrl implements Serializable 
 			String userName = ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();			
 			getBonusTransportDetailCtrl().getBonusTransport().setLastUpdate(new Date());			
 			getBonusTransportDetailCtrl().getBonusTransport().setUpdatedBy(userName);			
+			
+			BonusTransport bonusTransportCheckKode = null;
+			bonusTransportCheckKode = getBonusTransportService().getBonusTransportByDeskripsiBonusTransport(getBonusTransportDetailCtrl().getBonusTransport().getDeskripsiBonusTransport());
+			
+			if(bonusTransportCheckKode!=null){
+				if(bonusTransportCheckKode.getId()!=getBonusTransportDetailCtrl().getBonusTransport().getId()){
+					ZksampleMessageUtils.showErrorMessage("Bonus Transport sudah ada");
+					return;
+				}
+			}	
+			
 			// save it to database
 			getBonusTransportService().saveOrUpdate(getBonusTransportDetailCtrl().getBonusTransport());
 			// if saving is successfully than actualize the beans as

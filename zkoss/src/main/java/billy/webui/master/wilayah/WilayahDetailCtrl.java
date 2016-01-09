@@ -2,8 +2,6 @@ package billy.webui.master.wilayah;
 
 import java.io.Serializable;
 
-import javax.swing.plaf.basic.BasicBorders.RadioButtonBorder;
-
 import org.apache.log4j.Logger;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Path;
@@ -11,7 +9,6 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zkplus.databind.AnnotateDataBinder;
 import org.zkoss.zkplus.databind.BindingListModelList;
 import org.zkoss.zul.Borderlayout;
-import org.zkoss.zul.Button;
 import org.zkoss.zul.Intbox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Radio;
@@ -23,6 +20,7 @@ import de.forsthaus.UserWorkspace;
 import billy.backend.model.Wilayah;
 import billy.backend.service.WilayahService;
 import de.forsthaus.webui.util.GFCBaseCtrl;
+import de.forsthaus.webui.util.ZksampleMessageUtils;
 
 public class WilayahDetailCtrl extends GFCBaseCtrl implements Serializable {
 
@@ -123,6 +121,26 @@ public class WilayahDetailCtrl extends GFCBaseCtrl implements Serializable {
 		
 	}
 
+	public void onOK$txtb_KodeWilayah(Event event) throws InterruptedException {		
+		txtb_NamaWilayah.focus();			
+	}
+	public void onOK$txtb_NamaWilayah(Event event) throws InterruptedException {		
+		radiogroup_Status.focus();			
+	}
+	
+
+	public void onBlur$txtb_KodeWilayah(Event event) throws InterruptedException {
+		
+		Wilayah wilayahCheckKode = null;
+		wilayahCheckKode = getWilayahService().getWilayahByKodeWilayah(getWilayah().getKodeWilayah());
+		
+		if(wilayahCheckKode!=null){
+			if(wilayahCheckKode.getId()!=getWilayah().getId()){
+				ZksampleMessageUtils.showErrorMessage("Kode Wilayah sudah digunakan oleh wilayah : " +wilayahCheckKode.getNamaWilayah());
+				return;
+			}
+		}		
+	}
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
 	// ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //

@@ -21,8 +21,10 @@ import org.zkoss.zul.Window;
 
 import de.forsthaus.UserWorkspace;
 import billy.backend.model.Status;
+import billy.backend.model.Wilayah;
 import billy.backend.service.StatusService;
 import de.forsthaus.webui.util.GFCBaseCtrl;
+import de.forsthaus.webui.util.ZksampleMessageUtils;
 
 public class StatusDetailCtrl extends GFCBaseCtrl implements Serializable {
 
@@ -114,7 +116,23 @@ public class StatusDetailCtrl extends GFCBaseCtrl implements Serializable {
 		txtb_DeskripsiStatus.setReadonly(b);		
 		
 	}
-
+	public void onOK$txtb_DeskripsiStatus(Event event) throws InterruptedException {		
+		getStatusMainCtrl().btnSave.focus();			
+	}
+	
+	public void onBlur$txtb_DeskripsiStatus(Event event) throws InterruptedException {
+		
+		Status statusCheckKode = null;
+		statusCheckKode = getStatusService().getStatusByDeskripsiStatus(getStatus().getDeskripsiStatus());
+		
+		if(statusCheckKode!=null){
+			if(statusCheckKode.getId()!=getStatus().getId()){
+				ZksampleMessageUtils.showErrorMessage("Status sudah ada");
+				return;
+			}
+		}		
+	}
+	
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
 	// ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //

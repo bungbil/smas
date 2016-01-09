@@ -27,7 +27,10 @@ public class WilayahServiceImpl implements WilayahService {
 	public Wilayah getWilayahByID(Long id) {
 		return getWilayahDAO().getWilayahById(id);
 	}
-
+	@Override
+	public Wilayah getWilayahByKodeWilayah(String string) {
+		return getWilayahDAO().getWilayahByKodeWilayah(string);
+	}
 	@Override
 	public List<Wilayah> getAllWilayahs() {
 		return getWilayahDAO().getAllWilayahs();

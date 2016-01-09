@@ -543,7 +543,18 @@ public class BarangMainCtrl extends GFCBaseCtrl implements Serializable {
 			}
 			String userName = ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();			
 			getBarangDetailCtrl().getBarang().setLastUpdate(new Date());			
-			getBarangDetailCtrl().getBarang().setUpdatedBy(userName);			
+			getBarangDetailCtrl().getBarang().setUpdatedBy(userName);	
+			
+			Barang barangCheckKode = null;
+			barangCheckKode = getBarangService().getBarangByKodeBarang(getBarangDetailCtrl().getBarang().getKodeBarang());
+			
+			if(barangCheckKode!=null){
+				if(barangCheckKode.getId()!=getBarangDetailCtrl().getBarang().getId()){
+					ZksampleMessageUtils.showErrorMessage("Kode Barang sudah digunakan oleh barang : " +barangCheckKode.getNamaBarang());
+					return;
+				}
+			}		
+			
 			// save it to database
 			getBarangService().saveOrUpdate(getBarangDetailCtrl().getBarang());
 			// if saving is successfully than actualize the beans as

@@ -542,6 +542,16 @@ public class WilayahMainCtrl extends GFCBaseCtrl implements Serializable {
 			if(getWilayahDetailCtrl().radioStatusDaerah.isSelected()){
 				getWilayahDetailCtrl().getWilayah().setStatus(getWilayahDetailCtrl().radioStatusDaerah.getLabel());
 			}
+			
+			Wilayah wilayahCheckKode = null;
+			wilayahCheckKode = getWilayahService().getWilayahByKodeWilayah(getWilayahDetailCtrl().getWilayah().getKodeWilayah());
+			
+			if(wilayahCheckKode!=null){
+				if(wilayahCheckKode.getId()!=getWilayahDetailCtrl().getWilayah().getId()){
+					ZksampleMessageUtils.showErrorMessage("Kode Wilayah sudah digunakan oleh wilayah : " +wilayahCheckKode.getNamaWilayah());
+					return;
+				}
+			}		
 			String userName = ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();			
 			getWilayahDetailCtrl().getWilayah().setLastUpdate(new Date());			
 			getWilayahDetailCtrl().getWilayah().setUpdatedBy(userName);			

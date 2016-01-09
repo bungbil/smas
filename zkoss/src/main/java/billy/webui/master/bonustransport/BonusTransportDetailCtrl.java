@@ -20,10 +20,12 @@ import org.zkoss.zul.Listbox;
 import de.forsthaus.UserWorkspace;
 import billy.backend.model.BonusTransport;
 import billy.backend.model.JobType;
+import billy.backend.model.Status;
 import billy.backend.service.BonusTransportService;
 import billy.backend.service.JobTypeService;
 import billy.webui.master.jobtype.model.JobTypeListModelItemRenderer;
 import de.forsthaus.webui.util.GFCBaseCtrl;
+import de.forsthaus.webui.util.ZksampleMessageUtils;
 
 public class BonusTransportDetailCtrl extends GFCBaseCtrl implements Serializable {
 
@@ -94,9 +96,6 @@ public class BonusTransportDetailCtrl extends GFCBaseCtrl implements Serializabl
 		} else {
 			setSelectedBonusTransport(null);
 		}
-		
-		
-
 	}
 
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
@@ -150,6 +149,42 @@ public class BonusTransportDetailCtrl extends GFCBaseCtrl implements Serializabl
 		txtb_Bonus.setReadonly(b);
 	}
 
+	public void onOK$txtb_DeskripsiBonusTransport(Event event) throws InterruptedException {		
+		lbox_JobType.focus();			
+	}
+	public void onOK$txtb_StartRangeUnit(Event event) throws InterruptedException {		
+		txtb_EndRangeUnit.focus();			
+	}
+	public void onOK$txtb_EndRangeUnit(Event event) throws InterruptedException {		
+		txtb_Honor.focus();			
+	}
+	public void onOK$txtb_Honor(Event event) throws InterruptedException {		
+		txtb_Or.focus();			
+	}
+	public void onOK$txtb_Or(Event event) throws InterruptedException {		
+		txtb_Transport.focus();			
+	}
+	public void onOK$txtb_Transport(Event event) throws InterruptedException {		
+		txtb_Bonus.focus();			
+	}
+	public void onOK$txtb_Bonus(Event event) throws InterruptedException {		
+		getBonusTransportMainCtrl().btnSave.focus();			
+	}
+	
+	public void onBlur$txtb_DeskripsiBonusTransport(Event event) throws InterruptedException {
+		
+		BonusTransport bonusTransportCheckKode = null;
+		bonusTransportCheckKode = getBonusTransportService().getBonusTransportByDeskripsiBonusTransport(getBonusTransport().getDeskripsiBonusTransport());
+		
+		if(bonusTransportCheckKode!=null){
+			if(bonusTransportCheckKode.getId()!=getBonusTransport().getId()){
+				ZksampleMessageUtils.showErrorMessage("Bonus Transport sudah ada");
+				return;
+			}
+		}		
+	}
+	
+	
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
 	// ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //

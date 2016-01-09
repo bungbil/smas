@@ -11,6 +11,7 @@ public interface BonusTransportService {
 
 	public BonusTransport getBonusTransportByID(Long id);
 
+	public BonusTransport getBonusTransportByDeskripsiBonusTransport(String string);
 	public List<BonusTransport> getAllBonusTransports();
 
 	public List<BonusTransport> getBonusTransportsLikeDeskripsiBonusTransport(String string);

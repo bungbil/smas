@@ -533,7 +533,18 @@ public class StatusMainCtrl extends GFCBaseCtrl implements Serializable {
 		try {			
 			String userName = ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();			
 			getStatusDetailCtrl().getStatus().setLastUpdate(new Date());			
-			getStatusDetailCtrl().getStatus().setUpdatedBy(userName);			
+			getStatusDetailCtrl().getStatus().setUpdatedBy(userName);		
+			
+			Status statusCheckKode = null;
+			statusCheckKode = getStatusService().getStatusByDeskripsiStatus(getStatusDetailCtrl().getStatus().getDeskripsiStatus());
+			
+			if(statusCheckKode!=null){
+				if(statusCheckKode.getId()!=getStatusDetailCtrl().getStatus().getId()){
+					ZksampleMessageUtils.showErrorMessage("Status sudah ada");
+					return;
+				}
+			}	
+			
 			// save it to database
 			getStatusService().saveOrUpdate(getStatusDetailCtrl().getStatus());
 			// if saving is successfully than actualize the beans as

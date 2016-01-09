@@ -11,7 +11,9 @@ public interface BarangService {
 	public int getCountAllBarangs();
 
 	public Barang getBarangByID(Long id);
-
+	
+	public Barang getBarangByKodeBarang(String string);
+	
 	public List<Barang> getAllBarangs();
 
 	public List<Barang> getBarangsLikeKodeBarang(String string);

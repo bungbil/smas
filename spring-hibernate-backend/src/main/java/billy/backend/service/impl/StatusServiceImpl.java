@@ -27,7 +27,10 @@ public class StatusServiceImpl implements StatusService {
 	public Status getStatusByID(Long id) {
 		return getStatusDAO().getStatusById(id);
 	}
-
+	@Override
+	public Status getStatusByDeskripsiStatus(String string) {
+		return getStatusDAO().getStatusByDeskripsiStatus(string);
+	}
 	@Override
 	public List<Status> getAllStatuss() {
 		return getStatusDAO().getAllStatuss();
