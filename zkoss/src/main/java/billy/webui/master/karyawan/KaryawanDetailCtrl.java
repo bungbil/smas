@@ -184,6 +184,39 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 		uploadKtp.setDisabled(b);
 	}
 	
+	public void onOK$txtb_KodeKaryawan(Event event) throws InterruptedException {		
+		txtb_NamaPanggilan.focus();			
+	}
+	public void onOK$txtb_NamaPanggilan(Event event) throws InterruptedException {
+		txtb_NamaKtp.focus();			
+	}
+	public void onOK$txtb_NamaKtp(Event event) throws InterruptedException {
+		txtb_Ktp.focus();			
+	}
+	public void onOK$txtb_Ktp(Event event) throws InterruptedException {
+		txtb_TanggalLahir.focus();			
+	}
+	public void onOK$txtb_TanggalLahir(Event event) throws InterruptedException {
+		txtb_TanggalMulaiKerja.focus();			
+	}
+	public void onOK$txtb_TanggalMulaiKerja(Event event) throws InterruptedException {
+		txtb_TanggalBerhentiKerja.focus();			
+	}
+	public void onOK$txtb_TanggalBerhentiKerja(Event event) throws InterruptedException {
+		txtb_Telepon.focus();			
+	}
+	public void onOK$txtb_Telepon(Event event) throws InterruptedException {
+		txtb_Handphone.focus();			
+	}
+	public void onOK$txtb_Handphone(Event event) throws InterruptedException {
+		txtb_Email.focus();			
+	}
+	public void onOK$txtb_Email(Event event) throws InterruptedException {
+		txtb_Alamat.focus();			
+	}
+	
+	
+
 	public void onBlur$txtb_Ktp(Event event) throws InterruptedException {
 		
 		Karyawan karyawanCheckKtp = null;
