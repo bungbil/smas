@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+	<class name="billy.backend.model.Penjualan" table="Penjualan">
+
+		<id name="id" type="long">
+			<column name="penjualan_id" />
+			<generator class="sequence">
+				<param name="sequence">penjualan_seq</param>
+			</generator>
+		</id>
+
+		<version name="version" column="VERSION" type="integer" />
+
+		<property name="noFaktur" type="string">
+			<column name="no_faktur" length="50" not-null="true" unique="true" />
+		</property>
+		<property name="tglPenjualan" type="date">
+			<column name="tgl_penjualan"/>
+		</property>
+		<property name="metodePembayaran" type="string">
+			<column name="metode_pembayaran" length="50" />
+		</property>
+		<many-to-one name="status" class="billy.backend.model.Status"
+			fetch="select" lazy="false">
+			<column name="status_id" not-null="true" />
+		</many-to-one>
+		<many-to-one name="sales1" class="billy.backend.model.Karyawan"
+			fetch="select" lazy="false">
+			<column name="sales1_id" not-null="true" />
+		</many-to-one>
+		<many-to-one name="sales2" class="billy.backend.model.Karyawan"
+			fetch="select" lazy="false">
+			<column name="sales2_id" not-null="true" />
+		</many-to-one>
+		<many-to-one name="divisi" class="billy.backend.model.Karyawan"
+			fetch="select" lazy="false">
+			<column name="divisi_id" not-null="true" />
+		</many-to-one>
+		<many-to-one name="wilayah" class="billy.backend.model.Wilayah"
+			fetch="select" lazy="false">
+			<column name="wilayah_id" not-null="true" />
+		</many-to-one>
+		<property name="namaPelanggan" type="string">
+			<column name="nama_pelanggan" length="200" />
+		</property>
+		<property name="telepon" type="string">
+			<column name="telepon" length="100" />
+		</property>
+		<property name="alamat" type="string">
+			<column name="alamat" length="500" />
+		</property>
+		<property name="rencanaKirim" type="date">
+			<column name="rencana_kirim"/>
+		</property>
+		<many-to-one name="pengirim" class="billy.backend.model.Karyawan"
+			fetch="select" lazy="false">
+			<column name="pengirim_id" not-null="true" />
+		</many-to-one>
+		<property name="downPayment" type="big_decimal">
+			<column name="down_payment" precision="12" />
+		</property>
+		<property name="intervalKredit" type="integer">
+			<column name="interval_kredit" />
+		</property>
+		<property name="diskon" type="big_decimal">
+			<column name="diskon" precision="12" />
+		</property>		
+		<property name="tglAngsuran1" type="date">
+			<column name="tgl_angsuran1"/>
+		</property>		
+		<property name="total" type="big_decimal">
+			<column name="total" precision="12" />
+		</property>			
+		<property name="grandTotal" type="big_decimal">
+			<column name="grand_total" precision="12" />
+		</property>			
+		<property name="kreditPerBulan" type="big_decimal">
+			<column name="kredit_per_bulan" precision="12" />
+		</property>	
+		<property name="piutang" type="big_decimal">
+			<column name="piutang" precision="12" />
+		</property>		
+		<property name="remark" type="string">
+			<column name="remark" length="500" />
+		</property>
+		<property name="bulanPenjualan" type="string">
+			<column name="bulan_penjualan" length="15" />
+		</property>
+		<property name="tahunPenjualan" type="string">
+			<column name="tahun_penjualan" length="10" />
+		</property>			
+		<property name="lastUpdate" type="timestamp">
+			<column name="last_update" length="29" />
+		</property>	
+		<property name="updatedBy" type="string">
+			<column name="updated_by" length="50" />
+		</property>	
+		
+	</class>
+</hibernate-mapping>

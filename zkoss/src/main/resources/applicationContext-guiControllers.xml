@@ -347,7 +347,7 @@
 	<bean id="companyProfileDetailCtrl" class="billy.webui.utility.companyprofile.CompanyProfileDetailCtrl" parent="basisCtrl" scope="prototype">
 		<property name="companyProfileService" ref="companyProfileService" />
 	</bean>
-
+	
 	<!-- Wilayah -->
 	<bean id="wilayahMainCtrl" class="billy.webui.master.wilayah.WilayahMainCtrl" parent="basisCtrl" scope="prototype">
 		<property name="wilayahService" ref="wilayahService" />
@@ -441,8 +441,6 @@
 		<property name="jobTypeService" ref="jobTypeService" />		
 	</bean>
 	
-	
-	
 	<!-- Barang -->
 	<bean id="barangMainCtrl" class="billy.webui.master.barang.BarangMainCtrl" parent="basisCtrl" scope="prototype">
 		<property name="barangService" ref="barangService" />
@@ -456,6 +454,31 @@
 		<property name="barangService" ref="barangService" />
 		<property name="wilayahService" ref="wilayahService" />
 	</bean>
+	
+	<!-- Penjualan -->
+	<bean id="penjualanListCtrl" class="billy.webui.transaction.penjualan.PenjualanListCtrl" parent="basisCtrl" scope="prototype">
+		<property name="penjualanService" ref="penjualanService" />		
+		<property name="plwPenjualans" ref="pagedListWrapper" />
+	</bean> 
+	<bean id="penjualanDialogCtrl" class="billy.webui.transaction.penjualan.PenjualanDialogCtrl" parent="basisCtrl" scope="prototype">
+		<property name="penjualanService" ref="penjualanService" />	
+		<property name="plwPenjualanDetails" ref="pagedListWrapper" />
+		
+	</bean>
+	<bean id="penjualanDetailDialogCtrl" class="billy.webui.transaction.penjualan.PenjualanDetailDialogCtrl" parent="basisCtrl"
+		scope="prototype">
+		<property name="penjualanService" ref="penjualanService" />	
+		<property name="plwPenjualanDetails" ref="pagedListWrapper" />
+		
+	</bean>
+	
+	<bean id="piutangDialogCtrl" class="billy.webui.transaction.penjualan.PiutangDialogCtrl" parent="basisCtrl"
+		scope="prototype">
+		<property name="penjualanService" ref="penjualanService" />	
+		<property name="plwPiutangs" ref="pagedListWrapper" />
+		
+	</bean>
+		
 	
 </beans>
 

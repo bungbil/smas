@@ -45,13 +45,13 @@
 			iconName="/images/icons/cardbox1_16x16.gif" />
 	</menu>-->
 
-	<!-- OfficeData MenuTree
+	<!-- OfficeData MenuTree -->
 	<menu id="menu_Category_OfficeData" rightName="menuCat_OfficeData">
 		<menuItem id="menu_Item_Customers" zulNavigation="/WEB-INF/pages/customer/customerList.zul"
 			iconName="/images/icons/view.gif" rightName="menuItem_OfficeData_Customers" />
 		<menuItem id="menu_Item_Orders" zulNavigation="/WEB-INF/pages/order/orderList.zul"
 			iconName="/images/icons/view.gif" rightName="menuItem_OfficeData_Orders" />
-	</menu> -->
+	</menu> 
 
 	<!-- BaseData MenuTree 
 	<menu id="menu_Category_MainData" rightName="menuCat_MainData">
@@ -108,10 +108,14 @@
 		<!-- <menuItem id="menu_Item_JobType" zulNavigation="/WEB-INF/pages/master/jobtype/jobTypeMain.zul"
 			iconName="/images/icons/index_16x16.gif" rightName="menuItem_Master_JobType"  /> -->			
 	</menu>
-	<!-- Transaction MenuTree 
+	<!-- Transaction MenuTree -->
 	<menu id="menu_Category_Transaction" >
 		<menuItem id="menu_Item_Penjualan" zulNavigation="/WEB-INF/pages/transaction/penjualan/penjualanList.zul"
 			iconName="/images/icons/view.gif" />
+	<!-- <menu id="menu_Category_Transaction" rightName="menuCat_Transaction" >
+		<menuItem id="menu_Item_Penjualan" zulNavigation="/WEB-INF/pages/transaction/penjualan/penjualanList.zul"
+			iconName="/images/icons/view.gif" rightName="menuItem_Transaction_Penjualan"  /> -->
+	
 		<menuItem id="menu_Item_ApprovalPenjualan" zulNavigation="/WEB-INF/pages/transaction/approvalpenjualan/approvalPenjualanList.zul"
 			iconName="/images/icons/view.gif" />
 		<menuItem id="menu_Item_TutupPenjualan" zulNavigation="/WEB-INF/pages/transaction/tutuppenjualan/tutupPenjualanList.zul"
@@ -124,7 +128,7 @@
 			iconName="/images/icons/view.gif" />
 		<menuItem id="menu_Item_TabunganSales" zulNavigation="/WEB-INF/pages/transaction/tabungansales/tabungansalesList.zul"
 			iconName="/images/icons/view.gif" />
-	</menu>-->
+	</menu>
 	<!-- Report MenuTree
 	<menu id="menu_Category_Report" >
 		<menuItem id="menu_Item_ReportSummaryPenjualan" zulNavigation="/WEB-INF/pages/report/summarypenjualan/summaryPenjualanFilterPage.zul"

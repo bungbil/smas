@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+	<class name="billy.backend.model.Piutang" table="Piutang">
+
+		<id name="id" type="long">
+			<column name="piutang_id" />
+			<generator class="sequence">
+				<param name="sequence">piutang_seq</param>
+			</generator>
+		</id>
+
+		<version name="version" column="VERSION" type="integer" />
+		
+		<many-to-one name="penjualan" class="billy.backend.model.Penjualan"
+			fetch="select" lazy="false">
+			<column name="penjualan_id" not-null="true" />
+		</many-to-one>
+		<property name="noKuitansi" type="string">
+			<column name="no_kuitansi" length="50" not-null="true" />
+		</property>
+		<property name="pembayaranKe" type="integer">
+			<column name="pembayaran_ke" />
+		</property>
+		<property name="tglPembayaran" type="date">
+			<column name="tgl_pembayaran"/>
+		</property>
+  		<property name="status" type="string">
+			<column name="status" length="50" not-null="true" />
+		</property>
+   		<property name="nilaiTagihan" type="big_decimal">
+			<column name="nilai_tagihan" precision="12" />
+		</property>	
+   		<property name="pembayaran" type="big_decimal">
+			<column name="pembayaran" precision="12" />
+		</property>	
+   		<property name="piutang" type="big_decimal">
+			<column name="piutang" precision="12" />
+		</property>	
+   		<property name="tglJatuhTempo" type="date">
+			<column name="tgl_jatuh_tempo"/>
+		</property>
+   		<many-to-one name="kolektor" class="billy.backend.model.Karyawan"
+			fetch="select" lazy="false">
+			<column name="kolektor_id" not-null="true" />
+		</many-to-one>
+   		<property name="keterangan" type="string">
+			<column name="keterangan" length="300" />
+		</property>
+	
+		<property name="lastUpdate" type="timestamp">
+			<column name="last_update" length="29" />
+		</property>	
+		<property name="updatedBy" type="string">
+			<column name="updated_by" length="50" />
+		</property>	
+		
+	</class>
+</hibernate-mapping>

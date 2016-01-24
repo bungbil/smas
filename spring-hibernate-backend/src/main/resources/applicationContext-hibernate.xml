@@ -69,6 +69,9 @@
 				<value>billy/backend/model/BonusTransport.hbm.xml</value>				
 				<value>billy/backend/model/Karyawan.hbm.xml</value>
 				<value>billy/backend/model/Barang.hbm.xml</value>
+				<value>billy/backend/model/Penjualan.hbm.xml</value>
+				<value>billy/backend/model/PenjualanDetail.hbm.xml</value>
+				<value>billy/backend/model/Piutang.hbm.xml</value>
 				
 				 
 			</list>
@@ -291,6 +294,9 @@
 	<bean id="jobTypeDAO" class="billy.backend.dao.impl.JobTypeDAOImpl" parent="billyBasisDAO" />
 	<bean id="bonusTransportDAO" class="billy.backend.dao.impl.BonusTransportDAOImpl" parent="billyBasisDAO" />
 	<bean id="karyawanDAO" class="billy.backend.dao.impl.KaryawanDAOImpl" parent="billyBasisDAO" />	
+	<bean id="penjualanDAO" class="billy.backend.dao.impl.PenjualanDAOImpl" parent="billyBasisDAO" />
+	<bean id="penjualanDetailDAO" class="billy.backend.dao.impl.PenjualanDetailDAOImpl" parent="billyBasisDAO" />
+	<bean id="piutangDAO" class="billy.backend.dao.impl.PiutangDAOImpl" parent="billyBasisDAO" />
 	
 	<!-- ====================================================== -->
 	<!-- Billy SERVICE beans -->
@@ -328,4 +334,11 @@
 	<bean name="bonusTransportService" class="billy.backend.service.impl.BonusTransportServiceImpl">
 		<property name="bonusTransportDAO" ref="bonusTransportDAO" />
 	</bean>
+	
+	<bean name="penjualanService" class="billy.backend.service.impl.PenjualanServiceImpl">
+		<property name="penjualanDAO" ref="penjualanDAO" />
+		<property name="penjualanDetailDAO" ref="penjualanDetailDAO" />
+		<property name="piutangDAO" ref="piutangDAO" />
+	</bean>
+	
 </beans>

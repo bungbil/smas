@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+	<class name="billy.backend.model.PenjualanDetail" table="Penjualan_detail">
+
+		<id name="id" type="long">
+			<column name="penjualan_detail_id" />
+			<generator class="sequence">
+				<param name="sequence">penjualan_detail_seq</param>
+			</generator>
+		</id>
+
+		<version name="version" column="VERSION" type="integer" />
+
+		<many-to-one name="penjualan" class="billy.backend.model.Penjualan"
+			fetch="select" lazy="false">
+			<column name="penjualan_id" not-null="true" />
+		</many-to-one>
+		<many-to-one name="barang" class="billy.backend.model.Barang"
+			fetch="select" lazy="false">
+			<column name="barang_id" not-null="true" />
+		</many-to-one>
+		<property name="qty" type="integer">
+			<column name="qty" />
+		</property>
+		<property name="harga" type="big_decimal">
+			<column name="harga" precision="12" />
+		</property>		
+		<property name="total" type="big_decimal">
+			<column name="total" precision="12" />
+		</property>			
+		<property name="lastUpdate" type="timestamp">
+			<column name="last_update" length="29" />
+		</property>	
+		<property name="updatedBy" type="string">
+			<column name="updated_by" length="50" />
+		</property>	
+		
+	</class>
+</hibernate-mapping>
