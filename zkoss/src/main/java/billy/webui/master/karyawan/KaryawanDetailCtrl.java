@@ -2,9 +2,13 @@ package billy.webui.master.karyawan;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.zkoss.image.AImage;
+import org.zkoss.util.media.Media;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.event.Event;
@@ -13,6 +17,7 @@ import org.zkoss.zkplus.databind.BindingListModelList;
 import org.zkoss.zul.Borderlayout;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Datebox;
+import org.zkoss.zul.Filedownload;
 import org.zkoss.zul.Image;
 import org.zkoss.zul.Intbox;
 import org.zkoss.zul.Label;
@@ -67,6 +72,8 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 	
 	protected Button uploadProfile;
 	protected Button uploadKtp;
+	protected Button downloadProfile;
+	protected Button downloadKtp;
 	
 	protected Image profileImage;
 	protected Image ktpImage;
@@ -108,9 +115,13 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 				try {
 					if(getSelectedKaryawan().getProfileImage()!=null){
 						profileImage.setContent(new AImage("profileImage",getSelectedKaryawan().getProfileImage()));
+					}else{
+						profileImage.setSrc("/images/icon-no-image.png");
 					}
 					if(getSelectedKaryawan().getKtpImage()!=null){
 						ktpImage.setContent(new AImage("ktpImage",getSelectedKaryawan().getKtpImage()));
+					}else{
+						ktpImage.setSrc("/images/icon-no-image.png");
 					}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -141,8 +152,29 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 		binder.loadAll();
 
 		doFitSize(event);
+		
+		doCheckRights();
 	}
+	private void doCheckRights() {
 
+		final UserWorkspace workspace = getUserWorkspace();
+		downloadProfile.setVisible(workspace.isAllowed("button_KaryawanDetail_DownloadProfile"));
+		downloadKtp.setVisible(workspace.isAllowed("button_KaryawanDetail_DownloadKtp"));
+		
+	}
+	public void onClick$downloadProfile(Event event) throws Exception {
+		if(profileImage.getContent()!=null){
+			String fileName = getKaryawan().getNamaKtp() + "-Profile.jpg";
+			Filedownload.save(profileImage.getContent().getByteData(), "image/jpeg", fileName);		
+		}
+		
+	}
+	public void onClick$downloadKtp(Event event) throws Exception {
+		if(ktpImage.getContent()!=null){
+			String fileName = getKaryawan().getNamaKtp() + "-KTP.jpg";
+			Filedownload.save(ktpImage.getContent().getByteData(), "image/jpeg", fileName);
+		}
+	}
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
 	// +++++++++++++++++ Business Logic ++++++++++++++++ //
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
@@ -182,6 +214,8 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 		radioStatusDaerah.setDisabled(b);
 		uploadProfile.setDisabled(b);
 		uploadKtp.setDisabled(b);
+		downloadProfile.setDisabled(b);
+		downloadKtp.setDisabled(b);
 	}
 	
 	public void onOK$txtb_KodeKaryawan(Event event) throws InterruptedException {		
@@ -299,7 +333,16 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 			
 			
 			if(supervisorDivisiId > 0){
-				lbox_SupervisorDivisi.setModel(new ListModelList(getKaryawanService().getKaryawansByJobTypeId(supervisorDivisiId)));						
+				List<Karyawan> listSupervisorDivisi= getKaryawanService().getKaryawansByJobTypeId(supervisorDivisiId);
+				Collections.sort(listSupervisorDivisi, new Comparator<Karyawan>() {
+			        @Override
+			        public int compare(Karyawan  karyawan1, Karyawan  karyawan2)
+			        {
+			            return  karyawan1.getNamaKtp().compareTo(karyawan2.getNamaKtp());
+			        }
+			    });
+				
+				lbox_SupervisorDivisi.setModel(new ListModelList(listSupervisorDivisi));						
 				lbox_SupervisorDivisi.setItemRenderer(new KaryawanListModelItemRenderer());				
 			}else{
 				getKaryawan().setSupervisorDivisi(null);

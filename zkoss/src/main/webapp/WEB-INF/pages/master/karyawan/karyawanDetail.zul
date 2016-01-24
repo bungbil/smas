@@ -214,20 +214,22 @@
 														</row>	
 														
 														<row>
-															<button id="uploadKtp" label="Upload KTP" upload="true,maxsize=4000" disabled="true">
-																<attribute name="onUpload"><![CDATA[
-																	org.zkoss.util.media.Media media = event.getMedia();
-														            if (media instanceof org.zkoss.image.Image) {
-														            	ktpImage.setContent(media);
-														            } else {
-														                Messagebox.show("Not an image: "+media, "Error", Messagebox.OK, Messagebox.ERROR);
-														                break;
-														            }																	
-																	]]>
-																</attribute>
-															</button>
-															
-															<image id="ktpImage" style="padding-top:5px; padding-bottom:5px;" src="/images/icon-no-image.png" width="200px" height="150px">
+															<vbox>
+																<button id="uploadKtp" label="Upload KTP" upload="true,maxsize=4000" disabled="true">
+																	<attribute name="onUpload"><![CDATA[
+																		org.zkoss.util.media.Media media = event.getMedia();
+															            if (media instanceof org.zkoss.image.Image) {
+															            	ktpImage.setContent(media);
+															            } else {
+															                Messagebox.show("Not an image: "+media, "Error", Messagebox.OK, Messagebox.ERROR);
+															                break;
+															            }																	
+																		]]>
+																	</attribute>
+																</button>
+																<button id="downloadKtp" label="Download"  disabled="true"></button>
+															</vbox>
+															<image id="ktpImage" style="padding-top:5px; padding-bottom:5px;" width="200px" height="150px">
 																<attribute name="onMouseOver">
 																	ktpImage.setStyle("zoom:3;");
 																	
@@ -236,6 +238,8 @@
 																	ktpImage.setStyle("zoom:1;");
 																</attribute>
 															</image>
+															
+															
 														</row>														
 													</rows>
 												</grid>												
@@ -265,9 +269,12 @@
 											            }														
 														]]>
 													</attribute>												
-												</button>
-												<image id="profileImage" style="padding-top:5px; padding-bottom:5px;" src="/images/icon-no-image.png" width="200px" height="200px">													
-												</image>														
+												</button>																						    
+												
+												<image id="profileImage" style="padding-top:5px; padding-bottom:5px;"  width="200px" height="200px">													
+												</image>			
+												
+												<button id="downloadProfile" label="Download"  disabled="true">	</button>												
 											</div>												
 										</groupbox>
 									</panelchildren>	
