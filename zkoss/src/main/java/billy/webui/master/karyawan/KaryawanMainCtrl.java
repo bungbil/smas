@@ -204,6 +204,23 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
 					getKaryawanDetailCtrl().radioStatusDaerah.setSelected(true);
 				}
 			}
+			
+			try {
+				if(getSelectedKaryawan().getProfileImage()!=null){
+					getKaryawanDetailCtrl().profileImage.setContent(new AImage("profileImage",getSelectedKaryawan().getProfileImage()));
+				}else{
+					getKaryawanDetailCtrl().profileImage.setSrc("/images/icon-no-image.png");
+				}
+				if(getSelectedKaryawan().getKtpImage()!=null){
+					getKaryawanDetailCtrl().ktpImage.setContent(new AImage("ktpImage",getSelectedKaryawan().getKtpImage()));
+				}else{
+					getKaryawanDetailCtrl().ktpImage.setSrc("/images/icon-no-image.png");
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			return;
 		}
 
@@ -494,7 +511,7 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
 
 		// refresh the UI, because we can click the EditBtn from every tab.
 		getKaryawanDetailCtrl().getBinder().loadAll();
-
+		
 		// set focus
 		getKaryawanDetailCtrl().txtb_KodeKaryawan.focus();
 	}
@@ -565,6 +582,8 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
 
 		// refresh all dataBinder related controllers
 		getKaryawanDetailCtrl().getBinder().loadAll();
+		
+		
 	}
 
 	/**
@@ -792,13 +811,23 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
 		
 		getKaryawanDetailCtrl().loadListBox();
 		
+		
 		try {
-			getKaryawanDetailCtrl().profileImage.setContent(new AImage("profileImage",getSelectedKaryawan().getProfileImage()));
-			getKaryawanDetailCtrl().ktpImage.setContent(new AImage("ktpImage",getSelectedKaryawan().getKtpImage()));
+			if(getSelectedKaryawan().getProfileImage()!=null){
+				getKaryawanDetailCtrl().profileImage.setContent(new AImage("profileImage",getSelectedKaryawan().getProfileImage()));
+			}else{
+				getKaryawanDetailCtrl().profileImage.setSrc("/images/icon-no-image.png");
+			}
+			if(getSelectedKaryawan().getKtpImage()!=null){
+				getKaryawanDetailCtrl().ktpImage.setContent(new AImage("ktpImage",getSelectedKaryawan().getKtpImage()));
+			}else{
+				getKaryawanDetailCtrl().ktpImage.setSrc("/images/icon-no-image.png");
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		// EXTRA: if we have a longtext field under the listbox, so we must
 		// refresh
 		// this binded component too

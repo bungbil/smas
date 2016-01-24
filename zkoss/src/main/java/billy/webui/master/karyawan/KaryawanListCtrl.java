@@ -126,8 +126,8 @@ public class KaryawanListCtrl extends GFCBaseListCtrl<Karyawan> implements Seria
 		listheader_KaryawanList_JobType.setSortAscending(new FieldComparator("jobType.namaJobType", true));
 		listheader_KaryawanList_JobType.setSortDescending(new FieldComparator("jobType.namaJobType", false));
 		
-		listheader_KaryawanList_SupervisorDivisi.setSortAscending(new FieldComparator("supervisorDivisi.namaKaryawan", true));
-		listheader_KaryawanList_SupervisorDivisi.setSortDescending(new FieldComparator("supervisorDivisi.namaKaryawan", false));
+		listheader_KaryawanList_SupervisorDivisi.setSortAscending(new FieldComparator("supervisorDivisi.namaKtp", true));
+		listheader_KaryawanList_SupervisorDivisi.setSortDescending(new FieldComparator("supervisorDivisi.namaKtp", false));
 		
 		listheader_KaryawanList_Handphone.setSortAscending(new FieldComparator("handphone", true));
 		listheader_KaryawanList_Handphone.setSortDescending(new FieldComparator("handphone", false));				

@@ -63,7 +63,7 @@
 		<!-- ====================================================== -->
 		<!-- v2.x	<concurrent-session-control max-sessions="5" /> -->
 		<session-management>
-			<concurrency-control max-sessions="5" />
+			<concurrency-control max-sessions="1" error-if-maximum-exceeded="true" />			
 		</session-management>
 
 	</http>

@@ -19,7 +19,11 @@
 package de.forsthaus.webui.security.user;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -187,7 +191,22 @@ public class UserDialogCtrl extends GFCBaseCtrl implements Serializable {
 
 		// +++++++++ DropDown ListBox
 		// set listModel and itemRenderer for the dropdown listbox staff only
-		lbox_usrKaryawan.setModel(new ListModelList(getKaryawanService().getKaryawansByJobTypeId(new Long(7))));
+		List<Karyawan> listStaff= getKaryawanService().getKaryawansByJobTypeId(new Long(7));
+		List<Karyawan> listAuditor= getKaryawanService().getKaryawansByJobTypeId(new Long(8));
+		List<Karyawan> listKasir= getKaryawanService().getKaryawansByJobTypeId(new Long(9));
+		listStaff.addAll(listAuditor);
+		listStaff.addAll(listKasir);
+		
+		Collections.sort(listStaff, new Comparator<Karyawan>() {
+	        @Override
+	        public int compare(Karyawan  karyawan1, Karyawan  karyawan2)
+	        {
+	            return  karyawan1.getNamaKtp().compareTo(karyawan2.getNamaKtp());
+	        }
+	    });
+		
+		lbox_usrKaryawan.setModel(new ListModelList(listStaff));
+		
 		lbox_usrKaryawan.setItemRenderer(new KaryawanListModelItemRenderer());
 
 		// if available, select the object
