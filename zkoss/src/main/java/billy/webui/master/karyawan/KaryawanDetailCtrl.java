@@ -2,13 +2,10 @@ package billy.webui.master.karyawan;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.zkoss.image.AImage;
-import org.zkoss.util.media.Media;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.event.Event;
@@ -102,31 +99,13 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 			setKaryawanMainCtrl((KaryawanMainCtrl) arg.get("ModuleMainController"));
 
 			// SET THIS CONTROLLER TO THE module's Parent/MainController
-			getKaryawanMainCtrl().setKaryawanDetailCtrl(this);
-			lbox_JobType.setModel(new ListModelList(getJobTypeService().getAllJobTypes()));
-			lbox_JobType.setItemRenderer(new JobTypeListModelItemRenderer());
+			
 			// Get the selected object.
 			// Check if this Controller if created on first time. If so,
 			// than the selectedXXXBean should be null
 			if (getKaryawanMainCtrl().getSelectedKaryawan() != null) {
 				setSelectedKaryawan(getKaryawanMainCtrl().getSelectedKaryawan());		
-				loadListBox();
-				
-				try {
-					if(getSelectedKaryawan().getProfileImage()!=null){
-						profileImage.setContent(new AImage("profileImage",getSelectedKaryawan().getProfileImage()));
-					}else{
-						profileImage.setSrc("/images/icon-no-image.png");
-					}
-					if(getSelectedKaryawan().getKtpImage()!=null){
-						ktpImage.setContent(new AImage("ktpImage",getSelectedKaryawan().getKtpImage()));
-					}else{
-						ktpImage.setSrc("/images/icon-no-image.png");
-					}
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				doRefresh();
 			} else
 				setSelectedKaryawan(null);
 		} else {
@@ -136,6 +115,45 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 		
 	}
 
+	public void doRefresh(){
+		getKaryawanMainCtrl().setKaryawanDetailCtrl(this);
+		lbox_JobType.setModel(new ListModelList(getJobTypeService().getAllJobTypes()));
+		lbox_JobType.setItemRenderer(new JobTypeListModelItemRenderer());
+		
+		if(getSelectedKaryawan().getJobType() != null){
+			ListModelList lml = (ListModelList) lbox_JobType.getModel();		
+			JobType jobType = getJobTypeService().getJobTypeByID(getSelectedKaryawan().getJobType().getId());
+			lbox_JobType.setSelectedIndex(lml.indexOf(jobType));					
+		}
+		
+		loadListBox();
+		
+		if(getSelectedKaryawan().getStatusDivisi()!=null){
+			if(getSelectedKaryawan().getStatusDivisi().equals(radioStatusPusat.getLabel())){
+				radioStatusPusat.setSelected(true);
+			}
+			if(getSelectedKaryawan().getStatusDivisi().equals(radioStatusDaerah.getLabel())){
+				radioStatusDaerah.setSelected(true);
+			}
+		}
+		try {
+			if(getSelectedKaryawan().getProfileImage()!=null){
+				profileImage.setContent(new AImage("profileImage",getSelectedKaryawan().getProfileImage()));
+			}else{
+				profileImage.setSrc("/images/icon-no-image.png");
+			}
+			if(getSelectedKaryawan().getKtpImage()!=null){
+				ktpImage.setContent(new AImage("ktpImage",getSelectedKaryawan().getKtpImage()));
+			}else{
+				ktpImage.setSrc("/images/icon-no-image.png");
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
 	// +++++++++++++++ Component Events ++++++++++++++++ //
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
@@ -279,6 +297,10 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 	}
 	public void onSelect$lbox_JobType(Event event) throws InterruptedException {
 		
+		loadListBox();
+	}
+	public void loadListBox() {
+		
 		/* if a job type is selected get the object from the listbox */
 		Listitem item = lbox_JobType.getSelectedItem();
 
@@ -333,80 +355,21 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 			
 			
 			if(supervisorDivisiId > 0){
-				List<Karyawan> listSupervisorDivisi= getKaryawanService().getKaryawansByJobTypeId(supervisorDivisiId);
-				Collections.sort(listSupervisorDivisi, new Comparator<Karyawan>() {
-			        @Override
-			        public int compare(Karyawan  karyawan1, Karyawan  karyawan2)
-			        {
-			            return  karyawan1.getNamaKtp().compareTo(karyawan2.getNamaKtp());
-			        }
-			    });
-				
+				List<Karyawan> listSupervisorDivisi= getKaryawanService().getKaryawansByJobTypeId(supervisorDivisiId);								
 				lbox_SupervisorDivisi.setModel(new ListModelList(listSupervisorDivisi));						
-				lbox_SupervisorDivisi.setItemRenderer(new KaryawanListModelItemRenderer());				
-			}else{
-				getKaryawan().setSupervisorDivisi(null);
-				getKaryawan().setStatusDivisi(null);
-				getKaryawan().setInisialDivisi(null);
-				radioStatusPusat.setChecked(false);
-				radioStatusDaerah.setChecked(false);
-			}
-		}
-	}
-	public void loadListBox() {
-		// +++++++++ DropDown ListBox
-		// set listModel and itemRenderer for the dropdown listbox
-		
-		// if available, select the object
-		if(getSelectedKaryawan().getJobType() != null){
-			ListModelList lml = (ListModelList) lbox_JobType.getModel();		
-			JobType jobType = getJobTypeService().getJobTypeByID(getSelectedKaryawan().getJobType().getId());
-			lbox_JobType.setSelectedIndex(lml.indexOf(jobType));					
-		}	
-		
-		/* if a job type is selected get the object from the listbox */
-		Listitem item = lbox_JobType.getSelectedItem();
-
-		if (item != null) {
-			ListModelList lml1 = (ListModelList) lbox_JobType.getListModel();
-			JobType jobType = (JobType) lml1.get(item.getIndex());
-			
-			/*(1,'Supervisor',1),
-			(2,'Divisi',1),
-			(3,'Leader',1),
-			(4,'Sales',1),
-			(5,'Sopir',1),
-			(6,'Kolektor',1);*/
-			long supervisorDivisiId = 0;
-			boolean showSupervisorDivisi = false;
-			if(jobType.getId() == 1 ){
-				showSupervisorDivisi = false;
-			}else if(jobType.getId() == 6){
-				showSupervisorDivisi = false;
-			}else if(jobType.getId() == 2){
-				supervisorDivisiId = 1;
-				showSupervisorDivisi = true;
-			}else{
-				supervisorDivisiId = 2;
-				showSupervisorDivisi = true;
-			}
-			label_SupervisorDivisi.setVisible(showSupervisorDivisi);
-			lbox_SupervisorDivisi.setVisible(showSupervisorDivisi);
-			label_InisialDivisi.setVisible(showSupervisorDivisi);
-			txtb_InisialDivisi.setVisible(showSupervisorDivisi);
-			label_StatusDivisi.setVisible(showSupervisorDivisi);
-			radiogroup_Status.setVisible(showSupervisorDivisi);
-			
-			if(supervisorDivisiId > 0){
-				lbox_SupervisorDivisi.setModel(new ListModelList(getKaryawanService().getKaryawansByJobTypeId(supervisorDivisiId)));						
-				lbox_SupervisorDivisi.setItemRenderer(new KaryawanListModelItemRenderer());
-				
+				lbox_SupervisorDivisi.setItemRenderer(new KaryawanListModelItemRenderer());		
 				// if available, select the object
 				if(getSelectedKaryawan().getSupervisorDivisi() != null){
 					ListModelList lml = (ListModelList) lbox_SupervisorDivisi.getModel();		
 					Karyawan supervisorDivisi = getKaryawanService().getKaryawanByID(getSelectedKaryawan().getSupervisorDivisi().getId());
 					lbox_SupervisorDivisi.setSelectedIndex(lml.indexOf(supervisorDivisi));					
 				}	
+			}else{
+				getKaryawan().setSupervisorDivisi(null);
+				getKaryawan().setStatusDivisi(null);
+				getKaryawan().setInisialDivisi(null);
+				radioStatusPusat.setChecked(false);
+				radioStatusDaerah.setChecked(false);
 			}
 		}
 		

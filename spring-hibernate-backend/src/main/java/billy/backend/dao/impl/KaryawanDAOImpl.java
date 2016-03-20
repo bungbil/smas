@@ -46,7 +46,16 @@ public class KaryawanDAOImpl extends BillyBasisDAO<Karyawan> implements Karyawan
 	public List<Karyawan> getAllKaryawans() {
 		return getHibernateTemplate().loadAll(Karyawan.class);
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Karyawan> getKaryawansBySupervisorId(Long id) {
 
+		DetachedCriteria criteria = DetachedCriteria.forClass(Karyawan.class);
+		criteria.add(Restrictions.eq("supervisorDivisi.id", id));
+
+		return getHibernateTemplate().findByCriteria(criteria);
+	}
 	@Override
 	public void deleteKaryawanById(long id) {
 		Karyawan Karyawan = getKaryawanById(id);

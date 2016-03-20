@@ -166,7 +166,7 @@ public class BarangMainCtrl extends GFCBaseCtrl implements Serializable {
 		}
 
 		if (tabPanelBarangList != null) {
-			ZksampleCommonUtils.createTabPanelContent(this.tabPanelBarangList, this, "ModuleMainController", "/WEB-INF/pages//barang/barangList.zul");
+			ZksampleCommonUtils.createTabPanelContent(this.tabPanelBarangList, this, "ModuleMainController", "/WEB-INF/pages/master/barang/barangList.zul");
 		}
 
 	}
@@ -188,7 +188,7 @@ public class BarangMainCtrl extends GFCBaseCtrl implements Serializable {
 			// refresh the Binding mechanism
 			getBarangDetailCtrl().setBarang(getSelectedBarang());
 			getBarangDetailCtrl().getBinder().loadAll();
-			
+			getBarangDetailCtrl().doRefresh();
 			return;
 		}
 
@@ -401,7 +401,7 @@ public class BarangMainCtrl extends GFCBaseCtrl implements Serializable {
 
 			// refresh all dataBinder related controllers/components
 			getBarangDetailCtrl().getBinder().loadAll();
-
+			getBarangDetailCtrl().doRefresh();
 			// set editable Mode
 			getBarangDetailCtrl().doReadOnlyMode(true);
 
@@ -448,7 +448,7 @@ public class BarangMainCtrl extends GFCBaseCtrl implements Serializable {
 
 		// refresh the UI, because we can click the EditBtn from every tab.
 		getBarangDetailCtrl().getBinder().loadAll();
-
+		getBarangDetailCtrl().doRefresh();
 		// set focus
 		getBarangDetailCtrl().txtb_KodeBarang.focus();
 	}
@@ -519,6 +519,7 @@ public class BarangMainCtrl extends GFCBaseCtrl implements Serializable {
 
 		// refresh all dataBinder related controllers
 		getBarangDetailCtrl().getBinder().loadAll();
+		getBarangDetailCtrl().doRefresh();
 	}
 
 	/**
@@ -616,7 +617,8 @@ public class BarangMainCtrl extends GFCBaseCtrl implements Serializable {
 		// Refresh the binding mechanism
 		getBarangDetailCtrl().setSelectedBarang(getSelectedBarang());
 		try{
-			getBarangDetailCtrl().getBinder().loadAll();
+			getBarangDetailCtrl().doRefresh();
+			getBarangDetailCtrl().getBinder().loadAll();			
 		}catch(Exception e){
 			//do nothing
 		}
@@ -691,7 +693,7 @@ public class BarangMainCtrl extends GFCBaseCtrl implements Serializable {
 
 		// refresh master-detail MASTERS data
 		getBarangDetailCtrl().getBinder().loadAll();
-
+		getBarangDetailCtrl().doRefresh();
 		// EXTRA: if we have a longtext field under the listbox, so we must
 		// refresh
 		// this binded component too

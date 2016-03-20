@@ -32,12 +32,6 @@
 		<property name="total" type="big_decimal">
 			<column name="total" precision="12" />
 		</property>			
-		<property name="lastUpdate" type="timestamp">
-			<column name="last_update" length="29" />
-		</property>	
-		<property name="updatedBy" type="string">
-			<column name="updated_by" length="50" />
-		</property>	
 		
 	</class>
 </hibernate-mapping>

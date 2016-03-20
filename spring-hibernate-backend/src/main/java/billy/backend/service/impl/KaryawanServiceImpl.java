@@ -1,13 +1,20 @@
 package billy.backend.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+
+import org.apache.log4j.Logger;
+
+import de.forsthaus.backend.model.SecUser;
 
 import billy.backend.dao.KaryawanDAO;
 import billy.backend.model.Karyawan;
 import billy.backend.service.KaryawanService;
 
 public class KaryawanServiceImpl implements KaryawanService {
-
+	private static final Logger logger = Logger.getLogger(KaryawanServiceImpl.class);
 	private KaryawanDAO karyawanDAO;
 
 	public KaryawanDAO getKaryawanDAO() {
@@ -39,6 +46,39 @@ public class KaryawanServiceImpl implements KaryawanService {
 	@Override
 	public List<Karyawan> getAllKaryawans() {
 		return getKaryawanDAO().getAllKaryawans();
+	}
+	
+	@Override
+	public List<Karyawan> getAllSalesKaryawansByUserLogin(SecUser user) {
+		List<Karyawan> listSales = new ArrayList<Karyawan>();
+		if(user.getKaryawan()!=null ){
+			//under supervisor
+			if (user.getKaryawan().getSupervisorDivisi()!=null){		
+				List<Karyawan> list = getKaryawanDAO().getKaryawansBySupervisorId(user.getKaryawan().getSupervisorDivisi().getId());
+				//under divisi
+				for(Karyawan karyawan : list){
+					if(karyawan.getJobType().getId() == new Long(2)){//divisi
+						List<Karyawan> listDivisi = getKaryawanDAO().getKaryawansBySupervisorId(karyawan.getId());						
+						for(Karyawan karyawanDivisi : listDivisi){
+							if(karyawanDivisi.getJobType().getId() == new Long(4)){//sales
+								listSales.add(karyawanDivisi);
+							}
+						}						
+					}					
+				}
+			}						
+		}
+		else{
+			listSales = getKaryawansByJobTypeId(new Long(4));
+		}		
+		Collections.sort(listSales, new Comparator<Karyawan>() {
+	        @Override
+	        public int compare(Karyawan obj1, Karyawan obj2)
+	        {
+	            return  obj1.getNamaKtp().compareTo(obj2.getNamaKtp());
+	        }
+	    });
+		return listSales;
 	}
 
 	@Override
@@ -78,7 +118,15 @@ public class KaryawanServiceImpl implements KaryawanService {
 
 	@Override
 	public List<Karyawan> getKaryawansByJobTypeId(Long id) {
-		return getKaryawanDAO().getKaryawansByJobTypeId(id);
+		List<Karyawan> list= getKaryawanDAO().getKaryawansByJobTypeId(id);
+		Collections.sort(list, new Comparator<Karyawan>() {
+	        @Override
+	        public int compare(Karyawan obj1, Karyawan obj2)
+	        {
+	            return  obj1.getNamaKtp().compareTo(obj2.getNamaKtp());
+	        }
+	    });
+		return list;
 	}
 
 	@Override

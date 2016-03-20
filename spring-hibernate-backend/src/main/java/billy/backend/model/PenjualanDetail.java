@@ -17,9 +17,6 @@ public class PenjualanDetail implements java.io.Serializable, Entity {
 	private BigDecimal harga;
 	private BigDecimal total;
 	
-	private Date lastUpdate;
-	private String updatedBy;
-
 	public boolean isNew() {
 		return (getId() == Long.MIN_VALUE +1);
 	}
@@ -94,21 +91,7 @@ public class PenjualanDetail implements java.io.Serializable, Entity {
 		this.total = total;
 	}
 
-	public Date getLastUpdate() {
-		return lastUpdate;
-	}
-
-	public void setLastUpdate(Date lastUpdate) {
-		this.lastUpdate = lastUpdate;
-	}
-
-	public String getUpdatedBy() {
-		return updatedBy;
-	}
-
-	public void setUpdatedBy(String updatedBy) {
-		this.updatedBy = updatedBy;
-	}
+	
 
 	@Override
 	public int hashCode() {

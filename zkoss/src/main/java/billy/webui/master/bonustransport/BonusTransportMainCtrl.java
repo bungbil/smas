@@ -196,9 +196,8 @@ public class BonusTransportMainCtrl extends GFCBaseCtrl implements Serializable 
 
 			// refresh the Binding mechanism
 			getBonusTransportDetailCtrl().setBonusTransport(getSelectedBonusTransport());
-			getBonusTransportDetailCtrl().getBinder().loadAll();
-	
-			
+			getBonusTransportDetailCtrl().getBinder().loadAll();			
+			getBonusTransportDetailCtrl().doRefresh();
 			return;
 		}
 
@@ -411,7 +410,7 @@ public class BonusTransportMainCtrl extends GFCBaseCtrl implements Serializable 
 
 			// refresh all dataBinder related controllers/components
 			getBonusTransportDetailCtrl().getBinder().loadAll();
-
+			getBonusTransportDetailCtrl().doRefresh();
 			// set editable Mode
 			getBonusTransportDetailCtrl().doReadOnlyMode(true);
 
@@ -458,7 +457,7 @@ public class BonusTransportMainCtrl extends GFCBaseCtrl implements Serializable 
 
 		// refresh the UI, because we can click the EditBtn from every tab.
 		getBonusTransportDetailCtrl().getBinder().loadAll();
-
+		getBonusTransportDetailCtrl().doRefresh();
 		// set focus
 		getBonusTransportDetailCtrl().txtb_DeskripsiBonusTransport.focus();
 	}
@@ -529,6 +528,7 @@ public class BonusTransportMainCtrl extends GFCBaseCtrl implements Serializable 
 
 		// refresh all dataBinder related controllers
 		getBonusTransportDetailCtrl().getBinder().loadAll();
+		getBonusTransportDetailCtrl().doRefresh();
 	}
 
 	/**
@@ -627,7 +627,8 @@ public class BonusTransportMainCtrl extends GFCBaseCtrl implements Serializable 
 		// Refresh the binding mechanism
 		getBonusTransportDetailCtrl().setSelectedBonusTransport(getSelectedBonusTransport());
 		try{
-			getBonusTransportDetailCtrl().getBinder().loadAll();
+			getBonusTransportDetailCtrl().doRefresh();
+			getBonusTransportDetailCtrl().getBinder().loadAll();			
 		}catch(Exception e){
 			//do nothing
 		}
@@ -708,7 +709,7 @@ public class BonusTransportMainCtrl extends GFCBaseCtrl implements Serializable 
 
 		// refresh master-detail MASTERS data
 		getBonusTransportDetailCtrl().getBinder().loadAll();
-
+		getBonusTransportDetailCtrl().doRefresh();
 		// EXTRA: if we have a longtext field under the listbox, so we must
 		// refresh
 		// this binded component too

@@ -100,9 +100,9 @@
 							style="padding-left: 5px" />
 						<listcell label="@{penjualan.telepon}"
 							style="padding-left: 5px" />
-						<listcell label="@{penjualan.sales1.namaKtp}"
+						<listcell label="@{penjualan.sales1.namaPanggilan}"
 							style="padding-left: 5px" />
-						<listcell label="@{penjualan.sales2.namaKtp}"
+						<listcell label="@{penjualan.sales2.namaPanggilan}"
 							style="padding-left: 5px" />														
 						<listcell label="@{penjualan.lastUpdate}"
 							style="padding-left: 5px" />	

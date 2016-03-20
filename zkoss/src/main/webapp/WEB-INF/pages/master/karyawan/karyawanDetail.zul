@@ -215,7 +215,7 @@
 														
 														<row>
 															<vbox>
-																<button id="uploadKtp" label="Upload KTP" upload="true,maxsize=4000" disabled="true">
+																<button id="uploadKtp" label="Upload KTP" upload="true,maxsize=10000" disabled="true">
 																	<attribute name="onUpload"><![CDATA[
 																		org.zkoss.util.media.Media media = event.getMedia();
 															            if (media instanceof org.zkoss.image.Image) {
@@ -258,7 +258,7 @@
 											<caption image="/images/icons/view.gif" label="Profile Picture" />
 									
 											<div style="border:2px; padding-left:5px; padding-right:5px;">
-												<button id="uploadProfile" label="Upload Profile Picture" upload="true,maxsize=4000" disabled="true">
+												<button id="uploadProfile" label="Upload Profile Picture" upload="true,maxsize=10000" disabled="true">
 													<attribute name="onUpload"><![CDATA[
 														org.zkoss.util.media.Media media = event.getMedia();
 											            if (media instanceof org.zkoss.image.Image) {

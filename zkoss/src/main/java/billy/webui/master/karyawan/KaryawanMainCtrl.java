@@ -4,16 +4,13 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.zkoss.image.AImage;
 import org.zkoss.image.Image;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.EventQueues;
@@ -196,30 +193,7 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
 			// refresh the Binding mechanism
 			getKaryawanDetailCtrl().setKaryawan(getSelectedKaryawan());
 			getKaryawanDetailCtrl().getBinder().loadAll();
-			if(getSelectedKaryawan().getStatusDivisi()!=null){
-				if(getSelectedKaryawan().getStatusDivisi().equals(getKaryawanDetailCtrl().radioStatusPusat.getLabel())){
-					getKaryawanDetailCtrl().radioStatusPusat.setSelected(true);
-				}
-				if(getSelectedKaryawan().getStatusDivisi().equals(getKaryawanDetailCtrl().radioStatusDaerah.getLabel())){
-					getKaryawanDetailCtrl().radioStatusDaerah.setSelected(true);
-				}
-			}
-			
-			try {
-				if(getSelectedKaryawan().getProfileImage()!=null){
-					getKaryawanDetailCtrl().profileImage.setContent(new AImage("profileImage",getSelectedKaryawan().getProfileImage()));
-				}else{
-					getKaryawanDetailCtrl().profileImage.setSrc("/images/icon-no-image.png");
-				}
-				if(getSelectedKaryawan().getKtpImage()!=null){
-					getKaryawanDetailCtrl().ktpImage.setContent(new AImage("ktpImage",getSelectedKaryawan().getKtpImage()));
-				}else{
-					getKaryawanDetailCtrl().ktpImage.setSrc("/images/icon-no-image.png");
-				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			getKaryawanDetailCtrl().doRefresh();			
 			
 			return;
 		}
@@ -464,7 +438,7 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
 
 			// refresh all dataBinder related controllers/components
 			getKaryawanDetailCtrl().getBinder().loadAll();
-
+			getKaryawanDetailCtrl().doRefresh();
 			// set editable Mode
 			getKaryawanDetailCtrl().doReadOnlyMode(true);
 
@@ -511,7 +485,7 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
 
 		// refresh the UI, because we can click the EditBtn from every tab.
 		getKaryawanDetailCtrl().getBinder().loadAll();
-		
+		getKaryawanDetailCtrl().doRefresh();
 		// set focus
 		getKaryawanDetailCtrl().txtb_KodeKaryawan.focus();
 	}
@@ -582,7 +556,7 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
 
 		// refresh all dataBinder related controllers
 		getKaryawanDetailCtrl().getBinder().loadAll();
-		
+		getKaryawanDetailCtrl().doRefresh();
 		
 	}
 
@@ -718,7 +692,8 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
 		// Refresh the binding mechanism
 		getKaryawanDetailCtrl().setSelectedKaryawan(getSelectedKaryawan());
 		try{
-			getKaryawanDetailCtrl().getBinder().loadAll();
+			getKaryawanDetailCtrl().doRefresh();
+			getKaryawanDetailCtrl().getBinder().loadAll();			
 		}catch(Exception e){
 			//do nothing
 		}
@@ -808,25 +783,8 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
 
 		// refresh master-detail MASTERS data
 		getKaryawanDetailCtrl().getBinder().loadAll();
+		getKaryawanDetailCtrl().doRefresh();
 		
-		getKaryawanDetailCtrl().loadListBox();
-		
-		
-		try {
-			if(getSelectedKaryawan().getProfileImage()!=null){
-				getKaryawanDetailCtrl().profileImage.setContent(new AImage("profileImage",getSelectedKaryawan().getProfileImage()));
-			}else{
-				getKaryawanDetailCtrl().profileImage.setSrc("/images/icon-no-image.png");
-			}
-			if(getSelectedKaryawan().getKtpImage()!=null){
-				getKaryawanDetailCtrl().ktpImage.setContent(new AImage("ktpImage",getSelectedKaryawan().getKtpImage()));
-			}else{
-				getKaryawanDetailCtrl().ktpImage.setSrc("/images/icon-no-image.png");
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		// EXTRA: if we have a longtext field under the listbox, so we must
 		// refresh

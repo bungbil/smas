@@ -1,16 +1,21 @@
 package billy.backend.dao.impl;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
+import org.hibernate.FetchMode;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.stereotype.Repository;
 
+import de.forsthaus.backend.model.MyCalendarEvent;
+
 import billy.backend.dao.BillyBasisDAO;
 import billy.backend.dao.PenjualanDAO;
+import billy.backend.model.Karyawan;
 import billy.backend.model.Penjualan;
 import billy.backend.model.PenjualanDetail;
 @Repository
@@ -50,6 +55,14 @@ public class PenjualanDAOImpl extends BillyBasisDAO<Penjualan> implements Penjua
 	@Override
 	public int getCountAllPenjualans() {
 		return DataAccessUtils.intResult(getHibernateTemplate().find("select count(*) from Penjualan"));
+	}
+	
+	public int getCountAllPenjualansByDivisi(Karyawan obj,Date startDate, Date endDate) {
+		DetachedCriteria criteria = DetachedCriteria.forClass(Penjualan.class);
+		criteria.add(Restrictions.ge("tglPenjualan", startDate));
+		criteria.add(Restrictions.le("tglPenjualan", endDate));
+		criteria.add(Restrictions.eq("divisi.id", obj.getId()));
+		return getHibernateTemplate().findByCriteria(criteria).size();
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package billy.backend.service.impl;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import billy.backend.dao.WilayahDAO;
@@ -33,7 +35,15 @@ public class WilayahServiceImpl implements WilayahService {
 	}
 	@Override
 	public List<Wilayah> getAllWilayahs() {
-		return getWilayahDAO().getAllWilayahs();
+		List<Wilayah> list= getWilayahDAO().getAllWilayahs();
+		Collections.sort(list, new Comparator<Wilayah>() {
+	        @Override
+	        public int compare(Wilayah obj1, Wilayah  obj2)
+	        {
+	            return  obj1.getNamaWilayah().compareTo(obj2.getNamaWilayah());
+	        }
+	    });		
+		return list;
 	}
 
 	@Override

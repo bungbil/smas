@@ -67,7 +67,8 @@ public class WilayahDetailCtrl extends GFCBaseCtrl implements Serializable {
 			// Check if this Controller if created on first time. If so,
 			// than the selectedXXXBean should be null
 			if (getWilayahMainCtrl().getSelectedWilayah() != null) {
-				setSelectedWilayah(getWilayahMainCtrl().getSelectedWilayah());				
+				setSelectedWilayah(getWilayahMainCtrl().getSelectedWilayah());		
+				doRefresh();
 			} else
 				setSelectedWilayah(null);
 		} else {
@@ -75,7 +76,17 @@ public class WilayahDetailCtrl extends GFCBaseCtrl implements Serializable {
 		}
 
 	}
-
+	
+	public void doRefresh(){
+		if(getSelectedWilayah().getStatus().equals(radioStatusPusat.getLabel())){
+			radioStatusPusat.setSelected(true);
+		}
+		if(getSelectedWilayah().getStatus().equals(radioStatusDaerah.getLabel())){
+			radioStatusDaerah.setSelected(true);
+		}
+		
+	}
+	
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
 	// +++++++++++++++ Component Events ++++++++++++++++ //
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //

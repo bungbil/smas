@@ -12,6 +12,7 @@ import billy.backend.dao.BillyBasisDAO;
 
 import billy.backend.dao.BarangDAO;
 import billy.backend.model.Barang;
+import billy.backend.model.Karyawan;
 
 @Repository
 public class BarangDAOImpl extends BillyBasisDAO<Barang> implements BarangDAO {
@@ -39,6 +40,15 @@ public class BarangDAOImpl extends BillyBasisDAO<Barang> implements BarangDAO {
 		return getHibernateTemplate().loadAll(Barang.class);
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Barang> getAllBarangsByWilayahId(Long id) {
+		DetachedCriteria criteria = DetachedCriteria.forClass(Barang.class);
+		criteria.add(Restrictions.eq("wilayah.id", id));
+
+		return getHibernateTemplate().findByCriteria(criteria);		
+	}
+	
 	@Override
 	public void deleteBarangById(long id) {
 		Barang barang = getBarangById(id);

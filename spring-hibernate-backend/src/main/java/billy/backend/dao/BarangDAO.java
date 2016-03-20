@@ -13,7 +13,7 @@ public interface BarangDAO {
 	public Barang getBarangByKodeBarang(String string);
 
 	public List<Barang> getAllBarangs();
-
+	public List<Barang> getAllBarangsByWilayahId(Long id);
 	public int getCountAllBarangs();
 
 	public List<Barang> getBarangsLikeKodeBarang(String string);

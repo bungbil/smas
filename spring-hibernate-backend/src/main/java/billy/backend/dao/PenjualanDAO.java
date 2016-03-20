@@ -1,8 +1,10 @@
 package billy.backend.dao;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
+import billy.backend.model.Karyawan;
 import billy.backend.model.Penjualan;
 
 public interface PenjualanDAO {
@@ -10,6 +12,7 @@ public interface PenjualanDAO {
 	public Penjualan getNewPenjualan();
 
 	public int getCountAllPenjualans();
+	public int getCountAllPenjualansByDivisi(Karyawan obj, Date startDate, Date endDate);
 
 	public Penjualan getPenjualanById(long id);
 

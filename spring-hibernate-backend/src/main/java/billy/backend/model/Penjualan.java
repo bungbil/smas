@@ -12,29 +12,39 @@ public class Penjualan implements java.io.Serializable, Entity {
 	private long id = Long.MIN_VALUE +1;
 	private int version;
 	private String noFaktur;
+	private String mandiri;
+	private String noOrderSheet;
 	private Date tglPenjualan;
-	private String metodePembayaran;
-	private Status status;
+	private Date rencanaKirim;
+	private Wilayah wilayah;
 	private Karyawan sales1;
 	private Karyawan sales2;
-	private Karyawan divisi;
-	private Wilayah wilayah;
+	private Karyawan pengirim;
+	
 	private String namaPelanggan;
 	private String telepon;
 	private String alamat;
-	private Date rencanaKirim;
-	private Karyawan pengirim;
-	private BigDecimal downPayment;
-	private int intervalKredit;	
-	private BigDecimal diskon;
-	private Date tglAngsuran1;
-	private BigDecimal total;
-	private BigDecimal grandTotal;
-	private BigDecimal kreditPerBulan;
-	private BigDecimal piutang;
 	private String remark;
-	private String bulanPenjualan;
-	private String tahunPenjualan;
+	
+	private String metodePembayaran;
+	private BigDecimal diskon;	
+	private BigDecimal downPayment;	
+	private int intervalKredit;		
+	
+	private BigDecimal kreditPerBulan;
+	private Date tglAngsuran2;
+	
+	
+	private Status status;		
+	private BigDecimal total;		
+	private BigDecimal grandTotal;
+	private Karyawan divisi;		
+	private BigDecimal piutang;	
+	
+	private boolean needApproval = false;
+	private String reasonApproval;
+	private String approvedRemark;
+	private String approvedBy;
 	
 	private Date lastUpdate;
 	private String updatedBy;
@@ -51,9 +61,9 @@ public class Penjualan implements java.io.Serializable, Entity {
 			Karyawan sales2, Karyawan divisi, Wilayah wilayah,
 			String namaPelanggan, String telepon, String alamat,
 			Date rencanaKirim, Karyawan pengirim, BigDecimal downPayment,
-			int intervalKredit, BigDecimal diskon, Date tglAngsuran1,
+			int intervalKredit, BigDecimal diskon, Date tglAngsuran2,
 			BigDecimal total, BigDecimal grandTotal, BigDecimal kreditPerBulan,
-			String remark, String bulanPenjualan, String tahunPenjualan) {
+			String remark, String mandiri, String noOrderSheet) {
 		
 		this.id = id;
 		this.noFaktur = noFaktur;
@@ -72,13 +82,13 @@ public class Penjualan implements java.io.Serializable, Entity {
 		this.downPayment = downPayment;
 		this.intervalKredit = intervalKredit;
 		this.diskon = diskon;
-		this.tglAngsuran1 = tglAngsuran1;
+		this.tglAngsuran2 = tglAngsuran2;
 		this.total = total;
 		this.grandTotal = grandTotal;
 		this.kreditPerBulan = kreditPerBulan;
 		this.remark = remark;
-		this.bulanPenjualan = bulanPenjualan;
-		this.tahunPenjualan = tahunPenjualan;
+		this.mandiri = mandiri;
+		this.noOrderSheet = noOrderSheet;
 	}
 
 	public void setId(long id) {
@@ -225,12 +235,12 @@ public class Penjualan implements java.io.Serializable, Entity {
 		this.diskon = diskon;
 	}
 
-	public Date getTglAngsuran1() {
-		return tglAngsuran1;
+	public Date getTglAngsuran2() {
+		return tglAngsuran2;
 	}
 
-	public void setTglAngsuran1(Date tglAngsuran1) {
-		this.tglAngsuran1 = tglAngsuran1;
+	public void setTglAngsuran2(Date tglAngsuran2) {
+		this.tglAngsuran2 = tglAngsuran2;
 	}
 
 	public BigDecimal getTotal() {
@@ -265,20 +275,21 @@ public class Penjualan implements java.io.Serializable, Entity {
 		this.remark = remark;
 	}
 
-	public String getBulanPenjualan() {
-		return bulanPenjualan;
+
+	public String getMandiri() {
+		return mandiri;
 	}
 
-	public void setBulanPenjualan(String bulanPenjualan) {
-		this.bulanPenjualan = bulanPenjualan;
+	public void setMandiri(String mandiri) {
+		this.mandiri = mandiri;
 	}
 
-	public String getTahunPenjualan() {
-		return tahunPenjualan;
+	public String getNoOrderSheet() {
+		return noOrderSheet;
 	}
 
-	public void setTahunPenjualan(String tahunPenjualan) {
-		this.tahunPenjualan = tahunPenjualan;
+	public void setNoOrderSheet(String noOrderSheet) {
+		this.noOrderSheet = noOrderSheet;
 	}
 
 	public BigDecimal getPiutang() {
@@ -303,6 +314,38 @@ public class Penjualan implements java.io.Serializable, Entity {
 
 	public void setUpdatedBy(String updatedBy) {
 		this.updatedBy = updatedBy;
+	}
+
+	public boolean isNeedApproval() {
+		return needApproval;
+	}
+
+	public void setNeedApproval(boolean needApproval) {
+		this.needApproval = needApproval;
+	}
+
+	public String getReasonApproval() {
+		return reasonApproval;
+	}
+
+	public void setReasonApproval(String reasonApproval) {
+		this.reasonApproval = reasonApproval;
+	}
+
+	public String getApprovedRemark() {
+		return approvedRemark;
+	}
+
+	public void setApprovedRemark(String approvedRemark) {
+		this.approvedRemark = approvedRemark;
+	}
+
+	public String getApprovedBy() {
+		return approvedBy;
+	}
+
+	public void setApprovedBy(String approvedBy) {
+		this.approvedBy = approvedBy;
 	}
 
 	@Override

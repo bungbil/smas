@@ -186,12 +186,7 @@ public class WilayahMainCtrl extends GFCBaseCtrl implements Serializable {
 			// refresh the Binding mechanism
 			getWilayahDetailCtrl().setWilayah(getSelectedWilayah());
 			getWilayahDetailCtrl().getBinder().loadAll();
-			if(getSelectedWilayah().getStatus().equals(getWilayahDetailCtrl().radioStatusPusat.getLabel())){
-				getWilayahDetailCtrl().radioStatusPusat.setSelected(true);
-			}
-			if(getSelectedWilayah().getStatus().equals(getWilayahDetailCtrl().radioStatusDaerah.getLabel())){
-				getWilayahDetailCtrl().radioStatusDaerah.setSelected(true);
-			}
+			getWilayahDetailCtrl().doRefresh();
 			return;
 		}
 
@@ -404,6 +399,7 @@ public class WilayahMainCtrl extends GFCBaseCtrl implements Serializable {
 
 			// refresh all dataBinder related controllers/components
 			getWilayahDetailCtrl().getBinder().loadAll();
+			getWilayahDetailCtrl().doRefresh();
 
 			// set editable Mode
 			getWilayahDetailCtrl().doReadOnlyMode(true);
@@ -451,7 +447,7 @@ public class WilayahMainCtrl extends GFCBaseCtrl implements Serializable {
 
 		// refresh the UI, because we can click the EditBtn from every tab.
 		getWilayahDetailCtrl().getBinder().loadAll();
-
+		getWilayahDetailCtrl().doRefresh();
 		// set focus
 		getWilayahDetailCtrl().txtb_KodeWilayah.focus();
 	}
@@ -522,6 +518,7 @@ public class WilayahMainCtrl extends GFCBaseCtrl implements Serializable {
 
 		// refresh all dataBinder related controllers
 		getWilayahDetailCtrl().getBinder().loadAll();
+		getWilayahDetailCtrl().doRefresh();
 	}
 
 	/**
@@ -616,7 +613,8 @@ public class WilayahMainCtrl extends GFCBaseCtrl implements Serializable {
 		// Refresh the binding mechanism
 		getWilayahDetailCtrl().setSelectedWilayah(getSelectedWilayah());
 		try{
-			getWilayahDetailCtrl().getBinder().loadAll();
+			getWilayahDetailCtrl().doRefresh();
+			getWilayahDetailCtrl().getBinder().loadAll();			
 		}catch(Exception e){
 			//do nothing
 		}
@@ -692,13 +690,8 @@ public class WilayahMainCtrl extends GFCBaseCtrl implements Serializable {
 
 		// refresh master-detail MASTERS data
 		getWilayahDetailCtrl().getBinder().loadAll();
-
-		if(getSelectedWilayah().getStatus().equals(getWilayahDetailCtrl().radioStatusPusat.getLabel())){
-			getWilayahDetailCtrl().radioStatusPusat.setSelected(true);
-		}
-		if(getSelectedWilayah().getStatus().equals(getWilayahDetailCtrl().radioStatusDaerah.getLabel())){
-			getWilayahDetailCtrl().radioStatusDaerah.setSelected(true);
-		}
+		getWilayahDetailCtrl().doRefresh();
+		
 		// EXTRA: if we have a longtext field under the listbox, so we must
 		// refresh
 		// this binded component too

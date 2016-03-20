@@ -1,29 +1,22 @@
 package billy.backend.service.impl;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+
+import de.forsthaus.backend.model.SecUser;
 
 import billy.backend.dao.PenjualanDAO;
 import billy.backend.dao.PenjualanDetailDAO;
-import billy.backend.dao.PiutangDAO;
+import billy.backend.model.Karyawan;
 import billy.backend.model.Penjualan;
 import billy.backend.model.PenjualanDetail;
-import billy.backend.model.Piutang;
 import billy.backend.service.PenjualanService;
 public class PenjualanServiceImpl implements PenjualanService {
 
 	private PenjualanDAO penjualanDAO;
-	private PenjualanDetailDAO penjualanDetailDAO;
-	private PiutangDAO piutangDAO;
-
-
-	public PiutangDAO getPiutangDAO() {
-		return piutangDAO;
-	}
-
-	public void setPiutangDAO(PiutangDAO piutangDAO) {
-		this.piutangDAO = piutangDAO;
-	}
+	private PenjualanDetailDAO penjualanDetailDAO;	
 
 	public PenjualanDAO getPenjualanDAO() {
 		return penjualanDAO;
@@ -83,12 +76,20 @@ public class PenjualanServiceImpl implements PenjualanService {
 	public List<Penjualan> getAllPenjualans() {
 		return getPenjualanDAO().getAllPenjualans();
 	}
-
-	@Override
-	public void initialize(Penjualan proxy) {
-		getPenjualanDAO().initialize(proxy);
-
+	
+	/*@Override
+	public List<Penjualan> getAllPenjualansByUserLogin(SecUser user) {
+		//cari supervisornya
+		
+		//klo tidak ada tampilin semua
+		return getPenjualanDAO().getAllPenjualans();
 	}
+*/
+//	@Override
+//	public void initialize(Penjualan proxy) {
+//		getPenjualanDAO().initialize(proxy);
+//
+//	}
 
 	@Override
 	public Penjualan getPenjualanById(long id) {
@@ -111,6 +112,11 @@ public class PenjualanServiceImpl implements PenjualanService {
 	}
 
 	@Override
+	public void deletePenjualanDetailsByPenjualan(Penjualan penjualan) {
+		getPenjualanDetailDAO().deletePenjualanDetailsByPenjualan(penjualan);
+	}
+	
+	@Override
 	public BigDecimal getPenjualanSum(Penjualan penjualan) {
 		return getPenjualanDAO().getPenjualanSum(penjualan);
 	}
@@ -119,42 +125,22 @@ public class PenjualanServiceImpl implements PenjualanService {
 	public int getCountAllPenjualans() {
 		return getPenjualanDAO().getCountAllPenjualans();
 	}
+	@Override
+	public int getCountAllPenjualansByDivisi(Karyawan obj,Date date) {
+
+		Calendar calendar = Calendar.getInstance(); 
+		calendar.setTime(date);
+		calendar.set(Calendar.DAY_OF_MONTH, 1);
+		Date startDate = calendar.getTime();		
+		calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+		Date endDate = calendar.getTime();	
+				
+		return getPenjualanDAO().getCountAllPenjualansByDivisi(obj,startDate,endDate);
+	}
 
 	@Override
 	public int getCountAllPenjualanDetails() {
 		return getPenjualanDetailDAO().getCountAllPenjualanDetails();
 	}
 
-	@Override
-	public List<Piutang> getPiutangsByPenjualan(Penjualan penjualan) {
-		getPenjualanDAO().refresh(penjualan);
-		getPenjualanDAO().initialize(penjualan);
-		
-		List<Piutang> result = getPiutangDAO().getPiutangsByPenjualan(penjualan);
-
-		return result;
-	}
-
-	@Override
-	public int getCountPiutangsByPenjualan(Penjualan penjualan) {
-		int result = getPiutangDAO().getCountPiutangsByPenjualan(penjualan);
-		return result;
-	}
-
-	@Override
-	public Piutang getNewPiutang() {
-		return getPiutangDAO().getNewPiutang();		
-	}
-
-	@Override
-	public void saveOrUpdate(Piutang piutang) {
-		getPiutangDAO().saveOrUpdate(piutang);
-		
-	}
-
-	@Override
-	public void delete(Piutang piutang) {
-		getPiutangDAO().delete(piutang);
-		
-	}
 }

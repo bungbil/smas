@@ -1,9 +1,12 @@
 package billy.backend.service.impl;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import billy.backend.dao.JobTypeDAO;
 import billy.backend.model.JobType;
+import billy.backend.model.Karyawan;
 import billy.backend.service.JobTypeService;
 
 public class JobTypeServiceImpl implements JobTypeService {
@@ -29,8 +32,16 @@ public class JobTypeServiceImpl implements JobTypeService {
 	}
 
 	@Override
-	public List<JobType> getAllJobTypes() {
-		return getJobTypeDAO().getAllJobTypes();
+	public List<JobType> getAllJobTypes() {		
+		List<JobType> list= getJobTypeDAO().getAllJobTypes();
+		Collections.sort(list, new Comparator<JobType>() {
+	        @Override
+	        public int compare(JobType  obj1, JobType  obj2)
+	        {
+	            return  obj1.getNamaJobType().compareTo(obj2.getNamaJobType());
+	        }
+	    });
+		return list;
 	}
 
 	@Override

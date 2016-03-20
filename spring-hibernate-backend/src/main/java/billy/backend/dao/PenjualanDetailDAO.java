@@ -22,7 +22,7 @@ public interface PenjualanDetailDAO {
 	public void saveOrUpdate(PenjualanDetail entity);
 
 	public void delete(PenjualanDetail entity);
-
+	
 	public void save(PenjualanDetail entity);
 
 }

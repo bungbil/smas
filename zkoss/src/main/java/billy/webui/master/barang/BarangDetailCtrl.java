@@ -1,8 +1,6 @@
 package billy.webui.master.barang;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 
@@ -22,7 +20,6 @@ import org.zkoss.zul.Window;
 
 import de.forsthaus.UserWorkspace;
 import billy.backend.model.Barang;
-import billy.backend.model.Karyawan;
 import billy.backend.model.Wilayah;
 import billy.backend.service.BarangService;
 import billy.backend.service.WilayahService;
@@ -122,18 +119,6 @@ public class BarangDetailCtrl extends GFCBaseCtrl implements Serializable {
 			// SET THIS CONTROLLER TO THE module's Parent/MainController
 			getBarangMainCtrl().setBarangDetailCtrl(this);
 			
-			List<Wilayah> listWilayah= getWilayahService().getAllWilayahs();
-			Collections.sort(listWilayah, new Comparator<Wilayah>() {
-		        @Override
-		        public int compare(Wilayah obj1, Wilayah  obj2)
-		        {
-		            return  obj1.getNamaWilayah().compareTo(obj2.getNamaWilayah());
-		        }
-		    });
-			lbox_Wilayah.setModel(new ListModelList(listWilayah));
-			lbox_Wilayah.setItemRenderer(new WilayahListModelItemRenderer());
-			
-			
 			// Get the selected object.
 			// Check if this Controller if created on first time. If so,
 			// than the selectedXXXBean should be null
@@ -143,11 +128,7 @@ public class BarangDetailCtrl extends GFCBaseCtrl implements Serializable {
 				// +++++++++ DropDown ListBox
 				// set listModel and itemRenderer for the dropdown listbox				
 				// if available, select the object
-				if(getSelectedBarang().getWilayah() != null){
-					ListModelList lml = (ListModelList) lbox_Wilayah.getModel();		
-					Wilayah wilayah = getWilayahService().getWilayahByID(getSelectedBarang().getWilayah().getId());
-					lbox_Wilayah.setSelectedIndex(lml.indexOf(wilayah));					
-				}	
+				doRefresh();
 			} else
 				setSelectedBarang(null);
 		} else {
@@ -155,7 +136,19 @@ public class BarangDetailCtrl extends GFCBaseCtrl implements Serializable {
 		}
 
 	}
-
+	
+	public void doRefresh(){
+		List<Wilayah> listWilayah= getWilayahService().getAllWilayahs();			
+		lbox_Wilayah.setModel(new ListModelList(listWilayah));
+		lbox_Wilayah.setItemRenderer(new WilayahListModelItemRenderer());
+		
+		if(getSelectedBarang().getWilayah() != null){
+			ListModelList lml = (ListModelList) lbox_Wilayah.getModel();		
+			Wilayah wilayah = getWilayahService().getWilayahByID(getSelectedBarang().getWilayah().getId());
+			lbox_Wilayah.setSelectedIndex(lml.indexOf(wilayah));					
+		}
+	}
+	
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
 	// +++++++++++++++ Component Events ++++++++++++++++ //
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //

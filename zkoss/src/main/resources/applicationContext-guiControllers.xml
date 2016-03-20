@@ -456,7 +456,7 @@
 	</bean>
 	
 	<!-- Penjualan -->
-	<bean id="penjualanListCtrl" class="billy.webui.transaction.penjualan.PenjualanListCtrl" parent="basisCtrl" scope="prototype">
+<!--	<bean id="penjualanListCtrl" class="billy.webui.transaction.penjualan.PenjualanListCtrl" parent="basisCtrl" scope="prototype">
 		<property name="penjualanService" ref="penjualanService" />		
 		<property name="plwPenjualans" ref="pagedListWrapper" />
 	</bean> 
@@ -465,12 +465,12 @@
 		<property name="plwPenjualanDetails" ref="pagedListWrapper" />
 		
 	</bean>
-	<bean id="penjualanDetailDialogCtrl" class="billy.webui.transaction.penjualan.PenjualanDetailDialogCtrl" parent="basisCtrl"
+ 	<bean id="penjualanDetailDialogCtrl" class="billy.webui.transaction.penjualan.PenjualanDetailDialogCtrl" parent="basisCtrl"
 		scope="prototype">
 		<property name="penjualanService" ref="penjualanService" />	
 		<property name="plwPenjualanDetails" ref="pagedListWrapper" />
 		
-	</bean>
+	</bean> 
 	
 	<bean id="piutangDialogCtrl" class="billy.webui.transaction.penjualan.PiutangDialogCtrl" parent="basisCtrl"
 		scope="prototype">
@@ -478,8 +478,23 @@
 		<property name="plwPiutangs" ref="pagedListWrapper" />
 		
 	</bean>
-		
-	
+		-->
+	<!-- Penjualan -->
+	<bean id="penjualanMainCtrl" class="billy.webui.transaction.penjualan.PenjualanMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="penjualanService" ref="penjualanService" />
+		<property name="penjualanListCtrl" ref="penjualanListCtrl" />
+		<property name="penjualanDetailCtrl" ref="penjualanDetailCtrl" />
+	</bean>
+	<bean id="penjualanListCtrl" class="billy.webui.transaction.penjualan.PenjualanListCtrl" parent="basisCtrl" scope="prototype">
+		<property name="penjualanService" ref="penjualanService" />
+	</bean>
+	<bean id="penjualanDetailCtrl" class="billy.webui.transaction.penjualan.PenjualanDetailCtrl" parent="basisCtrl" scope="prototype">
+		<property name="penjualanService" ref="penjualanService" />
+		<property name="wilayahService" ref="wilayahService" />
+		<property name="karyawanService" ref="karyawanService" />
+		<property name="barangService" ref="barangService" />
+		<property name="statusService" ref="statusService" />
+	</bean>
 </beans>
 
 

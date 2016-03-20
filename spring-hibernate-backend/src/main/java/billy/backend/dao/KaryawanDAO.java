@@ -14,7 +14,7 @@ public interface KaryawanDAO {
 	public Karyawan getKaryawanByKtp(String string);
 
 	public List<Karyawan> getAllKaryawans();
-
+	public List<Karyawan> getKaryawansBySupervisorId(Long id);
 	public int getCountAllKaryawans();
 
 	public List<Karyawan> getKaryawansLikeKodeKaryawan(String string);

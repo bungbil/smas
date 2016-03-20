@@ -15,9 +15,9 @@ CREATE TABLE penjualan (
    metode_pembayaran	varchar(100)         not null,
    status_id			INT8                 not null,
    sales1_id			INT8                 not null,
-   sales2_id			INT8                 not null,
+   sales2_id			INT8                 null,
    wilayah_id			INT8                 not null,
-   divisi_id			INT8                 not null,
+   divisi_id			INT8                 null,
    nama_pelanggan  	  	varchar(200)         not null,
    telepon				varchar(100)   		 not null,
    alamat				varchar(500)   		 not null,
@@ -26,14 +26,18 @@ CREATE TABLE penjualan (
    down_payment			numeric(12,2)		 not null default 0,  
    interval_kredit		INT4                 not null,
    diskon				numeric(12,2)		 not null default 0,  
-   tgl_angsuran1		date				 not null,
+   tgl_angsuran2		date				 null,
    total				numeric(12,2)		 not null default 0,  
    grand_total			numeric(12,2)		 not null default 0,  
    kredit_per_bulan		numeric(12,2)		 not null default 0,
    piutang				numeric(12,2)		 not null default 0,
    remark				varchar(500)   		 null,
-   bulan_penjualan		varchar(15)          not null,
-   tahun_penjualan		varchar(10)          not null,
+   mandiri				varchar(20)          null,
+   no_order_sheet		varchar(50)          not null,
+   need_approval		boolean				 not null,
+   reason_approval		varchar(254)   		 null,
+   approved_remark		varchar(254)   		 null,
+   approved_by			varchar(50)	 		 null,
    last_update       	timestamp,          
    updated_by       	varchar(50)          null,
    version              int4                 not null default 0,
@@ -67,8 +71,6 @@ CREATE TABLE penjualan_detail (
    qty					INT4                 not null default 0,
    harga				numeric(12,2)		 not null default 0,
    total				numeric(12,2)		 not null default 0,
-   last_update       	timestamp,          
-   updated_by       	varchar(50)          null,
    version              int4                 not null default 0,
    constraint pk_penjualan_detail primary key (penjualan_detail_id)
 )
@@ -131,42 +133,41 @@ alter table piutang
       references penjualan (penjualan_id)
       on delete cascade on update cascade;
 
-/* Barang */
-/* --> Page Barang */
+/* Penjualan */
+/* --> Page Penjualan */
 INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
-(202, 1, 'menuCat_Transaction', 0),
-(203, 2, 'menuItem_Transaction_Penjualan', 0),
-(204, 0, 'penjualanListWindow', 0),
-(205, 6, 'button_PenjualanList_NewPenjualan', 0),
-
-
-
-/* window_BarangDialog BUTTONS */
-(192, 6, 'button_BarangMain_btnNew', 0),
-(193, 6, 'button_BarangMain_btnEdit', 0),
-(194, 6, 'button_BarangMain_btnDelete', 0),
-(195, 6, 'button_BarangMain_btnSave', 0),
-(196, 6, 'button_BarangMain_btnClose', 0),
-/* Barang navigation buttons */
-(197, 6, 'button_BarangMain_btnCancel', 0),
-(198, 6, 'button_BarangMain_btnFirst', 0),
-(199, 6, 'button_BarangMain_btnPrevious', 0),
-(200, 6, 'button_BarangMain_btnNext', 0),
-(201, 6, 'button_BarangMain_btnLast', 0);
-
+(204, 1, 'menuCat_Transaction', 0),
+(205, 2, 'menuItem_Transaction_Penjualan', 0),
+(206, 0, 'windowPenjualanList', 0),
+(207, 0, 'windowPenjualanDetail', 0),
+/* window_PenjualanList Buttons*/
+(208, 6, 'button_PenjualanList_Search', 0),
+/* window_PenjualanDialog BUTTONS */
+(209, 6, 'button_PenjualanMain_btnNew', 0),
+(210, 6, 'button_PenjualanMain_btnEdit', 0),
+(211, 6, 'button_PenjualanMain_btnDelete', 0),
+(212, 6, 'button_PenjualanMain_btnSave', 0),
+(213, 6, 'button_PenjualanMain_btnClose', 0),
+/* Penjualan navigation buttons */
+(214, 6, 'button_PenjualanMain_btnCancel', 0),
+(215, 6, 'button_PenjualanMain_btnFirst', 0),
+(216, 6, 'button_PenjualanMain_btnPrevious', 0),
+(217, 6, 'button_PenjualanMain_btnNext', 0),
+(218, 6, 'button_PenjualanMain_btnLast', 0);
 
 INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
-(188, 1, 188, 0),
-(189, 1, 189, 0),
-(190, 1, 190, 0),
-(191, 1, 191, 0),
-(192, 1, 192, 0),
-(193, 1, 193, 0),
-(194, 1, 194, 0),
-(195, 1, 195, 0),
-(196, 1, 196, 0),
-(197, 1, 197, 0),
-(198, 1, 198, 0),
-(199, 1, 199, 0),
-(200, 1, 200, 0),
-(201, 1, 201, 0);
+(204, 1, 204, 0),
+(205, 1, 205, 0),
+(206, 1, 206, 0),
+(207, 1, 207, 0),
+(208, 1, 208, 0),
+(209, 1, 209, 0),
+(210, 1, 210, 0),
+(211, 1, 211, 0),
+(212, 1, 212, 0),
+(213, 1, 213, 0),
+(214, 1, 214, 0),
+(215, 1, 215, 0),
+(216, 1, 216, 0),
+(217, 1, 217, 0),
+(218, 1, 218, 0);

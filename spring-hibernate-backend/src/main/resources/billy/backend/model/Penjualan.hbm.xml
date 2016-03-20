@@ -26,7 +26,7 @@
 		</property>
 		<many-to-one name="status" class="billy.backend.model.Status"
 			fetch="select" lazy="false">
-			<column name="status_id" not-null="true" />
+			<column name="status_id" not-null="false" />
 		</many-to-one>
 		<many-to-one name="sales1" class="billy.backend.model.Karyawan"
 			fetch="select" lazy="false">
@@ -34,11 +34,11 @@
 		</many-to-one>
 		<many-to-one name="sales2" class="billy.backend.model.Karyawan"
 			fetch="select" lazy="false">
-			<column name="sales2_id" not-null="true" />
+			<column name="sales2_id" not-null="false" />
 		</many-to-one>
 		<many-to-one name="divisi" class="billy.backend.model.Karyawan"
 			fetch="select" lazy="false">
-			<column name="divisi_id" not-null="true" />
+			<column name="divisi_id" not-null="false" />
 		</many-to-one>
 		<many-to-one name="wilayah" class="billy.backend.model.Wilayah"
 			fetch="select" lazy="false">
@@ -69,8 +69,8 @@
 		<property name="diskon" type="big_decimal">
 			<column name="diskon" precision="12" />
 		</property>		
-		<property name="tglAngsuran1" type="date">
-			<column name="tgl_angsuran1"/>
+		<property name="tglAngsuran2" type="date">
+			<column name="tgl_angsuran2"/>
 		</property>		
 		<property name="total" type="big_decimal">
 			<column name="total" precision="12" />
@@ -87,11 +87,24 @@
 		<property name="remark" type="string">
 			<column name="remark" length="500" />
 		</property>
-		<property name="bulanPenjualan" type="string">
-			<column name="bulan_penjualan" length="15" />
+		<property name="mandiri" type="string">
+			<column name="mandiri" length="20" />
 		</property>
-		<property name="tahunPenjualan" type="string">
-			<column name="tahun_penjualan" length="10" />
+		<property name="noOrderSheet" type="string">
+			<column name="no_order_sheet" length="50" />
+		</property>
+		
+		<property name="needApproval" type="boolean">
+			<column name="need_approval"  />
+		</property>
+		<property name="reasonApproval" type="string">
+			<column name="reason_approval" length="254" />
+		</property>
+		<property name="approvedRemark" type="string">
+			<column name="approved_remark" length="254" />
+		</property>
+		<property name="approvedBy" type="string">
+			<column name="approved_by" length="50" />
 		</property>			
 		<property name="lastUpdate" type="timestamp">
 			<column name="last_update" length="29" />

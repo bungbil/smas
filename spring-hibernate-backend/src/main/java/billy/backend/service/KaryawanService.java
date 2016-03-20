@@ -2,6 +2,8 @@ package billy.backend.service;
 
 import java.util.List;
 
+import de.forsthaus.backend.model.SecUser;
+
 import billy.backend.model.Karyawan;
 public interface KaryawanService {
 
@@ -15,7 +17,7 @@ public interface KaryawanService {
 	public Karyawan getKaryawanByKodeKaryawan(String string);
 
 	public List<Karyawan> getAllKaryawans();
-
+	public List<Karyawan> getAllSalesKaryawansByUserLogin(SecUser user);
 	public List<Karyawan> getKaryawansLikeKodeKaryawan(String string);
 	
 	public List<Karyawan> getKaryawansLikeNamaPanggilan(String string);

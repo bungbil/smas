@@ -282,18 +282,17 @@
 	<!-- Billy DAO beans -->
 	<!-- ====================================================== -->
 	<bean id="parameterDAO" class="billy.backend.dao.impl.ParameterDAOImpl" parent="billyBasisDAO" />
-	<bean id="companyProfileDAO" class="billy.backend.dao.impl.CompanyProfileDAOImpl" parent="billyBasisDAO" />
+	<bean id="companyProfileDAO" class="billy.backend.dao.impl.CompanyProfileDAOImpl" parent="billyBasisDAO" />	
 	
 	<bean id="wilayahDAO" class="billy.backend.dao.impl.WilayahDAOImpl" parent="billyBasisDAO" />
 	<bean id="satuanBarangDAO" class="billy.backend.dao.impl.SatuanBarangDAOImpl" parent="billyBasisDAO" />
 	<bean id="statusDAO" class="billy.backend.dao.impl.StatusDAOImpl" parent="billyBasisDAO" />
-	<bean id="kategoriBarangDAO" class="billy.backend.dao.impl.KategoriBarangDAOImpl" parent="billyBasisDAO" />
-	
-	<bean id="barangDAO" class="billy.backend.dao.impl.BarangDAOImpl" parent="billyBasisDAO" />
-	
+	<bean id="kategoriBarangDAO" class="billy.backend.dao.impl.KategoriBarangDAOImpl" parent="billyBasisDAO" />	
+	<bean id="barangDAO" class="billy.backend.dao.impl.BarangDAOImpl" parent="billyBasisDAO" />	
 	<bean id="jobTypeDAO" class="billy.backend.dao.impl.JobTypeDAOImpl" parent="billyBasisDAO" />
 	<bean id="bonusTransportDAO" class="billy.backend.dao.impl.BonusTransportDAOImpl" parent="billyBasisDAO" />
 	<bean id="karyawanDAO" class="billy.backend.dao.impl.KaryawanDAOImpl" parent="billyBasisDAO" />	
+	
 	<bean id="penjualanDAO" class="billy.backend.dao.impl.PenjualanDAOImpl" parent="billyBasisDAO" />
 	<bean id="penjualanDetailDAO" class="billy.backend.dao.impl.PenjualanDetailDAOImpl" parent="billyBasisDAO" />
 	<bean id="piutangDAO" class="billy.backend.dao.impl.PiutangDAOImpl" parent="billyBasisDAO" />
@@ -306,7 +305,7 @@
 	</bean>
 	<bean name="companyProfileService" class="billy.backend.service.impl.CompanyProfileServiceImpl">
 		<property name="companyProfileDAO" ref="companyProfileDAO" />
-	</bean>
+	</bean>	
 	
 	<bean name="wilayahService" class="billy.backend.service.impl.WilayahServiceImpl">
 		<property name="wilayahDAO" ref="wilayahDAO" />
@@ -316,12 +315,10 @@
 	</bean>
 	<bean name="kategoriBarangService" class="billy.backend.service.impl.KategoriBarangServiceImpl">
 		<property name="kategoriBarangDAO" ref="kategoriBarangDAO" />
-	</bean>
-	
+	</bean>	
 	<bean name="barangService" class="billy.backend.service.impl.BarangServiceImpl">
 		<property name="barangDAO" ref="barangDAO" />		
-	</bean>
-	
+	</bean>	
 	<bean name="jobTypeService" class="billy.backend.service.impl.JobTypeServiceImpl">
 		<property name="jobTypeDAO" ref="jobTypeDAO" />
 	</bean>
@@ -337,8 +334,7 @@
 	
 	<bean name="penjualanService" class="billy.backend.service.impl.PenjualanServiceImpl">
 		<property name="penjualanDAO" ref="penjualanDAO" />
-		<property name="penjualanDetailDAO" ref="penjualanDetailDAO" />
-		<property name="piutangDAO" ref="piutangDAO" />
+		<property name="penjualanDetailDAO" ref="penjualanDetailDAO" />		
 	</bean>
 	
 </beans>
