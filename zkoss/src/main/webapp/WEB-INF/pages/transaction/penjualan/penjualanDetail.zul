@@ -184,7 +184,7 @@
 										            <row>
 														<listbox id="listBoxPenjualanDetail"
 															style="border-top-width: 0px; border-left-width: 0px; border-right-width: 0px; border-bottom-width: 1px;"
-															selectedItem="@{controller.selectedPenjualanDetail}" vflex="true"
+															 vflex="true"
 															 width="100%" height="100%" multiple="false">
 															<listhead sizable="true">
 																<listheader id="listheader_PenjualanDetailList_KodeBarang"
@@ -329,11 +329,11 @@
 									                <row>
 									                	<label value="Alasan butuh Approval"/>
 									                    <textbox id="txtb_ReasonApproval" value="@{controller.penjualan.reasonApproval}"
-															readonly="true" maxlength="500" hflex="1" rows="2"  />
+															readonly="true" maxlength="500" hflex="1" rows="4"  />
 									                    <label />
 							                    		<label value="Approved Remark"/>
 							                    		<textbox id="txtb_ApprovedRemark" value="@{controller.penjualan.approvedRemark}"
-															readonly="true" maxlength="500" hflex="1" rows="2"  />						                    				                    									                    									                    											                      
+															readonly="true" maxlength="500" hflex="1" rows="4"  />						                    				                    									                    									                    											                      
 									                </row>
 												</rows>
 											</grid>

@@ -107,7 +107,7 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 	public List<PenjualanDetail> listPenjualanDetail = new ArrayList<PenjualanDetail>();
 	// Databinding
 	private PenjualanDetail selectedPenjualanDetail;
-	private BindingListModelList penjualanDetails;
+	
 	protected Listbox listBoxPenjualanDetail; // autowired
 	// Databinding
 	protected transient AnnotateDataBinder binder;
@@ -487,14 +487,17 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 							//
 							try {
 								deleteBean();
-								/*List<PenjualanDetail> copy = new ArrayList<PenjualanDetail>(listPenjualanDetail);
-								Iterator<PenjualanDetail> itr = copy.iterator();
+								Iterator<PenjualanDetail> itr = listPenjualanDetail.iterator();
 								while (itr.hasNext()) { 
 									PenjualanDetail pd = itr.next(); 
-									if (pd.equals(getSelectedPenjualanDetail())) { 
-										listPenjualanDetail.remove(pd); 
+									if (pd.getBarang().getId() == getSelectedPenjualanDetail().getBarang().getId()
+											&& pd.getQty() == getSelectedPenjualanDetail().getQty()
+											&& pd.getHarga() == getSelectedPenjualanDetail().getHarga()
+											&& pd.getTotal() == getSelectedPenjualanDetail().getTotal()
+											) { 
+										itr.remove(); 
 									} 
-								}*/
+								}
 								
 							} catch (InterruptedException e) {
 								// TODO Auto-generated catch block
@@ -642,7 +645,7 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 		// STORED IN THE module's MainController
 		getPenjualanMainCtrl().setPenjualans(penjualans);
 	}
-
+	
 	public AnnotateDataBinder getBinder() {
 		return this.binder;
 	}
@@ -715,14 +718,6 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 
 	public void setSelectedPenjualanDetail(PenjualanDetail selectedPenjualanDetail) {
 		this.selectedPenjualanDetail = selectedPenjualanDetail;
-	}
-
-	public BindingListModelList getPenjualanDetails() {
-		return penjualanDetails;
-	}
-
-	public void setPenjualanDetails(BindingListModelList penjualanDetails) {
-		this.penjualanDetails = penjualanDetails;
 	}
 
 	public Listbox getListBoxPenjualanDetail() {
