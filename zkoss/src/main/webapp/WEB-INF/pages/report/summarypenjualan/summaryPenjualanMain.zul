@@ -8,7 +8,7 @@
 	xmlns:w="http://www.zkoss.org/2005/zk/client"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
-	<window id="windowSummaryPenjualanMain" apply="${penjualanMainCtrl}"
+	<window id="windowReportSummaryPenjualanMain" apply="${reportSummaryPenjualanMainCtrl}"
 		border="none" width="100%">
 
 		<div sclass="z-toolbar" style="padding:0">
@@ -30,8 +30,8 @@
 											</columns>
 											<rows>
 												<row>
-													<label value="Sales" />
-													<listbox id="lbox_Sales" mold="select"
+													<label value="Divisi" />
+													<listbox id="lbox_Divisi" mold="select"
 															multiple="false" rows="1" width="250px">															
 													</listbox>	
 												</row>
@@ -46,8 +46,21 @@
 															format="dd/MM/yyyy" width="150px" constraint="no empty"/>
 												</row>
 												<row>
+													<label value="Pilih Printer Dot Matrix" />
+													<hbox>														
+														<listbox id="lbox_Printer" mold="select"
+															multiple="false" rows="1" width="250px">															
+														</listbox>	
+														<button id="btnRefeshPrinter" label="Cari Printer"  width="100px" />												
+													</hbox>
+												</row>
+												<row>
 													<label />
-													<button id="btnPrint" label="Print Summary Penjualan"  	/>
+													<button id="btnCetakLaporan" label="Cetak Summary Penjualan"  	/>
+												</row>
+												<row>
+													<label />
+													<button id="btnViewPdf" label="Lihat Summary Penjualan"  	/>
 												</row>
 												
 											</rows>

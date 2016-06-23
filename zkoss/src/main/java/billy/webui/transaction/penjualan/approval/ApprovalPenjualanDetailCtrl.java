@@ -1,4 +1,4 @@
-package billy.webui.transaction.penjualan;
+package billy.webui.transaction.penjualan.approval;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -60,14 +60,14 @@ import de.forsthaus.webui.util.GFCBaseCtrl;
 import de.forsthaus.webui.util.MultiLineMessageBox;
 import de.forsthaus.webui.util.ZksampleMessageUtils;
 
-public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
+public class ApprovalPenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 
 	private static final long serialVersionUID = -8352659530536077973L;
-	private static final Logger logger = Logger.getLogger(PenjualanDetailCtrl.class);
+	private static final Logger logger = Logger.getLogger(ApprovalPenjualanDetailCtrl.class);
 
-	protected Window windowPenjualanDetail; // autowired
+	protected Window windowApprovalPenjualanDetail; // autowired
 
-	protected Borderlayout borderlayout_PenjualanDetail; // autowired
+	protected Borderlayout borderlayout_ApprovalPenjualanDetail; // autowired
 
 	protected Textbox txtb_NoFaktur; // autowired
 	protected Textbox txtb_NoOrderSheet; // autowired
@@ -105,14 +105,14 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 	protected Decimalbox txtb_HargaBarang; 
 	protected Button btnNewBarang; 
 	
-	public List<PenjualanDetail> listPenjualanDetail = new ArrayList<PenjualanDetail>();
+	public List<PenjualanDetail> listApprovalPenjualanDetail = new ArrayList<PenjualanDetail>();
 	// Databinding
 	private PenjualanDetail selectedPenjualanDetail;
 	
-	protected Listbox listBoxPenjualanDetail; // autowired
+	protected Listbox listBoxApprovalPenjualanDetail; // autowired
 	// Databinding
 	protected transient AnnotateDataBinder binder;
-	private PenjualanMainCtrl penjualanMainCtrl;
+	private ApprovalPenjualanMainCtrl approvalPenjualanMainCtrl;
 
 	// ServiceDAOs / Domain Classes
 	private transient PenjualanService penjualanService;
@@ -125,7 +125,7 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 	/**
 	 * default constructor.<br>
 	 */
-	public PenjualanDetailCtrl() {
+	public ApprovalPenjualanDetailCtrl() {
 		super();
 	}
 
@@ -136,17 +136,18 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 		this.self.setAttribute("controller", this, false);
 
 		if (arg.containsKey("ModuleMainController")) {
-			setPenjualanMainCtrl((PenjualanMainCtrl) arg.get("ModuleMainController"));
+			setApprovalPenjualanMainCtrl((ApprovalPenjualanMainCtrl) arg.get("ModuleMainController"));
 
 			// SET THIS CONTROLLER TO THE module's Parent/MainController
-			getPenjualanMainCtrl().setPenjualanDetailCtrl(this);
+			getApprovalPenjualanMainCtrl().setApprovalPenjualanDetailCtrl(this);
 			
 			// Get the selected object.
 			// Check if this Controller if created on first time. If so,
 			// than the selectedXXXBean should be null
-			if (getPenjualanMainCtrl().getSelectedPenjualan() != null) {
-				setSelectedPenjualan(getPenjualanMainCtrl().getSelectedPenjualan());						
+			if (getApprovalPenjualanMainCtrl().getSelectedPenjualan() != null) {
+				setSelectedPenjualan(getApprovalPenjualanMainCtrl().getSelectedPenjualan());						
 				doRefresh();
+				txtb_ApprovedBy.focus();
 			} else
 				setSelectedPenjualan(null);
 		} else {
@@ -226,9 +227,9 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 		clearBarang();
 
 		if(getSelectedPenjualan().getNoFaktur()!=null){
-			listPenjualanDetail = getPenjualanService().getPenjualanDetailsByPenjualan(getSelectedPenjualan());			
+			listApprovalPenjualanDetail = getPenjualanService().getPenjualanDetailsByPenjualan(getSelectedPenjualan());			
 		}else{
-			listPenjualanDetail = new ArrayList<PenjualanDetail>();
+			listApprovalPenjualanDetail = new ArrayList<PenjualanDetail>();
 		}
 		doFillListboxPenjualanDetail();
 		
@@ -258,7 +259,7 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 	 * @param event
 	 * @throws Exception
 	 */
-	public void onCreate$windowPenjualanDetail(Event event) throws Exception {
+	public void onCreate$windowApprovalPenjualanDetail(Event event) throws Exception {
 		binder = (AnnotateDataBinder) event.getTarget().getAttribute("binder", true);
 
 		binder.loadAll();
@@ -308,7 +309,7 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 			BigDecimal total = calculateSubTotal(txtb_JumlahBarang.getValue(),txtb_HargaBarang.getValue());
 		    item.setTotal(total);
 			item.setPenjualan(getSelectedPenjualan());
-			listPenjualanDetail.add(item);
+			listApprovalPenjualanDetail.add(item);
 			doFillListboxPenjualanDetail();
 			clearBarang();
 			calculateTotal();
@@ -329,7 +330,7 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 	public void calculateTotal()
     {
 		BigDecimal total = BigDecimal.ZERO;
-		for(PenjualanDetail pd : listPenjualanDetail){
+		for(PenjualanDetail pd : listApprovalPenjualanDetail){
 			total = total.add(pd.getTotal());
 		}
 		getSelectedPenjualan().setTotal(total);
@@ -355,27 +356,12 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 		getSelectedPenjualan().setGrandTotal(grandTotal);
 		label_GrandTotal.setValue(grandTotal);
 		        
-		BigDecimal kreditPerBulan = BigDecimal.ZERO;
-		
-		int interval = Integer.parseInt(cmb_IntervalKredit.getValue());
-		if(interval > 1){
-			int temp = interval-1;
-			kreditPerBulan = getSelectedPenjualan().getGrandTotal().divide(new BigDecimal(temp),0, RoundingMode.HALF_UP);
-			label_KreditPerBulan.setValue(kreditPerBulan);
-			getSelectedPenjualan().setKreditPerBulan(kreditPerBulan);
-		}
     }
 	
 	public void onChange$txtb_TglPenjualan(Event event) throws InterruptedException {
 		generateNewNoFaktur();	
 	}
 	public void onSelect$lbox_Sales1(Event event) throws InterruptedException {		
-		generateNewNoFaktur();	
-	}
-	public void onBlur$lbox_Sales1(Event event) throws InterruptedException {		
-		generateNewNoFaktur();	
-	}
-	public void onChange$lbox_Sales1(Event event) throws InterruptedException {		
 		generateNewNoFaktur();	
 	}
 	public void onSelect$lbox_Wilayah(Event event) throws InterruptedException {		
@@ -448,7 +434,7 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 		
 		int interval = Integer.parseInt(cmb_IntervalKredit.getValue());
 		if(interval > 1){
-			for(PenjualanDetail ld : listPenjualanDetail){
+			for(PenjualanDetail ld : listApprovalPenjualanDetail){
 				ld.setHarga(getBarangService().getHargaBarangByIntervalKredit(ld.getBarang(), interval));
 				BigDecimal subTotal = calculateSubTotal(ld.getQty(),ld.getHarga());
 				ld.setTotal(subTotal);
@@ -457,13 +443,6 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 			}			
 		}else{
 			radioStatusCash.setSelected(true);
-			for(PenjualanDetail ld : listPenjualanDetail){
-				ld.setHarga(getBarangService().getHargaBarangByIntervalKredit(ld.getBarang(), interval));
-				BigDecimal subTotal = calculateSubTotal(ld.getQty(),ld.getHarga());
-				ld.setTotal(subTotal);
-				/*BigDecimal cicilanPerBulan = calculateSubTotal(ld.getQty(), getBarangService().getCicilanPerBulanByIntervalKredit(ld.getBarang(), interval));
-				kreditPerBulan = kreditPerBulan.add(cicilanPerBulan);	*/			
-			}
 		}
 		
 		doFillListboxPenjualanDetail();
@@ -472,7 +451,7 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 		
 		if(interval > 1){
 			int temp = interval-1;
-			kreditPerBulan = getSelectedPenjualan().getGrandTotal().divide(new BigDecimal(temp),0, RoundingMode.HALF_UP);
+			kreditPerBulan = getSelectedPenjualan().getTotal().divide(new BigDecimal(temp),0, RoundingMode.HALF_UP);
 			label_KreditPerBulan.setValue(kreditPerBulan);
 			getSelectedPenjualan().setKreditPerBulan(kreditPerBulan);
 		}
@@ -487,12 +466,12 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 	
 	public void doFillListboxPenjualanDetail() {
 		
-		getListBoxPenjualanDetail().setModel(new ListModelList(listPenjualanDetail));
-		getListBoxPenjualanDetail().setItemRenderer(new PenjualanDetailListModelItemRenderer());
+		getListBoxApprovalPenjualanDetail().setModel(new ListModelList(listApprovalPenjualanDetail));
+		getListBoxApprovalPenjualanDetail().setItemRenderer(new PenjualanDetailListModelItemRenderer());
 		
 	}
 	public void onDoubleClickedPenjualanDetailItem(Event event) {
-		Listitem item = this.listBoxPenjualanDetail.getSelectedItem();
+		/*Listitem item = this.listBoxApprovalPenjualanDetail.getSelectedItem();
 		if (item != null) {
 			setSelectedPenjualanDetail((PenjualanDetail) item.getAttribute("data"));
 			//delete item
@@ -510,7 +489,7 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 							//
 							try {
 								deleteBean();
-								Iterator<PenjualanDetail> itr = listPenjualanDetail.iterator();
+								Iterator<PenjualanDetail> itr = listApprovalPenjualanDetail.iterator();
 								while (itr.hasNext()) { 
 									PenjualanDetail pd = itr.next(); 
 									if (pd.getBarang().getId() == getSelectedPenjualanDetail().getBarang().getId()
@@ -552,7 +531,40 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 			calculateTotal();
 			calculateGrandTotal();
 			
-		}
+		}*/
+	}
+	
+	public void onClick$btnApprovePenjualan(Event event) throws InterruptedException {
+		final Penjualan anPenjualan = getSelectedPenjualan();
+		if (anPenjualan != null) {
+
+			// Show a confirm box
+			String msg = "Apakah anda yakin mengapprove penjualan ini? ";
+			final String title = Labels.getLabel("message.Information");
+
+			MultiLineMessageBox.doSetTemplate();
+			if (MultiLineMessageBox.show(msg, title, Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, true, new EventListener() {
+				@Override
+				public void onEvent(Event evt) {
+					switch (((Integer) evt.getData()).intValue()) {
+					case MultiLineMessageBox.YES:
+						try {
+							getApprovalPenjualanMainCtrl().doSave(evt);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						break; //
+					case MultiLineMessageBox.NO:
+						break; //
+					}
+				}				
+			}
+			) == MultiLineMessageBox.YES) {
+			}
+		}	
+		
+		
 	}
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
 	// ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
@@ -564,9 +576,9 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 		int height = ((Intbox) Path.getComponent("/outerIndexWindow/currentDesktopHeight")).getValue().intValue();
 		height = height - menuOffset;
 		final int maxListBoxHeight = height - 152;
-		borderlayout_PenjualanDetail.setHeight(String.valueOf(maxListBoxHeight) + "px");
+		borderlayout_ApprovalPenjualanDetail.setHeight(String.valueOf(maxListBoxHeight) + "px");
 
-		windowPenjualanDetail.invalidate();
+		windowApprovalPenjualanDetail.invalidate();
 	}
 
 	public void doReadOnlyMode(boolean b) {
@@ -642,32 +654,32 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 	/* Master BEANS */
 	public Penjualan getPenjualan() {
 		// STORED IN THE module's MainController
-		return getPenjualanMainCtrl().getSelectedPenjualan();
+		return getApprovalPenjualanMainCtrl().getSelectedPenjualan();
 	}
 
 	public void setPenjualan(Penjualan anPenjualan) {
 		// STORED IN THE module's MainController
-		getPenjualanMainCtrl().setSelectedPenjualan(anPenjualan);
+		getApprovalPenjualanMainCtrl().setSelectedPenjualan(anPenjualan);
 	}
 
 	public Penjualan getSelectedPenjualan() {
 		// STORED IN THE module's MainController
-		return getPenjualanMainCtrl().getSelectedPenjualan();
+		return getApprovalPenjualanMainCtrl().getSelectedPenjualan();
 	}
 
 	public void setSelectedPenjualan(Penjualan selectedPenjualan) {
 		// STORED IN THE module's MainController
-		getPenjualanMainCtrl().setSelectedPenjualan(selectedPenjualan);
+		getApprovalPenjualanMainCtrl().setSelectedPenjualan(selectedPenjualan);
 	}
 
 	public BindingListModelList getPenjualans() {
 		// STORED IN THE module's MainController
-		return getPenjualanMainCtrl().getPenjualans();
+		return getApprovalPenjualanMainCtrl().getPenjualans();
 	}
 	
 	public void setPenjualans(BindingListModelList penjualans) {
 		// STORED IN THE module's MainController
-		getPenjualanMainCtrl().setPenjualans(penjualans);
+		getApprovalPenjualanMainCtrl().setPenjualans(penjualans);
 	}
 	
 	public AnnotateDataBinder getBinder() {
@@ -679,12 +691,12 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 	}
 
 	/* CONTROLLERS */
-	public void setPenjualanMainCtrl(PenjualanMainCtrl penjualanMainCtrl) {
-		this.penjualanMainCtrl = penjualanMainCtrl;
+	public void setApprovalPenjualanMainCtrl(ApprovalPenjualanMainCtrl penjualanMainCtrl) {
+		this.approvalPenjualanMainCtrl = penjualanMainCtrl;
 	}
 
-	public PenjualanMainCtrl getPenjualanMainCtrl() {
-		return this.penjualanMainCtrl;
+	public ApprovalPenjualanMainCtrl getApprovalPenjualanMainCtrl() {
+		return this.approvalPenjualanMainCtrl;
 	}
 
 	/* SERVICES */
@@ -728,12 +740,12 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 		this.statusService = statusService;
 	}
 
-	public List<PenjualanDetail> getListPenjualanDetail() {
-		return listPenjualanDetail;
+	public List<PenjualanDetail> getListApprovalPenjualanDetail() {
+		return listApprovalPenjualanDetail;
 	}
 
-	public void setListPenjualanDetail(List<PenjualanDetail> listPenjualanDetail) {
-		this.listPenjualanDetail = listPenjualanDetail;
+	public void setListPenjualanDetail(List<PenjualanDetail> listApprovalPenjualanDetail) {
+		this.listApprovalPenjualanDetail = listApprovalPenjualanDetail;
 	}
 
 	public PenjualanDetail getSelectedPenjualanDetail() {
@@ -744,12 +756,12 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 		this.selectedPenjualanDetail = selectedPenjualanDetail;
 	}
 
-	public Listbox getListBoxPenjualanDetail() {
-		return listBoxPenjualanDetail;
+	public Listbox getListBoxApprovalPenjualanDetail() {
+		return listBoxApprovalPenjualanDetail;
 	}
 
-	public void setListBoxPenjualanDetail(Listbox listBoxPenjualanDetail) {
-		this.listBoxPenjualanDetail = listBoxPenjualanDetail;
+	public void setListBoxApprovalPenjualanDetail(Listbox listBoxApprovalPenjualanDetail) {
+		this.listBoxApprovalPenjualanDetail = listBoxApprovalPenjualanDetail;
 	}
 
 	/*public Barang getSelectedBarang() {

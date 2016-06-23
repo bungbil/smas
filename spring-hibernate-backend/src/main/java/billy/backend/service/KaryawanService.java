@@ -18,6 +18,7 @@ public interface KaryawanService {
 
 	public List<Karyawan> getAllKaryawans();
 	public List<Karyawan> getAllSalesKaryawansByUserLogin(SecUser user);
+	public List<Karyawan> getAllDivisiKaryawansByUserLogin(SecUser user);
 	public List<Karyawan> getKaryawansLikeKodeKaryawan(String string);
 	
 	public List<Karyawan> getKaryawansLikeNamaPanggilan(String string);

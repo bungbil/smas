@@ -64,6 +64,7 @@ public class PenjualanDAOImpl extends BillyBasisDAO<Penjualan> implements Penjua
 		criteria.add(Restrictions.eq("divisi.id", obj.getId()));
 		return getHibernateTemplate().findByCriteria(criteria).size();
 	}
+	
 
 	@Override
 	public void initialize(Penjualan obj) {
@@ -73,5 +74,46 @@ public class PenjualanDAOImpl extends BillyBasisDAO<Penjualan> implements Penjua
 	@Override
 	public Penjualan getPenjualanById(long id) {
 		return get(Penjualan.class, id);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Penjualan> getListNeedApprovalPenjualansByListNoFaktur(
+			List<String> listNoFaktur) {
+		DetachedCriteria criteria = DetachedCriteria.forClass(Penjualan.class);
+		criteria.add(Restrictions.in("noFaktur", listNoFaktur.toArray()));
+		criteria.add(Restrictions.eq("needApproval", true));
+		return getHibernateTemplate().findByCriteria(criteria);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Penjualan> getAllPenjualansByListNoFaktur(
+			List<String> listNoFaktur) {
+		DetachedCriteria criteria = DetachedCriteria.forClass(Penjualan.class);
+		criteria.add(Restrictions.in("noFaktur", listNoFaktur.toArray()));
+		return getHibernateTemplate().findByCriteria(criteria);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Penjualan> getAllPenjualansByDivisiAndRangeDate(
+			Karyawan obj,Date startDate, Date endDate) {
+		DetachedCriteria criteria = DetachedCriteria.forClass(Penjualan.class);
+		criteria.add(Restrictions.ge("tglPenjualan", startDate));
+		criteria.add(Restrictions.le("tglPenjualan", endDate));
+		criteria.add(Restrictions.eq("divisi.id", obj.getId()));		
+		return getHibernateTemplate().findByCriteria(criteria);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Penjualan> getAllPenjualansByKaryawanAndRangeDate(
+			Karyawan obj,Date startDate, Date endDate) {
+		DetachedCriteria criteria = DetachedCriteria.forClass(Penjualan.class);
+		criteria.add(Restrictions.ge("tglPenjualan", startDate));
+		criteria.add(Restrictions.le("tglPenjualan", endDate));		
+		criteria.add(Restrictions.eq("id", obj.getId()));
+		return getHibernateTemplate().findByCriteria(criteria);
 	}
 }

@@ -1,4 +1,4 @@
-package billy.webui.transaction.penjualan;
+package billy.webui.transaction.penjualan.approval;
 
 import java.io.Serializable;
 
@@ -32,17 +32,17 @@ import de.forsthaus.backend.util.HibernateSearchObject;
 import de.forsthaus.policy.model.UserImpl;
 import de.forsthaus.webui.util.GFCBaseListCtrl;
 
-public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Serializable {
+public class ApprovalPenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Serializable {
 
 	private static final long serialVersionUID = -2170565288232491362L;
-	private static final Logger logger = Logger.getLogger(PenjualanListCtrl.class);
+	private static final Logger logger = Logger.getLogger(ApprovalPenjualanListCtrl.class);
 
-	protected Window windowPenjualanList; // autowired
-	protected Panel panelPenjualanList; // autowired
+	protected Window windowApprovalPenjualanList; // autowired
+	protected Panel panelApprovalPenjualanList; // autowired
 
-	protected Borderlayout borderLayout_penjualanList; // autowired
-	protected Paging paging_PenjualanList; // autowired
-	protected Listbox listBoxPenjualan; // autowired
+	protected Borderlayout borderLayout_approvalPenjualanList; // autowired
+	protected Paging paging_ApprovalPenjualanList; // autowired
+	protected Listbox listBoxApprovalPenjualan; // autowired
 	protected Listheader listheader_PenjualanList_NoFaktur; // autowired
 	protected Listheader listheader_PenjualanList_TglPenjualan; // autowired
 	protected Listheader listheader_PenjualanList_MetodePembayaran; // autowired
@@ -64,7 +64,7 @@ public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Ser
 
 	// Databinding
 	private AnnotateDataBinder binder;
-	private PenjualanMainCtrl penjualanMainCtrl;
+	private ApprovalPenjualanMainCtrl approvalPenjualanMainCtrl;
 
 	// ServiceDAOs / Domain Classes
 	private transient PenjualanService penjualanService;
@@ -72,7 +72,7 @@ public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Ser
 	/**
 	 * default constructor.<br>
 	 */
-	public PenjualanListCtrl() {
+	public ApprovalPenjualanListCtrl() {
 		super();
 	}
 
@@ -82,11 +82,11 @@ public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Ser
 		
 		this.self.setAttribute("controller", this, false);
 		if (arg.containsKey("ModuleMainController")) {
-			setPenjualanMainCtrl((PenjualanMainCtrl) arg.get("ModuleMainController"));
-			getPenjualanMainCtrl().setPenjualanListCtrl(this);
+			setApprovalPenjualanMainCtrl((ApprovalPenjualanMainCtrl) arg.get("ModuleMainController"));
+			getApprovalPenjualanMainCtrl().setApprovalPenjualanListCtrl(this);
 
-			if (getPenjualanMainCtrl().getSelectedPenjualan() != null) {
-				setSelectedPenjualan(getPenjualanMainCtrl().getSelectedPenjualan());
+			if (getApprovalPenjualanMainCtrl().getSelectedPenjualan() != null) {
+				setSelectedPenjualan(getApprovalPenjualanMainCtrl().getSelectedPenjualan());
 			} else
 				setSelectedPenjualan(null);
 		} else {
@@ -105,7 +105,7 @@ public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Ser
 	 * @throws Exception
 	 */
 
-	public void onCreate$windowPenjualanList(Event event) throws Exception {
+	public void onCreate$windowApprovalPenjualanList(Event event) throws Exception {
 		binder = (AnnotateDataBinder) event.getTarget().getAttribute("binder", true);
 
 		doFillListbox();
@@ -118,8 +118,8 @@ public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Ser
 		doFitSize();
 
 		// set the paging params
-		paging_PenjualanList.setPageSize(getCountRows());
-		paging_PenjualanList.setDetailed(true);
+		paging_ApprovalPenjualanList.setPageSize(getCountRows());
+		paging_ApprovalPenjualanList.setDetailed(true);
 
 		// not used listheaders must be declared like ->
 		// lh.setSortAscending(""); lh.setSortDescending("")
@@ -138,8 +138,8 @@ public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Ser
 		listheader_PenjualanList_Piutang.setSortAscending(new FieldComparator("piutang", true));
 		listheader_PenjualanList_Piutang.setSortDescending(new FieldComparator("piutang", false));
 		
-		listheader_PenjualanList_Status.setSortAscending(new FieldComparator("status", true));
-		listheader_PenjualanList_Status.setSortDescending(new FieldComparator("status", false));
+		listheader_PenjualanList_Status.setSortAscending(new FieldComparator("status.deskripsiStatus", true));
+		listheader_PenjualanList_Status.setSortDescending(new FieldComparator("status.deskripsiStatus", false));
 		
 		listheader_PenjualanList_NamaPelanggan.setSortAscending(new FieldComparator("namaPelanggan", true));
 		listheader_PenjualanList_NamaPelanggan.setSortDescending(new FieldComparator("namaPelanggan", false));
@@ -147,11 +147,11 @@ public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Ser
 		listheader_PenjualanList_Telepon.setSortAscending(new FieldComparator("telepon", true));
 		listheader_PenjualanList_Telepon.setSortDescending(new FieldComparator("telepon", false));
 		
-		listheader_PenjualanList_Sales1.setSortAscending(new FieldComparator("sales1", true));
-		listheader_PenjualanList_Sales1.setSortDescending(new FieldComparator("sales1", false));
+		listheader_PenjualanList_Sales1.setSortAscending(new FieldComparator("sales1.namaKtp", true));
+		listheader_PenjualanList_Sales1.setSortDescending(new FieldComparator("sales1.namaKtp", false));
 		
-		listheader_PenjualanList_Sales2.setSortAscending(new FieldComparator("sales2", true));
-		listheader_PenjualanList_Sales2.setSortDescending(new FieldComparator("sales2", false));
+		listheader_PenjualanList_Sales2.setSortAscending(new FieldComparator("sales2.namaKtp", true));
+		listheader_PenjualanList_Sales2.setSortDescending(new FieldComparator("sales2.namaKtp", false));
 		
 		listheader_PenjualanList_LastUpdate.setSortAscending(new FieldComparator("lastUpdate", true));
 		listheader_PenjualanList_LastUpdate.setSortDescending(new FieldComparator("lastUpdate", false));
@@ -164,7 +164,7 @@ public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Ser
 		// ++ create the searchObject and init sorting ++//
 		searchObj = new HibernateSearchObject<Penjualan>(Penjualan.class, getCountRows());
 		searchObj.addSort("noFaktur", false);
-		
+		searchObj.addFilter(new Filter("needApproval", true , Filter.OP_EQUAL));
 		SecUser secUser = ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSecUser();
 		if(secUser.getKaryawan()!=null){
 			Karyawan karyawan = secUser.getKaryawan();
@@ -177,8 +177,8 @@ public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Ser
 		setSearchObj(searchObj);
 
 		// Set the BindingListModel
-		getPagedBindingListWrapper().init(searchObj, getListBoxPenjualan(), paging_PenjualanList);
-		BindingListModelList lml = (BindingListModelList) getListBoxPenjualan().getModel();
+		getPagedBindingListWrapper().init(searchObj, getListBoxApprovalPenjualan(), paging_ApprovalPenjualanList);
+		BindingListModelList lml = (BindingListModelList) getListBoxApprovalPenjualan().getModel();
 		setPenjualans(lml);
 
 		// check if first time opened and init databinding for selectedBean
@@ -189,13 +189,13 @@ public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Ser
 				// only for correct showing after Rendering. No effect as an
 				// Event
 				// yet.
-				getListBoxPenjualan().setSelectedIndex(rowIndex);
+				getListBoxApprovalPenjualan().setSelectedIndex(rowIndex);
 				// get the first entry and cast them to the needed object
 				setSelectedPenjualan((Penjualan) lml.get(0));
 
 				// call the onSelect Event for showing the objects data in the
 				// statusBar
-				Events.sendEvent(new Event("onSelect", getListBoxPenjualan(), getSelectedPenjualan()));
+				Events.sendEvent(new Event("onSelect", getListBoxApprovalPenjualan(), getSelectedPenjualan()));
 			}
 		}
 
@@ -215,15 +215,15 @@ public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Ser
 			setPenjualan(anPenjualan);
 
 			// check first, if the tabs are created
-			if (getPenjualanMainCtrl().getPenjualanDetailCtrl() == null) {
-				Events.sendEvent(new Event("onSelect", getPenjualanMainCtrl().tabPenjualanDetail, null));
+			if (getApprovalPenjualanMainCtrl().getApprovalPenjualanDetailCtrl() == null) {
+				Events.sendEvent(new Event("onSelect", getApprovalPenjualanMainCtrl().tabApprovalPenjualanDetail, null));
 				// if we work with spring beanCreation than we must check a
 				// little bit deeper, because the Controller are preCreated ?
-			} else if (getPenjualanMainCtrl().getPenjualanDetailCtrl().getBinder() == null) {
-				Events.sendEvent(new Event("onSelect", getPenjualanMainCtrl().tabPenjualanDetail, null));
+			} else if (getApprovalPenjualanMainCtrl().getApprovalPenjualanDetailCtrl().getBinder() == null) {
+				Events.sendEvent(new Event("onSelect", getApprovalPenjualanMainCtrl().tabApprovalPenjualanDetail, null));
 			}
 
-			Events.sendEvent(new Event("onSelect", getPenjualanMainCtrl().tabPenjualanDetail, anPenjualan));
+			Events.sendEvent(new Event("onSelect", getApprovalPenjualanMainCtrl().tabApprovalPenjualanDetail, anPenjualan));
 		}
 	}
 
@@ -233,7 +233,7 @@ public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Ser
 	 * 
 	 * @param event
 	 */
-	public void onSelect$listBoxPenjualan(Event event) {
+	public void onSelect$listBoxApprovalPenjualan(Event event) {
 		// logger.debug(event.toString());
 
 		// selectedPenjualan is filled by annotated databinding mechanism
@@ -244,20 +244,20 @@ public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Ser
 		}
 
 		// check first, if the tabs are created
-		if (getPenjualanMainCtrl().getPenjualanDetailCtrl() == null) {
-			Events.sendEvent(new Event("onSelect", getPenjualanMainCtrl().tabPenjualanDetail, null));
+		if (getApprovalPenjualanMainCtrl().getApprovalPenjualanDetailCtrl() == null) {
+			Events.sendEvent(new Event("onSelect", getApprovalPenjualanMainCtrl().tabApprovalPenjualanDetail, null));
 			// if we work with spring beanCreation than we must check a little
 			// bit deeper, because the Controller are preCreated ?
-		} else if (getPenjualanMainCtrl().getPenjualanDetailCtrl().getBinder() == null) {
-			Events.sendEvent(new Event("onSelect", getPenjualanMainCtrl().tabPenjualanDetail, null));
+		} else if (getApprovalPenjualanMainCtrl().getApprovalPenjualanDetailCtrl().getBinder() == null) {
+			Events.sendEvent(new Event("onSelect", getApprovalPenjualanMainCtrl().tabApprovalPenjualanDetail, null));
 		}
 
 		// INIT ALL RELATED Queries/OBJECTS/LISTS NEW
-		getPenjualanMainCtrl().getPenjualanDetailCtrl().setSelectedPenjualan(anPenjualan);
-		getPenjualanMainCtrl().getPenjualanDetailCtrl().setPenjualan(anPenjualan);
+		getApprovalPenjualanMainCtrl().getApprovalPenjualanDetailCtrl().setSelectedPenjualan(anPenjualan);
+		getApprovalPenjualanMainCtrl().getApprovalPenjualanDetailCtrl().setPenjualan(anPenjualan);
 
 		// store the selected bean values as current
-		getPenjualanMainCtrl().doStoreInitValues();
+		getApprovalPenjualanMainCtrl().doStoreInitValues();
 
 		// show the objects data in the statusBar
 		String str = Labels.getLabel("common.Penjualan") + ": " + anPenjualan.getNoFaktur();
@@ -290,9 +290,9 @@ public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Ser
 		height = height - menuOffset;
 		final int maxListBoxHeight = height - specialSize - 148;
 		setCountRows((int) Math.round(maxListBoxHeight / 17.7));
-		borderLayout_penjualanList.setHeight(String.valueOf(maxListBoxHeight) + "px");
+		borderLayout_approvalPenjualanList.setHeight(String.valueOf(maxListBoxHeight) + "px");
 
-		windowPenjualanList.invalidate();
+		windowApprovalPenjualanList.invalidate();
 	}
 
 	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++//
@@ -308,32 +308,32 @@ public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Ser
 	/* Master BEANS */
 	public Penjualan getPenjualan() {
 		// STORED IN THE module's MainController
-		return getPenjualanMainCtrl().getSelectedPenjualan();
+		return getApprovalPenjualanMainCtrl().getSelectedPenjualan();
 	}
 
 	public void setPenjualan(Penjualan anPenjualan) {
 		// STORED IN THE module's MainController
-		getPenjualanMainCtrl().setSelectedPenjualan(anPenjualan);
+		getApprovalPenjualanMainCtrl().setSelectedPenjualan(anPenjualan);
 	}
 
 	public void setSelectedPenjualan(Penjualan selectedPenjualan) {
 		// STORED IN THE module's MainController
-		getPenjualanMainCtrl().setSelectedPenjualan(selectedPenjualan);
+		getApprovalPenjualanMainCtrl().setSelectedPenjualan(selectedPenjualan);
 	}
 
 	public Penjualan getSelectedPenjualan() {
 		// STORED IN THE module's MainController
-		return getPenjualanMainCtrl().getSelectedPenjualan();
+		return getApprovalPenjualanMainCtrl().getSelectedPenjualan();
 	}
 
 	public void setPenjualans(BindingListModelList penjualans) {
 		// STORED IN THE module's MainController
-		getPenjualanMainCtrl().setPenjualans(penjualans);
+		getApprovalPenjualanMainCtrl().setPenjualans(penjualans);
 	}
 
 	public BindingListModelList getPenjualans() {
 		// STORED IN THE module's MainController
-		return getPenjualanMainCtrl().getPenjualans();
+		return getApprovalPenjualanMainCtrl().getPenjualans();
 	}
 
 	public void setBinder(AnnotateDataBinder binder) {
@@ -345,12 +345,12 @@ public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Ser
 	}
 
 	/* CONTROLLERS */
-	public void setPenjualanMainCtrl(PenjualanMainCtrl penjualanMainCtrl) {
-		this.penjualanMainCtrl = penjualanMainCtrl;
+	public void setApprovalPenjualanMainCtrl(ApprovalPenjualanMainCtrl approvalPenjualanMainCtrl) {
+		this.approvalPenjualanMainCtrl = approvalPenjualanMainCtrl;
 	}
 
-	public PenjualanMainCtrl getPenjualanMainCtrl() {
-		return this.penjualanMainCtrl;
+	public ApprovalPenjualanMainCtrl getApprovalPenjualanMainCtrl() {
+		return this.approvalPenjualanMainCtrl;
 	}
 
 	/* SERVICES */
@@ -371,12 +371,12 @@ public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Ser
 		return this.searchObj;
 	}
 
-	public Listbox getListBoxPenjualan() {
-		return this.listBoxPenjualan;
+	public Listbox getListBoxApprovalPenjualan() {
+		return this.listBoxApprovalPenjualan;
 	}
 
-	public void setListBoxPenjualan(Listbox listBoxPenjualan) {
-		this.listBoxPenjualan = listBoxPenjualan;
+	public void setListBoxApprovalPenjualan(Listbox listBoxApprovalPenjualan) {
+		this.listBoxApprovalPenjualan = listBoxApprovalPenjualan;
 	}
 
 	public int getCountRows() {

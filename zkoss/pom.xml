@@ -70,7 +70,10 @@
 			<url>http://repository.springsource.com/maven/bundles/release/</url>
 		</repository>
  
- 
+ 		<repository>
+ 			<id>simple-escp</id>
+ 			<url>http://dl.bintray.com/jockihendry/maven</url>
+ 		</repository>
 		<!-- Dynamic Jasper -->
 		<repository>
 			<id>fdvsolution.public</id>
@@ -148,7 +151,11 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
+		<dependency>
+		  <groupId>jockihendry</groupId>
+		  <artifactId>simple-escp</artifactId>
+		  <version>0.5.3</version>				  
+		</dependency>
 
 		<dependency>
 			<groupId>commons-fileupload</groupId>

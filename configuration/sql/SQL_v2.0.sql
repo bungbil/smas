@@ -23,13 +23,13 @@ CREATE TABLE penjualan (
    alamat				varchar(500)   		 not null,
    rencana_kirim      	date				 not null,
    pengirim_id			INT8                 not null,   
-   down_payment			numeric(12,2)		 not null default 0,  
+   down_payment			numeric(12,2)		 null default 0,  
    interval_kredit		INT4                 not null,
-   diskon				numeric(12,2)		 not null default 0,  
+   diskon				numeric(12,2)		 null default 0,  
    tgl_angsuran2		date				 null,
    total				numeric(12,2)		 not null default 0,  
    grand_total			numeric(12,2)		 not null default 0,  
-   kredit_per_bulan		numeric(12,2)		 not null default 0,
+   kredit_per_bulan		numeric(12,2)		 null default 0,
    piutang				numeric(12,2)		 not null default 0,
    remark				varchar(500)   		 null,
    mandiri				varchar(20)          null,
@@ -90,49 +90,6 @@ alter table penjualan_detail
       on delete cascade on update cascade;
 
 
-/*==============================================================*/
-/* Table: piutang                                             */
-/*==============================================================*/
-DROP TABLE IF EXISTS piutang cascade;
-DROP SEQUENCE IF EXISTS piutang_seq;
-
-CREATE TABLE piutang (
-   piutang_id  			INT8                 not null,
-   penjualan_id         INT8                 not null,
-   no_kuitansi			varchar(50)          not null, 
-   pembayaran_ke		INT4                 not null,
-   tgl_pembayaran		date				 not null,
-   status				varchar(50)          not null,
-   nilai_tagihan		numeric(12,2)		 not null default 0,
-   pembayaran			numeric(12,2)		 not null default 0,
-   piutang				numeric(12,2)		 not null default 0,
-   tgl_jatuh_tempo		date				 not null,
-   kolektor_id			INT8                 not null,
-   keterangan			varchar(300)          null,
-   last_update       	timestamp,          
-   updated_by       	varchar(50)          null,
-   version              int4                 not null default 0,
-   constraint pk_piutang primary key (piutang_id)
-)
-without oids;
-ALTER TABLE piutang owner to smas;
-
-CREATE SEQUENCE piutang_seq START 100;
-ALTER SEQUENCE piutang_seq OWNER TO smas;
-
-CREATE UNIQUE INDEX ix_piutang_id on piutang using btree (
-piutang_id
-);
-
-CREATE UNIQUE INDEX ix_no_kuitansi on piutang (
-no_kuitansi
-);
-
-alter table piutang
-   add constraint ref_penjualan_to_piutang foreign key (penjualan_id)
-      references penjualan (penjualan_id)
-      on delete cascade on update cascade;
-
 /* Penjualan */
 /* --> Page Penjualan */
 INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
@@ -171,3 +128,28 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 (216, 1, 216, 0),
 (217, 1, 217, 0),
 (218, 1, 218, 0);
+
+/* Approval Penjualan */
+/* --> Page Approval Penjualan */
+INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
+(219, 2, 'menuItem_Transaction_ApprovalPenjualan', 0),
+(220, 0, 'windowApprovalPenjualanList', 0),
+(221, 0, 'windowApprovalPenjualanDetail', 0),
+/* window_ApprovalPenjualanList Buttons*/
+(222, 6, 'button_ApprovalPenjualanList_Search', 0),
+/* Approval Penjualan navigation buttons */
+(223, 6, 'button_ApprovalPenjualanMain_btnFirst', 0),
+(224, 6, 'button_ApprovalPenjualanMain_btnPrevious', 0),
+(225, 6, 'button_ApprovalPenjualanMain_btnNext', 0),
+(226, 6, 'button_ApprovalPenjualanMain_btnLast', 0);
+
+INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
+(219, 1, 219, 0),
+(220, 1, 220, 0),
+(221, 1, 221, 0),
+(222, 1, 222, 0),
+(223, 1, 223, 0),
+(224, 1, 224, 0),
+(225, 1, 225, 0),
+(226, 1, 226, 0);
+

@@ -5,15 +5,15 @@
 <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 <!-- Namespace dependent DataBinding Initiator.          -->
 <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./windowPenjualanDetail" ?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./windowApprovalPenjualanDetail" ?>
 
 <zk xmlns="http://www.zkoss.org/2005/zul" xmlns:h="http://www.w3.org/1999/xhtml"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
-	<window id="windowPenjualanDetail" apply="${penjualanDetailCtrl}" border="none" width="100%">
+	<window id="windowApprovalPenjualanDetail" apply="${approvalPenjualanDetailCtrl}" border="none" width="100%">
 
-		<borderlayout id="borderlayout_PenjualanDetail">
+		<borderlayout id="borderlayout_ApprovalPenjualanDetail">
 			<center border="none" autoscroll="true">
 
 				<hbox align="stretch" pack="stretch" sclass="FDCenterNoBorder" width="100%">
@@ -84,7 +84,7 @@
 														<label />	
 														<label id="label_Sales1" value="Sales 1" />
 														<listbox id="lbox_Sales1" mold="select" disabled="true"
-																multiple="false" rows="1" width="300px" xmlns:w="client">
+																multiple="false" rows="1" width="150px" xmlns:w="client">
 																<attribute w:name="doBlur_"><![CDATA[
 														            function(evt) {
 														                this.$doBlur_(evt);
@@ -115,7 +115,7 @@
 														<label />
 														<label id="label_Sales2" value="Sales 2" />
 														<listbox id="lbox_Sales2" mold="select" disabled="true"
-																multiple="false" rows="1" width="300px">															
+																multiple="false" rows="1" width="150px">															
 														</listbox>
 													</row>
 													
@@ -164,36 +164,6 @@
 															readonly="true" maxlength="500" hflex="1" rows="2"  />
 													</row>
 													
-													
-													<row>
-														<label value="Metode Pembayaran"/>
-									            		<radiogroup id="radiogroup_MetodePembayaran" >
-															<grid>
-														        <rows>													            
-														            <row>
-														                 <radio id="radioStatusCash" label="Cash" radiogroup="radiogroup_MetodePembayaran" disabled="true"/>
-												               			 <radio id="radioStatusKredit" label="Kredit" radiogroup="radiogroup_MetodePembayaran" disabled="true"/>												               			 
-														            </row>													            
-														        </rows>
-														    </grid>
-											      		</radiogroup>	
-													</row>
-													
-													<row>
-														<label value="Interval Kredit"/>									            													      		
-														<combobox id="cmb_IntervalKredit" width="150px" disabled="true">										                    
-										                        <comboitem label="1" value="1"/>
-										                        <comboitem label="2" value="2"/>
-										                        <comboitem label="3" value="3"/>
-										                        <comboitem label="4" value="4"/>
-										                        <comboitem label="5" value="5"/>
-										                        <comboitem label="6" value="6"/>
-										                        <comboitem label="7" value="7"/>
-										                        <comboitem label="8" value="8"/>
-										                        <comboitem label="9" value="9"/>
-										                        <comboitem label="10" value="10"/>										                    
-										                </combobox>
-													</row>
 													<row>
 														<separator bar="true"></separator>
 														<separator bar="true"></separator>
@@ -232,7 +202,7 @@
 									            </columns>
 									            <rows>
 										            <row>
-														<listbox id="listBoxPenjualanDetail"
+														<listbox id="listBoxApprovalPenjualanDetail"
 															style="border-top-width: 0px; border-left-width: 0px; border-right-width: 0px; border-bottom-width: 1px;"
 															 vflex="true"
 															 width="100%" height="100%" multiple="false">
@@ -301,8 +271,17 @@
 														<separator bar="true"></separator>
 													</row>
 									                <row>
-									                    <label value="Down Payment"/>
-									                    <decimalbox id="txtb_DownPayment" value="@{controller.penjualan.downPayment}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />								      		
+									                    <label value="Metode Pembayaran"/>
+									            		<radiogroup id="radiogroup_MetodePembayaran" >
+															<grid>
+														        <rows>													            
+														            <row>
+														                 <radio id="radioStatusCash" label="Cash" radiogroup="radiogroup_MetodePembayaran" disabled="true"/>
+												               			 <radio id="radioStatusKredit" label="Kredit" radiogroup="radiogroup_MetodePembayaran" disabled="true"/>												               			 
+														            </row>													            
+														        </rows>
+														    </grid>
+											      		</radiogroup>											      		
 														<label />
 							                    		<label value="Tanggal Angsuran ke 2"/>
 									            		<datebox id="txtb_TglAngsuran2"	value="@{controller.penjualan.tglAngsuran2}" 
@@ -310,21 +289,38 @@
 														<label />							                    									                    											                       
 									                </row>
 									                
-									                
+									                <row>
+									                    <label value="Interval Kredit"/>									            													      		
+														<combobox id="cmb_IntervalKredit" width="150px" disabled="true">										                    
+										                        <comboitem label="1" value="1"/>
+										                        <comboitem label="2" value="2"/>
+										                        <comboitem label="3" value="3"/>
+										                        <comboitem label="4" value="4"/>
+										                        <comboitem label="5" value="5"/>
+										                        <comboitem label="6" value="6"/>
+										                        <comboitem label="7" value="7"/>
+										                        <comboitem label="8" value="8"/>
+										                        <comboitem label="9" value="9"/>
+										                        <comboitem label="10" value="10"/>										                    
+										                </combobox>
+										                <label />
+										                <label value="Kredit Per Bulan"/>
+									                    <decimalbox id="label_KreditPerBulan" value="@{controller.penjualan.kreditPerBulan}" readonly="true" format=",###.#" hflex="1" />                  											                       
+									                </row>
 									                <row>
 									                	<label value="Diskon"/>
 									                    <decimalbox id="txtb_Diskon" value="@{controller.penjualan.diskon}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
 									                    <label />
-									                    <label value="Diskon + DP"/>									                    
-									                    <decimalbox id="label_DiskonDP" readonly="true" format=",###.#" hflex="1" />									                    				                    									                    									                    											                      
+									                    <label value="Down Payment"/>
+									                    <decimalbox id="txtb_DownPayment" value="@{controller.penjualan.downPayment}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />									                    				                    									                    									                    											                      
 									                </row>
 									                
-							                    	<row>
-									                    <label value="Grand Total"/>
-							                    		<decimalbox id="label_GrandTotal" value="@{controller.penjualan.grandTotal}" readonly="true" format=",###.#" hflex="1" />
-										                <label />
-										                <label value="Kredit Per Bulan"/>
-									                    <decimalbox id="label_KreditPerBulan" value="@{controller.penjualan.kreditPerBulan}" readonly="true" format=",###.#" hflex="1" />                  											                       
+									                <row>
+									                	<label value="Diskon + DP"/>									                    
+									                    <decimalbox id="label_DiskonDP" readonly="true" format=",###.#" hflex="1" />
+								                        <label />
+							                    		<label value="Grand Total"/>
+							                    		<decimalbox id="label_GrandTotal" value="@{controller.penjualan.grandTotal}" readonly="true" format=",###.#" hflex="1" />		                    									                    									                    											                      
 									                </row>
 							                    	<row>
 									                	<label value="Status"/>
@@ -358,7 +354,7 @@
 									                    <label />
 							                    		<label value="Approved By"/>
 							                    		<textbox id="txtb_ApprovedBy" value="@{controller.penjualan.approvedBy}"
-															readonly="true" maxlength="100" hflex="1"  />							                    				                    									                    									                    											                      
+															 maxlength="100" hflex="1"  />							                    				                    									                    									                    											                      
 									                </row>
 									                <row>
 									                	<label value="Alasan butuh Approval"/>
@@ -367,14 +363,14 @@
 									                    <label />
 							                    		<label value="Approved Remark"/>
 							                    		<textbox id="txtb_ApprovedRemark" value="@{controller.penjualan.approvedRemark}"
-															readonly="true" maxlength="500" hflex="1" rows="4"  />						                    				                    									                    									                    											                      
+															maxlength="500" hflex="1" rows="4"  />						                    				                    									                    									                    											                      
 									                </row>
 									                <row>
 									                	<label/>
 									                	<label/>
 									                    <label />
 							                    		<label/>
-							                    		<button id="btnApprovePenjualan" visible="false" label="Confirm Approval"  	/>					                    				                    									                    									                    											                      
+							                    		<button id="btnApprovePenjualan"  label="Confirm Approval"  	/>					                    				                    									                    									                    											                      
 									                </row>
 												</rows>
 											</grid>

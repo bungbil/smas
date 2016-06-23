@@ -95,7 +95,17 @@ public class PenjualanDetail implements java.io.Serializable, Entity {
 
 	@Override
 	public int hashCode() {
-		return Long.valueOf(getId()).hashCode();
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((barang == null) ? 0 : barang.hashCode());
+		result = prime * result + ((harga == null) ? 0 : harga.hashCode());
+		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result
+				+ ((penjualan == null) ? 0 : penjualan.hashCode());
+		result = prime * result + qty;
+		result = prime * result + ((total == null) ? 0 : total.hashCode());
+		result = prime * result + version;
+		return result;
 	}
 
 	public boolean equals(PenjualanDetail obj) {
@@ -104,20 +114,47 @@ public class PenjualanDetail implements java.io.Serializable, Entity {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-
-		if (obj instanceof PenjualanDetail) {
-			PenjualanDetail objs = (PenjualanDetail) obj;
-			return equals(objs);
-		}
-
-		return false;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PenjualanDetail other = (PenjualanDetail) obj;
+		if (barang == null) {
+			if (other.barang != null)
+				return false;
+		} else if (!barang.equals(other.barang))
+			return false;
+		if (harga == null) {
+			if (other.harga != null)
+				return false;
+		} else if (!harga.equals(other.harga))
+			return false;
+		if (id != other.id)
+			return false;
+		if (penjualan == null) {
+			if (other.penjualan != null)
+				return false;
+		} else if (!penjualan.equals(other.penjualan))
+			return false;
+		if (qty != other.qty)
+			return false;
+		if (total == null) {
+			if (other.total != null)
+				return false;
+		} else if (!total.equals(other.total))
+			return false;
+		if (version != other.version)
+			return false;
+		return true;
 	}
 
+	@Override
 	public String toString() {
-		return new ToStringBuilder(this).append("id", getId()).toString();
+		return "PenjualanDetail [id=" + id + ", version=" + version
+				+ ", penjualan=" + penjualan + ", barang=" + barang + ", qty="
+				+ qty + ", harga=" + harga + ", total=" + total + "]";
 	}
 
 }

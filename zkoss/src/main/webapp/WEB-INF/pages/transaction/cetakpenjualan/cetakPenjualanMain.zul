@@ -8,7 +8,7 @@
 	xmlns:w="http://www.zkoss.org/2005/zk/client"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
-	<window id="windowCetakPenjualanMain" apply="${penjualanMainCtrl}"
+	<window id="windowCetakPenjualanMain" apply="${cetakPenjualanMainCtrl}"
 		border="none" width="100%">
 
 		<div sclass="z-toolbar" style="padding:0">
@@ -25,33 +25,51 @@
 										<grid sclass="GridLayoutNoBorder" fixedLayout="true"
 											style="border:0px; padding-left:5px; padding-right:5px;">
 											<columns>
-												<column width="150px" />
+												<column width="350px" />
 												<column />
 											</columns>
 											<rows>
 												<row>
-													<label value="Sales" />
-													<listbox id="lbox_Sales" mold="select"
+													<label value="Divisi" />
+													<hbox>
+														
+														<listbox id="lbox_Divisi" mold="select"
 															multiple="false" rows="1" width="250px">															
-													</listbox>	
+														</listbox>	
+														<button id="btnReset" label="Reset"  width="100px" 	/>
+												
+													</hbox>
+													
+													
 												</row>
 												<row>
-													<label value="Awal Penjualan" />
-													<datebox id="txtb_AwalPenjualan"
-															format="dd/MM/yyyy" width="150px" constraint="no empty"/>
+													<label value="No Faktur Awal (Full No Faktur)" />
+													<textbox id="txtb_NoFakturAwal"
+															width="150px" constraint="no empty" maxlength="10"/>
 												</row>
 												<row>
-													<label value="Akhir Penjualan" />
-													<datebox id="txtb_AkhirPenjualan" 
-															format="dd/MM/yyyy" width="150px" constraint="no empty"/>
+													<label value="No Faktur Akhir (Full No Faktur)" />
+													<textbox id="txtb_NoFakturAkhir" 
+															width="150px" constraint="no empty" maxlength="10"/>
+												</row>
+												<row>
+													<label value="Pilih Printer Dot Matrix" />
+													<hbox>
+														
+														<listbox id="lbox_Printer" mold="select"
+															multiple="false" rows="1" width="250px">															
+														</listbox>	
+														<button id="btnRefeshPrinter" label="Cari Printer"  width="100px" 	/>
+												
+													</hbox>
 												</row>
 												<row>
 													<label />
-													<button id="btnPrintFaktur" label="Cetak Faktur"  	/>
+													<button id="btnCetakFaktur" label="Cetak Faktur"  	/>
 												</row>
 												<row>
 													<label />
-													<button id="btnPrintA2" label="Cetak Kuitansi A2"  	/>
+													<button id="btnCetakKuitansiA2" label="Cetak Kuitansi A2"  	/>
 												</row>
 												
 											</rows>
