@@ -15,6 +15,7 @@ public class PenjualanDetail implements java.io.Serializable, Entity {
 	private Barang barang;
 	private int qty;
 	private BigDecimal harga;
+	private BigDecimal downPayment;
 	private BigDecimal total;
 	
 	public boolean isNew() {
@@ -25,15 +26,17 @@ public class PenjualanDetail implements java.io.Serializable, Entity {
 	}
 
 	
-	public PenjualanDetail(long id, Penjualan penjualan, Barang barang,
-			int qty, BigDecimal harga) {
-		
+	public PenjualanDetail(long id, Barang barang, int qty, BigDecimal harga,
+			BigDecimal downPayment, BigDecimal total) {
+		super();
 		this.id = id;
-		this.penjualan = penjualan;
 		this.barang = barang;
 		this.qty = qty;
 		this.harga = harga;
+		this.downPayment = downPayment;
+		this.total = total;
 	}
+
 
 	public void setId(long id) {
 		this.id = id;
@@ -92,6 +95,14 @@ public class PenjualanDetail implements java.io.Serializable, Entity {
 	}
 
 	
+
+	public BigDecimal getDownPayment() {
+		return downPayment;
+	}
+
+	public void setDownPayment(BigDecimal downPayment) {
+		this.downPayment = downPayment;
+	}
 
 	@Override
 	public int hashCode() {
@@ -152,9 +163,11 @@ public class PenjualanDetail implements java.io.Serializable, Entity {
 
 	@Override
 	public String toString() {
-		return "PenjualanDetail [id=" + id + ", version=" + version
-				+ ", penjualan=" + penjualan + ", barang=" + barang + ", qty="
-				+ qty + ", harga=" + harga + ", total=" + total + "]";
+		return String
+				.format("PenjualanDetail [id=%s, version=%s, penjualan=%s, barang=%s, qty=%s, harga=%s, downPayment=%s, total=%s]",
+						id, version, penjualan, barang, qty, harga,
+						downPayment, total);
 	}
 
+	
 }

@@ -456,30 +456,6 @@
 	</bean>
 	
 	<!-- Penjualan -->
-<!--	<bean id="penjualanListCtrl" class="billy.webui.transaction.penjualan.PenjualanListCtrl" parent="basisCtrl" scope="prototype">
-		<property name="penjualanService" ref="penjualanService" />		
-		<property name="plwPenjualans" ref="pagedListWrapper" />
-	</bean> 
-	<bean id="penjualanDialogCtrl" class="billy.webui.transaction.penjualan.PenjualanDialogCtrl" parent="basisCtrl" scope="prototype">
-		<property name="penjualanService" ref="penjualanService" />	
-		<property name="plwPenjualanDetails" ref="pagedListWrapper" />
-		
-	</bean>
- 	<bean id="penjualanDetailDialogCtrl" class="billy.webui.transaction.penjualan.PenjualanDetailDialogCtrl" parent="basisCtrl"
-		scope="prototype">
-		<property name="penjualanService" ref="penjualanService" />	
-		<property name="plwPenjualanDetails" ref="pagedListWrapper" />
-		
-	</bean> 
-	
-	<bean id="piutangDialogCtrl" class="billy.webui.transaction.penjualan.PiutangDialogCtrl" parent="basisCtrl"
-		scope="prototype">
-		<property name="penjualanService" ref="penjualanService" />	
-		<property name="plwPiutangs" ref="pagedListWrapper" />
-		
-	</bean>
-		-->
-	<!-- Penjualan -->
 	<bean id="penjualanMainCtrl" class="billy.webui.transaction.penjualan.PenjualanMainCtrl" parent="basisCtrl" scope="prototype">
 		<property name="penjualanService" ref="penjualanService" />
 		<property name="penjualanListCtrl" ref="penjualanListCtrl" />
@@ -495,7 +471,39 @@
 		<property name="barangService" ref="barangService" />
 		<property name="statusService" ref="statusService" />
 	</bean>
+	
+	<!-- ApprovalPenjualan -->
+	<bean id="approvalPenjualanMainCtrl" class="billy.webui.transaction.penjualan.approval.ApprovalPenjualanMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="penjualanService" ref="penjualanService" />
+		<property name="approvalPenjualanListCtrl" ref="approvalPenjualanListCtrl" />
+		<property name="approvalPenjualanDetailCtrl" ref="approvalPenjualanDetailCtrl" />
+	</bean>
+	<bean id="approvalPenjualanListCtrl" class="billy.webui.transaction.penjualan.approval.ApprovalPenjualanListCtrl" parent="basisCtrl" scope="prototype">
+		<property name="penjualanService" ref="penjualanService" />
+	</bean>
+	<bean id="approvalPenjualanDetailCtrl" class="billy.webui.transaction.penjualan.approval.ApprovalPenjualanDetailCtrl" parent="basisCtrl" scope="prototype">
+		<property name="penjualanService" ref="penjualanService" />
+		<property name="wilayahService" ref="wilayahService" />
+		<property name="karyawanService" ref="karyawanService" />
+		<property name="barangService" ref="barangService" />
+		<property name="statusService" ref="statusService" />
+	</bean>
+	
+	<!-- CetakPenjualan -->
+	<bean id="cetakPenjualanMainCtrl" class="billy.webui.transaction.penjualan.cetak.CetakPenjualanMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="penjualanService" ref="penjualanService" />		
+		<property name="karyawanService" ref="karyawanService" />
+	</bean>
+	
+	<!-- ReportSummaryPenjualan -->
+	<bean id="reportSummaryPenjualanMainCtrl" class="billy.webui.report.summarypenjualan.ReportSummaryPenjualanMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="penjualanService" ref="penjualanService" />		
+		<property name="karyawanService" ref="karyawanService" />		
+	</bean>
+	
+	
+	
 </beans>
 
-
+	
 	

@@ -182,7 +182,7 @@
 																	value="${c:l('label_KaryawanDialog_inisialDivisi.value')}" />
 															</hbox>
 															<textbox id="txtb_InisialDivisi"
-																value="@{controller.karyawan.inisialDivisi}" readonly="true" maxlength="20" width="200px"
+																value="@{controller.karyawan.inisialDivisi}" readonly="true" maxlength="2" width="50px"
 																hflex="1" />
 														</row>	
 														<row>

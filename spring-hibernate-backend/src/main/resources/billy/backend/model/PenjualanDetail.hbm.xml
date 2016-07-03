@@ -28,6 +28,9 @@
 		</property>
 		<property name="harga" type="big_decimal">
 			<column name="harga" precision="12" />
+		</property>	
+		<property name="downPayment" type="big_decimal">
+			<column name="down_payment" precision="12" />
 		</property>		
 		<property name="total" type="big_decimal">
 			<column name="total" precision="12" />

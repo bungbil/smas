@@ -8,7 +8,7 @@
 	xmlns:w="http://www.zkoss.org/2005/zk/client"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
-	<window id="windowPenjualanMain" apply="${penjualanMainCtrl}"
+	<window id="windowApprovalPenjualanMain" apply="${approvalPenjualanMainCtrl}"
 		border="none" width="100%">
 
 		<div sclass="z-toolbar" style="padding:0">
@@ -28,7 +28,7 @@
 					style="float:left; border-style: none;">
 					<hbox align="center" style="padding: 2px">
 						<space />
-						<checkbox id="checkbox_PenjualanList_ShowAll"
+						<checkbox id="checkbox_ApprovalPenjualanList_ShowAll"
 							checked="true"
 							label="${c:l('common.showAll')}" />
 						<space />
@@ -46,7 +46,7 @@
 						<label value="Alamat" style="padding-right: 3px"/>
 						<textbox id="tb_Search_Alamat" width="120px" />
 						
-						<button id="button_PenjualanList_Search"
+						<button id="button_ApprovalPenjualanList_Search"
 							sclass="oT_ButtonWithIcon" image="/images/icons/search.gif"
 							tooltiptext="Search" />												
 					</hbox>
@@ -63,39 +63,37 @@
 						tooltiptext="${c:l('btnNext.tooltiptext')}" />
 					<button id="btnLast" sclass="oT_ButtonWithIcon"
 						tooltiptext="${c:l('btnLast.tooltiptext')}" />
-					<separator bar="true" orient="vertical" />
-					<button id="btnNew" sclass="oT_ButtonWithIcon"
+					<!-- <separator bar="true" orient="vertical" />
+					<button id="btnNew" sclass="oT_ButtonWithIcon" visible="false"
 						tooltiptext="${c:l('btnNew.tooltiptext')}" />
 					<button id="btnEdit" sclass="oT_ButtonWithIcon"
 						tooltiptext="${c:l('btnEdit.tooltiptext')}" />
-					<button id="btnDelete" sclass="oT_ButtonWithIcon"
+					<button id="btnDelete" sclass="oT_ButtonWithIcon" visible="false"
 						tooltiptext="${c:l('btnDelete.tooltiptext')}" />
 					<button id="btnSave" sclass="oT_ButtonWithIcon"
 						tooltiptext="${c:l('btnSave.tooltiptext')}" />
 					<button id="btnCancel" sclass="oT_ButtonWithIcon"
-						tooltiptext="${c:l('btnCancel.tooltiptext')}" />
-					<button id="btnPrint" sclass="oT_ButtonWithIcon"
-						image="/images/icons/btn_print2_16x16.gif" tooltiptext="Print Kuitansi" />
+						tooltiptext="${c:l('btnCancel.tooltiptext')}" /> -->					
 				</toolbar>
 			</hbox>
 		</div>
 
 
-		<tabbox id="tabbox_PenjualanMain">
+		<tabbox id="tabbox_ApprovalPenjualanMain">
 			<tabs>
-				<tab id="tabPenjualanList" label="${c:l('common.List')}"
+				<tab id="tabApprovalPenjualanList" label="${c:l('common.List')}"
 					image="/images/icons/properties.gif" />
-				<tab id="tabPenjualanDetail"
-					label="${c:l('common.Details')}" image="/images/icons/table.gif" />
+				<tab id="tabApprovalPenjualanDetail"
+					label="${c:l('common.Details')}" image="/images/icons/table.gif" />					
 			</tabs>
 
 			<tabpanels>
 				<!-- TabPanel LIST / LISTE -->
-				<tabpanel id="tabPanelPenjualanList" height="100%"
+				<tabpanel id="tabPanelApprovalPenjualanList" height="100%"
 					style="border: none; padding: 0px; " />
 
 				<!-- TabPanel DETAILS / DETAILS -->
-				<tabpanel id="tabPanelPenjualanDetail" height="100%"
+				<tabpanel id="tabPanelApprovalPenjualanDetail" height="100%"
 					style="border: none; padding: 0px; " />
 			</tabpanels>
 		</tabbox>

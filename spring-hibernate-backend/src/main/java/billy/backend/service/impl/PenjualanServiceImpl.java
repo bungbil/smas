@@ -1,11 +1,10 @@
 package billy.backend.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import de.forsthaus.backend.model.SecUser;
 
 import billy.backend.dao.PenjualanDAO;
 import billy.backend.dao.PenjualanDetailDAO;
@@ -71,25 +70,12 @@ public class PenjualanServiceImpl implements PenjualanService {
 		int result = getPenjualanDetailDAO().getCountPenjualanDetailsByPenjualan(penjualan);
 		return result;
 	}
+	
 
 	@Override
 	public List<Penjualan> getAllPenjualans() {
 		return getPenjualanDAO().getAllPenjualans();
-	}
-	
-	/*@Override
-	public List<Penjualan> getAllPenjualansByUserLogin(SecUser user) {
-		//cari supervisornya
-		
-		//klo tidak ada tampilin semua
-		return getPenjualanDAO().getAllPenjualans();
-	}
-*/
-//	@Override
-//	public void initialize(Penjualan proxy) {
-//		getPenjualanDAO().initialize(proxy);
-//
-//	}
+	}	
 
 	@Override
 	public Penjualan getPenjualanById(long id) {
@@ -137,10 +123,29 @@ public class PenjualanServiceImpl implements PenjualanService {
 				
 		return getPenjualanDAO().getCountAllPenjualansByDivisi(obj,startDate,endDate);
 	}
+	
+	@Override
+	public List<Penjualan> getAllPenjualansByDivisiAndRangeDate(Karyawan obj,Date startDate,Date endDate) {
+		List<Penjualan> allPenjualan = new ArrayList<Penjualan>();
+		List<Penjualan> allPenjualanSalesUnderDivisi = getPenjualanDAO().getAllPenjualansByDivisiAndRangeDate(obj,startDate,endDate);
+		List<Penjualan> allPenjualanKaryawanDivisi = getPenjualanDAO().getAllPenjualansByKaryawanAndRangeDate(obj,startDate,endDate);
+		allPenjualan.addAll(allPenjualanSalesUnderDivisi);
+		allPenjualan.addAll(allPenjualanKaryawanDivisi);
+		
+		return allPenjualan;
+	}
 
 	@Override
 	public int getCountAllPenjualanDetails() {
 		return getPenjualanDetailDAO().getCountAllPenjualanDetails();
 	}
 
+	@Override
+	public List<Penjualan> getListNeedApprovalPenjualansByListNoFaktur(List<String> listNoFaktur) {
+		return getPenjualanDAO().getListNeedApprovalPenjualansByListNoFaktur(listNoFaktur);
+	}
+	@Override
+	public List<Penjualan> getAllPenjualansByListNoFaktur(List<String> listNoFaktur) {
+		return getPenjualanDAO().getAllPenjualansByListNoFaktur(listNoFaktur);
+	}
 }

@@ -5,26 +5,26 @@
 <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 <!-- Namespace dependent DataBinding Initiator.          -->
 <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./windowPenjualanList" ?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./windowApprovalPenjualanList" ?>
 
 <zk xmlns="http://www.zkoss.org/2005/zul"
 	xmlns:h="http://www.w3.org/1999/xhtml"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
-	<window id="windowPenjualanList" apply="${penjualanListCtrl}"
+	<window id="windowApprovalPenjualanList" apply="${approvalPenjualanListCtrl}"
 		border="none" width="100%">
 
-		<borderlayout id="borderLayout_penjualanList">
+		<borderlayout id="borderLayout_approvalPenjualanList">
 
 			<!-- PAGING COMPONENT -->
 			<north border="none" height="26px">
-				<paging id="paging_PenjualanList" />
+				<paging id="paging_ApprovalPenjualanList" />
 			</north>
 
 			<center border="none">
 
-				<listbox id="listBoxPenjualan"
+				<listbox id="listBoxApprovalPenjualan"
 					style="border-top-width: 0px; border-left-width: 0px; border-right-width: 0px; border-bottom-width: 1px;"
 					model="@{controller.penjualans}"
 					selectedItem="@{controller.selectedPenjualan}" vflex="true"
@@ -100,9 +100,9 @@
 							style="padding-left: 5px" />
 						<listcell label="@{penjualan.telepon}"
 							style="padding-left: 5px" />
-						<listcell label="@{penjualan.sales1.namaPanggilan}"
+						<listcell label="@{penjualan.sales1.namaKtp}"
 							style="padding-left: 5px" />
-						<listcell label="@{penjualan.sales2.namaPanggilan}"
+						<listcell label="@{penjualan.sales2.namaKtp}"
 							style="padding-left: 5px" />														
 						<listcell label="@{penjualan.lastUpdate}"
 							style="padding-left: 5px" />	

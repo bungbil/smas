@@ -80,6 +80,34 @@ public class KaryawanServiceImpl implements KaryawanService {
 	    });
 		return listSales;
 	}
+	
+	@Override
+	public List<Karyawan> getAllDivisiKaryawansByUserLogin(SecUser user) {
+		List<Karyawan> listDivisi = new ArrayList<Karyawan>();
+		if(user.getKaryawan()!=null ){
+			//under supervisor
+			if (user.getKaryawan().getSupervisorDivisi()!=null){		
+				List<Karyawan> list = getKaryawanDAO().getKaryawansBySupervisorId(user.getKaryawan().getSupervisorDivisi().getId());
+				//under divisi
+				for(Karyawan karyawan : list){
+					if(karyawan.getJobType().getId() == new Long(2)){//divisi
+						listDivisi.add(karyawan);																		
+					}					
+				}
+			}						
+		}
+		else{
+			listDivisi = getKaryawansByJobTypeId(new Long(2));
+		}		
+		Collections.sort(listDivisi, new Comparator<Karyawan>() {
+	        @Override
+	        public int compare(Karyawan obj1, Karyawan obj2)
+	        {
+	            return  obj1.getNamaKtp().compareTo(obj2.getNamaKtp());
+	        }
+	    });
+		return listDivisi;
+	}
 
 	@Override
 	public void saveOrUpdate(Karyawan entity) {

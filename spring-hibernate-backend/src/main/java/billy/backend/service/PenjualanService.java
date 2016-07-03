@@ -15,6 +15,8 @@ public interface PenjualanService {
 	public int getCountAllPenjualanDetails();
 	public int getCountAllPenjualansByDivisi(Karyawan obj, Date date);
 	public List<Penjualan> getAllPenjualans();
+	public List<Penjualan> getListNeedApprovalPenjualansByListNoFaktur(List<String> listNoFaktur);
+	public List<Penjualan> getAllPenjualansByListNoFaktur(List<String> listNoFaktur);
 //	public void initialize(Penjualan proxy);
 	public Penjualan getPenjualanById(long id);
 	public BigDecimal getPenjualanSum(Penjualan penjualan);
@@ -23,9 +25,11 @@ public interface PenjualanService {
 	
 	public List<PenjualanDetail> getPenjualanDetailsByPenjualan(Penjualan penjualan);
 	public int getCountPenjualanDetailsByPenjualan(Penjualan penjualan);
+	
 	public PenjualanDetail getNewPenjualanDetail();
 	public void saveOrUpdate(PenjualanDetail penjualanDetail);
 	public void delete(PenjualanDetail penjualanDetail);
 	public void deletePenjualanDetailsByPenjualan(Penjualan penjualan);
+	public List<Penjualan>  getAllPenjualansByDivisiAndRangeDate(Karyawan obj, Date startDate,	Date endDate);
 
 }
