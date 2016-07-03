@@ -18,6 +18,13 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 (229, 1, 229, 0);
 
 
+INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
+(230, 2, 'menu_Item_ReportSummaryPenjualan', 0),
+(231, 6, 'button_ReportSummaryPenjualanMain_btnView', 0);
+INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
+(230, 1, 230, 0),
+(231, 1, 231, 0);
+
 
 
 /*==============================================================*/

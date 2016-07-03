@@ -17,7 +17,6 @@ import org.zkoss.zul.Datebox;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
-import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 import de.forsthaus.UserWorkspace;
@@ -29,8 +28,6 @@ import billy.webui.master.karyawan.model.KaryawanListModelItemRenderer;
 import billy.webui.printer.model.PrinterListModelItemRenderer;
 import billy.webui.report.summarypenjualan.report.CetakLaporanSummaryPenjualanDJReport;
 import billy.webui.report.summarypenjualan.report.ViewPdfLaporanSummaryPenjualanDJReport;
-import billy.webui.transaction.penjualan.cetak.report.CetakFakturDJReport;
-import billy.webui.transaction.penjualan.cetak.report.CetakKuitansiA2DJReport;
 import de.forsthaus.backend.model.SecUser;
 import de.forsthaus.policy.model.UserImpl;
 import de.forsthaus.webui.util.GFCBaseCtrl;
@@ -153,14 +150,7 @@ public class ReportSummaryPenjualanMainCtrl extends GFCBaseCtrl implements Seria
 			ListModelList lml1 = (ListModelList) lbox_Divisi.getListModel();
 			karyawan = (Karyawan) lml1.get(itemDivisi.getIndex());
 		}
-		PrintService printer = null;
-		/*Listitem itemPrinter = lbox_Printer.getSelectedItem();
-		if (itemPrinter != null) {
-			ListModelList lml1 = (ListModelList) lbox_Printer.getListModel();
-			printer = (PrintService) lml1.get(itemPrinter.getIndex());
-			selectedPrinter =printer;
-			logger.info("Printer : "+printer.getName());
-		}*/
+		
 		if(karyawan != null 
 				&& txtb_tanggalAwalPenjualan.getValue()!=null
 				&& txtb_tanggalAkhirPenjualan.getValue()!=null){
@@ -188,7 +178,7 @@ public class ReportSummaryPenjualanMainCtrl extends GFCBaseCtrl implements Seria
 
 		final UserWorkspace workspace = getUserWorkspace();
 		//btnCetakLaporan.setDisabled(!workspace.isAllowed("button_CetakPenjualanMain_btnCetakFaktur"));
-		//btnViewPdf.setDisabled(!workspace.isAllowed("button_CetakPenjualanMain_btnCetakKuitansiA2"));
+		btnViewPdf.setDisabled(!workspace.isAllowed("button_ReportSummaryPenjualanMain_btnView"));
 	}
 
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
