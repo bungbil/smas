@@ -1,4 +1,4 @@
-package billy.webui.report.summarypenjualan.report;
+package billy.webui.report.komisipenjualan.report;
 
 
 import java.io.ByteArrayInputStream;
@@ -40,7 +40,7 @@ import billy.backend.model.Penjualan;
 import billy.backend.model.PenjualanDetail;
 import billy.backend.service.CompanyProfileService;
 import billy.backend.service.PenjualanService;
-import billy.webui.report.summarypenjualan.model.SummaryPenjualan;
+import billy.webui.report.komisipenjualan.model.KomisiPenjualan;
 
 import ar.com.fdvs.dj.core.DynamicJasperHelper;
 import ar.com.fdvs.dj.core.layout.ClassicLayoutManager;
@@ -61,7 +61,7 @@ import ar.com.fdvs.dj.domain.entities.columns.AbstractColumn;
 import de.forsthaus.webui.util.ZksampleDateFormat;
 import de.forsthaus.webui.util.ZksampleMessageUtils;
 
-public class ViewPdfLaporanSummaryPenjualanDJReport extends Window implements Serializable {
+public class KomisiPenjualanDJReport extends Window implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private Iframe iFrame;
@@ -70,8 +70,8 @@ public class ViewPdfLaporanSummaryPenjualanDJReport extends Window implements Se
 	private AMedia amedia;
 	
 	
-	private static final Logger logger = Logger.getLogger(ViewPdfLaporanSummaryPenjualanDJReport.class);
-	public ViewPdfLaporanSummaryPenjualanDJReport(Component parent,Karyawan karyawan,Date startDate,Date endDate,List<Penjualan> listPenjualan) throws InterruptedException {
+	private static final Logger logger = Logger.getLogger(KomisiPenjualanDJReport.class);
+	public KomisiPenjualanDJReport(Component parent,Karyawan karyawan,Date startDate,Date endDate,List<Penjualan> listPenjualan) throws InterruptedException {
 		super();
 		this.setParent(parent);
 
@@ -249,7 +249,7 @@ public class ViewPdfLaporanSummaryPenjualanDJReport extends Window implements Se
 		drb.setUseFullPageWidth(true); // use full width of the page
 		dr = drb.build(); // build the report		
 		
-		List<SummaryPenjualan> resultList = generateData(karyawan,listPenjualan);
+		List<KomisiPenjualan> resultList = generateData(karyawan,listPenjualan);
 		
 		// Generate the Jasper Print Object
 		JRDataSource ds = new JRBeanCollectionDataSource(resultList);
@@ -355,16 +355,16 @@ public class ViewPdfLaporanSummaryPenjualanDJReport extends Window implements Se
 
 	}
 	
-	private List<SummaryPenjualan> generateData(Karyawan karyawan, List<Penjualan> listPenjualan){
-		Map<String, SummaryPenjualan> mapBarang = new HashMap<String, SummaryPenjualan>();
+	private List<KomisiPenjualan> generateData(Karyawan karyawan, List<Penjualan> listPenjualan){
+		Map<String, KomisiPenjualan> mapBarang = new HashMap<String, KomisiPenjualan>();
 		PenjualanService penjualanService = (PenjualanService) SpringUtil.getBean("penjualanService");
 		for(Penjualan penjualan:listPenjualan){
 			List<PenjualanDetail> penjualanDetails = penjualanService.getPenjualanDetailsByPenjualan(penjualan);			
 			for(PenjualanDetail penjualanDetail : penjualanDetails){
 				String kodeBarang = penjualanDetail.getBarang().getKodeBarang();
-				SummaryPenjualan sp = mapBarang.get(kodeBarang);
+				KomisiPenjualan sp = mapBarang.get(kodeBarang);
 				if (sp == null) {
-					sp = new SummaryPenjualan();
+					sp = new KomisiPenjualan();
 					sp.setNamaDivisi(karyawan.getNamaPanggilan());
 					sp.setNamaBarang(penjualanDetail.getBarang().getNamaBarang());
 					sp.setUnitSetTerjual(penjualanDetail.getQty());
@@ -381,9 +381,9 @@ public class ViewPdfLaporanSummaryPenjualanDJReport extends Window implements Se
 			}
 		}
 		
-		List<SummaryPenjualan> summaryPenjualanList = new ArrayList<SummaryPenjualan>();
-		for (Map.Entry<String, SummaryPenjualan> kodeBarangMap : mapBarang.entrySet()) {
-			SummaryPenjualan sp = kodeBarangMap.getValue();
+		List<KomisiPenjualan> summaryPenjualanList = new ArrayList<KomisiPenjualan>();
+		for (Map.Entry<String, KomisiPenjualan> kodeBarangMap : mapBarang.entrySet()) {
+			KomisiPenjualan sp = kodeBarangMap.getValue();
 			summaryPenjualanList.add(sp);
 		}		
 		

@@ -1,9 +1,11 @@
-package billy.webui.report.summarypenjualan;
+package billy.webui.report.komisipenjualan;
+
 
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import javax.print.*;
 import org.apache.log4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -23,29 +25,34 @@ import billy.backend.model.Penjualan;
 import billy.backend.service.KaryawanService;
 import billy.backend.service.PenjualanService;
 import billy.webui.master.karyawan.model.KaryawanListModelItemRenderer;
-import billy.webui.report.summarypenjualan.report.SummaryPenjualanDJReport;
+import billy.webui.printer.model.PrinterListModelItemRenderer;
+import billy.webui.report.komisipenjualan.report.KomisiPenjualanDJReport;
 import de.forsthaus.backend.model.SecUser;
 import de.forsthaus.policy.model.UserImpl;
 import de.forsthaus.webui.util.GFCBaseCtrl;
 import de.forsthaus.webui.util.ZksampleMessageUtils;
 
-public class ReportSummaryPenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
+public class ReportKomisiPenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(ReportSummaryPenjualanMainCtrl.class);
+	private static final Logger logger = Logger.getLogger(ReportKomisiPenjualanMainCtrl.class);
 
 	
-	protected Window windowReportSummaryPenjualanMain; // autowired
-	protected Listbox lbox_Divisi;	
+	protected Window windowReportKomisiPenjualanMain; // autowired
+	protected Listbox lbox_Divisi;
+	protected Listbox lbox_Printer;
 	protected Datebox txtb_tanggalAwalPenjualan;
-	protected Datebox txtb_tanggalAkhirPenjualan;	
-	protected Button btnViewReport;
+	protected Datebox txtb_tanggalAkhirPenjualan;
+	protected Button btnCetakLaporan;
+	protected Button btnViewPdf;
 	protected Button btnReset;
 	
 	// ServiceDAOs / Domain Classes
 	private PenjualanService penjualanService;
 	private KaryawanService karyawanService;
-		
+	
+
+	private PrintService selectedPrinter;	
 	List<Penjualan> listPenjualan = new ArrayList<Penjualan>();
 	Karyawan karyawan = null;
 	
@@ -53,7 +60,7 @@ public class ReportSummaryPenjualanMainCtrl extends GFCBaseCtrl implements Seria
 	/**
 	 * default constructor.<br>
 	 */
-	public ReportSummaryPenjualanMainCtrl() {
+	public ReportKomisiPenjualanMainCtrl() {
 		super();
 	}
 
@@ -74,9 +81,11 @@ public class ReportSummaryPenjualanMainCtrl extends GFCBaseCtrl implements Seria
 	 * @param event
 	 * @throws Exception
 	 */
-	public void onCreate$windowReportSummaryPenjualanMain(Event event) throws Exception {
-		windowReportSummaryPenjualanMain.setContentStyle("padding:0px;");
-		doCheckRights();		
+	public void onCreate$windowReportKomisiPenjualanMain(Event event) throws Exception {
+		windowReportKomisiPenjualanMain.setContentStyle("padding:0px;");
+
+		doCheckRights();
+		
 		doReset();
 	}
 	
@@ -91,17 +100,23 @@ public class ReportSummaryPenjualanMainCtrl extends GFCBaseCtrl implements Seria
 		txtb_tanggalAkhirPenjualan.setValue(null);
 		listPenjualan = new ArrayList<Penjualan>();
 		
+		selectedPrinter = null;
 	}
 	
 	public void onClick$btnReset(Event event) throws Exception {
 		doReset();
 	}
 	
+	public void onClick$btnRefeshPrinter(Event event) throws Exception {
+		PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+        lbox_Printer.setModel(new ListModelList(printServices));
+        lbox_Printer.setItemRenderer(new PrinterListModelItemRenderer());
+	}
 	
 	public void onClick$btnViewPdf(Event event) throws Exception {
 		if(validToPrint()){
 			final Window win = (Window) Path.getComponent("/outerIndexWindow");
-			new SummaryPenjualanDJReport(win,karyawan,txtb_tanggalAwalPenjualan.getValue(),txtb_tanggalAkhirPenjualan.getValue(),listPenjualan);
+			new KomisiPenjualanDJReport(win,karyawan,txtb_tanggalAwalPenjualan.getValue(),txtb_tanggalAkhirPenjualan.getValue(),listPenjualan);
 		}else{
 			showErrorCetak();			
 		}	
@@ -110,28 +125,36 @@ public class ReportSummaryPenjualanMainCtrl extends GFCBaseCtrl implements Seria
 	public void showErrorCetak() throws Exception{
 		if(listPenjualan.size()==0){
 			ZksampleMessageUtils.showErrorMessage("Tidak ada penjualan di range waktu ini");
+		}else if (selectedPrinter==null){
+			ZksampleMessageUtils.showErrorMessage("Silakan dipilih Printernya");	
 		}else{
 			ZksampleMessageUtils.showErrorMessage("Error!!!");
 		}
 				
 	}
 	
-	public boolean validToPrint() throws Exception{			
+	public boolean validToPrint() throws Exception{
+		
+		
 		Listitem itemDivisi = lbox_Divisi.getSelectedItem();
 		if (itemDivisi != null) {
 			ListModelList lml1 = (ListModelList) lbox_Divisi.getListModel();
 			karyawan = (Karyawan) lml1.get(itemDivisi.getIndex());
-		}		
+		}
+		
 		if(karyawan != null 
 				&& txtb_tanggalAwalPenjualan.getValue()!=null
 				&& txtb_tanggalAkhirPenjualan.getValue()!=null){
 			listPenjualan = getPenjualanService().getAllPenjualansByDivisiAndRangeDate(karyawan,txtb_tanggalAwalPenjualan.getValue(),txtb_tanggalAkhirPenjualan.getValue());
 			if(listPenjualan.size() > 0){
 				return true;
-			}									
+			}				
+					
 		}
 		return false;
-	}	
+	}
+	
+	
 	
 	/**
 	 * User rights check. <br>
@@ -143,8 +166,9 @@ public class ReportSummaryPenjualanMainCtrl extends GFCBaseCtrl implements Seria
 	 */
 	// TODO move it to zul
 	private void doCheckRights() {
+
 		final UserWorkspace workspace = getUserWorkspace();		
-		btnViewReport.setDisabled(!workspace.isAllowed("button_ReportSummaryPenjualanMain_btnView"));
+		btnViewPdf.setDisabled(!workspace.isAllowed("button_ReportKomisiPenjualanMain_btnView"));
 	}
 
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //

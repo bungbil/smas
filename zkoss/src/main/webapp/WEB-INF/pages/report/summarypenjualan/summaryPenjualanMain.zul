@@ -47,7 +47,7 @@
 												</row>												
 												<row>
 													<label />
-													<button id="btnViewPdf" label="Lihat Summary Penjualan"  	/>
+													<button id="btnViewReport" label="Lihat Summary Penjualan"  	/>
 												</row>
 												
 											</rows>
