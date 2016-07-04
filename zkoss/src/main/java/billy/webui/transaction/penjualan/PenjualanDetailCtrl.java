@@ -90,10 +90,10 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 	protected Combobox cmb_IntervalKredit;
 	protected Decimalbox label_KreditPerBulan;
 	protected Decimalbox label_Total;	
-	protected Decimalbox txtb_Diskon; // autowired
+	//protected Decimalbox txtb_Diskon; // autowired
 	protected Decimalbox txtb_DownPayment; // autowired	
 	protected Listbox lbox_Status;	
-	protected Decimalbox label_DiskonDP;
+	//protected Decimalbox label_DiskonDP;
 	protected Decimalbox label_GrandTotal;
 	protected Label label_butuhApproval;
 	protected Textbox txtb_ReasonApproval;
@@ -238,9 +238,9 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 			BigDecimal diskonTotal = BigDecimal.ZERO;
 			diskonTotal = diskonTotal.add(getSelectedPenjualan().getDiskon());
 			diskonTotal = diskonTotal.add(getSelectedPenjualan().getDownPayment());
-			label_DiskonDP.setValue(diskonTotal);
+			//label_DiskonDP.setValue(diskonTotal);
 		}else{
-			label_DiskonDP.setValue(BigDecimal.ZERO);
+			//label_DiskonDP.setValue(BigDecimal.ZERO);
 		}
 
 		if(getSelectedPenjualan().isNeedApproval()){
@@ -311,6 +311,10 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 			item.setDownPayment(getBarangService().getCicilanPerBulanByIntervalKredit(barang, interval));
 			BigDecimal total = calculateSubTotal(txtb_JumlahBarang.getValue(),txtb_HargaBarang.getValue());
 		    item.setTotal(total);
+		    item.setKomisiSales(getBarangService().getKomisiSalesByIntervalKredit(barang, interval));
+		    item.setTabunganSales(getBarangService().getTabunganSalesByIntervalKredit(barang, interval));
+		    item.setOprDivisi(barang.getDivisiOpr());
+		    item.setOrDivisi(barang.getDivisiOr());
 			item.setPenjualan(getSelectedPenjualan());
 			listPenjualanDetail.add(item);
 			doFillListboxPenjualanDetail();
@@ -364,7 +368,7 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 		}
 		grandTotal = grandTotal.subtract(diskonTotal);
 		
-		label_DiskonDP.setValue(diskonTotal);
+		//label_DiskonDP.setValue(diskonTotal);
 		
 		getSelectedPenjualan().setGrandTotal(grandTotal);
 		label_GrandTotal.setValue(grandTotal);
@@ -378,6 +382,8 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 			label_KreditPerBulan.setValue(kreditPerBulan);
 			getSelectedPenjualan().setKreditPerBulan(kreditPerBulan);
 		}
+		
+		
     }
 	
 	public void onChange$txtb_TglPenjualan(Event event) throws InterruptedException {
@@ -461,23 +467,19 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 		BigDecimal kreditPerBulan = BigDecimal.ZERO;
 		
 		int interval = Integer.parseInt(cmb_IntervalKredit.getValue());
-		if(interval > 1){
-			for(PenjualanDetail ld : listPenjualanDetail){
-				ld.setHarga(getBarangService().getHargaBarangByIntervalKredit(ld.getBarang(), interval));
-				BigDecimal subTotal = calculateSubTotal(ld.getQty(),ld.getHarga());
-				ld.setTotal(subTotal);
-				/*BigDecimal cicilanPerBulan = calculateSubTotal(ld.getQty(), getBarangService().getCicilanPerBulanByIntervalKredit(ld.getBarang(), interval));
-				kreditPerBulan = kreditPerBulan.add(cicilanPerBulan);	*/			
-			}			
-		}else{
+		if(interval == 1){
 			radioStatusCash.setSelected(true);
-			for(PenjualanDetail ld : listPenjualanDetail){
-				ld.setHarga(getBarangService().getHargaBarangByIntervalKredit(ld.getBarang(), interval));
-				BigDecimal subTotal = calculateSubTotal(ld.getQty(),ld.getHarga());
-				ld.setTotal(subTotal);
-				/*BigDecimal cicilanPerBulan = calculateSubTotal(ld.getQty(), getBarangService().getCicilanPerBulanByIntervalKredit(ld.getBarang(), interval));
-				kreditPerBulan = kreditPerBulan.add(cicilanPerBulan);	*/			
-			}
+		}
+		
+		for(PenjualanDetail ld : listPenjualanDetail){
+			ld.setHarga(getBarangService().getHargaBarangByIntervalKredit(ld.getBarang(), interval));
+			BigDecimal subTotal = calculateSubTotal(ld.getQty(),ld.getHarga());
+			ld.setTotal(subTotal);
+			ld.setKomisiSales(getBarangService().getKomisiSalesByIntervalKredit(ld.getBarang(), interval));
+		    ld.setTabunganSales(getBarangService().getTabunganSalesByIntervalKredit(ld.getBarang(), interval));
+		    
+			/*BigDecimal cicilanPerBulan = calculateSubTotal(ld.getQty(), getBarangService().getCicilanPerBulanByIntervalKredit(ld.getBarang(), interval));
+			kreditPerBulan = kreditPerBulan.add(cicilanPerBulan);	*/			
 		}
 		
 		doFillListboxPenjualanDetail();
@@ -602,7 +604,7 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 		radioStatusKredit.setDisabled(b);
 		//txtb_TglAngsuran2.setDisabled(b);		
 		cmb_IntervalKredit.setDisabled(b);
-		txtb_Diskon.setReadonly(b);
+		//txtb_Diskon.setReadonly(b);
 		
 		txtb_DownPayment.setReadonly(b);
 		lbox_Status.setDisabled(b);		
@@ -641,11 +643,11 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 		cmb_IntervalKredit.setSelectedIndex(-1);
 		txtb_NamaBarang.setValue(null);
 		txtb_JumlahBarang.setValue(null);
-		txtb_Diskon.setValue(BigDecimal.ZERO);
+		//txtb_Diskon.setValue(BigDecimal.ZERO);
 		txtb_DownPayment.setValue(BigDecimal.ZERO);
 		txtb_HargaBarang.setValue(BigDecimal.ZERO);		
 		label_Total.setValue(BigDecimal.ZERO);
-		label_DiskonDP.setValue(BigDecimal.ZERO);
+		//label_DiskonDP.setValue(BigDecimal.ZERO);
 		label_GrandTotal.setValue(BigDecimal.ZERO);
 		label_KreditPerBulan.setValue(BigDecimal.ZERO);
 	}
