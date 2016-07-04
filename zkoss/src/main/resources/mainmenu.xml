@@ -141,10 +141,10 @@
 	<menu id="menu_Category_Report" >
 		<menuItem id="menu_Item_ReportSummaryPenjualan" zulNavigation="/WEB-INF/pages/report/summarypenjualan/summaryPenjualanMain.zul"
 			iconName="/images/icons/view.gif" rightName="menuItem_Report_SummaryPenjualan"/>
-		<menuItem id="menu_Item_ReportPenerimaanPembayaran" zulNavigation="/WEB-INF/pages/report/penerimaanpembayaran/penerimaanPembayaranMain.zul"
-			iconName="/images/icons/view.gif" />
-		<menuItem id="menu_Item_ReportKomisi" zulNavigation="/WEB-INF/pages/report/komisi/KomisiPenjualanMain.zul"
-			iconName="/images/icons/view.gif" />
+		<!-- <menuItem id="menu_Item_ReportPenerimaanPembayaran" zulNavigation="/WEB-INF/pages/report/penerimaanpembayaran/penerimaanPembayaranMain.zul"
+			iconName="/images/icons/view.gif" /> -->
+		<menuItem id="menu_Item_ReportKomisi" zulNavigation="/WEB-INF/pages/report/komisi/komisiPenjualanMain.zul"
+			iconName="/images/icons/view.gif" rightName="menuItem_Report_KomisiPenjualan"/>
 		
 			
 		<!-- 	

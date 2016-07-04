@@ -17,6 +17,10 @@ public class PenjualanDetail implements java.io.Serializable, Entity {
 	private BigDecimal harga;
 	private BigDecimal downPayment;
 	private BigDecimal total;
+	private BigDecimal komisiSales;
+	private BigDecimal tabunganSales;
+	private BigDecimal oprDivisi;
+	private BigDecimal orDivisi;
 	
 	public boolean isNew() {
 		return (getId() == Long.MIN_VALUE +1);
@@ -25,35 +29,34 @@ public class PenjualanDetail implements java.io.Serializable, Entity {
 	public PenjualanDetail() {
 	}
 
-	
-	public PenjualanDetail(long id, Barang barang, int qty, BigDecimal harga,
-			BigDecimal downPayment, BigDecimal total) {
+
+	public PenjualanDetail(long id, int version, Penjualan penjualan,
+			Barang barang, int qty, BigDecimal harga, BigDecimal downPayment,
+			BigDecimal total, BigDecimal komisiSales, BigDecimal tabunganSales,
+			BigDecimal oprDivisi, BigDecimal orDivisi) {
 		super();
 		this.id = id;
+		this.version = version;
+		this.penjualan = penjualan;
 		this.barang = barang;
 		this.qty = qty;
 		this.harga = harga;
 		this.downPayment = downPayment;
 		this.total = total;
-	}
-
-
-	public void setId(long id) {
-		this.id = id;
+		this.komisiSales = komisiSales;
+		this.tabunganSales = tabunganSales;
+		this.oprDivisi = oprDivisi;
+		this.orDivisi = orDivisi;
 	}
 
 	public long getId() {
 		return id;
 	}
 
-	public int getVersion() {
-		return this.version;
+	public void setId(long id) {
+		this.id = id;
 	}
 
-	public void setVersion(int version) {
-		this.version = version;
-	}
-	
 	public Penjualan getPenjualan() {
 		return penjualan;
 	}
@@ -86,6 +89,14 @@ public class PenjualanDetail implements java.io.Serializable, Entity {
 		this.harga = harga;
 	}
 
+	public BigDecimal getDownPayment() {
+		return downPayment;
+	}
+
+	public void setDownPayment(BigDecimal downPayment) {
+		this.downPayment = downPayment;
+	}
+
 	public BigDecimal getTotal() {
 		return total;
 	}
@@ -94,14 +105,36 @@ public class PenjualanDetail implements java.io.Serializable, Entity {
 		this.total = total;
 	}
 
-	
-
-	public BigDecimal getDownPayment() {
-		return downPayment;
+	public BigDecimal getKomisiSales() {
+		return komisiSales;
 	}
 
-	public void setDownPayment(BigDecimal downPayment) {
-		this.downPayment = downPayment;
+	public void setKomisiSales(BigDecimal komisiSales) {
+		this.komisiSales = komisiSales;
+	}
+
+	public BigDecimal getTabunganSales() {
+		return tabunganSales;
+	}
+
+	public void setTabunganSales(BigDecimal tabunganSales) {
+		this.tabunganSales = tabunganSales;
+	}
+
+	public BigDecimal getOprDivisi() {
+		return oprDivisi;
+	}
+
+	public void setOprDivisi(BigDecimal oprDivisi) {
+		this.oprDivisi = oprDivisi;
+	}
+
+	public BigDecimal getOrDivisi() {
+		return orDivisi;
+	}
+
+	public void setOrDivisi(BigDecimal orDivisi) {
+		this.orDivisi = orDivisi;
 	}
 
 	@Override
@@ -164,10 +197,9 @@ public class PenjualanDetail implements java.io.Serializable, Entity {
 	@Override
 	public String toString() {
 		return String
-				.format("PenjualanDetail [id=%s, version=%s, penjualan=%s, barang=%s, qty=%s, harga=%s, downPayment=%s, total=%s]",
+				.format("PenjualanDetail [id=%s, version=%s, penjualan=%s, barang=%s, qty=%s, harga=%s, downPayment=%s, total=%s, komisiSales=%s, tabunganSales=%s, oprDivisi=%s, orDivisi=%s]",
 						id, version, penjualan, barang, qty, harga,
-						downPayment, total);
+						downPayment, total, komisiSales, tabunganSales,
+						oprDivisi, orDivisi);
 	}
-
-	
 }

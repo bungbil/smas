@@ -75,7 +75,7 @@ public class KaryawanServiceImpl implements KaryawanService {
 	        @Override
 	        public int compare(Karyawan obj1, Karyawan obj2)
 	        {
-	            return  obj1.getNamaKtp().compareTo(obj2.getNamaKtp());
+	            return  obj1.getNamaPanggilan().compareTo(obj2.getNamaPanggilan());
 	        }
 	    });
 		return listSales;
@@ -103,7 +103,7 @@ public class KaryawanServiceImpl implements KaryawanService {
 	        @Override
 	        public int compare(Karyawan obj1, Karyawan obj2)
 	        {
-	            return  obj1.getNamaKtp().compareTo(obj2.getNamaKtp());
+	            return  obj1.getNamaPanggilan().compareTo(obj2.getNamaPanggilan());
 	        }
 	    });
 		return listDivisi;
@@ -151,7 +151,7 @@ public class KaryawanServiceImpl implements KaryawanService {
 	        @Override
 	        public int compare(Karyawan obj1, Karyawan obj2)
 	        {
-	            return  obj1.getNamaKtp().compareTo(obj2.getNamaKtp());
+	            return  obj1.getNamaPanggilan().compareTo(obj2.getNamaPanggilan());
 	        }
 	    });
 		return list;

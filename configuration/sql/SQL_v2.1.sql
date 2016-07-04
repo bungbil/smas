@@ -25,7 +25,12 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 (230, 1, 230, 0),
 (231, 1, 231, 0);
 
-
+INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
+(232, 2, 'menuItem_Report_KomisiPenjualan', 0),
+(233, 6, 'button_ReportKomisiPenjualanMain_btnView', 0);
+INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
+(232, 1, 232, 0),
+(233, 1, 233, 0);
 
 /*==============================================================*/
 /* Table: piutang                                             */

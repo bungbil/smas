@@ -19,7 +19,7 @@ public class BarangListModelItemRenderer implements ListitemRenderer, Serializab
 
 		final Barang entity = (Barang) data;
 
-		final Listcell lc = new Listcell(entity.getNamaBarang());		
+		final Listcell lc = new Listcell(entity.getNamaBarang()+"("+entity.getKodeBarang()+")");		
 		lc.setParent(item);
 
 		item.setAttribute("data", data);

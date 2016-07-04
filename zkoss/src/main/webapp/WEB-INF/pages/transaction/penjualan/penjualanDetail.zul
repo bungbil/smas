@@ -301,7 +301,7 @@
 														<separator bar="true"></separator>
 													</row>
 									                <row>
-									                    <label value="Down Payment"/>
+									                    <label value="Pembayaran"/>
 									                    <decimalbox id="txtb_DownPayment" value="@{controller.penjualan.downPayment}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />								      		
 														<label />
 							                    		<label value="Tanggal Angsuran ke 2"/>
@@ -311,14 +311,17 @@
 									                </row>
 									                
 									                
-									                <row>
-									                	<label value="Diskon"/>
+									                <!-- <row>
+									                	 <label value="Diskon"/>
 									                    <decimalbox id="txtb_Diskon" value="@{controller.penjualan.diskon}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
+									                     
+									                    <label />
+									                    <label />
 									                    <label />
 									                    <label value="Diskon + DP"/>									                    
 									                    <decimalbox id="label_DiskonDP" readonly="true" format=",###.#" hflex="1" />									                    				                    									                    									                    											                      
 									                </row>
-									                
+									                 -->
 							                    	<row>
 									                    <label value="Grand Total"/>
 							                    		<decimalbox id="label_GrandTotal" value="@{controller.penjualan.grandTotal}" readonly="true" format=",###.#" hflex="1" />

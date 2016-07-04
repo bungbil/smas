@@ -131,6 +131,9 @@ public class BarangServiceImpl implements BarangService {
 			    data = BigDecimal.ZERO;
 		        break;		
 		}
+		if(data==null){
+		    data = BigDecimal.ZERO;
+		}
 		return data;
 	}
 	
@@ -170,6 +173,9 @@ public class BarangServiceImpl implements BarangService {
 		  default:
 			    data = BigDecimal.ZERO;
 		        break;		
+		}
+		if(data==null){
+		    data = BigDecimal.ZERO;
 		}
 		return data;
 	}
@@ -211,6 +217,9 @@ public class BarangServiceImpl implements BarangService {
 			    data = BigDecimal.ZERO;
 		        break;		
 		}
+		if(data==null){
+		    data = BigDecimal.ZERO;
+		}
 		return data;
 	}
 	
@@ -250,6 +259,9 @@ public class BarangServiceImpl implements BarangService {
 		  default:
 			    data = BigDecimal.ZERO;
 		        break;		
+		}
+		if(data==null){
+		    data = BigDecimal.ZERO;
 		}
 		return data;
 	}
