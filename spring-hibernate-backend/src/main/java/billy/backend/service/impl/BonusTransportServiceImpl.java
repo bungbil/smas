@@ -1,14 +1,19 @@
 package billy.backend.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import billy.backend.dao.BonusTransportDAO;
 import billy.backend.model.BonusTransport;
+import billy.backend.model.Karyawan;
 import billy.backend.service.BonusTransportService;
 
 public class BonusTransportServiceImpl implements BonusTransportService {
 
   private BonusTransportDAO bonusTransportDAO;
+  private static final Logger logger = Logger.getLogger(BonusTransportServiceImpl.class);
 
   @Override
   public void delete(BonusTransport entity) {
@@ -18,6 +23,19 @@ public class BonusTransportServiceImpl implements BonusTransportService {
   @Override
   public List<BonusTransport> getAllBonusTransports() {
     return getBonusTransportDAO().getAllBonusTransports();
+  }
+
+  @Override
+  public BigDecimal getBonusSales(Karyawan karyawan, Double totalQty) {
+    List<BonusTransport> result =
+        getBonusTransportDAO().getBonusTransportByJobTypeIdAndUnit(karyawan.getJobType().getId(),
+            totalQty);
+    BigDecimal bonusSales = BigDecimal.ZERO;
+    for (BonusTransport data : result) {
+      if (data.getBonus() != null)
+        bonusSales = bonusSales.add(data.getBonus());
+    }
+    return bonusSales;
   }
 
   @Override
@@ -45,8 +63,38 @@ public class BonusTransportServiceImpl implements BonusTransportService {
   }
 
   @Override
+  public BigDecimal getHonorDivisi(Karyawan karyawan, Double totalQty) {
+    List<BonusTransport> result =
+        getBonusTransportDAO().getBonusTransportByJobTypeIdAndUnit(karyawan.getJobType().getId(),
+            totalQty);
+    BigDecimal honorDivisi = BigDecimal.ZERO;
+    for (BonusTransport data : result) {
+      if (data.getHonor() != null)
+        honorDivisi = honorDivisi.add(data.getHonor());
+    }
+    return honorDivisi;
+  }
+
+  @Override
   public BonusTransport getNewBonusTransport() {
     return getBonusTransportDAO().getNewBonusTransport();
+  }
+
+  @Override
+  public BigDecimal getTransportSales(Karyawan karyawan, Double totalQty) {
+    List<BonusTransport> result =
+        getBonusTransportDAO().getBonusTransportByJobTypeIdAndUnit(karyawan.getJobType().getId(),
+            totalQty);
+    logger.info("resultsize" + result.size() + "karyawan.getJobType().getId() : "
+        + karyawan.getJobType().getId() + ", totalQty: " + totalQty.intValue());
+    BigDecimal transportSales = BigDecimal.ZERO;
+    for (BonusTransport data : result) {
+      logger.info(data.toString());
+      if (data.getTransport() != null)
+        transportSales = transportSales.add(data.getTransport());
+    }
+
+    return transportSales;
   }
 
   @Override

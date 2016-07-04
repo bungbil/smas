@@ -46,6 +46,17 @@ public class BonusTransportDAOImpl extends BillyBasisDAO<BonusTransport> impleme
 
   @SuppressWarnings("unchecked")
   @Override
+  public List<BonusTransport> getBonusTransportByJobTypeIdAndUnit(long id, Double totalQty) {
+    DetachedCriteria criteria = DetachedCriteria.forClass(BonusTransport.class);
+    criteria.add(Restrictions.le("startRangeUnit", totalQty.intValue()));
+    criteria.add(Restrictions.ge("endRangeUnit", totalQty.intValue()));
+    criteria.add(Restrictions.eq("jobType.id", id));
+    return getHibernateTemplate().findByCriteria(criteria);
+
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
   public List<BonusTransport> getBonusTransportsLikeDeskripsiBonusTransport(String string) {
 
     DetachedCriteria criteria = DetachedCriteria.forClass(BonusTransport.class);

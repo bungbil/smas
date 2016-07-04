@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -52,6 +53,7 @@ import billy.backend.model.CompanyProfile;
 import billy.backend.model.Karyawan;
 import billy.backend.model.Penjualan;
 import billy.backend.model.PenjualanDetail;
+import billy.backend.service.BonusTransportService;
 import billy.backend.service.CompanyProfileService;
 import billy.backend.service.PenjualanService;
 import billy.webui.report.komisipenjualan.model.KomisiPenjualan;
@@ -76,11 +78,12 @@ public class KomisiPenjualanDJReport extends Window implements Serializable {
   private Iframe iFrame;
   private ByteArrayOutputStream output;
   private InputStream mediais;
-
-
+  private BigDecimal totalTabungan = BigDecimal.ZERO;
+  private BigDecimal totalKomisi = BigDecimal.ZERO;
+  private Double totalQty = 0.0;
   private AMedia amedia;
   private static final Logger logger = Logger.getLogger(KomisiPenjualanDJReport.class);
-
+  DecimalFormat df = new DecimalFormat("#,###");
 
   public KomisiPenjualanDJReport(Component parent, Karyawan karyawan, Date startDate, Date endDate,
       List<Penjualan> listPenjualan) throws InterruptedException {
@@ -149,6 +152,8 @@ public class KomisiPenjualanDJReport extends Window implements Serializable {
 
   public void doPrint(Karyawan karyawan, Date startDate, Date endDate, List<Penjualan> listPenjualan)
       throws JRException, ColumnBuilderException, ClassNotFoundException, IOException {
+
+    List<KomisiPenjualan> resultList = generateData(karyawan, listPenjualan);
     /**
      * STYLES
      */
@@ -178,9 +183,9 @@ public class KomisiPenjualanDJReport extends Window implements Serializable {
 
     // Footer Style (center-align)
     Style footerStyle = new Style();
-    footerStyle.setFont(Font.VERDANA_SMALL);
-    footerStyle.getFont().setFontSize(8);
-    footerStyle.setHorizontalAlign(HorizontalAlign.CENTER);
+    // footerStyle.setFont(Font.VERDANA_SMALL);
+    // footerStyle.getFont().setFontSize(8);
+    footerStyle.setHorizontalAlign(HorizontalAlign.RIGHT);
     footerStyle.setBorderTop(Border.PEN_1_POINT());
 
     // Rows content Style (left-align)
@@ -240,6 +245,7 @@ public class KomisiPenjualanDJReport extends Window implements Serializable {
     CompanyProfileService as = (CompanyProfileService) SpringUtil.getBean("companyProfileService");
     List<CompanyProfile> company = as.getAllCompanyProfiles();
 
+
     AutoText atCompanyHeader =
         new AutoText(company.get(0).getCompanyName(), AutoText.POSITION_HEADER,
             HorizontalBandAlignment.LEFT);
@@ -267,13 +273,36 @@ public class KomisiPenjualanDJReport extends Window implements Serializable {
     emptyLine.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
     drb.addAutoText(atCompanyHeader).addAutoText(address).addAutoText(emptyLine).addAutoText(sales)
         .addAutoText(tanggal);
-    //
-    // // Footer
-    // AutoText footerText = new
-    // AutoText("Help to prevent the global warming by writing cool software.",
-    // AutoText.POSITION_FOOTER, HorizontalBandAlignment.CENTER);
-    // footerText.setStyle(footerStyle);
-    // drb.addAutoText(footerText);
+
+    // Footer
+    BonusTransportService bonusService =
+        (BonusTransportService) SpringUtil.getBean("bonusTransportService");
+    BigDecimal bonusSales = bonusService.getBonusSales(karyawan, totalQty);
+    BigDecimal transportSales = bonusService.getTransportSales(karyawan, totalQty);
+    BigDecimal total = totalKomisi.add(bonusSales).add(transportSales);
+
+    AutoText footerTextBonus =
+        new AutoText("Bonus     : " + df.format(bonusSales), AutoText.POSITION_FOOTER,
+            HorizontalBandAlignment.RIGHT);
+    footerTextBonus.setWidth(new Integer(100));
+
+    AutoText footerTextTransport =
+        new AutoText("Transport : " + df.format(transportSales), AutoText.POSITION_FOOTER,
+            HorizontalBandAlignment.RIGHT);
+    footerTextTransport.setWidth(new Integer(100));
+
+    AutoText footerTextTotal =
+        new AutoText("Total     : " + df.format(total), AutoText.POSITION_FOOTER,
+            HorizontalBandAlignment.RIGHT);
+    footerTextTotal.setWidth(new Integer(100));
+    footerTextTotal.setStyle(footerStyle);
+    AutoText footerTextTabungan =
+        new AutoText("Tabungan  : " + df.format(totalTabungan), AutoText.POSITION_FOOTER,
+            HorizontalBandAlignment.RIGHT);
+    footerTextTabungan.setWidth(new Integer(100));
+
+    drb.addAutoText(footerTextBonus).addAutoText(footerTextTransport).addAutoText(footerTextTotal)
+        .addAutoText(footerTextTabungan);
 
     /**
      * Columns Definitions. A new ColumnBuilder instance for each column.
@@ -373,7 +402,6 @@ public class KomisiPenjualanDJReport extends Window implements Serializable {
     drb.setUseFullPageWidth(true); // use full width of the page
     dr = drb.build(); // build the report
 
-    List<KomisiPenjualan> resultList = generateData(karyawan, listPenjualan);
 
     // Generate the Jasper Print Object
     JRDataSource ds = new JRBeanCollectionDataSource(resultList);
@@ -430,6 +458,9 @@ public class KomisiPenjualanDJReport extends Window implements Serializable {
         String kodePartner = "0000";
         Double qtyKirim = Double.parseDouble(String.valueOf(penjualanDetail.getQty()));
         BigDecimal komisi = BigDecimal.ZERO;
+        BigDecimal tabungan = BigDecimal.ZERO;
+        tabungan =
+            penjualanDetail.getTabunganSales().multiply(new BigDecimal(penjualanDetail.getQty()));
         komisi =
             penjualanDetail.getKomisiSales().multiply(new BigDecimal(penjualanDetail.getQty()));
         if (penjualan.getSales1().getKodeKaryawan().equals(karyawan.getKodeKaryawan())
@@ -437,12 +468,14 @@ public class KomisiPenjualanDJReport extends Window implements Serializable {
           kodePartner = penjualan.getSales2().getKodeKaryawan();
           qtyKirim = qtyKirim / 2;
           komisi = komisi.divide(new BigDecimal(2));
+          tabungan = tabungan.divide(new BigDecimal(2));
         } else if (penjualan.getSales2() != null
             && penjualan.getSales2().getKodeKaryawan().equals(karyawan.getKodeKaryawan())
             && penjualan.getSales1() != null) {
           kodePartner = penjualan.getSales1().getKodeKaryawan();
           qtyKirim = qtyKirim / 2;
           komisi = komisi.divide(new BigDecimal(2));
+          tabungan = tabungan.divide(new BigDecimal(2));
         }
         data.setKodePartner(kodePartner);
         data.setNamaBarang(penjualanDetail.getBarang().getNamaBarang());
@@ -450,6 +483,9 @@ public class KomisiPenjualanDJReport extends Window implements Serializable {
         data.setPenjualanBarang(penjualanDetail.getTotal());
         data.setPenerimaanPenjualan(penjualanDetail.getDownPayment());
         data.setKomisiPenjualan(komisi);
+        totalKomisi = totalKomisi.add(komisi);
+        totalTabungan = totalTabungan.add(tabungan);
+        totalQty = totalQty + qtyKirim;
         komisiPenjualanList.add(data);
       }
     }

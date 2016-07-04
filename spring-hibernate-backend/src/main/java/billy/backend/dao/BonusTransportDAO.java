@@ -16,6 +16,8 @@ public interface BonusTransportDAO {
 
   public BonusTransport getBonusTransportById(Long id);
 
+  public List<BonusTransport> getBonusTransportByJobTypeIdAndUnit(long id, Double totalQty);
+
   public List<BonusTransport> getBonusTransportsLikeDeskripsiBonusTransport(String string);
 
   public int getCountAllBonusTransports();
