@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -82,7 +83,8 @@ public class SummaryPenjualanDJReport extends Window implements Serializable {
 
   private AMedia amedia;
   private static final Logger logger = Logger.getLogger(SummaryPenjualanDJReport.class);
-
+  private static final String title = "LAPORAN SUMMARY PENJUALAN";
+  private static final SimpleDateFormat DATE_FORMATER = new SimpleDateFormat("ddMMyyyy");
 
   public SummaryPenjualanDJReport(Component parent, Karyawan karyawan, Date startDate,
       Date endDate, List<Penjualan> listPenjualan) throws InterruptedException {
@@ -99,7 +101,7 @@ public class SummaryPenjualanDJReport extends Window implements Serializable {
   private void callReportWindow(AMedia aMedia, String format) {
     boolean modal = true;
 
-    setTitle("Laporan Summary Penjualan");
+    setTitle(this.title);
     setId("ReportWindow");
     setVisible(true);
     setMaximizable(true);
@@ -206,7 +208,7 @@ public class SummaryPenjualanDJReport extends Window implements Serializable {
 
     // Sets the Report Columns, header, Title, Groups, Etc Formats
     // DynamicJasper documentation
-    drb.setTitle("LAPORAN SUMMARY PENJUALAN");
+    drb.setTitle(this.title);
     // drb.setSubtitle("Tanggal Penjualan : "+ZksampleDateFormat.getDateFormater().format(startDate)+" - "+ZksampleDateFormat.getDateFormater().format(endDate));
     // drb.setSubtitleStyle(subtitleStyle);
 
@@ -354,7 +356,9 @@ public class SummaryPenjualanDJReport extends Window implements Serializable {
     if (outputFormat.equalsIgnoreCase("PDF")) {
       JasperExportManager.exportReportToPdfStream(jp, output);
       mediais = new ByteArrayInputStream(output.toByteArray());
-      amedia = new AMedia("SummaryPenjualan.pdf", "pdf", "application/pdf", mediais);
+      amedia =
+          new AMedia(generateFileName(".pdf", karyawan, startDate, endDate), "pdf",
+              "application/pdf", mediais);
 
       callReportWindow(this.amedia, "PDF");
     } else if (outputFormat.equalsIgnoreCase("XLS")) {
@@ -419,4 +423,15 @@ public class SummaryPenjualanDJReport extends Window implements Serializable {
 
     return summaryPenjualanList;
   }
+
+  private String generateFileName(String fileType, Karyawan karyawan, Date startDate, Date endDate) {
+    StringBuffer fileName = new StringBuffer();
+    fileName.append(title);
+    fileName.append("_" + karyawan.getNamaPanggilan());
+    fileName.append("_" + DATE_FORMATER.format(startDate));
+    fileName.append("_" + DATE_FORMATER.format(endDate));
+    fileName.append(fileType);
+    return fileName.toString();
+  }
+
 }

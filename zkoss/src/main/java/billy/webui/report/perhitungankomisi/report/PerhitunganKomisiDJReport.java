@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -84,9 +85,11 @@ public class PerhitunganKomisiDJReport extends Window implements Serializable {
   private AMedia amedia;
   private static final Logger logger = Logger.getLogger(PerhitunganKomisiDJReport.class);
   DecimalFormat df = new DecimalFormat("#,###");
+  private static final String title = "LAPORAN PERHITUNGAN KOMISI";
+  private static final SimpleDateFormat DATE_FORMATER = new SimpleDateFormat("ddMMyyyy");
 
-  public PerhitunganKomisiDJReport(Component parent, Karyawan karyawan, Date startDate, Date endDate,
-      List<Penjualan> listPenjualan) throws InterruptedException {
+  public PerhitunganKomisiDJReport(Component parent, Karyawan karyawan, Date startDate,
+      Date endDate, List<Penjualan> listPenjualan) throws InterruptedException {
     super();
     this.setParent(parent);
 
@@ -100,7 +103,7 @@ public class PerhitunganKomisiDJReport extends Window implements Serializable {
   private void callReportWindow(AMedia aMedia, String format) {
     boolean modal = true;
 
-    setTitle("Laporan Perhitungan Komisi");
+    setTitle(title);
     setId("ReportWindow");
     setVisible(true);
     setMaximizable(true);
@@ -209,7 +212,7 @@ public class PerhitunganKomisiDJReport extends Window implements Serializable {
 
     // Sets the Report Columns, header, Title, Groups, Etc Formats
     // DynamicJasper documentation
-    drb.setTitle("PERHITUNGAN KOMISI");
+    drb.setTitle(title);
     // drb.setSubtitle("Tanggal Penjualan : "+ZksampleDateFormat.getDateFormater().format(startDate)+" - "+ZksampleDateFormat.getDateFormater().format(endDate));
     // drb.setSubtitleStyle(subtitleStyle);
 
@@ -414,7 +417,9 @@ public class PerhitunganKomisiDJReport extends Window implements Serializable {
     if (outputFormat.equalsIgnoreCase("PDF")) {
       JasperExportManager.exportReportToPdfStream(jp, output);
       mediais = new ByteArrayInputStream(output.toByteArray());
-      amedia = new AMedia("PerhitunganKomisiPenjualan.pdf", "pdf", "application/pdf", mediais);
+      amedia =
+          new AMedia(generateFileName(".pdf", karyawan, startDate, endDate), "pdf",
+              "application/pdf", mediais);
 
       callReportWindow(this.amedia, "PDF");
     } else if (outputFormat.equalsIgnoreCase("XLS")) {
@@ -491,4 +496,15 @@ public class PerhitunganKomisiDJReport extends Window implements Serializable {
     }
     return komisiPenjualanList;
   }
+
+  private String generateFileName(String fileType, Karyawan karyawan, Date startDate, Date endDate) {
+    StringBuffer fileName = new StringBuffer();
+    fileName.append(title);
+    fileName.append("_" + karyawan.getNamaPanggilan());
+    fileName.append("_" + DATE_FORMATER.format(startDate));
+    fileName.append("_" + DATE_FORMATER.format(endDate));
+    fileName.append(fileType);
+    return fileName.toString();
+  }
+
 }

@@ -85,11 +85,8 @@ public class BonusTransportServiceImpl implements BonusTransportService {
     List<BonusTransport> result =
         getBonusTransportDAO().getBonusTransportByJobTypeIdAndUnit(karyawan.getJobType().getId(),
             totalQty);
-    logger.info("resultsize" + result.size() + "karyawan.getJobType().getId() : "
-        + karyawan.getJobType().getId() + ", totalQty: " + totalQty.intValue());
     BigDecimal transportSales = BigDecimal.ZERO;
     for (BonusTransport data : result) {
-      logger.info(data.toString());
       if (data.getTransport() != null)
         transportSales = transportSales.add(data.getTransport());
     }
