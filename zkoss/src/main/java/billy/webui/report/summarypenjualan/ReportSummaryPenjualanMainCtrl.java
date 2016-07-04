@@ -39,8 +39,8 @@ public class ReportSummaryPenjualanMainCtrl extends GFCBaseCtrl implements Seria
 	protected Listbox lbox_Divisi;	
 	protected Datebox txtb_tanggalAwalPenjualan;
 	protected Datebox txtb_tanggalAkhirPenjualan;	
-	protected Button btnViewReport;
-	protected Button btnReset;
+	protected Button btnView;
+	
 	
 	// ServiceDAOs / Domain Classes
 	private PenjualanService penjualanService;
@@ -49,7 +49,6 @@ public class ReportSummaryPenjualanMainCtrl extends GFCBaseCtrl implements Seria
 	List<Penjualan> listPenjualan = new ArrayList<Penjualan>();
 	Karyawan karyawan = null;
 	
-	DecimalFormat df = new DecimalFormat("#,###");
 	/**
 	 * default constructor.<br>
 	 */
@@ -93,12 +92,7 @@ public class ReportSummaryPenjualanMainCtrl extends GFCBaseCtrl implements Seria
 		
 	}
 	
-	public void onClick$btnReset(Event event) throws Exception {
-		doReset();
-	}
-	
-	
-	public void onClick$btnViewPdf(Event event) throws Exception {
+	public void onClick$btnView(Event event) throws Exception {
 		if(validToPrint()){
 			final Window win = (Window) Path.getComponent("/outerIndexWindow");
 			new SummaryPenjualanDJReport(win,karyawan,txtb_tanggalAwalPenjualan.getValue(),txtb_tanggalAkhirPenjualan.getValue(),listPenjualan);
@@ -144,7 +138,7 @@ public class ReportSummaryPenjualanMainCtrl extends GFCBaseCtrl implements Seria
 	// TODO move it to zul
 	private void doCheckRights() {
 		final UserWorkspace workspace = getUserWorkspace();		
-		btnViewReport.setDisabled(!workspace.isAllowed("button_ReportSummaryPenjualanMain_btnView"));
+		btnView.setDisabled(!workspace.isAllowed("button_ReportSummaryPenjualanMain_btnView"));
 	}
 
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //

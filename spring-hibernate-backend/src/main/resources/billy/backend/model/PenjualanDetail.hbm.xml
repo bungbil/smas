@@ -34,7 +34,19 @@
 		</property>		
 		<property name="total" type="big_decimal">
 			<column name="total" precision="12" />
-		</property>			
+		</property>
+		<property name="komisiSales" type="big_decimal">
+			<column name="komisi_sales" precision="12" />
+		</property>	
+		<property name="tabunganSales" type="big_decimal">
+			<column name="tabungan_sales" precision="12" />
+		</property>	
+		<property name="oprDivisi" type="big_decimal">
+			<column name="opr_divisi" precision="12" />
+		</property>	
+		<property name="orDivisi" type="big_decimal">
+			<column name="or_divisi" precision="12" />
+		</property>				
 		
 	</class>
 </hibernate-mapping>

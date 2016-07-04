@@ -1,9 +1,6 @@
 package billy.backend.model;
 
 import java.math.BigDecimal;
-import java.util.Date;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class PenjualanDetail implements java.io.Serializable, Entity {
 
@@ -47,6 +44,14 @@ public class PenjualanDetail implements java.io.Serializable, Entity {
 		this.tabunganSales = tabunganSales;
 		this.oprDivisi = oprDivisi;
 		this.orDivisi = orDivisi;
+	}
+
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
 	}
 
 	public long getId() {

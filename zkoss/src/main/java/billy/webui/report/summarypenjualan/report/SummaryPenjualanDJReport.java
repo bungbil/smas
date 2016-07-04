@@ -101,13 +101,13 @@ public class SummaryPenjualanDJReport extends Window implements Serializable {
 
 		// ColumnHeader Style Text (left-align)
 		final Style columnHeaderStyleText = new Style();
-		columnHeaderStyleText.setFont(Font.VERDANA_MEDIUM_BOLD);
+		columnHeaderStyleText.setFont(Font.VERDANA_SMALL_BOLD);
 		columnHeaderStyleText.setHorizontalAlign(HorizontalAlign.LEFT);
 		//columnHeaderStyleText.setBorderBottom(Border.PEN_1_POINT());
 
 		// ColumnHeader Style Text (right-align)
 		Style columnHeaderStyleNumber = new Style();
-		columnHeaderStyleNumber.setFont(Font.VERDANA_MEDIUM_BOLD);
+		columnHeaderStyleNumber.setFont(Font.VERDANA_SMALL_BOLD);
 		columnHeaderStyleNumber.setHorizontalAlign(HorizontalAlign.RIGHT);
 		columnHeaderStyleNumber.setBorderBottom(Border.PEN_1_POINT());
 
@@ -130,7 +130,7 @@ public class SummaryPenjualanDJReport extends Window implements Serializable {
 
 		// TotalSum (left-right)
 		Style footerStyleTotalSumValue = new Style();
-		footerStyleTotalSumValue.setFont(Font.VERDANA_MEDIUM_BOLD);
+		footerStyleTotalSumValue.setFont(Font.VERDANA_SMALL_BOLD);
 		footerStyleTotalSumValue.setHorizontalAlign(HorizontalAlign.RIGHT);
 		footerStyleTotalSumValue.setBorderTop(Border.PEN_1_POINT());
 
@@ -262,7 +262,7 @@ public class SummaryPenjualanDJReport extends Window implements Serializable {
 		if (outputFormat.equalsIgnoreCase("PDF")) {
 			JasperExportManager.exportReportToPdfStream(jp, output);
 			mediais = new ByteArrayInputStream(output.toByteArray());
-			amedia = new AMedia("FirstReport.pdf", "pdf", "application/pdf", mediais);
+			amedia = new AMedia("SummaryPenjualan.pdf", "pdf", "application/pdf", mediais);
 
 			callReportWindow(this.amedia, "PDF");
 		} else if (outputFormat.equalsIgnoreCase("XLS")) {

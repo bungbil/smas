@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import javax.print.*;
 import org.apache.log4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -25,7 +24,6 @@ import billy.backend.model.Penjualan;
 import billy.backend.service.KaryawanService;
 import billy.backend.service.PenjualanService;
 import billy.webui.master.karyawan.model.KaryawanListModelItemRenderer;
-import billy.webui.printer.model.PrinterListModelItemRenderer;
 import billy.webui.report.komisipenjualan.report.KomisiPenjualanDJReport;
 import de.forsthaus.backend.model.SecUser;
 import de.forsthaus.policy.model.UserImpl;
@@ -39,24 +37,18 @@ public class ReportKomisiPenjualanMainCtrl extends GFCBaseCtrl implements Serial
 
 	
 	protected Window windowReportKomisiPenjualanMain; // autowired
-	protected Listbox lbox_Divisi;
-	protected Listbox lbox_Printer;
+	protected Listbox lbox_Sales;	
 	protected Datebox txtb_tanggalAwalPenjualan;
-	protected Datebox txtb_tanggalAkhirPenjualan;
-	protected Button btnCetakLaporan;
-	protected Button btnViewPdf;
-	protected Button btnReset;
+	protected Datebox txtb_tanggalAkhirPenjualan;	
+	protected Button btnView;
 	
 	// ServiceDAOs / Domain Classes
 	private PenjualanService penjualanService;
 	private KaryawanService karyawanService;
 	
-
-	private PrintService selectedPrinter;	
 	List<Penjualan> listPenjualan = new ArrayList<Penjualan>();
 	Karyawan karyawan = null;
 	
-	DecimalFormat df = new DecimalFormat("#,###");
 	/**
 	 * default constructor.<br>
 	 */
@@ -91,29 +83,20 @@ public class ReportKomisiPenjualanMainCtrl extends GFCBaseCtrl implements Serial
 	
 	public void doReset(){
 		SecUser userLogin = ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSecUser();	
-		List<Karyawan> listDivisi= getKaryawanService().getAllDivisiKaryawansByUserLogin(userLogin);
+		List<Karyawan> listSales= getKaryawanService().getAllSalesKaryawansByUserLogin(userLogin);
 		
-		lbox_Divisi.setModel(new ListModelList(listDivisi));
-		lbox_Divisi.setItemRenderer(new KaryawanListModelItemRenderer());
+		lbox_Sales.setModel(new ListModelList(listSales));
+		lbox_Sales.setItemRenderer(new KaryawanListModelItemRenderer());
 		
 		txtb_tanggalAwalPenjualan.setValue(null);
 		txtb_tanggalAkhirPenjualan.setValue(null);
 		listPenjualan = new ArrayList<Penjualan>();
 		
-		selectedPrinter = null;
+		
 	}
 	
-	public void onClick$btnReset(Event event) throws Exception {
-		doReset();
-	}
 	
-	public void onClick$btnRefeshPrinter(Event event) throws Exception {
-		PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
-        lbox_Printer.setModel(new ListModelList(printServices));
-        lbox_Printer.setItemRenderer(new PrinterListModelItemRenderer());
-	}
-	
-	public void onClick$btnViewPdf(Event event) throws Exception {
+	public void onClick$btnView(Event event) throws Exception {
 		if(validToPrint()){
 			final Window win = (Window) Path.getComponent("/outerIndexWindow");
 			new KomisiPenjualanDJReport(win,karyawan,txtb_tanggalAwalPenjualan.getValue(),txtb_tanggalAkhirPenjualan.getValue(),listPenjualan);
@@ -125,8 +108,6 @@ public class ReportKomisiPenjualanMainCtrl extends GFCBaseCtrl implements Serial
 	public void showErrorCetak() throws Exception{
 		if(listPenjualan.size()==0){
 			ZksampleMessageUtils.showErrorMessage("Tidak ada penjualan di range waktu ini");
-		}else if (selectedPrinter==null){
-			ZksampleMessageUtils.showErrorMessage("Silakan dipilih Printernya");	
 		}else{
 			ZksampleMessageUtils.showErrorMessage("Error!!!");
 		}
@@ -134,22 +115,19 @@ public class ReportKomisiPenjualanMainCtrl extends GFCBaseCtrl implements Serial
 	}
 	
 	public boolean validToPrint() throws Exception{
-		
-		
-		Listitem itemDivisi = lbox_Divisi.getSelectedItem();
-		if (itemDivisi != null) {
-			ListModelList lml1 = (ListModelList) lbox_Divisi.getListModel();
-			karyawan = (Karyawan) lml1.get(itemDivisi.getIndex());
+		Listitem itemSales = lbox_Sales.getSelectedItem();
+		if (itemSales != null) {
+			ListModelList lml1 = (ListModelList) lbox_Sales.getListModel();
+			karyawan = (Karyawan) lml1.get(itemSales.getIndex());
 		}
 		
 		if(karyawan != null 
 				&& txtb_tanggalAwalPenjualan.getValue()!=null
 				&& txtb_tanggalAkhirPenjualan.getValue()!=null){
-			listPenjualan = getPenjualanService().getAllPenjualansByDivisiAndRangeDate(karyawan,txtb_tanggalAwalPenjualan.getValue(),txtb_tanggalAkhirPenjualan.getValue());
+			listPenjualan = getPenjualanService().getAllPenjualansBySalesAndRangeDate(karyawan,txtb_tanggalAwalPenjualan.getValue(),txtb_tanggalAkhirPenjualan.getValue());
 			if(listPenjualan.size() > 0){
 				return true;
-			}				
-					
+			}									
 		}
 		return false;
 	}
@@ -168,7 +146,7 @@ public class ReportKomisiPenjualanMainCtrl extends GFCBaseCtrl implements Serial
 	private void doCheckRights() {
 
 		final UserWorkspace workspace = getUserWorkspace();		
-		btnViewPdf.setDisabled(!workspace.isAllowed("button_ReportKomisiPenjualanMain_btnView"));
+		btnView.setDisabled(!workspace.isAllowed("button_ReportKomisiPenjualanMain_btnView"));
 	}
 
 	// +++++++++++++++++++++++++++++++++++++++++++++++++ //

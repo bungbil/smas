@@ -4,12 +4,15 @@ import java.math.BigDecimal;
  
 public class KomisiPenjualan {
  
-	private String namaDivisi;
+	private String nomorFaktur;
+    private String namaPelanggan;
+    private String kodePartner;
+    private String intervalKredit;
     private String namaBarang;
-    private int unitSetTerjual;
+    private Double qtyKirim;
     private BigDecimal penjualanBarang;
     private BigDecimal penerimaanPenjualan;
-    private BigDecimal sisaPiutang;
+    private BigDecimal komisiPenjualan;
     
     
     
@@ -21,15 +24,76 @@ public class KomisiPenjualan {
 
 
 
-	public String getNamaDivisi() {
-		return namaDivisi;
+	public KomisiPenjualan(String nomorFaktur, String namaPelanggan,
+			String kodePartner, String intervalKredit, String namaBarang,
+			Double qtyKirim, BigDecimal penjualanBarang,
+			BigDecimal penerimaanPenjualan, BigDecimal komisiPenjualan) {
+		super();
+		this.nomorFaktur = nomorFaktur;
+		this.namaPelanggan = namaPelanggan;
+		this.kodePartner = kodePartner;
+		this.intervalKredit = intervalKredit;
+		this.namaBarang = namaBarang;
+		this.qtyKirim = qtyKirim;
+		this.penjualanBarang = penjualanBarang;
+		this.penerimaanPenjualan = penerimaanPenjualan;
+		this.komisiPenjualan = komisiPenjualan;
 	}
 
 
 
 
-	public void setNamaDivisi(String namaDivisi) {
-		this.namaDivisi = namaDivisi;
+	public String getNomorFaktur() {
+		return nomorFaktur;
+	}
+
+
+
+
+	public void setNomorFaktur(String nomorFaktur) {
+		this.nomorFaktur = nomorFaktur;
+	}
+
+
+
+
+	public String getNamaPelanggan() {
+		return namaPelanggan;
+	}
+
+
+
+
+	public void setNamaPelanggan(String namaPelanggan) {
+		this.namaPelanggan = namaPelanggan;
+	}
+
+
+
+
+	public String getKodePartner() {
+		return kodePartner;
+	}
+
+
+
+
+	public void setKodePartner(String kodePartner) {
+		this.kodePartner = kodePartner;
+	}
+
+
+
+
+	public String getIntervalKredit() {
+		return intervalKredit;
+	}
+
+
+
+
+	public void setIntervalKredit(String intervalKredit) {
+		this.intervalKredit = intervalKredit;
 	}
 
 
@@ -49,15 +113,15 @@ public class KomisiPenjualan {
 
 
 
-	public int getUnitSetTerjual() {
-		return unitSetTerjual;
+	public Double getQtyKirim() {
+		return qtyKirim;
 	}
 
 
 
 
-	public void setUnitSetTerjual(int unitSetTerjual) {
-		this.unitSetTerjual = unitSetTerjual;
+	public void setQtyKirim(Double qtyKirim) {
+		this.qtyKirim = qtyKirim;
 	}
 
 
@@ -91,32 +155,16 @@ public class KomisiPenjualan {
 
 
 
-	public BigDecimal getSisaPiutang() {
-		return sisaPiutang;
+	public BigDecimal getKomisiPenjualan() {
+		return komisiPenjualan;
 	}
 
 
 
 
-	public void setSisaPiutang(BigDecimal sisaPiutang) {
-		this.sisaPiutang = sisaPiutang;
+	public void setKomisiPenjualan(BigDecimal komisiPenjualan) {
+		this.komisiPenjualan = komisiPenjualan;
 	}
-
-
-
-
-	public KomisiPenjualan(String namaDivisi, String namaBarang,
-			int unitSetTerjual, BigDecimal penjualanBarang,
-			BigDecimal penerimaanPenjualan, BigDecimal sisaPiutang) {
-		super();
-		this.namaDivisi = namaDivisi;
-		this.namaBarang = namaBarang;
-		this.unitSetTerjual = unitSetTerjual;
-		this.penjualanBarang = penjualanBarang;
-		this.penerimaanPenjualan = penerimaanPenjualan;
-		this.sisaPiutang = sisaPiutang;
-	}
-
 
 
 }

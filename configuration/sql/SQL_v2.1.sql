@@ -2,11 +2,11 @@
 UPDATE PARAMETER SET PARAM_VALUE ='2.1' WHERE PARAM_NAME = 'APPLICATION_VERSION';
 
 alter table penjualan_detail
-	add column down_payment			numeric(12,2)		 null default 0;
-	
-
-
-
+	add column down_payment			numeric(12,2)		 null default 0,
+	add column komisi_sales			numeric(12,2)		 null default 0,
+	add column tabungan_sales		numeric(12,2)		 null default 0,
+	add column opr_divisi			numeric(12,2)		 null default 0,
+	add column or_divisi			numeric(12,2)		 null default 0;
 
 INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
 (227, 2, 'menuItem_Transaction_CetakPenjualan', 0),

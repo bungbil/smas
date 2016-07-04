@@ -8,7 +8,7 @@
 	xmlns:w="http://www.zkoss.org/2005/zk/client"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
-	<window id="windowKomisiPenjualanMain" apply="${reportKomisiPenjualanMainCtrl}"
+	<window id="windowReportKomisiPenjualanMain" apply="${reportKomisiPenjualanMainCtrl}"
 		border="none" width="100%">
 
 		<div sclass="z-toolbar" style="padding:0">
@@ -47,7 +47,7 @@
 												</row>
 												<row>
 													<label />
-													<button id="btnViewReport" label="Print Komisi Penjualan"  	/>
+													<button id="btnView" label="Lihat Komisi Penjualan"  	/>
 												</row>
 												
 											</rows>

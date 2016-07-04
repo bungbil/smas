@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.hibernate.FetchMode;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -112,8 +113,11 @@ public class PenjualanDAOImpl extends BillyBasisDAO<Penjualan> implements Penjua
 			Karyawan obj,Date startDate, Date endDate) {
 		DetachedCriteria criteria = DetachedCriteria.forClass(Penjualan.class);
 		criteria.add(Restrictions.ge("tglPenjualan", startDate));
-		criteria.add(Restrictions.le("tglPenjualan", endDate));		
-		criteria.add(Restrictions.eq("id", obj.getId()));
+		criteria.add(Restrictions.le("tglPenjualan", endDate));	
+		//criteria.add(Restrictions.eq("sales1.id", obj.getId()));
+		Criterion sales1 = Restrictions.eq("sales1.id", obj.getId());
+		Criterion sales2 = Restrictions.eq("sales2.id", obj.getId());
+		criteria.add(Restrictions.or(sales1,sales2));		
 		return getHibernateTemplate().findByCriteria(criteria);
 	}
 }

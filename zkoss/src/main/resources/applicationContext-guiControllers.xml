@@ -501,7 +501,11 @@
 		<property name="karyawanService" ref="karyawanService" />		
 	</bean>
 	
-	
+	<!-- ReportKomisiPenjualan -->
+	<bean id="reportKomisiPenjualanMainCtrl" class="billy.webui.report.komisipenjualan.ReportKomisiPenjualanMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="penjualanService" ref="penjualanService" />		
+		<property name="karyawanService" ref="karyawanService" />		
+	</bean>
 	
 </beans>
 

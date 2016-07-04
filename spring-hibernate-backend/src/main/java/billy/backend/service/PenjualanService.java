@@ -31,5 +31,5 @@ public interface PenjualanService {
 	public void delete(PenjualanDetail penjualanDetail);
 	public void deletePenjualanDetailsByPenjualan(Penjualan penjualan);
 	public List<Penjualan>  getAllPenjualansByDivisiAndRangeDate(Karyawan obj, Date startDate,	Date endDate);
-
+	public List<Penjualan>  getAllPenjualansBySalesAndRangeDate(Karyawan obj, Date startDate,	Date endDate);
 }

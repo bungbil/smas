@@ -21,7 +21,7 @@ public class KaryawanListModelItemRenderer implements ListitemRenderer, Serializ
 
 		final Karyawan entity = (Karyawan) data;
 
-		final Listcell lc = new Listcell(entity.getNamaPanggilan()+"("+entity.getId()+")");		
+		final Listcell lc = new Listcell(entity.getNamaPanggilan()+"("+entity.getKodeKaryawan()+")");		
 		lc.setParent(item);
 
 		item.setAttribute("data", data);

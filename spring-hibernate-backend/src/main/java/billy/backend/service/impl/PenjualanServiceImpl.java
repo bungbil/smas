@@ -134,6 +134,15 @@ public class PenjualanServiceImpl implements PenjualanService {
 		
 		return allPenjualan;
 	}
+	@Override
+	public List<Penjualan> getAllPenjualansBySalesAndRangeDate(Karyawan obj,Date startDate,Date endDate) {
+		List<Penjualan> allPenjualan = new ArrayList<Penjualan>();		
+		List<Penjualan> allPenjualanKaryawan = getPenjualanDAO().getAllPenjualansByKaryawanAndRangeDate(obj,startDate,endDate);		
+		allPenjualan.addAll(allPenjualanKaryawan);
+		
+		return allPenjualan;
+	}
+
 
 	@Override
 	public int getCountAllPenjualanDetails() {
