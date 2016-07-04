@@ -501,8 +501,14 @@
 		<property name="karyawanService" ref="karyawanService" />		
 	</bean>
 	
-	<!-- ReportKomisiPenjualan -->
+	<!-- ReportPerhitunganKomisi -->
 	<bean id="reportPerhitunganKomisiMainCtrl" class="billy.webui.report.perhitungankomisi.ReportPerhitunganKomisiMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="penjualanService" ref="penjualanService" />		
+		<property name="karyawanService" ref="karyawanService" />		
+	</bean>
+	
+	<!-- ReportKomisi -->
+	<bean id="reportKomisiMainCtrl" class="billy.webui.report.komisi.ReportKomisiMainCtrl" parent="basisCtrl" scope="prototype">
 		<property name="penjualanService" ref="penjualanService" />		
 		<property name="karyawanService" ref="karyawanService" />		
 	</bean>

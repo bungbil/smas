@@ -47,7 +47,7 @@
 												</row>												
 												<row>
 													<label />
-													<button id="btnView" label="Lihat Summary Penjualan"  	/>
+													<button id="btnView" label="Lihat Laporan"  	/>
 												</row>
 												
 											</rows>

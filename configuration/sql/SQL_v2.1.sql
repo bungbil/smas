@@ -32,7 +32,12 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 (232, 1, 232, 0),
 (233, 1, 233, 0);
 
-
+INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
+(234, 2, 'menuItem_Report_Komisi', 0),
+(235, 6, 'button_ReportKomisiMain_btnView', 0);
+INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
+(234, 1, 234, 0),
+(235, 1, 235, 0);
 
 
 
