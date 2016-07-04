@@ -3,18 +3,19 @@ package billy.backend.service;
 import java.util.List;
 
 import billy.backend.model.CompanyProfile;
+
 public interface CompanyProfileService {
 
-	public CompanyProfile getNewCompanyProfile();
+  public void delete(CompanyProfile entity);
 
-	public int getCountAllCompanyProfiles();
+  public List<CompanyProfile> getAllCompanyProfiles();
 
-	public CompanyProfile getCompanyProfileByID(Long id);
+  public CompanyProfile getCompanyProfileByID(Long id);
 
-	public List<CompanyProfile> getAllCompanyProfiles();
+  public int getCountAllCompanyProfiles();
 
-	public void saveOrUpdate(CompanyProfile entity);
+  public CompanyProfile getNewCompanyProfile();
 
-	public void delete(CompanyProfile entity);
+  public void saveOrUpdate(CompanyProfile entity);
 
 }

@@ -20,327 +20,328 @@ import org.zkoss.zul.Paging;
 import org.zkoss.zul.Panel;
 import org.zkoss.zul.Window;
 
-import de.forsthaus.UserWorkspace;
 import billy.backend.model.Wilayah;
 import billy.backend.service.WilayahService;
+import de.forsthaus.UserWorkspace;
 import de.forsthaus.backend.util.HibernateSearchObject;
 import de.forsthaus.webui.util.GFCBaseListCtrl;
 
 public class WilayahListCtrl extends GFCBaseListCtrl<Wilayah> implements Serializable {
 
-	private static final long serialVersionUID = -2170565288232491362L;
-	private static final Logger logger = Logger.getLogger(WilayahListCtrl.class);
+  private static final long serialVersionUID = -2170565288232491362L;
+  private static final Logger logger = Logger.getLogger(WilayahListCtrl.class);
 
-	protected Window windowWilayahList; // autowired
-	protected Panel panelWilayahList; // autowired
+  protected Window windowWilayahList; // autowired
+  protected Panel panelWilayahList; // autowired
 
-	protected Borderlayout borderLayout_wilayahList; // autowired
-	protected Paging paging_WilayahList; // autowired
-	protected Listbox listBoxWilayah; // autowired
-	protected Listheader listheader_WilayahList_Kode; // autowired
-	protected Listheader listheader_WilayahList_Nama; // autowired
-	protected Listheader listheader_WilayahList_Status; // autowired
-	protected Listheader listheader_WilayahList_LastUpdate;
-	protected Listheader listheader_WilayahList_UpdatedBy;
-	
-	// NEEDED for ReUse in the SearchWindow
-	private HibernateSearchObject<Wilayah> searchObj;
+  protected Borderlayout borderLayout_wilayahList; // autowired
+  protected Paging paging_WilayahList; // autowired
+  protected Listbox listBoxWilayah; // autowired
+  protected Listheader listheader_WilayahList_Kode; // autowired
+  protected Listheader listheader_WilayahList_Nama; // autowired
+  protected Listheader listheader_WilayahList_Status; // autowired
+  protected Listheader listheader_WilayahList_LastUpdate;
+  protected Listheader listheader_WilayahList_UpdatedBy;
 
-	// row count for listbox
-	private int countRows;
+  // NEEDED for ReUse in the SearchWindow
+  private HibernateSearchObject<Wilayah> searchObj;
 
-	// Databinding
-	private AnnotateDataBinder binder;
-	private WilayahMainCtrl wilayahMainCtrl;
+  // row count for listbox
+  private int countRows;
 
-	// ServiceDAOs / Domain Classes
-	private transient WilayahService wilayahService;
+  // Databinding
+  private AnnotateDataBinder binder;
+  private WilayahMainCtrl wilayahMainCtrl;
 
-	/**
-	 * default constructor.<br>
-	 */
-	public WilayahListCtrl() {
-		super();
-	}
+  // ServiceDAOs / Domain Classes
+  private transient WilayahService wilayahService;
 
-	@Override
-	public void doAfterCompose(Component window) throws Exception {
-		super.doAfterCompose(window);
-		
-		this.self.setAttribute("controller", this, false);
-		if (arg.containsKey("ModuleMainController")) {
-			setWilayahMainCtrl((WilayahMainCtrl) arg.get("ModuleMainController"));
-			getWilayahMainCtrl().setWilayahListCtrl(this);
+  /**
+   * default constructor.<br>
+   */
+  public WilayahListCtrl() {
+    super();
+  }
 
-			if (getWilayahMainCtrl().getSelectedWilayah() != null) {
-				setSelectedWilayah(getWilayahMainCtrl().getSelectedWilayah());
-			} else
-				setSelectedWilayah(null);
-		} else {
-			setSelectedWilayah(null);
-		}
-	}
+  @Override
+  public void doAfterCompose(Component window) throws Exception {
+    super.doAfterCompose(window);
 
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
-	// +++++++++++++++ Component Events ++++++++++++++++ //
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
+    this.self.setAttribute("controller", this, false);
+    if (arg.containsKey("ModuleMainController")) {
+      setWilayahMainCtrl((WilayahMainCtrl) arg.get("ModuleMainController"));
+      getWilayahMainCtrl().setWilayahListCtrl(this);
 
-	/**
-	 * Automatically called method from zk.
-	 * 
-	 * @param event
-	 * @throws Exception
-	 */
+      if (getWilayahMainCtrl().getSelectedWilayah() != null) {
+        setSelectedWilayah(getWilayahMainCtrl().getSelectedWilayah());
+      } else
+        setSelectedWilayah(null);
+    } else {
+      setSelectedWilayah(null);
+    }
+  }
 
-	public void onCreate$windowWilayahList(Event event) throws Exception {
-		binder = (AnnotateDataBinder) event.getTarget().getAttribute("binder", true);
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++ Component Events ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
-		doFillListbox();
+  public void doFillListbox() {
 
-		binder.loadAll();
-	}
+    doFitSize();
 
-	public void doFillListbox() {
+    // set the paging params
+    paging_WilayahList.setPageSize(getCountRows());
+    paging_WilayahList.setDetailed(true);
 
-		doFitSize();
+    // not used listheaders must be declared like ->
+    // lh.setSortAscending(""); lh.setSortDescending("")
+    listheader_WilayahList_Kode.setSortAscending(new FieldComparator("kodeWilayah", true));
+    listheader_WilayahList_Kode.setSortDescending(new FieldComparator("kodeWilayah", false));
 
-		// set the paging params
-		paging_WilayahList.setPageSize(getCountRows());
-		paging_WilayahList.setDetailed(true);
+    listheader_WilayahList_Nama.setSortAscending(new FieldComparator("namaWilayah", true));
+    listheader_WilayahList_Nama.setSortDescending(new FieldComparator("namaWilayah", false));
 
-		// not used listheaders must be declared like ->
-		// lh.setSortAscending(""); lh.setSortDescending("")
-		listheader_WilayahList_Kode.setSortAscending(new FieldComparator("kodeWilayah", true));
-		listheader_WilayahList_Kode.setSortDescending(new FieldComparator("kodeWilayah", false));
-		
-		listheader_WilayahList_Nama.setSortAscending(new FieldComparator("namaWilayah", true));
-		listheader_WilayahList_Nama.setSortDescending(new FieldComparator("namaWilayah", false));
-		
-		listheader_WilayahList_Status.setSortAscending(new FieldComparator("status", true));
-		listheader_WilayahList_Status.setSortDescending(new FieldComparator("status", false));
-		
-		listheader_WilayahList_LastUpdate.setSortAscending(new FieldComparator("lastUpdate", true));
-		listheader_WilayahList_LastUpdate.setSortDescending(new FieldComparator("lastUpdate", false));
-		
-		listheader_WilayahList_UpdatedBy.setSortAscending(new FieldComparator("updatedBy", true));
-		listheader_WilayahList_UpdatedBy.setSortDescending(new FieldComparator("updatedBy", false));
-		
-		
-		// ++ create the searchObject and init sorting ++//
-		// ++ create the searchObject and init sorting ++//
-		searchObj = new HibernateSearchObject<Wilayah>(Wilayah.class, getCountRows());
-		searchObj.addSort("kodeWilayah", false);
-		setSearchObj(searchObj);
+    listheader_WilayahList_Status.setSortAscending(new FieldComparator("status", true));
+    listheader_WilayahList_Status.setSortDescending(new FieldComparator("status", false));
 
-		// Set the BindingListModel
-		getPagedBindingListWrapper().init(searchObj, getListBoxWilayah(), paging_WilayahList);
-		BindingListModelList lml = (BindingListModelList) getListBoxWilayah().getModel();
-		setWilayahs(lml);
+    listheader_WilayahList_LastUpdate.setSortAscending(new FieldComparator("lastUpdate", true));
+    listheader_WilayahList_LastUpdate.setSortDescending(new FieldComparator("lastUpdate", false));
 
-		// check if first time opened and init databinding for selectedBean
-		if (getSelectedWilayah() == null) {
-			// init the bean with the first record in the List
-			if (lml.getSize() > 0) {
-				final int rowIndex = 0;
-				// only for correct showing after Rendering. No effect as an
-				// Event
-				// yet.
-				getListBoxWilayah().setSelectedIndex(rowIndex);
-				// get the first entry and cast them to the needed object
-				setSelectedWilayah((Wilayah) lml.get(0));
+    listheader_WilayahList_UpdatedBy.setSortAscending(new FieldComparator("updatedBy", true));
+    listheader_WilayahList_UpdatedBy.setSortDescending(new FieldComparator("updatedBy", false));
 
-				// call the onSelect Event for showing the objects data in the
-				// statusBar
-				Events.sendEvent(new Event("onSelect", getListBoxWilayah(), getSelectedWilayah()));
-			}
-		}
 
-	}
+    // ++ create the searchObject and init sorting ++//
+    // ++ create the searchObject and init sorting ++//
+    searchObj = new HibernateSearchObject<Wilayah>(Wilayah.class, getCountRows());
+    searchObj.addSort("kodeWilayah", false);
+    setSearchObj(searchObj);
 
-	/**
-	 * Selects the object in the listbox and change the tab.<br>
-	 * Event is forwarded in the corresponding listbox.
-	 */
-	public void onDoubleClickedWilayahItem(Event event) {
-		// logger.debug(event.toString());
+    // Set the BindingListModel
+    getPagedBindingListWrapper().init(searchObj, getListBoxWilayah(), paging_WilayahList);
+    BindingListModelList lml = (BindingListModelList) getListBoxWilayah().getModel();
+    setWilayahs(lml);
 
-		Wilayah anWilayah = getSelectedWilayah();
+    // check if first time opened and init databinding for selectedBean
+    if (getSelectedWilayah() == null) {
+      // init the bean with the first record in the List
+      if (lml.getSize() > 0) {
+        final int rowIndex = 0;
+        // only for correct showing after Rendering. No effect as an
+        // Event
+        // yet.
+        getListBoxWilayah().setSelectedIndex(rowIndex);
+        // get the first entry and cast them to the needed object
+        setSelectedWilayah((Wilayah) lml.get(0));
 
-		if (anWilayah != null) {
-			setSelectedWilayah(anWilayah);
-			setWilayah(anWilayah);
+        // call the onSelect Event for showing the objects data in the
+        // statusBar
+        Events.sendEvent(new Event("onSelect", getListBoxWilayah(), getSelectedWilayah()));
+      }
+    }
 
-			// check first, if the tabs are created
-			if (getWilayahMainCtrl().getWilayahDetailCtrl() == null) {
-				Events.sendEvent(new Event("onSelect", getWilayahMainCtrl().tabWilayahDetail, null));
-				// if we work with spring beanCreation than we must check a
-				// little bit deeper, because the Controller are preCreated ?
-			} else if (getWilayahMainCtrl().getWilayahDetailCtrl().getBinder() == null) {
-				Events.sendEvent(new Event("onSelect", getWilayahMainCtrl().tabWilayahDetail, null));
-			}
+  }
 
-			Events.sendEvent(new Event("onSelect", getWilayahMainCtrl().tabWilayahDetail, anWilayah));
-		}
-	}
+  /**
+   * Recalculates the container size for this controller and resize them. Calculate how many rows
+   * have been place in the listbox. Get the currentDesktopHeight from a hidden Intbox from the
+   * index.zul that are filled by onClientInfo() in the indexCtroller.
+   */
+  public void doFitSize() {
 
-	/**
-	 * When a listItem in the corresponding listbox is selected.<br>
-	 * Event is forwarded in the corresponding listbox.
-	 * 
-	 * @param event
-	 */
-	public void onSelect$listBoxWilayah(Event event) {
-		// logger.debug(event.toString());
+    // normally 0 ! Or we have a i.e. a toolBar on top of the listBox.
+    final int specialSize = 5;
 
-		// selectedWilayah is filled by annotated databinding mechanism
-		Wilayah anWilayah = getSelectedWilayah();
+    final int menuOffset = UserWorkspace.getInstance().getMenuOffset();
+    int height =
+        ((Intbox) Path.getComponent("/outerIndexWindow/currentDesktopHeight")).getValue()
+            .intValue();
+    height = height - menuOffset;
+    final int maxListBoxHeight = height - specialSize - 148;
+    setCountRows((int) Math.round(maxListBoxHeight / 17.7));
+    borderLayout_wilayahList.setHeight(String.valueOf(maxListBoxHeight) + "px");
 
-		if (anWilayah == null) {
-			return;
-		}
+    windowWilayahList.invalidate();
+  }
 
-		// check first, if the tabs are created
-		if (getWilayahMainCtrl().getWilayahDetailCtrl() == null) {
-			Events.sendEvent(new Event("onSelect", getWilayahMainCtrl().tabWilayahDetail, null));
-			// if we work with spring beanCreation than we must check a little
-			// bit deeper, because the Controller are preCreated ?
-		} else if (getWilayahMainCtrl().getWilayahDetailCtrl().getBinder() == null) {
-			Events.sendEvent(new Event("onSelect", getWilayahMainCtrl().tabWilayahDetail, null));
-		}
+  public AnnotateDataBinder getBinder() {
+    return this.binder;
+  }
 
-		// INIT ALL RELATED Queries/OBJECTS/LISTS NEW
-		getWilayahMainCtrl().getWilayahDetailCtrl().setSelectedWilayah(anWilayah);
-		getWilayahMainCtrl().getWilayahDetailCtrl().setWilayah(anWilayah);
+  public int getCountRows() {
+    return this.countRows;
+  }
 
-		// store the selected bean values as current
-		getWilayahMainCtrl().doStoreInitValues();
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++++ Business Logic ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
-		// show the objects data in the statusBar
-		String str = Labels.getLabel("common.Wilayah") + ": " + anWilayah.getKodeWilayah();
-		EventQueues.lookup("selectedObjectEventQueue", EventQueues.DESKTOP, true).publish(new Event("onChangeSelectedObject", null, str));
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
-	}
+  public Listbox getListBoxWilayah() {
+    return this.listBoxWilayah;
+  }
 
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
-	// +++++++++++++++++ Business Logic ++++++++++++++++ //
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+  // ++++++++++++++++++ getter / setter +++++++++++++++++++//
+  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++//
 
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
-	// ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  public HibernateSearchObject<Wilayah> getSearchObj() {
+    return this.searchObj;
+  }
 
-	/**
-	 * Recalculates the container size for this controller and resize them.
-	 * 
-	 * Calculate how many rows have been place in the listbox. Get the
-	 * currentDesktopHeight from a hidden Intbox from the index.zul that are
-	 * filled by onClientInfo() in the indexCtroller.
-	 */
-	public void doFitSize() {
+  public Wilayah getSelectedWilayah() {
+    // STORED IN THE module's MainController
+    return getWilayahMainCtrl().getSelectedWilayah();
+  }
 
-		// normally 0 ! Or we have a i.e. a toolBar on top of the listBox.
-		final int specialSize = 5;
+  /**
+   * Best Pratice Hint:<br>
+   * The setters/getters for the local annotated data binded Beans/Sets are administered in the
+   * module's mainController. Working in this way you have clean line to share this beans/sets with
+   * other controllers.
+   */
+  /* Master BEANS */
+  public Wilayah getWilayah() {
+    // STORED IN THE module's MainController
+    return getWilayahMainCtrl().getSelectedWilayah();
+  }
 
-		final int menuOffset = UserWorkspace.getInstance().getMenuOffset();
-		int height = ((Intbox) Path.getComponent("/outerIndexWindow/currentDesktopHeight")).getValue().intValue();
-		height = height - menuOffset;
-		final int maxListBoxHeight = height - specialSize - 148;
-		setCountRows((int) Math.round(maxListBoxHeight / 17.7));
-		borderLayout_wilayahList.setHeight(String.valueOf(maxListBoxHeight) + "px");
+  public WilayahMainCtrl getWilayahMainCtrl() {
+    return this.wilayahMainCtrl;
+  }
 
-		windowWilayahList.invalidate();
-	}
+  public BindingListModelList getWilayahs() {
+    // STORED IN THE module's MainController
+    return getWilayahMainCtrl().getWilayahs();
+  }
 
-	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++//
-	// ++++++++++++++++++ getter / setter +++++++++++++++++++//
-	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+  public WilayahService getWilayahService() {
+    return this.wilayahService;
+  }
 
-	/**
-	 * Best Pratice Hint:<br>
-	 * The setters/getters for the local annotated data binded Beans/Sets are
-	 * administered in the module's mainController. Working in this way you have
-	 * clean line to share this beans/sets with other controllers.
-	 */
-	/* Master BEANS */
-	public Wilayah getWilayah() {
-		// STORED IN THE module's MainController
-		return getWilayahMainCtrl().getSelectedWilayah();
-	}
+  /**
+   * Automatically called method from zk.
+   * 
+   * @param event
+   * @throws Exception
+   */
 
-	public void setWilayah(Wilayah anWilayah) {
-		// STORED IN THE module's MainController
-		getWilayahMainCtrl().setSelectedWilayah(anWilayah);
-	}
+  public void onCreate$windowWilayahList(Event event) throws Exception {
+    binder = (AnnotateDataBinder) event.getTarget().getAttribute("binder", true);
 
-	public void setSelectedWilayah(Wilayah selectedWilayah) {
-		// STORED IN THE module's MainController
-		getWilayahMainCtrl().setSelectedWilayah(selectedWilayah);
-	}
+    doFillListbox();
 
-	public Wilayah getSelectedWilayah() {
-		// STORED IN THE module's MainController
-		return getWilayahMainCtrl().getSelectedWilayah();
-	}
+    binder.loadAll();
+  }
 
-	public void setWilayahs(BindingListModelList wilayahs) {
-		// STORED IN THE module's MainController
-		getWilayahMainCtrl().setWilayahs(wilayahs);
-	}
+  /**
+   * Selects the object in the listbox and change the tab.<br>
+   * Event is forwarded in the corresponding listbox.
+   */
+  public void onDoubleClickedWilayahItem(Event event) {
+    // logger.debug(event.toString());
 
-	public BindingListModelList getWilayahs() {
-		// STORED IN THE module's MainController
-		return getWilayahMainCtrl().getWilayahs();
-	}
+    Wilayah anWilayah = getSelectedWilayah();
 
-	public void setBinder(AnnotateDataBinder binder) {
-		this.binder = binder;
-	}
+    if (anWilayah != null) {
+      setSelectedWilayah(anWilayah);
+      setWilayah(anWilayah);
 
-	public AnnotateDataBinder getBinder() {
-		return this.binder;
-	}
+      // check first, if the tabs are created
+      if (getWilayahMainCtrl().getWilayahDetailCtrl() == null) {
+        Events.sendEvent(new Event("onSelect", getWilayahMainCtrl().tabWilayahDetail, null));
+        // if we work with spring beanCreation than we must check a
+        // little bit deeper, because the Controller are preCreated ?
+      } else if (getWilayahMainCtrl().getWilayahDetailCtrl().getBinder() == null) {
+        Events.sendEvent(new Event("onSelect", getWilayahMainCtrl().tabWilayahDetail, null));
+      }
 
-	/* CONTROLLERS */
-	public void setWilayahMainCtrl(WilayahMainCtrl wilayahMainCtrl) {
-		this.wilayahMainCtrl = wilayahMainCtrl;
-	}
+      Events.sendEvent(new Event("onSelect", getWilayahMainCtrl().tabWilayahDetail, anWilayah));
+    }
+  }
 
-	public WilayahMainCtrl getWilayahMainCtrl() {
-		return this.wilayahMainCtrl;
-	}
+  /**
+   * When a listItem in the corresponding listbox is selected.<br>
+   * Event is forwarded in the corresponding listbox.
+   * 
+   * @param event
+   */
+  public void onSelect$listBoxWilayah(Event event) {
+    // logger.debug(event.toString());
 
-	/* SERVICES */
-	public void setWilayahService(WilayahService wilayahService) {
-		this.wilayahService = wilayahService;
-	}
+    // selectedWilayah is filled by annotated databinding mechanism
+    Wilayah anWilayah = getSelectedWilayah();
 
-	public WilayahService getWilayahService() {
-		return this.wilayahService;
-	}
+    if (anWilayah == null) {
+      return;
+    }
 
-	/* COMPONENTS and OTHERS */
-	public void setSearchObj(HibernateSearchObject<Wilayah> searchObj) {
-		this.searchObj = searchObj;
-	}
+    // check first, if the tabs are created
+    if (getWilayahMainCtrl().getWilayahDetailCtrl() == null) {
+      Events.sendEvent(new Event("onSelect", getWilayahMainCtrl().tabWilayahDetail, null));
+      // if we work with spring beanCreation than we must check a little
+      // bit deeper, because the Controller are preCreated ?
+    } else if (getWilayahMainCtrl().getWilayahDetailCtrl().getBinder() == null) {
+      Events.sendEvent(new Event("onSelect", getWilayahMainCtrl().tabWilayahDetail, null));
+    }
 
-	public HibernateSearchObject<Wilayah> getSearchObj() {
-		return this.searchObj;
-	}
+    // INIT ALL RELATED Queries/OBJECTS/LISTS NEW
+    getWilayahMainCtrl().getWilayahDetailCtrl().setSelectedWilayah(anWilayah);
+    getWilayahMainCtrl().getWilayahDetailCtrl().setWilayah(anWilayah);
 
-	public Listbox getListBoxWilayah() {
-		return this.listBoxWilayah;
-	}
+    // store the selected bean values as current
+    getWilayahMainCtrl().doStoreInitValues();
 
-	public void setListBoxWilayah(Listbox listBoxWilayah) {
-		this.listBoxWilayah = listBoxWilayah;
-	}
+    // show the objects data in the statusBar
+    String str = Labels.getLabel("common.Wilayah") + ": " + anWilayah.getKodeWilayah();
+    EventQueues.lookup("selectedObjectEventQueue", EventQueues.DESKTOP, true).publish(
+        new Event("onChangeSelectedObject", null, str));
 
-	public int getCountRows() {
-		return this.countRows;
-	}
+  }
 
-	public void setCountRows(int countRows) {
-		this.countRows = countRows;
-	}
+  public void setBinder(AnnotateDataBinder binder) {
+    this.binder = binder;
+  }
+
+  public void setCountRows(int countRows) {
+    this.countRows = countRows;
+  }
+
+  public void setListBoxWilayah(Listbox listBoxWilayah) {
+    this.listBoxWilayah = listBoxWilayah;
+  }
+
+  /* COMPONENTS and OTHERS */
+  public void setSearchObj(HibernateSearchObject<Wilayah> searchObj) {
+    this.searchObj = searchObj;
+  }
+
+  public void setSelectedWilayah(Wilayah selectedWilayah) {
+    // STORED IN THE module's MainController
+    getWilayahMainCtrl().setSelectedWilayah(selectedWilayah);
+  }
+
+  public void setWilayah(Wilayah anWilayah) {
+    // STORED IN THE module's MainController
+    getWilayahMainCtrl().setSelectedWilayah(anWilayah);
+  }
+
+  /* CONTROLLERS */
+  public void setWilayahMainCtrl(WilayahMainCtrl wilayahMainCtrl) {
+    this.wilayahMainCtrl = wilayahMainCtrl;
+  }
+
+  public void setWilayahs(BindingListModelList wilayahs) {
+    // STORED IN THE module's MainController
+    getWilayahMainCtrl().setWilayahs(wilayahs);
+  }
+
+  /* SERVICES */
+  public void setWilayahService(WilayahService wilayahService) {
+    this.wilayahService = wilayahService;
+  }
 
 }

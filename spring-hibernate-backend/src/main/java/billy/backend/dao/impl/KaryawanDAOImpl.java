@@ -9,122 +9,124 @@ import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.stereotype.Repository;
 
 import billy.backend.dao.BillyBasisDAO;
-
 import billy.backend.dao.KaryawanDAO;
 import billy.backend.model.Karyawan;
 
 @Repository
 public class KaryawanDAOImpl extends BillyBasisDAO<Karyawan> implements KaryawanDAO {
 
-	@Override
-	public Karyawan getNewKaryawan() {
-		return new Karyawan();
-	}
+  @Override
+  public void deleteKaryawanById(long id) {
+    Karyawan Karyawan = getKaryawanById(id);
+    if (Karyawan != null) {
+      delete(Karyawan);
+    }
+  }
 
-	@Override
-	public Karyawan getKaryawanById(Long id) {
-		return get(Karyawan.class, id);
-	}
+  @Override
+  public List<Karyawan> getAllKaryawans() {
+    return getHibernateTemplate().loadAll(Karyawan.class);
+  }
 
-	@SuppressWarnings("unchecked")
-	public Karyawan getKaryawanByKodeKaryawan(String string) {
-		DetachedCriteria criteria = DetachedCriteria.forClass(Karyawan.class);
-		criteria.add(Restrictions.eq("kodeKaryawan", string));
+  @Override
+  public int getCountAllKaryawans() {
+    return DataAccessUtils.intResult(getHibernateTemplate().find("select count(*) from Karyawan"));
+  }
 
-		return (Karyawan) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(criteria));
-	}
-	
-	@SuppressWarnings("unchecked")
-	public Karyawan getKaryawanByKtp(String string) {
-		DetachedCriteria criteria = DetachedCriteria.forClass(Karyawan.class);
-		criteria.add(Restrictions.eq("ktp", string));
+  @Override
+  public Karyawan getKaryawanById(Long id) {
+    return get(Karyawan.class, id);
+  }
 
-		return (Karyawan) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(criteria));
-	}
+  @Override
+  @SuppressWarnings("unchecked")
+  public Karyawan getKaryawanByKodeKaryawan(String string) {
+    DetachedCriteria criteria = DetachedCriteria.forClass(Karyawan.class);
+    criteria.add(Restrictions.eq("kodeKaryawan", string));
 
-	@Override
-	public List<Karyawan> getAllKaryawans() {
-		return getHibernateTemplate().loadAll(Karyawan.class);
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Karyawan> getKaryawansBySupervisorId(Long id) {
+    return (Karyawan) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(criteria));
+  }
 
-		DetachedCriteria criteria = DetachedCriteria.forClass(Karyawan.class);
-		criteria.add(Restrictions.eq("supervisorDivisi.id", id));
+  @Override
+  @SuppressWarnings("unchecked")
+  public Karyawan getKaryawanByKtp(String string) {
+    DetachedCriteria criteria = DetachedCriteria.forClass(Karyawan.class);
+    criteria.add(Restrictions.eq("ktp", string));
 
-		return getHibernateTemplate().findByCriteria(criteria);
-	}
-	@Override
-	public void deleteKaryawanById(long id) {
-		Karyawan Karyawan = getKaryawanById(id);
-		if (Karyawan != null) {
-			delete(Karyawan);
-		}
-	}
+    return (Karyawan) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(criteria));
+  }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Karyawan> getKaryawansLikeKodeKaryawan(String string) {
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Karyawan> getKaryawansByJobTypeId(Long id) {
+    DetachedCriteria criteria = DetachedCriteria.forClass(Karyawan.class);
+    criteria.add(Restrictions.eq("jobType.id", id));
 
-		DetachedCriteria criteria = DetachedCriteria.forClass(Karyawan.class);
-		criteria.add(Restrictions.ilike("kodeKaryawan", string, MatchMode.ANYWHERE));
+    return getHibernateTemplate().findByCriteria(criteria);
+  }
 
-		return getHibernateTemplate().findByCriteria(criteria);
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Karyawan> getKaryawansLikeKtp(String string) {
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Karyawan> getKaryawansByNamaJobType(String string) {
+    DetachedCriteria criteria = DetachedCriteria.forClass(Karyawan.class);
+    criteria.add(Restrictions.eq("jobType.namaJobType", string));
 
-		DetachedCriteria criteria = DetachedCriteria.forClass(Karyawan.class);
-		criteria.add(Restrictions.ilike("ktp", string, MatchMode.ANYWHERE));
+    return getHibernateTemplate().findByCriteria(criteria);
+  }
 
-		return getHibernateTemplate().findByCriteria(criteria);
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Karyawan> getKaryawansLikeNamaKtp(String string) {
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Karyawan> getKaryawansBySupervisorId(Long id) {
 
-		DetachedCriteria criteria = DetachedCriteria.forClass(Karyawan.class);
-		criteria.add(Restrictions.ilike("namaKtp", string, MatchMode.ANYWHERE));
+    DetachedCriteria criteria = DetachedCriteria.forClass(Karyawan.class);
+    criteria.add(Restrictions.eq("supervisorDivisi.id", id));
 
-		return getHibernateTemplate().findByCriteria(criteria);
-	}
+    return getHibernateTemplate().findByCriteria(criteria);
+  }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Karyawan> getKaryawansLikeNamaPanggilan(String string) {
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Karyawan> getKaryawansLikeKodeKaryawan(String string) {
 
-		DetachedCriteria criteria = DetachedCriteria.forClass(Karyawan.class);
-		criteria.add(Restrictions.ilike("namaPanggilan", string, MatchMode.ANYWHERE));
+    DetachedCriteria criteria = DetachedCriteria.forClass(Karyawan.class);
+    criteria.add(Restrictions.ilike("kodeKaryawan", string, MatchMode.ANYWHERE));
 
-		return getHibernateTemplate().findByCriteria(criteria);
-	}
+    return getHibernateTemplate().findByCriteria(criteria);
+  }
 
-	@Override
-	public int getCountAllKaryawans() {
-		return DataAccessUtils.intResult(getHibernateTemplate().find("select count(*) from Karyawan"));
-	}
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Karyawan> getKaryawansLikeKtp(String string) {
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Karyawan> getKaryawansByJobTypeId(Long id) {
-		DetachedCriteria criteria = DetachedCriteria.forClass(Karyawan.class);
-		criteria.add(Restrictions.eq("jobType.id", id));
+    DetachedCriteria criteria = DetachedCriteria.forClass(Karyawan.class);
+    criteria.add(Restrictions.ilike("ktp", string, MatchMode.ANYWHERE));
 
-		return getHibernateTemplate().findByCriteria(criteria);
-	}
+    return getHibernateTemplate().findByCriteria(criteria);
+  }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Karyawan> getKaryawansByNamaJobType(String string) {
-		DetachedCriteria criteria = DetachedCriteria.forClass(Karyawan.class);
-		criteria.add(Restrictions.eq("jobType.namaJobType", string));
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Karyawan> getKaryawansLikeNamaKtp(String string) {
 
-		return getHibernateTemplate().findByCriteria(criteria);
-	}
+    DetachedCriteria criteria = DetachedCriteria.forClass(Karyawan.class);
+    criteria.add(Restrictions.ilike("namaKtp", string, MatchMode.ANYWHERE));
+
+    return getHibernateTemplate().findByCriteria(criteria);
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Karyawan> getKaryawansLikeNamaPanggilan(String string) {
+
+    DetachedCriteria criteria = DetachedCriteria.forClass(Karyawan.class);
+    criteria.add(Restrictions.ilike("namaPanggilan", string, MatchMode.ANYWHERE));
+
+    return getHibernateTemplate().findByCriteria(criteria);
+  }
+
+  @Override
+  public Karyawan getNewKaryawan() {
+    return new Karyawan();
+  }
 
 }

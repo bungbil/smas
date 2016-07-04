@@ -7,196 +7,198 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class Piutang implements java.io.Serializable, Entity {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private long id = Long.MIN_VALUE +1;
-	private int version;
-	private Penjualan penjualan;
-	private String noKuitansi;
-	private int pembayaranKe;
-	private Date tglPembayaran;
-	private String status;
-	private BigDecimal nilaiTagihan;
-	private BigDecimal pembayaran;
-	private BigDecimal piutang;
-	private Date tglJatuhTempo;
-	private Karyawan kolektor;
-	private String keterangan;
-	private Date lastUpdate;
-	private String updatedBy;
+  private long id = Long.MIN_VALUE + 1;
+  private int version;
+  private Penjualan penjualan;
+  private String noKuitansi;
+  private int pembayaranKe;
+  private Date tglPembayaran;
+  private String status;
+  private BigDecimal nilaiTagihan;
+  private BigDecimal pembayaran;
+  private BigDecimal piutang;
+  private Date tglJatuhTempo;
+  private Karyawan kolektor;
+  private String keterangan;
+  private Date lastUpdate;
+  private String updatedBy;
 
-	public boolean isNew() {
-		return (getId() == Long.MIN_VALUE +1);
-	}
+  public Piutang() {}
 
-	public Piutang() {
-	}
+  public Piutang(long id, Penjualan penjualan, String noKuitansi, int pembayaranKe,
+      Date tglPembayaran, String status, BigDecimal nilaiTagihan, BigDecimal pembayaran,
+      BigDecimal piutang, Date tglJatuhTempo, Karyawan kolektor, String keterangan) {
 
-	public Piutang(long id, Penjualan penjualan, String noKuitansi,
-			int pembayaranKe, Date tglPembayaran, String status,
-			BigDecimal nilaiTagihan, BigDecimal pembayaran, BigDecimal piutang,
-			Date tglJatuhTempo, Karyawan kolektor, String keterangan) {
-		
-		this.id = id;
-		this.penjualan = penjualan;
-		this.noKuitansi = noKuitansi;
-		this.pembayaranKe = pembayaranKe;
-		this.tglPembayaran = tglPembayaran;
-		this.status = status;
-		this.nilaiTagihan = nilaiTagihan;
-		this.pembayaran = pembayaran;
-		this.piutang = piutang;
-		this.tglJatuhTempo = tglJatuhTempo;
-		this.kolektor = kolektor;
-		this.keterangan = keterangan;
-	}
+    this.id = id;
+    this.penjualan = penjualan;
+    this.noKuitansi = noKuitansi;
+    this.pembayaranKe = pembayaranKe;
+    this.tglPembayaran = tglPembayaran;
+    this.status = status;
+    this.nilaiTagihan = nilaiTagihan;
+    this.pembayaran = pembayaran;
+    this.piutang = piutang;
+    this.tglJatuhTempo = tglJatuhTempo;
+    this.kolektor = kolektor;
+    this.keterangan = keterangan;
+  }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
 
-	public long getId() {
-		return id;
-	}
+    if (obj instanceof Piutang) {
+      Piutang objs = (Piutang) obj;
+      return equals(objs);
+    }
 
-	public int getVersion() {
-		return this.version;
-	}
+    return false;
+  }
 
-	public void setVersion(int version) {
-		this.version = version;
-	}
-	
-	public Penjualan getPenjualan() {
-		return penjualan;
-	}
+  public boolean equals(Piutang obj) {
+    return getId() == obj.getId();
+  }
 
-	public void setPenjualan(Penjualan penjualan) {
-		this.penjualan = penjualan;
-	}
+  @Override
+  public long getId() {
+    return id;
+  }
 
-	
-	public String getNoKuitansi() {
-		return noKuitansi;
-	}
+  public String getKeterangan() {
+    return keterangan;
+  }
 
-	public void setNoKuitansi(String noKuitansi) {
-		this.noKuitansi = noKuitansi;
-	}
+  public Karyawan getKolektor() {
+    return kolektor;
+  }
 
-	public int getPembayaranKe() {
-		return pembayaranKe;
-	}
+  public Date getLastUpdate() {
+    return lastUpdate;
+  }
 
-	public void setPembayaranKe(int pembayaranKe) {
-		this.pembayaranKe = pembayaranKe;
-	}
+  public BigDecimal getNilaiTagihan() {
+    return nilaiTagihan;
+  }
 
-	public Date getTglPembayaran() {
-		return tglPembayaran;
-	}
 
-	public void setTglPembayaran(Date tglPembayaran) {
-		this.tglPembayaran = tglPembayaran;
-	}
+  public String getNoKuitansi() {
+    return noKuitansi;
+  }
 
-	public String getStatus() {
-		return status;
-	}
+  public BigDecimal getPembayaran() {
+    return pembayaran;
+  }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+  public int getPembayaranKe() {
+    return pembayaranKe;
+  }
 
-	public BigDecimal getNilaiTagihan() {
-		return nilaiTagihan;
-	}
+  public Penjualan getPenjualan() {
+    return penjualan;
+  }
 
-	public void setNilaiTagihan(BigDecimal nilaiTagihan) {
-		this.nilaiTagihan = nilaiTagihan;
-	}
+  public BigDecimal getPiutang() {
+    return piutang;
+  }
 
-	public BigDecimal getPembayaran() {
-		return pembayaran;
-	}
+  public String getStatus() {
+    return status;
+  }
 
-	public void setPembayaran(BigDecimal pembayaran) {
-		this.pembayaran = pembayaran;
-	}
+  public Date getTglJatuhTempo() {
+    return tglJatuhTempo;
+  }
 
-	public BigDecimal getPiutang() {
-		return piutang;
-	}
+  public Date getTglPembayaran() {
+    return tglPembayaran;
+  }
 
-	public void setPiutang(BigDecimal piutang) {
-		this.piutang = piutang;
-	}
+  public String getUpdatedBy() {
+    return updatedBy;
+  }
 
-	public Date getTglJatuhTempo() {
-		return tglJatuhTempo;
-	}
+  public int getVersion() {
+    return this.version;
+  }
 
-	public void setTglJatuhTempo(Date tglJatuhTempo) {
-		this.tglJatuhTempo = tglJatuhTempo;
-	}
+  @Override
+  public int hashCode() {
+    return Long.valueOf(getId()).hashCode();
+  }
 
-	public Karyawan getKolektor() {
-		return kolektor;
-	}
+  @Override
+  public boolean isNew() {
+    return (getId() == Long.MIN_VALUE + 1);
+  }
 
-	public void setKolektor(Karyawan kolektor) {
-		this.kolektor = kolektor;
-	}
+  @Override
+  public void setId(long id) {
+    this.id = id;
+  }
 
-	public String getKeterangan() {
-		return keterangan;
-	}
+  public void setKeterangan(String keterangan) {
+    this.keterangan = keterangan;
+  }
 
-	public void setKeterangan(String keterangan) {
-		this.keterangan = keterangan;
-	}
+  public void setKolektor(Karyawan kolektor) {
+    this.kolektor = kolektor;
+  }
 
-	public Date getLastUpdate() {
-		return lastUpdate;
-	}
+  public void setLastUpdate(Date lastUpdate) {
+    this.lastUpdate = lastUpdate;
+  }
 
-	public void setLastUpdate(Date lastUpdate) {
-		this.lastUpdate = lastUpdate;
-	}
+  public void setNilaiTagihan(BigDecimal nilaiTagihan) {
+    this.nilaiTagihan = nilaiTagihan;
+  }
 
-	public String getUpdatedBy() {
-		return updatedBy;
-	}
+  public void setNoKuitansi(String noKuitansi) {
+    this.noKuitansi = noKuitansi;
+  }
 
-	public void setUpdatedBy(String updatedBy) {
-		this.updatedBy = updatedBy;
-	}
+  public void setPembayaran(BigDecimal pembayaran) {
+    this.pembayaran = pembayaran;
+  }
 
-	@Override
-	public int hashCode() {
-		return Long.valueOf(getId()).hashCode();
-	}
+  public void setPembayaranKe(int pembayaranKe) {
+    this.pembayaranKe = pembayaranKe;
+  }
 
-	public boolean equals(Piutang obj) {
-		return getId() == obj.getId();
-	}
+  public void setPenjualan(Penjualan penjualan) {
+    this.penjualan = penjualan;
+  }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
+  public void setPiutang(BigDecimal piutang) {
+    this.piutang = piutang;
+  }
 
-		if (obj instanceof Piutang) {
-			Piutang objs = (Piutang) obj;
-			return equals(objs);
-		}
+  public void setStatus(String status) {
+    this.status = status;
+  }
 
-		return false;
-	}
+  public void setTglJatuhTempo(Date tglJatuhTempo) {
+    this.tglJatuhTempo = tglJatuhTempo;
+  }
 
-	public String toString() {
-		return new ToStringBuilder(this).append("id", getId()).toString();
-	}
+  public void setTglPembayaran(Date tglPembayaran) {
+    this.tglPembayaran = tglPembayaran;
+  }
+
+  public void setUpdatedBy(String updatedBy) {
+    this.updatedBy = updatedBy;
+  }
+
+  public void setVersion(int version) {
+    this.version = version;
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this).append("id", getId()).toString();
+  }
 
 }

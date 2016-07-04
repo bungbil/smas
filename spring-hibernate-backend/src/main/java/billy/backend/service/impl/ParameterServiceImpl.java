@@ -8,59 +8,59 @@ import billy.backend.service.ParameterService;
 
 public class ParameterServiceImpl implements ParameterService {
 
-	private ParameterDAO parameterDAO;
+  private ParameterDAO parameterDAO;
 
-	public ParameterDAO getParameterDAO() {
-		return parameterDAO;
-	}
+  @Override
+  public void delete(Parameter entity) {
+    getParameterDAO().delete(entity);
+  }
 
-	public void setParameterDAO(ParameterDAO parameterDAO) {
-		this.parameterDAO = parameterDAO;
-	}
+  @Override
+  public List<Parameter> getAllParameters() {
+    return getParameterDAO().getAllParameters();
+  }
 
-	@Override
-	public Parameter getNewParameter() {
-		return getParameterDAO().getNewParameter();
-	}
+  @Override
+  public int getCountAllParameters() {
+    return getParameterDAO().getCountAllParameters();
+  }
 
-	@Override
-	public Parameter getParameterByID(Long id) {
-		return getParameterDAO().getParameterById(id);
-	}
-	
-	@Override
-	public Parameter getParameterByParamName(String string) {
-		return getParameterDAO().getParameterByParamName(string);
-	}
+  @Override
+  public Parameter getNewParameter() {
+    return getParameterDAO().getNewParameter();
+  }
 
-	@Override
-	public List<Parameter> getAllParameters() {
-		return getParameterDAO().getAllParameters();
-	}
+  @Override
+  public Parameter getParameterByID(Long id) {
+    return getParameterDAO().getParameterById(id);
+  }
 
-	@Override
-	public void saveOrUpdate(Parameter entity) {
-		getParameterDAO().saveOrUpdate(entity);
-	}
+  @Override
+  public Parameter getParameterByParamName(String string) {
+    return getParameterDAO().getParameterByParamName(string);
+  }
 
-	@Override
-	public void delete(Parameter entity) {
-		getParameterDAO().delete(entity);
-	}
+  public ParameterDAO getParameterDAO() {
+    return parameterDAO;
+  }
 
-	@Override
-	public List<Parameter> getParametersLikeParamValue(String string) {
-		return getParameterDAO().getParametersLikeParamValue(string);
-	}
+  @Override
+  public List<Parameter> getParametersLikeDescription(String string) {
+    return getParameterDAO().getParametersLikeDescription(string);
+  }
 
-	@Override
-	public List<Parameter> getParametersLikeDescription(String string) {
-		return getParameterDAO().getParametersLikeDescription(string);
-	}
+  @Override
+  public List<Parameter> getParametersLikeParamValue(String string) {
+    return getParameterDAO().getParametersLikeParamValue(string);
+  }
 
-	@Override
-	public int getCountAllParameters() {
-		return getParameterDAO().getCountAllParameters();
-	}
+  @Override
+  public void saveOrUpdate(Parameter entity) {
+    getParameterDAO().saveOrUpdate(entity);
+  }
+
+  public void setParameterDAO(ParameterDAO parameterDAO) {
+    this.parameterDAO = parameterDAO;
+  }
 
 }

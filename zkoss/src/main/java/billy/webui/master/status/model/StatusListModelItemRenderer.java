@@ -10,22 +10,21 @@ import org.zkoss.zul.ListitemRenderer;
 import billy.backend.model.Status;
 
 
-
 public class StatusListModelItemRenderer implements ListitemRenderer, Serializable {
 
-	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(StatusListModelItemRenderer.class);
+  private static final long serialVersionUID = 1L;
+  private static final Logger logger = Logger.getLogger(StatusListModelItemRenderer.class);
 
-	@Override
-	public void render(Listitem item, Object data) throws Exception {
+  @Override
+  public void render(Listitem item, Object data) throws Exception {
 
-		final Status entity = (Status) data;
+    final Status entity = (Status) data;
 
-		final Listcell lc = new Listcell(entity.getDeskripsiStatus());		
-		lc.setParent(item);
+    final Listcell lc = new Listcell(entity.getDeskripsiStatus());
+    lc.setParent(item);
 
-		item.setAttribute("data", data);
+    item.setAttribute("data", data);
 
-	}
+  }
 
 }

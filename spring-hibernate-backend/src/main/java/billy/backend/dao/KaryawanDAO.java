@@ -6,33 +6,38 @@ import billy.backend.model.Karyawan;
 
 public interface KaryawanDAO {
 
-	public Karyawan getNewKaryawan();
+  public void delete(Karyawan entity);
 
-	public Karyawan getKaryawanById(Long id);
+  public void deleteKaryawanById(long id);
 
-	public Karyawan getKaryawanByKodeKaryawan(String string);
-	public Karyawan getKaryawanByKtp(String string);
+  public List<Karyawan> getAllKaryawans();
 
-	public List<Karyawan> getAllKaryawans();
-	public List<Karyawan> getKaryawansBySupervisorId(Long id);
-	public int getCountAllKaryawans();
+  public int getCountAllKaryawans();
 
-	public List<Karyawan> getKaryawansLikeKodeKaryawan(String string);
+  public Karyawan getKaryawanById(Long id);
 
-	public List<Karyawan> getKaryawansLikeNamaPanggilan(String string);
-	public List<Karyawan> getKaryawansLikeKtp(String string);
-	public List<Karyawan> getKaryawansLikeNamaKtp(String string);
-	
-	public List<Karyawan> getKaryawansByJobTypeId(Long id);
-	
-	public List<Karyawan> getKaryawansByNamaJobType(String string);
+  public Karyawan getKaryawanByKodeKaryawan(String string);
 
-	public void deleteKaryawanById(long id);
+  public Karyawan getKaryawanByKtp(String string);
 
-	public void saveOrUpdate(Karyawan entity);
+  public List<Karyawan> getKaryawansByJobTypeId(Long id);
 
-	public void delete(Karyawan entity);
+  public List<Karyawan> getKaryawansByNamaJobType(String string);
 
-	public void save(Karyawan entity);
+  public List<Karyawan> getKaryawansBySupervisorId(Long id);
+
+  public List<Karyawan> getKaryawansLikeKodeKaryawan(String string);
+
+  public List<Karyawan> getKaryawansLikeKtp(String string);
+
+  public List<Karyawan> getKaryawansLikeNamaKtp(String string);
+
+  public List<Karyawan> getKaryawansLikeNamaPanggilan(String string);
+
+  public Karyawan getNewKaryawan();
+
+  public void save(Karyawan entity);
+
+  public void saveOrUpdate(Karyawan entity);
 
 }

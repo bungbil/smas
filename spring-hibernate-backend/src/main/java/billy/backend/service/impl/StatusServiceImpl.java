@@ -8,52 +8,54 @@ import billy.backend.service.StatusService;
 
 public class StatusServiceImpl implements StatusService {
 
-	private StatusDAO statusDAO;
+  private StatusDAO statusDAO;
 
-	public StatusDAO getStatusDAO() {
-		return statusDAO;
-	}
+  @Override
+  public void delete(Status entity) {
+    getStatusDAO().delete(entity);
+  }
 
-	public void setStatusDAO(StatusDAO statusDAO) {
-		this.statusDAO = statusDAO;
-	}
+  @Override
+  public List<Status> getAllStatuss() {
+    return getStatusDAO().getAllStatuss();
+  }
 
-	@Override
-	public Status getNewStatus() {
-		return getStatusDAO().getNewStatus();
-	}
+  @Override
+  public int getCountAllStatuss() {
+    return getStatusDAO().getCountAllStatuss();
+  }
 
-	@Override
-	public Status getStatusByID(Long id) {
-		return getStatusDAO().getStatusById(id);
-	}
-	@Override
-	public Status getStatusByDeskripsiStatus(String string) {
-		return getStatusDAO().getStatusByDeskripsiStatus(string);
-	}
-	@Override
-	public List<Status> getAllStatuss() {
-		return getStatusDAO().getAllStatuss();
-	}
+  @Override
+  public Status getNewStatus() {
+    return getStatusDAO().getNewStatus();
+  }
 
-	@Override
-	public void saveOrUpdate(Status entity) {
-		getStatusDAO().saveOrUpdate(entity);
-	}
+  @Override
+  public Status getStatusByDeskripsiStatus(String string) {
+    return getStatusDAO().getStatusByDeskripsiStatus(string);
+  }
 
-	@Override
-	public void delete(Status entity) {
-		getStatusDAO().delete(entity);
-	}
+  @Override
+  public Status getStatusByID(Long id) {
+    return getStatusDAO().getStatusById(id);
+  }
 
-	@Override
-	public List<Status> getStatussLikeDeskripsiStatus(String string) {
-		return getStatusDAO().getStatussLikeDeskripsiStatus(string);
-	}
+  public StatusDAO getStatusDAO() {
+    return statusDAO;
+  }
 
-	@Override
-	public int getCountAllStatuss() {
-		return getStatusDAO().getCountAllStatuss();
-	}
+  @Override
+  public List<Status> getStatussLikeDeskripsiStatus(String string) {
+    return getStatusDAO().getStatussLikeDeskripsiStatus(string);
+  }
+
+  @Override
+  public void saveOrUpdate(Status entity) {
+    getStatusDAO().saveOrUpdate(entity);
+  }
+
+  public void setStatusDAO(StatusDAO statusDAO) {
+    this.statusDAO = statusDAO;
+  }
 
 }

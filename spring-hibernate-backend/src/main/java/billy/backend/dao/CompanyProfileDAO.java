@@ -6,20 +6,20 @@ import billy.backend.model.CompanyProfile;
 
 public interface CompanyProfileDAO {
 
-	public CompanyProfile getNewCompanyProfile();
+  public void delete(CompanyProfile entity);
 
-	public CompanyProfile getCompanyProfileById(Long id);
+  public void deleteCompanyProfileById(long id);
 
-	public List<CompanyProfile> getAllCompanyProfiles();
+  public List<CompanyProfile> getAllCompanyProfiles();
 
-	public int getCountAllCompanyProfiles();
+  public CompanyProfile getCompanyProfileById(Long id);
 
-	public void deleteCompanyProfileById(long id);
+  public int getCountAllCompanyProfiles();
 
-	public void saveOrUpdate(CompanyProfile entity);
+  public CompanyProfile getNewCompanyProfile();
 
-	public void delete(CompanyProfile entity);
+  public void save(CompanyProfile entity);
 
-	public void save(CompanyProfile entity);
+  public void saveOrUpdate(CompanyProfile entity);
 
 }

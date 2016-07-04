@@ -20,320 +20,322 @@ import org.zkoss.zul.Paging;
 import org.zkoss.zul.Panel;
 import org.zkoss.zul.Window;
 
-import de.forsthaus.UserWorkspace;
 import billy.backend.model.Status;
 import billy.backend.service.StatusService;
+import de.forsthaus.UserWorkspace;
 import de.forsthaus.backend.util.HibernateSearchObject;
 import de.forsthaus.webui.util.GFCBaseListCtrl;
 
 public class StatusListCtrl extends GFCBaseListCtrl<Status> implements Serializable {
 
-	private static final long serialVersionUID = -2170565288232491362L;
-	private static final Logger logger = Logger.getLogger(StatusListCtrl.class);
+  private static final long serialVersionUID = -2170565288232491362L;
+  private static final Logger logger = Logger.getLogger(StatusListCtrl.class);
 
-	protected Window windowStatusList; // autowired
-	protected Panel panelStatusList; // autowired
+  protected Window windowStatusList; // autowired
+  protected Panel panelStatusList; // autowired
 
-	protected Borderlayout borderLayout_statusList; // autowired
-	protected Paging paging_StatusList; // autowired
-	protected Listbox listBoxStatus; // autowired	
-	protected Listheader listheader_StatusList_Deskripsi; // autowired
-	protected Listheader listheader_StatusList_LastUpdate;
-	protected Listheader listheader_StatusList_UpdatedBy;
+  protected Borderlayout borderLayout_statusList; // autowired
+  protected Paging paging_StatusList; // autowired
+  protected Listbox listBoxStatus; // autowired
+  protected Listheader listheader_StatusList_Deskripsi; // autowired
+  protected Listheader listheader_StatusList_LastUpdate;
+  protected Listheader listheader_StatusList_UpdatedBy;
 
-	// NEEDED for ReUse in the SearchWindow
-	private HibernateSearchObject<Status> searchObj;
+  // NEEDED for ReUse in the SearchWindow
+  private HibernateSearchObject<Status> searchObj;
 
-	// row count for listbox
-	private int countRows;
+  // row count for listbox
+  private int countRows;
 
-	// Databinding
-	private AnnotateDataBinder binder;
-	private StatusMainCtrl statusMainCtrl;
+  // Databinding
+  private AnnotateDataBinder binder;
+  private StatusMainCtrl statusMainCtrl;
 
-	// ServiceDAOs / Domain Classes
-	private transient StatusService statusService;
+  // ServiceDAOs / Domain Classes
+  private transient StatusService statusService;
 
-	/**
-	 * default constructor.<br>
-	 */
-	public StatusListCtrl() {
-		super();
-	}
+  /**
+   * default constructor.<br>
+   */
+  public StatusListCtrl() {
+    super();
+  }
 
-	@Override
-	public void doAfterCompose(Component window) throws Exception {
-		super.doAfterCompose(window);
-		
-		this.self.setAttribute("controller", this, false);
-		if (arg.containsKey("ModuleMainController")) {
-			setStatusMainCtrl((StatusMainCtrl) arg.get("ModuleMainController"));
-			getStatusMainCtrl().setStatusListCtrl(this);
+  @Override
+  public void doAfterCompose(Component window) throws Exception {
+    super.doAfterCompose(window);
 
-			if (getStatusMainCtrl().getSelectedStatus() != null) {
-				setSelectedStatus(getStatusMainCtrl().getSelectedStatus());
-			} else
-				setSelectedStatus(null);
-		} else {
-			setSelectedStatus(null);
-		}
-	}
+    this.self.setAttribute("controller", this, false);
+    if (arg.containsKey("ModuleMainController")) {
+      setStatusMainCtrl((StatusMainCtrl) arg.get("ModuleMainController"));
+      getStatusMainCtrl().setStatusListCtrl(this);
 
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
-	// +++++++++++++++ Component Events ++++++++++++++++ //
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
+      if (getStatusMainCtrl().getSelectedStatus() != null) {
+        setSelectedStatus(getStatusMainCtrl().getSelectedStatus());
+      } else
+        setSelectedStatus(null);
+    } else {
+      setSelectedStatus(null);
+    }
+  }
 
-	/**
-	 * Automatically called method from zk.
-	 * 
-	 * @param event
-	 * @throws Exception
-	 */
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++ Component Events ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
-	public void onCreate$windowStatusList(Event event) throws Exception {
-		binder = (AnnotateDataBinder) event.getTarget().getAttribute("binder", true);
+  public void doFillListbox() {
 
-		doFillListbox();
+    doFitSize();
 
-		binder.loadAll();
-	}
+    // set the paging params
+    paging_StatusList.setPageSize(getCountRows());
+    paging_StatusList.setDetailed(true);
 
-	public void doFillListbox() {
+    // not used listheaders must be declared like ->
+    // lh.setSortAscending(""); lh.setSortDescending("")
 
-		doFitSize();
+    listheader_StatusList_Deskripsi.setSortAscending(new FieldComparator("deskripsiStatus", true));
+    listheader_StatusList_Deskripsi
+        .setSortDescending(new FieldComparator("deskripsiStatus", false));
 
-		// set the paging params
-		paging_StatusList.setPageSize(getCountRows());
-		paging_StatusList.setDetailed(true);
+    listheader_StatusList_LastUpdate.setSortAscending(new FieldComparator("lastUpdate", true));
+    listheader_StatusList_LastUpdate.setSortDescending(new FieldComparator("lastUpdate", false));
 
-		// not used listheaders must be declared like ->
-		// lh.setSortAscending(""); lh.setSortDescending("")
-		
-		listheader_StatusList_Deskripsi.setSortAscending(new FieldComparator("deskripsiStatus", true));
-		listheader_StatusList_Deskripsi.setSortDescending(new FieldComparator("deskripsiStatus", false));
-		
-		listheader_StatusList_LastUpdate.setSortAscending(new FieldComparator("lastUpdate", true));
-		listheader_StatusList_LastUpdate.setSortDescending(new FieldComparator("lastUpdate", false));
-		
-		listheader_StatusList_UpdatedBy.setSortAscending(new FieldComparator("UpdatedBy", true));
-		listheader_StatusList_UpdatedBy.setSortDescending(new FieldComparator("UpdatedBy", false));
-		
-		
-		// ++ create the searchObject and init sorting ++//
-		// ++ create the searchObject and init sorting ++//
-		searchObj = new HibernateSearchObject<Status>(Status.class, getCountRows());
-		searchObj.addSort("deskripsiStatus", false);
-		setSearchObj(searchObj);
+    listheader_StatusList_UpdatedBy.setSortAscending(new FieldComparator("UpdatedBy", true));
+    listheader_StatusList_UpdatedBy.setSortDescending(new FieldComparator("UpdatedBy", false));
 
-		// Set the BindingListModel
-		getPagedBindingListWrapper().init(searchObj, getListBoxStatus(), paging_StatusList);
-		BindingListModelList lml = (BindingListModelList) getListBoxStatus().getModel();
-		setStatuss(lml);
 
-		// check if first time opened and init databinding for selectedBean
-		if (getSelectedStatus() == null) {
-			// init the bean with the first record in the List
-			if (lml.getSize() > 0) {
-				final int rowIndex = 0;
-				// only for correct showing after Rendering. No effect as an
-				// Event
-				// yet.
-				getListBoxStatus().setSelectedIndex(rowIndex);
-				// get the first entry and cast them to the needed object
-				setSelectedStatus((Status) lml.get(0));
+    // ++ create the searchObject and init sorting ++//
+    // ++ create the searchObject and init sorting ++//
+    searchObj = new HibernateSearchObject<Status>(Status.class, getCountRows());
+    searchObj.addSort("deskripsiStatus", false);
+    setSearchObj(searchObj);
 
-				// call the onSelect Event for showing the objects data in the
-				// statusBar
-				Events.sendEvent(new Event("onSelect", getListBoxStatus(), getSelectedStatus()));
-			}
-		}
+    // Set the BindingListModel
+    getPagedBindingListWrapper().init(searchObj, getListBoxStatus(), paging_StatusList);
+    BindingListModelList lml = (BindingListModelList) getListBoxStatus().getModel();
+    setStatuss(lml);
 
-	}
+    // check if first time opened and init databinding for selectedBean
+    if (getSelectedStatus() == null) {
+      // init the bean with the first record in the List
+      if (lml.getSize() > 0) {
+        final int rowIndex = 0;
+        // only for correct showing after Rendering. No effect as an
+        // Event
+        // yet.
+        getListBoxStatus().setSelectedIndex(rowIndex);
+        // get the first entry and cast them to the needed object
+        setSelectedStatus((Status) lml.get(0));
 
-	/**
-	 * Selects the object in the listbox and change the tab.<br>
-	 * Event is forwarded in the corresponding listbox.
-	 */
-	public void onDoubleClickedStatusItem(Event event) {
-		// logger.debug(event.toString());
+        // call the onSelect Event for showing the objects data in the
+        // statusBar
+        Events.sendEvent(new Event("onSelect", getListBoxStatus(), getSelectedStatus()));
+      }
+    }
 
-		Status anStatus = getSelectedStatus();
+  }
 
-		if (anStatus != null) {
-			setSelectedStatus(anStatus);
-			setStatus(anStatus);
+  /**
+   * Recalculates the container size for this controller and resize them. Calculate how many rows
+   * have been place in the listbox. Get the currentDesktopHeight from a hidden Intbox from the
+   * index.zul that are filled by onClientInfo() in the indexCtroller.
+   */
+  public void doFitSize() {
 
-			// check first, if the tabs are created
-			if (getStatusMainCtrl().getStatusDetailCtrl() == null) {
-				Events.sendEvent(new Event("onSelect", getStatusMainCtrl().tabStatusDetail, null));
-				// if we work with spring beanCreation than we must check a
-				// little bit deeper, because the Controller are preCreated ?
-			} else if (getStatusMainCtrl().getStatusDetailCtrl().getBinder() == null) {
-				Events.sendEvent(new Event("onSelect", getStatusMainCtrl().tabStatusDetail, null));
-			}
+    // normally 0 ! Or we have a i.e. a toolBar on top of the listBox.
+    final int specialSize = 5;
 
-			Events.sendEvent(new Event("onSelect", getStatusMainCtrl().tabStatusDetail, anStatus));
-		}
-	}
+    final int menuOffset = UserWorkspace.getInstance().getMenuOffset();
+    int height =
+        ((Intbox) Path.getComponent("/outerIndexWindow/currentDesktopHeight")).getValue()
+            .intValue();
+    height = height - menuOffset;
+    final int maxListBoxHeight = height - specialSize - 148;
+    setCountRows((int) Math.round(maxListBoxHeight / 17.7));
+    borderLayout_statusList.setHeight(String.valueOf(maxListBoxHeight) + "px");
 
-	/**
-	 * When a listItem in the corresponding listbox is selected.<br>
-	 * Event is forwarded in the corresponding listbox.
-	 * 
-	 * @param event
-	 */
-	public void onSelect$listBoxStatus(Event event) {
-		// logger.debug(event.toString());
+    windowStatusList.invalidate();
+  }
 
-		// selectedStatus is filled by annotated databinding mechanism
-		Status anStatus = getSelectedStatus();
+  public AnnotateDataBinder getBinder() {
+    return this.binder;
+  }
 
-		if (anStatus == null) {
-			return;
-		}
+  public int getCountRows() {
+    return this.countRows;
+  }
 
-		// check first, if the tabs are created
-		if (getStatusMainCtrl().getStatusDetailCtrl() == null) {
-			Events.sendEvent(new Event("onSelect", getStatusMainCtrl().tabStatusDetail, null));
-			// if we work with spring beanCreation than we must check a little
-			// bit deeper, because the Controller are preCreated ?
-		} else if (getStatusMainCtrl().getStatusDetailCtrl().getBinder() == null) {
-			Events.sendEvent(new Event("onSelect", getStatusMainCtrl().tabStatusDetail, null));
-		}
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++++ Business Logic ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
-		// INIT ALL RELATED Queries/OBJECTS/LISTS NEW
-		getStatusMainCtrl().getStatusDetailCtrl().setSelectedStatus(anStatus);
-		getStatusMainCtrl().getStatusDetailCtrl().setStatus(anStatus);
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
-		// store the selected bean values as current
-		getStatusMainCtrl().doStoreInitValues();
+  public Listbox getListBoxStatus() {
+    return this.listBoxStatus;
+  }
 
-		// show the objects data in the statusBar
-		String str = Labels.getLabel("common.Status") + ": " + anStatus.getDeskripsiStatus();
-		EventQueues.lookup("selectedObjectEventQueue", EventQueues.DESKTOP, true).publish(new Event("onChangeSelectedObject", null, str));
+  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+  // ++++++++++++++++++ getter / setter +++++++++++++++++++//
+  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++//
 
-	}
+  public HibernateSearchObject<Status> getSearchObj() {
+    return this.searchObj;
+  }
 
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
-	// +++++++++++++++++ Business Logic ++++++++++++++++ //
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  public Status getSelectedStatus() {
+    // STORED IN THE module's MainController
+    return getStatusMainCtrl().getSelectedStatus();
+  }
 
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
-	// ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  /**
+   * Best Pratice Hint:<br>
+   * The setters/getters for the local annotated data binded Beans/Sets are administered in the
+   * module's mainController. Working in this way you have clean line to share this beans/sets with
+   * other controllers.
+   */
+  /* Master BEANS */
+  public Status getStatus() {
+    // STORED IN THE module's MainController
+    return getStatusMainCtrl().getSelectedStatus();
+  }
 
-	/**
-	 * Recalculates the container size for this controller and resize them.
-	 * 
-	 * Calculate how many rows have been place in the listbox. Get the
-	 * currentDesktopHeight from a hidden Intbox from the index.zul that are
-	 * filled by onClientInfo() in the indexCtroller.
-	 */
-	public void doFitSize() {
+  public StatusMainCtrl getStatusMainCtrl() {
+    return this.statusMainCtrl;
+  }
 
-		// normally 0 ! Or we have a i.e. a toolBar on top of the listBox.
-		final int specialSize = 5;
+  public BindingListModelList getStatuss() {
+    // STORED IN THE module's MainController
+    return getStatusMainCtrl().getStatuss();
+  }
 
-		final int menuOffset = UserWorkspace.getInstance().getMenuOffset();
-		int height = ((Intbox) Path.getComponent("/outerIndexWindow/currentDesktopHeight")).getValue().intValue();
-		height = height - menuOffset;
-		final int maxListBoxHeight = height - specialSize - 148;
-		setCountRows((int) Math.round(maxListBoxHeight / 17.7));
-		borderLayout_statusList.setHeight(String.valueOf(maxListBoxHeight) + "px");
+  public StatusService getStatusService() {
+    return this.statusService;
+  }
 
-		windowStatusList.invalidate();
-	}
+  /**
+   * Automatically called method from zk.
+   * 
+   * @param event
+   * @throws Exception
+   */
 
-	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++//
-	// ++++++++++++++++++ getter / setter +++++++++++++++++++//
-	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+  public void onCreate$windowStatusList(Event event) throws Exception {
+    binder = (AnnotateDataBinder) event.getTarget().getAttribute("binder", true);
 
-	/**
-	 * Best Pratice Hint:<br>
-	 * The setters/getters for the local annotated data binded Beans/Sets are
-	 * administered in the module's mainController. Working in this way you have
-	 * clean line to share this beans/sets with other controllers.
-	 */
-	/* Master BEANS */
-	public Status getStatus() {
-		// STORED IN THE module's MainController
-		return getStatusMainCtrl().getSelectedStatus();
-	}
+    doFillListbox();
 
-	public void setStatus(Status anStatus) {
-		// STORED IN THE module's MainController
-		getStatusMainCtrl().setSelectedStatus(anStatus);
-	}
+    binder.loadAll();
+  }
 
-	public void setSelectedStatus(Status selectedStatus) {
-		// STORED IN THE module's MainController
-		getStatusMainCtrl().setSelectedStatus(selectedStatus);
-	}
+  /**
+   * Selects the object in the listbox and change the tab.<br>
+   * Event is forwarded in the corresponding listbox.
+   */
+  public void onDoubleClickedStatusItem(Event event) {
+    // logger.debug(event.toString());
 
-	public Status getSelectedStatus() {
-		// STORED IN THE module's MainController
-		return getStatusMainCtrl().getSelectedStatus();
-	}
+    Status anStatus = getSelectedStatus();
 
-	public void setStatuss(BindingListModelList statuss) {
-		// STORED IN THE module's MainController
-		getStatusMainCtrl().setStatuss(statuss);
-	}
+    if (anStatus != null) {
+      setSelectedStatus(anStatus);
+      setStatus(anStatus);
 
-	public BindingListModelList getStatuss() {
-		// STORED IN THE module's MainController
-		return getStatusMainCtrl().getStatuss();
-	}
+      // check first, if the tabs are created
+      if (getStatusMainCtrl().getStatusDetailCtrl() == null) {
+        Events.sendEvent(new Event("onSelect", getStatusMainCtrl().tabStatusDetail, null));
+        // if we work with spring beanCreation than we must check a
+        // little bit deeper, because the Controller are preCreated ?
+      } else if (getStatusMainCtrl().getStatusDetailCtrl().getBinder() == null) {
+        Events.sendEvent(new Event("onSelect", getStatusMainCtrl().tabStatusDetail, null));
+      }
 
-	public void setBinder(AnnotateDataBinder binder) {
-		this.binder = binder;
-	}
+      Events.sendEvent(new Event("onSelect", getStatusMainCtrl().tabStatusDetail, anStatus));
+    }
+  }
 
-	public AnnotateDataBinder getBinder() {
-		return this.binder;
-	}
+  /**
+   * When a listItem in the corresponding listbox is selected.<br>
+   * Event is forwarded in the corresponding listbox.
+   * 
+   * @param event
+   */
+  public void onSelect$listBoxStatus(Event event) {
+    // logger.debug(event.toString());
 
-	/* CONTROLLERS */
-	public void setStatusMainCtrl(StatusMainCtrl statusMainCtrl) {
-		this.statusMainCtrl = statusMainCtrl;
-	}
+    // selectedStatus is filled by annotated databinding mechanism
+    Status anStatus = getSelectedStatus();
 
-	public StatusMainCtrl getStatusMainCtrl() {
-		return this.statusMainCtrl;
-	}
+    if (anStatus == null) {
+      return;
+    }
 
-	/* SERVICES */
-	public void setStatusService(StatusService statusService) {
-		this.statusService = statusService;
-	}
+    // check first, if the tabs are created
+    if (getStatusMainCtrl().getStatusDetailCtrl() == null) {
+      Events.sendEvent(new Event("onSelect", getStatusMainCtrl().tabStatusDetail, null));
+      // if we work with spring beanCreation than we must check a little
+      // bit deeper, because the Controller are preCreated ?
+    } else if (getStatusMainCtrl().getStatusDetailCtrl().getBinder() == null) {
+      Events.sendEvent(new Event("onSelect", getStatusMainCtrl().tabStatusDetail, null));
+    }
 
-	public StatusService getStatusService() {
-		return this.statusService;
-	}
+    // INIT ALL RELATED Queries/OBJECTS/LISTS NEW
+    getStatusMainCtrl().getStatusDetailCtrl().setSelectedStatus(anStatus);
+    getStatusMainCtrl().getStatusDetailCtrl().setStatus(anStatus);
 
-	/* COMPONENTS and OTHERS */
-	public void setSearchObj(HibernateSearchObject<Status> searchObj) {
-		this.searchObj = searchObj;
-	}
+    // store the selected bean values as current
+    getStatusMainCtrl().doStoreInitValues();
 
-	public HibernateSearchObject<Status> getSearchObj() {
-		return this.searchObj;
-	}
+    // show the objects data in the statusBar
+    String str = Labels.getLabel("common.Status") + ": " + anStatus.getDeskripsiStatus();
+    EventQueues.lookup("selectedObjectEventQueue", EventQueues.DESKTOP, true).publish(
+        new Event("onChangeSelectedObject", null, str));
 
-	public Listbox getListBoxStatus() {
-		return this.listBoxStatus;
-	}
+  }
 
-	public void setListBoxStatus(Listbox listBoxStatus) {
-		this.listBoxStatus = listBoxStatus;
-	}
+  public void setBinder(AnnotateDataBinder binder) {
+    this.binder = binder;
+  }
 
-	public int getCountRows() {
-		return this.countRows;
-	}
+  public void setCountRows(int countRows) {
+    this.countRows = countRows;
+  }
 
-	public void setCountRows(int countRows) {
-		this.countRows = countRows;
-	}
+  public void setListBoxStatus(Listbox listBoxStatus) {
+    this.listBoxStatus = listBoxStatus;
+  }
+
+  /* COMPONENTS and OTHERS */
+  public void setSearchObj(HibernateSearchObject<Status> searchObj) {
+    this.searchObj = searchObj;
+  }
+
+  public void setSelectedStatus(Status selectedStatus) {
+    // STORED IN THE module's MainController
+    getStatusMainCtrl().setSelectedStatus(selectedStatus);
+  }
+
+  public void setStatus(Status anStatus) {
+    // STORED IN THE module's MainController
+    getStatusMainCtrl().setSelectedStatus(anStatus);
+  }
+
+  /* CONTROLLERS */
+  public void setStatusMainCtrl(StatusMainCtrl statusMainCtrl) {
+    this.statusMainCtrl = statusMainCtrl;
+  }
+
+  public void setStatuss(BindingListModelList statuss) {
+    // STORED IN THE module's MainController
+    getStatusMainCtrl().setStatuss(statuss);
+  }
+
+  /* SERVICES */
+  public void setStatusService(StatusService statusService) {
+    this.statusService = statusService;
+  }
 
 }

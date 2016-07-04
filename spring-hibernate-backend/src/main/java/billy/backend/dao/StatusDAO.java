@@ -6,24 +6,24 @@ import billy.backend.model.Status;
 
 public interface StatusDAO {
 
-	public Status getNewStatus();
+  public void delete(Status entity);
 
-	public Status getStatusById(Long id);
+  public void deleteStatusById(long id);
 
-	public Status getStatusByDeskripsiStatus(String string);
+  public List<Status> getAllStatuss();
 
-	public List<Status> getAllStatuss();
+  public int getCountAllStatuss();
 
-	public int getCountAllStatuss();
+  public Status getNewStatus();
 
-	public List<Status> getStatussLikeDeskripsiStatus(String string);	
+  public Status getStatusByDeskripsiStatus(String string);
 
-	public void deleteStatusById(long id);
+  public Status getStatusById(Long id);
 
-	public void saveOrUpdate(Status entity);
+  public List<Status> getStatussLikeDeskripsiStatus(String string);
 
-	public void delete(Status entity);
+  public void save(Status entity);
 
-	public void save(Status entity);
+  public void saveOrUpdate(Status entity);
 
 }

@@ -6,52 +6,52 @@ import billy.backend.dao.PiutangDAO;
 import billy.backend.model.Penjualan;
 import billy.backend.model.Piutang;
 import billy.backend.service.PiutangService;
+
 public class PiutangServiceImpl implements PiutangService {
 
-	private PiutangDAO piutangDAO;
+  private PiutangDAO piutangDAO;
 
 
-	public PiutangDAO getPiutangDAO() {
-		return piutangDAO;
-	}
+  /**
+   * default Constructor
+   */
+  public PiutangServiceImpl() {}
 
-	public void setPiutangDAO(PiutangDAO piutangDAO) {
-		this.piutangDAO = piutangDAO;
-	}
+  @Override
+  public void delete(Piutang piutang) {
+    getPiutangDAO().delete(piutang);
 
-	/**
-	 * default Constructor
-	 */
-	public PiutangServiceImpl() {
-	}
+  }
 
-	
-	@Override
-	public List<Piutang> getPiutangsByPenjualan(Penjualan penjualan) {		
-		List<Piutang> result = getPiutangDAO().getPiutangsByPenjualan(penjualan);
-		return result;
-	}
+  @Override
+  public int getCountPiutangsByPenjualan(Penjualan penjualan) {
+    int result = getPiutangDAO().getCountPiutangsByPenjualan(penjualan);
+    return result;
+  }
 
-	@Override
-	public int getCountPiutangsByPenjualan(Penjualan penjualan) {
-		int result = getPiutangDAO().getCountPiutangsByPenjualan(penjualan);
-		return result;
-	}
 
-	@Override
-	public Piutang getNewPiutang() {
-		return getPiutangDAO().getNewPiutang();		
-	}
+  @Override
+  public Piutang getNewPiutang() {
+    return getPiutangDAO().getNewPiutang();
+  }
 
-	@Override
-	public void saveOrUpdate(Piutang piutang) {
-		getPiutangDAO().saveOrUpdate(piutang);
-		
-	}
+  public PiutangDAO getPiutangDAO() {
+    return piutangDAO;
+  }
 
-	@Override
-	public void delete(Piutang piutang) {
-		getPiutangDAO().delete(piutang);
-		
-	}
+  @Override
+  public List<Piutang> getPiutangsByPenjualan(Penjualan penjualan) {
+    List<Piutang> result = getPiutangDAO().getPiutangsByPenjualan(penjualan);
+    return result;
+  }
+
+  @Override
+  public void saveOrUpdate(Piutang piutang) {
+    getPiutangDAO().saveOrUpdate(piutang);
+
+  }
+
+  public void setPiutangDAO(PiutangDAO piutangDAO) {
+    this.piutangDAO = piutangDAO;
+  }
 }

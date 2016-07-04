@@ -9,57 +9,57 @@ import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.stereotype.Repository;
 
 import billy.backend.dao.BillyBasisDAO;
-
 import billy.backend.dao.StatusDAO;
 import billy.backend.model.Status;
 
 @Repository
 public class StatusDAOImpl extends BillyBasisDAO<Status> implements StatusDAO {
 
-	@Override
-	public Status getNewStatus() {
-		return new Status();
-	}
+  @Override
+  public void deleteStatusById(long id) {
+    Status Status = getStatusById(id);
+    if (Status != null) {
+      delete(Status);
+    }
+  }
 
-	@Override
-	public Status getStatusById(Long id) {
-		return get(Status.class, id);
-	}
+  @Override
+  public List<Status> getAllStatuss() {
+    return getHibernateTemplate().loadAll(Status.class);
+  }
 
-	@SuppressWarnings("unchecked")
-	public Status getStatusByDeskripsiStatus(String string) {
-		DetachedCriteria criteria = DetachedCriteria.forClass(Status.class);
-		criteria.add(Restrictions.eq("deskripsiStatus", string));
+  @Override
+  public int getCountAllStatuss() {
+    return DataAccessUtils.intResult(getHibernateTemplate().find("select count(*) from Status"));
+  }
 
-		return (Status) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(criteria));
-	}
+  @Override
+  public Status getNewStatus() {
+    return new Status();
+  }
 
-	@Override
-	public List<Status> getAllStatuss() {
-		return getHibernateTemplate().loadAll(Status.class);
-	}
+  @Override
+  @SuppressWarnings("unchecked")
+  public Status getStatusByDeskripsiStatus(String string) {
+    DetachedCriteria criteria = DetachedCriteria.forClass(Status.class);
+    criteria.add(Restrictions.eq("deskripsiStatus", string));
 
-	@Override
-	public void deleteStatusById(long id) {
-		Status Status = getStatusById(id);
-		if (Status != null) {
-			delete(Status);
-		}
-	}
+    return (Status) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(criteria));
+  }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Status> getStatussLikeDeskripsiStatus(String string) {
+  @Override
+  public Status getStatusById(Long id) {
+    return get(Status.class, id);
+  }
 
-		DetachedCriteria criteria = DetachedCriteria.forClass(Status.class);
-		criteria.add(Restrictions.ilike("deskripsiStatus", string, MatchMode.ANYWHERE));
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Status> getStatussLikeDeskripsiStatus(String string) {
 
-		return getHibernateTemplate().findByCriteria(criteria);
-	}
+    DetachedCriteria criteria = DetachedCriteria.forClass(Status.class);
+    criteria.add(Restrictions.ilike("deskripsiStatus", string, MatchMode.ANYWHERE));
 
-	@Override
-	public int getCountAllStatuss() {
-		return DataAccessUtils.intResult(getHibernateTemplate().find("select count(*) from Status"));
-	}
+    return getHibernateTemplate().findByCriteria(criteria);
+  }
 
 }

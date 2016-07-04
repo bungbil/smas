@@ -2,8 +2,6 @@ package billy.webui.master.status;
 
 import java.io.Serializable;
 
-import javax.swing.plaf.basic.BasicBorders.RadioButtonBorder;
-
 import org.apache.log4j.Logger;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Path;
@@ -11,189 +9,187 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zkplus.databind.AnnotateDataBinder;
 import org.zkoss.zkplus.databind.BindingListModelList;
 import org.zkoss.zul.Borderlayout;
-import org.zkoss.zul.Button;
 import org.zkoss.zul.Intbox;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.Radio;
-import org.zkoss.zul.Radiogroup;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
-import de.forsthaus.UserWorkspace;
 import billy.backend.model.Status;
-import billy.backend.model.Wilayah;
 import billy.backend.service.StatusService;
+import de.forsthaus.UserWorkspace;
 import de.forsthaus.webui.util.GFCBaseCtrl;
 import de.forsthaus.webui.util.ZksampleMessageUtils;
 
 public class StatusDetailCtrl extends GFCBaseCtrl implements Serializable {
 
-	private static final long serialVersionUID = -8352659530536077973L;
-	private static final Logger logger = Logger.getLogger(StatusDetailCtrl.class);
+  private static final long serialVersionUID = -8352659530536077973L;
+  private static final Logger logger = Logger.getLogger(StatusDetailCtrl.class);
 
-	protected Window windowStatusDetail; // autowired
+  protected Window windowStatusDetail; // autowired
+  protected Borderlayout borderlayout_StatusDetail; // autowired
 
-	protected Borderlayout borderlayout_StatusDetail; // autowired
+  protected Textbox txtb_DeskripsiStatus; // autowired
+  // Databinding
+  protected transient AnnotateDataBinder binder;
+  private StatusMainCtrl statusMainCtrl;
 
-	protected Textbox txtb_DeskripsiStatus; // autowired	
-	// Databinding
-	protected transient AnnotateDataBinder binder;
-	private StatusMainCtrl statusMainCtrl;
+  // ServiceDAOs / Domain Classes
+  private transient StatusService statusService;
 
-	// ServiceDAOs / Domain Classes
-	private transient StatusService statusService;
+  /**
+   * default constructor.<br>
+   */
+  public StatusDetailCtrl() {
+    super();
+  }
 
-	/**
-	 * default constructor.<br>
-	 */
-	public StatusDetailCtrl() {
-		super();
-	}
+  @Override
+  public void doAfterCompose(Component window) throws Exception {
+    super.doAfterCompose(window);
 
-	@Override
-	public void doAfterCompose(Component window) throws Exception {
-		super.doAfterCompose(window);
+    this.self.setAttribute("controller", this, false);
 
-		this.self.setAttribute("controller", this, false);
+    if (arg.containsKey("ModuleMainController")) {
+      setStatusMainCtrl((StatusMainCtrl) arg.get("ModuleMainController"));
 
-		if (arg.containsKey("ModuleMainController")) {
-			setStatusMainCtrl((StatusMainCtrl) arg.get("ModuleMainController"));
+      // SET THIS CONTROLLER TO THE module's Parent/MainController
+      getStatusMainCtrl().setStatusDetailCtrl(this);
 
-			// SET THIS CONTROLLER TO THE module's Parent/MainController
-			getStatusMainCtrl().setStatusDetailCtrl(this);
+      // Get the selected object.
+      // Check if this Controller if created on first time. If so,
+      // than the selectedXXXBean should be null
+      if (getStatusMainCtrl().getSelectedStatus() != null) {
+        setSelectedStatus(getStatusMainCtrl().getSelectedStatus());
+      } else
+        setSelectedStatus(null);
+    } else {
+      setSelectedStatus(null);
+    }
 
-			// Get the selected object.
-			// Check if this Controller if created on first time. If so,
-			// than the selectedXXXBean should be null
-			if (getStatusMainCtrl().getSelectedStatus() != null) {
-				setSelectedStatus(getStatusMainCtrl().getSelectedStatus());				
-			} else
-				setSelectedStatus(null);
-		} else {
-			setSelectedStatus(null);
-		}
+  }
 
-	}
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++ Component Events ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
-	// +++++++++++++++ Component Events ++++++++++++++++ //
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  public void doFitSize(Event event) {
 
-	/**
-	 * Automatically called method from zk.
-	 * 
-	 * @param event
-	 * @throws Exception
-	 */
-	public void onCreate$windowStatusDetail(Event event) throws Exception {
-		binder = (AnnotateDataBinder) event.getTarget().getAttribute("binder", true);
+    final int menuOffset = UserWorkspace.getInstance().getMenuOffset();
+    int height =
+        ((Intbox) Path.getComponent("/outerIndexWindow/currentDesktopHeight")).getValue()
+            .intValue();
+    height = height - menuOffset;
+    final int maxListBoxHeight = height - 152;
+    borderlayout_StatusDetail.setHeight(String.valueOf(maxListBoxHeight) + "px");
 
-		binder.loadAll();
+    windowStatusDetail.invalidate();
+  }
 
-		doFitSize(event);
-	}
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++++ Business Logic ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
-	// +++++++++++++++++ Business Logic ++++++++++++++++ //
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
-	// ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  public void doReadOnlyMode(boolean b) {
+    txtb_DeskripsiStatus.setReadonly(b);
 
-	public void doFitSize(Event event) {
+  }
 
-		final int menuOffset = UserWorkspace.getInstance().getMenuOffset();
-		int height = ((Intbox) Path.getComponent("/outerIndexWindow/currentDesktopHeight")).getValue().intValue();
-		height = height - menuOffset;
-		final int maxListBoxHeight = height - 152;
-		borderlayout_StatusDetail.setHeight(String.valueOf(maxListBoxHeight) + "px");
+  public AnnotateDataBinder getBinder() {
+    return this.binder;
+  }
 
-		windowStatusDetail.invalidate();
-	}
+  public Status getSelectedStatus() {
+    // STORED IN THE module's MainController
+    return getStatusMainCtrl().getSelectedStatus();
+  }
 
-	public void doReadOnlyMode(boolean b) {
-		txtb_DeskripsiStatus.setReadonly(b);		
-		
-	}
-	public void onOK$txtb_DeskripsiStatus(Event event) throws InterruptedException {		
-		getStatusMainCtrl().btnSave.focus();			
-	}
-	
-	public void onBlur$txtb_DeskripsiStatus(Event event) throws InterruptedException {
-		
-		Status statusCheckKode = null;
-		statusCheckKode = getStatusService().getStatusByDeskripsiStatus(getStatus().getDeskripsiStatus());
-		
-		if(statusCheckKode!=null){
-			if(statusCheckKode.getId()!=getStatus().getId()){
-				ZksampleMessageUtils.showErrorMessage("Status sudah ada");
-				return;
-			}
-		}		
-	}
-	
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
-	// ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  /* Master BEANS */
+  public Status getStatus() {
+    // STORED IN THE module's MainController
+    return getStatusMainCtrl().getSelectedStatus();
+  }
 
-	/* Master BEANS */
-	public Status getStatus() {
-		// STORED IN THE module's MainController
-		return getStatusMainCtrl().getSelectedStatus();
-	}
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
-	public void setStatus(Status anStatus) {
-		// STORED IN THE module's MainController
-		getStatusMainCtrl().setSelectedStatus(anStatus);
-	}
+  public StatusMainCtrl getStatusMainCtrl() {
+    return this.statusMainCtrl;
+  }
 
-	public Status getSelectedStatus() {
-		// STORED IN THE module's MainController
-		return getStatusMainCtrl().getSelectedStatus();
-	}
+  public BindingListModelList getStatuss() {
+    // STORED IN THE module's MainController
+    return getStatusMainCtrl().getStatuss();
+  }
 
-	public void setSelectedStatus(Status selectedStatus) {
-		// STORED IN THE module's MainController
-		getStatusMainCtrl().setSelectedStatus(selectedStatus);
-	}
+  public StatusService getStatusService() {
+    return this.statusService;
+  }
 
-	public BindingListModelList getStatuss() {
-		// STORED IN THE module's MainController
-		return getStatusMainCtrl().getStatuss();
-	}
+  public void onBlur$txtb_DeskripsiStatus(Event event) throws InterruptedException {
 
-	public void setStatuss(BindingListModelList statuss) {
-		// STORED IN THE module's MainController
-		getStatusMainCtrl().setStatuss(statuss);
-	}
+    Status statusCheckKode = null;
+    statusCheckKode =
+        getStatusService().getStatusByDeskripsiStatus(getStatus().getDeskripsiStatus());
 
-	public AnnotateDataBinder getBinder() {
-		return this.binder;
-	}
+    if (statusCheckKode != null) {
+      if (statusCheckKode.getId() != getStatus().getId()) {
+        ZksampleMessageUtils.showErrorMessage("Status sudah ada");
+        return;
+      }
+    }
+  }
 
-	public void setBinder(AnnotateDataBinder binder) {
-		this.binder = binder;
-	}
+  /**
+   * Automatically called method from zk.
+   * 
+   * @param event
+   * @throws Exception
+   */
+  public void onCreate$windowStatusDetail(Event event) throws Exception {
+    binder = (AnnotateDataBinder) event.getTarget().getAttribute("binder", true);
 
-	/* CONTROLLERS */
-	public void setStatusMainCtrl(StatusMainCtrl statusMainCtrl) {
-		this.statusMainCtrl = statusMainCtrl;
-	}
+    binder.loadAll();
 
-	public StatusMainCtrl getStatusMainCtrl() {
-		return this.statusMainCtrl;
-	}
+    doFitSize(event);
+  }
 
-	/* SERVICES */
-	public void setStatusService(StatusService statusService) {
-		this.statusService = statusService;
-	}
+  public void onOK$txtb_DeskripsiStatus(Event event) throws InterruptedException {
+    getStatusMainCtrl().btnSave.focus();
+  }
 
-	public StatusService getStatusService() {
-		return this.statusService;
-	}
+  public void setBinder(AnnotateDataBinder binder) {
+    this.binder = binder;
+  }
 
-	/* COMPONENTS and OTHERS */
+  public void setSelectedStatus(Status selectedStatus) {
+    // STORED IN THE module's MainController
+    getStatusMainCtrl().setSelectedStatus(selectedStatus);
+  }
+
+  public void setStatus(Status anStatus) {
+    // STORED IN THE module's MainController
+    getStatusMainCtrl().setSelectedStatus(anStatus);
+  }
+
+  /* CONTROLLERS */
+  public void setStatusMainCtrl(StatusMainCtrl statusMainCtrl) {
+    this.statusMainCtrl = statusMainCtrl;
+  }
+
+  public void setStatuss(BindingListModelList statuss) {
+    // STORED IN THE module's MainController
+    getStatusMainCtrl().setStatuss(statuss);
+  }
+
+  /* SERVICES */
+  public void setStatusService(StatusService statusService) {
+    this.statusService = statusService;
+  }
+
+  /* COMPONENTS and OTHERS */
 
 }

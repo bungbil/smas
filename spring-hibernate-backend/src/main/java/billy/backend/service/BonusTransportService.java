@@ -3,21 +3,23 @@ package billy.backend.service;
 import java.util.List;
 
 import billy.backend.model.BonusTransport;
+
 public interface BonusTransportService {
 
-	public BonusTransport getNewBonusTransport();
+  public void delete(BonusTransport entity);
 
-	public int getCountAllBonusTransports();
+  public List<BonusTransport> getAllBonusTransports();
 
-	public BonusTransport getBonusTransportByID(Long id);
+  public BonusTransport getBonusTransportByDeskripsiBonusTransport(String string);
 
-	public BonusTransport getBonusTransportByDeskripsiBonusTransport(String string);
-	public List<BonusTransport> getAllBonusTransports();
+  public BonusTransport getBonusTransportByID(Long id);
 
-	public List<BonusTransport> getBonusTransportsLikeDeskripsiBonusTransport(String string);
-	
-	public void saveOrUpdate(BonusTransport entity);
+  public List<BonusTransport> getBonusTransportsLikeDeskripsiBonusTransport(String string);
 
-	public void delete(BonusTransport entity);
+  public int getCountAllBonusTransports();
+
+  public BonusTransport getNewBonusTransport();
+
+  public void saveOrUpdate(BonusTransport entity);
 
 }

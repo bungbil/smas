@@ -34,14 +34,6 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zul.Iframe;
 import org.zkoss.zul.Window;
 
-import billy.backend.model.CompanyProfile;
-import billy.backend.model.Karyawan;
-import billy.backend.model.Penjualan;
-import billy.backend.model.PenjualanDetail;
-import billy.backend.service.CompanyProfileService;
-import billy.backend.service.PenjualanService;
-import billy.webui.report.summarypenjualan.model.SummaryPenjualan;
-
 import ar.com.fdvs.dj.core.DynamicJasperHelper;
 import ar.com.fdvs.dj.core.layout.ClassicLayoutManager;
 import ar.com.fdvs.dj.core.layout.HorizontalBandAlignment;
@@ -58,335 +50,373 @@ import ar.com.fdvs.dj.domain.constants.Border;
 import ar.com.fdvs.dj.domain.constants.Font;
 import ar.com.fdvs.dj.domain.constants.HorizontalAlign;
 import ar.com.fdvs.dj.domain.entities.columns.AbstractColumn;
+import billy.backend.model.CompanyProfile;
+import billy.backend.model.Karyawan;
+import billy.backend.model.Penjualan;
+import billy.backend.model.PenjualanDetail;
+import billy.backend.service.CompanyProfileService;
+import billy.backend.service.PenjualanService;
+import billy.webui.report.summarypenjualan.model.SummaryPenjualan;
 import de.forsthaus.webui.util.ZksampleDateFormat;
 import de.forsthaus.webui.util.ZksampleMessageUtils;
 
 public class SummaryPenjualanDJReport extends Window implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	private Iframe iFrame;
-	private ByteArrayOutputStream output;
-	private InputStream mediais;
-	private AMedia amedia;
-	
-	
-	private static final Logger logger = Logger.getLogger(SummaryPenjualanDJReport.class);
-	public SummaryPenjualanDJReport(Component parent,Karyawan karyawan,Date startDate,Date endDate,List<Penjualan> listPenjualan) throws InterruptedException {
-		super();
-		this.setParent(parent);
+  /**
+   * EventListener for closing the Report Window.<br>
+   * 
+   * @author sge
+   */
+  public final class OnCloseReportEventListener implements EventListener {
+    @Override
+    public void onEvent(Event event) throws Exception {
+      closeReportWindow();
+    }
+  }
 
-		try {
-			doPrint(karyawan,startDate,endDate,listPenjualan);
-		} catch (final Exception e) {
-			ZksampleMessageUtils.showErrorMessage(e.toString());
-		}
-	}
+  private static final long serialVersionUID = 1L;
+  private Iframe iFrame;
+  private ByteArrayOutputStream output;
+  private InputStream mediais;
 
-	
-	public void doPrint(Karyawan karyawan,Date startDate,Date endDate,List<Penjualan> listPenjualan) throws JRException, ColumnBuilderException, ClassNotFoundException, IOException{	
-		/**
-		 * STYLES
-		 */
-		// Styles: Title
-		Style titleStyle = new Style();
-		titleStyle.setHorizontalAlign(HorizontalAlign.CENTER);
-		Font titleFont = Font.VERDANA_BIG_BOLD;
-		titleFont.setUnderline(true);
-		titleStyle.setFont(titleFont);
 
-		// Styles: Subtitle
-		Style subtitleStyle = new Style();
-		subtitleStyle.setHorizontalAlign(HorizontalAlign.LEFT);
-		subtitleStyle.setFont(Font.VERDANA_MEDIUM_BOLD);		
+  private AMedia amedia;
+  private static final Logger logger = Logger.getLogger(SummaryPenjualanDJReport.class);
 
-		// ColumnHeader Style Text (left-align)
-		final Style columnHeaderStyleText = new Style();
-		columnHeaderStyleText.setFont(Font.VERDANA_SMALL_BOLD);
-		columnHeaderStyleText.setHorizontalAlign(HorizontalAlign.LEFT);
-		//columnHeaderStyleText.setBorderBottom(Border.PEN_1_POINT());
 
-		// ColumnHeader Style Text (right-align)
-		Style columnHeaderStyleNumber = new Style();
-		columnHeaderStyleNumber.setFont(Font.VERDANA_SMALL_BOLD);
-		columnHeaderStyleNumber.setHorizontalAlign(HorizontalAlign.RIGHT);
-		columnHeaderStyleNumber.setBorderBottom(Border.PEN_1_POINT());
+  public SummaryPenjualanDJReport(Component parent, Karyawan karyawan, Date startDate,
+      Date endDate, List<Penjualan> listPenjualan) throws InterruptedException {
+    super();
+    this.setParent(parent);
 
-		// Footer Style (center-align)
-		Style footerStyle = new Style();
-		footerStyle.setFont(Font.VERDANA_SMALL);
-		footerStyle.getFont().setFontSize(8);
-		footerStyle.setHorizontalAlign(HorizontalAlign.CENTER);
-		footerStyle.setBorderTop(Border.PEN_1_POINT());
+    try {
+      doPrint(karyawan, startDate, endDate, listPenjualan);
+    } catch (final Exception e) {
+      ZksampleMessageUtils.showErrorMessage(e.toString());
+    }
+  }
 
-		// Rows content Style (left-align)
-		final Style columnDetailStyleText = new Style();
-		columnDetailStyleText.setFont(Font.VERDANA_SMALL);
-		columnDetailStyleText.setHorizontalAlign(HorizontalAlign.LEFT);
+  private void callReportWindow(AMedia aMedia, String format) {
+    boolean modal = true;
 
-		// Rows content Style (right-align)
-		Style columnDetailStyleNumbers = new Style();
-		columnDetailStyleNumbers.setFont(Font.VERDANA_SMALL);
-		columnDetailStyleNumbers.setHorizontalAlign(HorizontalAlign.RIGHT);
+    setTitle("Laporan Summary Penjualan");
+    setId("ReportWindow");
+    setVisible(true);
+    setMaximizable(true);
+    setMinimizable(true);
+    setSizable(true);
+    setClosable(true);
+    setHeight("100%");
+    setWidth("80%");
+    addEventListener("onClose", new OnCloseReportEventListener());
 
-		// TotalSum (left-right)
-		Style footerStyleTotalSumValue = new Style();
-		footerStyleTotalSumValue.setFont(Font.VERDANA_SMALL_BOLD);
-		footerStyleTotalSumValue.setHorizontalAlign(HorizontalAlign.RIGHT);
-		footerStyleTotalSumValue.setBorderTop(Border.PEN_1_POINT());
+    iFrame = new Iframe();
+    iFrame.setId("jasperReportId");
+    iFrame.setWidth("100%");
+    iFrame.setHeight("100%");
+    iFrame.setContent(aMedia);
+    iFrame.setParent(this);
 
-		DynamicReportBuilder drb = new DynamicReportBuilder();
-		DynamicReport dr;
+    if (modal == true) {
+      try {
+        doModal();
+      } catch (final SuspendNotAllowedException e) {
+        throw new RuntimeException(e);
+      } catch (final InterruptedException e) {
+        throw new RuntimeException(e);
+      }
+    }
 
-		// Sets the Report Columns, header, Title, Groups, Etc Formats
-		// DynamicJasper documentation
-		drb.setTitle("LAPORAN SUMMARY PENJUALAN");
-		//drb.setSubtitle("Tanggal Penjualan : "+ZksampleDateFormat.getDateFormater().format(startDate)+" - "+ZksampleDateFormat.getDateFormater().format(endDate));
-		//drb.setSubtitleStyle(subtitleStyle);
+  }
 
-		drb.setHeaderHeight(20);
-		drb.setDetailHeight(15);
-		drb.setFooterVariablesHeight(10);
-		drb.setMargins(20, 20, 30, 15);
+  /**
+   * We must clear something to prevent errors or problems <br>
+   * by opening the report a few times. <br>
+   * 
+   * @throws IOException
+   */
+  private void closeReportWindow() throws IOException {
 
-		drb.setDefaultStyles(titleStyle, subtitleStyle, columnHeaderStyleText, columnDetailStyleText);
-		drb.setPrintBackgroundOnOddRows(true);
+    // TODO check this
+    try {
+      amedia.getStreamData().close();
+      output.close();
+    } catch (final Exception e) {
+      throw new RuntimeException(e);
+    }
 
-		/**
-		 * Adding many autotexts in the same position (header/footer and
-		 * aligment) makes them to be one on top of the other
-		 */
-		Style atStyle = new StyleBuilder(true).setFont(Font.COMIC_SANS_SMALL).build();
+    onClose();
 
-		AutoText created = new AutoText(Labels.getLabel("common.Created") + ": " + ZksampleDateFormat.getDateTimeFormater().format(new Date()), AutoText.POSITION_HEADER, HorizontalBandAlignment.RIGHT);
-		created.setWidth(new Integer(120));
-		created.setStyle(atStyle);
-		drb.addAutoText(created);
+  }
 
-		AutoText autoText = new AutoText(AutoText.AUTOTEXT_PAGE_X_SLASH_Y, AutoText.POSITION_HEADER, HorizontalBandAlignment.RIGHT);
-		autoText.setWidth(new Integer(20));
-		autoText.setStyle(atStyle);
-		drb.addAutoText(autoText);
+  public void doPrint(Karyawan karyawan, Date startDate, Date endDate, List<Penjualan> listPenjualan)
+      throws JRException, ColumnBuilderException, ClassNotFoundException, IOException {
+    /**
+     * STYLES
+     */
+    // Styles: Title
+    Style titleStyle = new Style();
+    titleStyle.setHorizontalAlign(HorizontalAlign.CENTER);
+    Font titleFont = Font.VERDANA_BIG_BOLD;
+    titleFont.setUnderline(true);
+    titleStyle.setFont(titleFont);
 
-		CompanyProfileService as = (CompanyProfileService) SpringUtil.getBean("companyProfileService");
-		List<CompanyProfile> company = as.getAllCompanyProfiles();
-		
-		AutoText atCompanyHeader = new AutoText(company.get(0).getCompanyName(), AutoText.POSITION_HEADER, HorizontalBandAlignment.LEFT);
-		atCompanyHeader.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
-		atCompanyHeader.setWidth(new Integer(700));
-		AutoText address = new AutoText(company.get(0).getAddress(), AutoText.POSITION_HEADER, HorizontalBandAlignment.LEFT);
-		address.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
-		address.setWidth(new Integer(700));
-		AutoText divisi = new AutoText("Divisi : "+karyawan.getNamaPanggilan(), AutoText.POSITION_HEADER, HorizontalBandAlignment.LEFT);
-		divisi.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
-		divisi.setWidth(new Integer(700));
-		AutoText tanggal = new AutoText("Tanggal Penjualan : "+ZksampleDateFormat.getDateFormater().format(startDate)+" - "+ZksampleDateFormat.getDateFormater().format(endDate), AutoText.POSITION_HEADER, HorizontalBandAlignment.LEFT);
-		tanggal.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
-		tanggal.setWidth(new Integer(700));
-		AutoText emptyLine = new AutoText("", AutoText.POSITION_HEADER, HorizontalBandAlignment.LEFT);
-		emptyLine.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
-		drb.addAutoText(atCompanyHeader).addAutoText(address).addAutoText(emptyLine).addAutoText(divisi).addAutoText(tanggal);
-//
-//		// Footer
-//		AutoText footerText = new AutoText("Help to prevent the global warming by writing cool software.", AutoText.POSITION_FOOTER, HorizontalBandAlignment.CENTER);
-//		footerText.setStyle(footerStyle);
-//		drb.addAutoText(footerText);
+    // Styles: Subtitle
+    Style subtitleStyle = new Style();
+    subtitleStyle.setHorizontalAlign(HorizontalAlign.LEFT);
+    subtitleStyle.setFont(Font.VERDANA_MEDIUM_BOLD);
 
-		/**
-		 * Columns Definitions. A new ColumnBuilder instance for each column.
-		 */
-		
-		AbstractColumn colBarang = ColumnBuilder.getNew().setColumnProperty("namaBarang", String.class.getName()).build();
-		colBarang.setTitle("Nama Barang");
-		colBarang.setWidth(100);
-		colBarang.setHeaderStyle(columnHeaderStyleText);
-		colBarang.setStyle(columnDetailStyleText);
+    // ColumnHeader Style Text (left-align)
+    final Style columnHeaderStyleText = new Style();
+    columnHeaderStyleText.setFont(Font.VERDANA_SMALL_BOLD);
+    columnHeaderStyleText.setHorizontalAlign(HorizontalAlign.LEFT);
+    // columnHeaderStyleText.setBorderBottom(Border.PEN_1_POINT());
 
-		AbstractColumn colQuantity = ColumnBuilder.getNew().setColumnProperty("unitSetTerjual", Integer.class.getName()).build();
-		colQuantity.setTitle("Unit / Set Terjual");
-		colQuantity.setWidth(40);
-		colQuantity.setHeaderStyle(columnHeaderStyleNumber);
-		colQuantity.setStyle(columnDetailStyleNumbers);
-		
-		AbstractColumn colPenjualanBarang = ColumnBuilder.getNew().setColumnProperty("penjualanBarang", BigDecimal.class.getName()).build();
-		colPenjualanBarang.setTitle("Penjualan Barang");
-		colPenjualanBarang.setWidth(40);
-		colPenjualanBarang.setPattern("#,##0");
-		colPenjualanBarang.setHeaderStyle(columnHeaderStyleNumber);
-		colPenjualanBarang.setStyle(columnDetailStyleNumbers);
+    // ColumnHeader Style Text (right-align)
+    Style columnHeaderStyleNumber = new Style();
+    columnHeaderStyleNumber.setFont(Font.VERDANA_SMALL_BOLD);
+    columnHeaderStyleNumber.setHorizontalAlign(HorizontalAlign.RIGHT);
+    columnHeaderStyleNumber.setBorderBottom(Border.PEN_1_POINT());
 
-		AbstractColumn colPenerimaanPenjualan = ColumnBuilder.getNew().setColumnProperty("penerimaanPenjualan", BigDecimal.class.getName()).build();
-		colPenerimaanPenjualan.setTitle("Penerimaan Penjualan");
-		colPenerimaanPenjualan.setWidth(40);
-		colPenerimaanPenjualan.setPattern("#,##0");
-		colPenerimaanPenjualan.setHeaderStyle(columnHeaderStyleNumber);
-		colPenerimaanPenjualan.setStyle(columnDetailStyleNumbers);
-		
-		AbstractColumn colSisaPiutang = ColumnBuilder.getNew().setColumnProperty("sisaPiutang", BigDecimal.class.getName()).build();
-		colSisaPiutang.setTitle("Sisa Piutang");
-		colSisaPiutang.setWidth(40);
-		colSisaPiutang.setPattern("#,##0");
-		colSisaPiutang.setHeaderStyle(columnHeaderStyleNumber);
-		colSisaPiutang.setStyle(columnDetailStyleNumbers);
+    // Footer Style (center-align)
+    Style footerStyle = new Style();
+    footerStyle.setFont(Font.VERDANA_SMALL);
+    footerStyle.getFont().setFontSize(8);
+    footerStyle.setHorizontalAlign(HorizontalAlign.CENTER);
+    footerStyle.setBorderTop(Border.PEN_1_POINT());
 
-		drb.addColumn(colBarang);
-		drb.addColumn(colQuantity);		
-		drb.addColumn(colPenjualanBarang);
-		drb.addColumn(colPenerimaanPenjualan);
-		drb.addColumn(colSisaPiutang);
-		
-		/**
-		 * Add a global total sum for the lineSum field.
-		 */
-		drb.addGlobalFooterVariable(colQuantity, DJCalculation.SUM, footerStyleTotalSumValue);
-		drb.addGlobalFooterVariable(colPenjualanBarang, DJCalculation.SUM, footerStyleTotalSumValue);
-		drb.addGlobalFooterVariable(colPenerimaanPenjualan, DJCalculation.SUM, footerStyleTotalSumValue);
-		drb.addGlobalFooterVariable(colSisaPiutang, DJCalculation.SUM, footerStyleTotalSumValue);
-		drb.setGlobalFooterVariableHeight(new Integer(20));
-		drb.setGrandTotalLegend("Total");
+    // Rows content Style (left-align)
+    final Style columnDetailStyleText = new Style();
+    columnDetailStyleText.setFont(Font.VERDANA_SMALL);
+    columnDetailStyleText.setHorizontalAlign(HorizontalAlign.LEFT);
 
-		// ADD ALL USED FIELDS to the report.
+    // Rows content Style (right-align)
+    Style columnDetailStyleNumbers = new Style();
+    columnDetailStyleNumbers.setFont(Font.VERDANA_SMALL);
+    columnDetailStyleNumbers.setHorizontalAlign(HorizontalAlign.RIGHT);
 
-		drb.setUseFullPageWidth(true); // use full width of the page
-		dr = drb.build(); // build the report		
-		
-		List<SummaryPenjualan> resultList = generateData(karyawan,listPenjualan);
-		
-		// Generate the Jasper Print Object
-		JRDataSource ds = new JRBeanCollectionDataSource(resultList);
-		JasperPrint jp = DynamicJasperHelper.generateJasperPrint(dr, new ClassicLayoutManager(), ds);
+    // TotalSum (left-right)
+    Style footerStyleTotalSumValue = new Style();
+    footerStyleTotalSumValue.setFont(Font.VERDANA_SMALL_BOLD);
+    footerStyleTotalSumValue.setHorizontalAlign(HorizontalAlign.RIGHT);
+    footerStyleTotalSumValue.setBorderTop(Border.PEN_1_POINT());
 
-		String outputFormat = "PDF";
+    DynamicReportBuilder drb = new DynamicReportBuilder();
+    DynamicReport dr;
 
-		output = new ByteArrayOutputStream();
+    // Sets the Report Columns, header, Title, Groups, Etc Formats
+    // DynamicJasper documentation
+    drb.setTitle("LAPORAN SUMMARY PENJUALAN");
+    // drb.setSubtitle("Tanggal Penjualan : "+ZksampleDateFormat.getDateFormater().format(startDate)+" - "+ZksampleDateFormat.getDateFormater().format(endDate));
+    // drb.setSubtitleStyle(subtitleStyle);
 
-		if (outputFormat.equalsIgnoreCase("PDF")) {
-			JasperExportManager.exportReportToPdfStream(jp, output);
-			mediais = new ByteArrayInputStream(output.toByteArray());
-			amedia = new AMedia("SummaryPenjualan.pdf", "pdf", "application/pdf", mediais);
+    drb.setHeaderHeight(20);
+    drb.setDetailHeight(15);
+    drb.setFooterVariablesHeight(10);
+    drb.setMargins(20, 20, 30, 15);
 
-			callReportWindow(this.amedia, "PDF");
-		} else if (outputFormat.equalsIgnoreCase("XLS")) {
-			JExcelApiExporter exporterXLS = new JExcelApiExporter();
-			exporterXLS.setParameter(JExcelApiExporterParameter.JASPER_PRINT, jp);
-			exporterXLS.setParameter(JExcelApiExporterParameter.OUTPUT_STREAM, output);
-			exporterXLS.setParameter(JExcelApiExporterParameter.IS_DETECT_CELL_TYPE, Boolean.TRUE);
-			exporterXLS.setParameter(JExcelApiExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.TRUE);
-			exporterXLS.setParameter(JExcelApiExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
-			exporterXLS.exportReport();
-			mediais = new ByteArrayInputStream(output.toByteArray());
-			amedia = new AMedia("FileFormatExcel", "xls", "application/vnd.ms-excel", mediais);
+    drb.setDefaultStyles(titleStyle, subtitleStyle, columnHeaderStyleText, columnDetailStyleText);
+    drb.setPrintBackgroundOnOddRows(true);
 
-			callReportWindow(this.amedia, "XLS");
-		} else if (outputFormat.equalsIgnoreCase("RTF") || outputFormat.equalsIgnoreCase("DOC")) {
-			JRRtfExporter exporterRTF = new JRRtfExporter();
-			exporterRTF.setParameter(JRExporterParameter.JASPER_PRINT, jp);
-			exporterRTF.setParameter(JRExporterParameter.OUTPUT_STREAM, output);
-			exporterRTF.exportReport();
-			mediais = new ByteArrayInputStream(output.toByteArray());
-			amedia = new AMedia("FileFormatRTF", "rtf", "application/rtf", mediais);
+    /**
+     * Adding many autotexts in the same position (header/footer and aligment) makes them to be one
+     * on top of the other
+     */
+    Style atStyle = new StyleBuilder(true).setFont(Font.COMIC_SANS_SMALL).build();
 
-			callReportWindow(this.amedia, "RTF-DOC");
-		}
-	}
-	
-	private void callReportWindow(AMedia aMedia, String format) {
-		boolean modal = true;
+    AutoText created =
+        new AutoText(Labels.getLabel("common.Created") + ": "
+            + ZksampleDateFormat.getDateTimeFormater().format(new Date()),
+            AutoText.POSITION_HEADER, HorizontalBandAlignment.RIGHT);
+    created.setWidth(new Integer(120));
+    created.setStyle(atStyle);
+    drb.addAutoText(created);
 
-		setTitle("Laporan Summary Penjualan");
-		setId("ReportWindow");
-		setVisible(true);
-		setMaximizable(true);
-		setMinimizable(true);
-		setSizable(true);
-		setClosable(true);
-		setHeight("100%");
-		setWidth("80%");
-		addEventListener("onClose", new OnCloseReportEventListener());
+    AutoText autoText =
+        new AutoText(AutoText.AUTOTEXT_PAGE_X_SLASH_Y, AutoText.POSITION_HEADER,
+            HorizontalBandAlignment.RIGHT);
+    autoText.setWidth(new Integer(20));
+    autoText.setStyle(atStyle);
+    drb.addAutoText(autoText);
 
-		iFrame = new Iframe();
-		iFrame.setId("jasperReportId");
-		iFrame.setWidth("100%");
-		iFrame.setHeight("100%");
-		iFrame.setContent(aMedia);
-		iFrame.setParent(this);
+    CompanyProfileService as = (CompanyProfileService) SpringUtil.getBean("companyProfileService");
+    List<CompanyProfile> company = as.getAllCompanyProfiles();
 
-		if (modal == true) {
-			try {
-				doModal();
-			} catch (final SuspendNotAllowedException e) {
-				throw new RuntimeException(e);
-			} catch (final InterruptedException e) {
-				throw new RuntimeException(e);
-			}
-		}
+    AutoText atCompanyHeader =
+        new AutoText(company.get(0).getCompanyName(), AutoText.POSITION_HEADER,
+            HorizontalBandAlignment.LEFT);
+    atCompanyHeader.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
+    atCompanyHeader.setWidth(new Integer(700));
+    AutoText address =
+        new AutoText(company.get(0).getAddress(), AutoText.POSITION_HEADER,
+            HorizontalBandAlignment.LEFT);
+    address.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
+    address.setWidth(new Integer(700));
+    AutoText divisi =
+        new AutoText("Divisi : " + karyawan.getNamaPanggilan(), AutoText.POSITION_HEADER,
+            HorizontalBandAlignment.LEFT);
+    divisi.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
+    divisi.setWidth(new Integer(700));
+    AutoText tanggal =
+        new AutoText("Tanggal Penjualan : "
+            + ZksampleDateFormat.getDateFormater().format(startDate) + " - "
+            + ZksampleDateFormat.getDateFormater().format(endDate), AutoText.POSITION_HEADER,
+            HorizontalBandAlignment.LEFT);
+    tanggal.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
+    tanggal.setWidth(new Integer(700));
+    AutoText emptyLine = new AutoText("", AutoText.POSITION_HEADER, HorizontalBandAlignment.LEFT);
+    emptyLine.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
+    drb.addAutoText(atCompanyHeader).addAutoText(address).addAutoText(emptyLine)
+        .addAutoText(divisi).addAutoText(tanggal);
+    //
+    // // Footer
+    // AutoText footerText = new
+    // AutoText("Help to prevent the global warming by writing cool software.",
+    // AutoText.POSITION_FOOTER, HorizontalBandAlignment.CENTER);
+    // footerText.setStyle(footerStyle);
+    // drb.addAutoText(footerText);
 
-	}
+    /**
+     * Columns Definitions. A new ColumnBuilder instance for each column.
+     */
 
-	/**
-	 * EventListener for closing the Report Window.<br>
-	 * 
-	 * @author sge
-	 * 
-	 */
-	public final class OnCloseReportEventListener implements EventListener {
-		@Override
-		public void onEvent(Event event) throws Exception {
-			closeReportWindow();
-		}
-	}
+    AbstractColumn colBarang =
+        ColumnBuilder.getNew().setColumnProperty("namaBarang", String.class.getName()).build();
+    colBarang.setTitle("Nama Barang");
+    colBarang.setWidth(100);
+    colBarang.setHeaderStyle(columnHeaderStyleText);
+    colBarang.setStyle(columnDetailStyleText);
 
-	/**
-	 * We must clear something to prevent errors or problems <br>
-	 * by opening the report a few times. <br>
-	 * 
-	 * @throws IOException
-	 */
-	private void closeReportWindow() throws IOException {
+    AbstractColumn colQuantity =
+        ColumnBuilder.getNew().setColumnProperty("unitSetTerjual", Integer.class.getName()).build();
+    colQuantity.setTitle("Unit / Set Terjual");
+    colQuantity.setWidth(40);
+    colQuantity.setHeaderStyle(columnHeaderStyleNumber);
+    colQuantity.setStyle(columnDetailStyleNumbers);
 
-		// TODO check this
-		try {
-			amedia.getStreamData().close();
-			output.close();
-		} catch (final Exception e) {
-			throw new RuntimeException(e);
-		}
+    AbstractColumn colPenjualanBarang =
+        ColumnBuilder.getNew().setColumnProperty("penjualanBarang", BigDecimal.class.getName())
+            .build();
+    colPenjualanBarang.setTitle("Penjualan Barang");
+    colPenjualanBarang.setWidth(40);
+    colPenjualanBarang.setPattern("#,##0");
+    colPenjualanBarang.setHeaderStyle(columnHeaderStyleNumber);
+    colPenjualanBarang.setStyle(columnDetailStyleNumbers);
 
-		onClose();
+    AbstractColumn colPenerimaanPenjualan =
+        ColumnBuilder.getNew().setColumnProperty("penerimaanPenjualan", BigDecimal.class.getName())
+            .build();
+    colPenerimaanPenjualan.setTitle("Penerimaan Penjualan");
+    colPenerimaanPenjualan.setWidth(40);
+    colPenerimaanPenjualan.setPattern("#,##0");
+    colPenerimaanPenjualan.setHeaderStyle(columnHeaderStyleNumber);
+    colPenerimaanPenjualan.setStyle(columnDetailStyleNumbers);
 
-	}
-	
-	private List<SummaryPenjualan> generateData(Karyawan karyawan, List<Penjualan> listPenjualan){
-		Map<String, SummaryPenjualan> mapBarang = new HashMap<String, SummaryPenjualan>();
-		PenjualanService penjualanService = (PenjualanService) SpringUtil.getBean("penjualanService");
-		for(Penjualan penjualan:listPenjualan){
-			List<PenjualanDetail> penjualanDetails = penjualanService.getPenjualanDetailsByPenjualan(penjualan);			
-			for(PenjualanDetail penjualanDetail : penjualanDetails){
-				String kodeBarang = penjualanDetail.getBarang().getKodeBarang();
-				SummaryPenjualan sp = mapBarang.get(kodeBarang);
-				if (sp == null) {
-					sp = new SummaryPenjualan();
-					sp.setNamaDivisi(karyawan.getNamaPanggilan());
-					sp.setNamaBarang(penjualanDetail.getBarang().getNamaBarang());
-					sp.setUnitSetTerjual(penjualanDetail.getQty());
-					sp.setPenjualanBarang(penjualanDetail.getTotal());
-					sp.setPenerimaanPenjualan(penjualanDetail.getDownPayment());				
-					sp.setSisaPiutang(penjualanDetail.getTotal().subtract(penjualanDetail.getDownPayment()));
-					mapBarang.put(kodeBarang, sp);
-				}else{
-					sp.setUnitSetTerjual(sp.getUnitSetTerjual()+ penjualanDetail.getQty());
-					sp.setPenjualanBarang(sp.getPenjualanBarang().add(penjualanDetail.getTotal()));
-					sp.setPenerimaanPenjualan(sp.getPenerimaanPenjualan().add(penjualanDetail.getDownPayment()));				
-					sp.setSisaPiutang(sp.getSisaPiutang().add(penjualanDetail.getTotal().subtract(penjualanDetail.getDownPayment())));					
-				}			      
-			}
-		}
-		
-		List<SummaryPenjualan> summaryPenjualanList = new ArrayList<SummaryPenjualan>();
-		for (Map.Entry<String, SummaryPenjualan> kodeBarangMap : mapBarang.entrySet()) {
-			SummaryPenjualan sp = kodeBarangMap.getValue();
-			summaryPenjualanList.add(sp);
-		}		
-		
-		return summaryPenjualanList;
-	}
+    AbstractColumn colSisaPiutang =
+        ColumnBuilder.getNew().setColumnProperty("sisaPiutang", BigDecimal.class.getName()).build();
+    colSisaPiutang.setTitle("Sisa Piutang");
+    colSisaPiutang.setWidth(40);
+    colSisaPiutang.setPattern("#,##0");
+    colSisaPiutang.setHeaderStyle(columnHeaderStyleNumber);
+    colSisaPiutang.setStyle(columnDetailStyleNumbers);
+
+    drb.addColumn(colBarang);
+    drb.addColumn(colQuantity);
+    drb.addColumn(colPenjualanBarang);
+    drb.addColumn(colPenerimaanPenjualan);
+    drb.addColumn(colSisaPiutang);
+
+    /**
+     * Add a global total sum for the lineSum field.
+     */
+    drb.addGlobalFooterVariable(colQuantity, DJCalculation.SUM, footerStyleTotalSumValue);
+    drb.addGlobalFooterVariable(colPenjualanBarang, DJCalculation.SUM, footerStyleTotalSumValue);
+    drb.addGlobalFooterVariable(colPenerimaanPenjualan, DJCalculation.SUM, footerStyleTotalSumValue);
+    drb.addGlobalFooterVariable(colSisaPiutang, DJCalculation.SUM, footerStyleTotalSumValue);
+    drb.setGlobalFooterVariableHeight(new Integer(20));
+    drb.setGrandTotalLegend("Total");
+
+    // ADD ALL USED FIELDS to the report.
+
+    drb.setUseFullPageWidth(true); // use full width of the page
+    dr = drb.build(); // build the report
+
+    List<SummaryPenjualan> resultList = generateData(karyawan, listPenjualan);
+
+    // Generate the Jasper Print Object
+    JRDataSource ds = new JRBeanCollectionDataSource(resultList);
+    JasperPrint jp = DynamicJasperHelper.generateJasperPrint(dr, new ClassicLayoutManager(), ds);
+
+    String outputFormat = "PDF";
+
+    output = new ByteArrayOutputStream();
+
+    if (outputFormat.equalsIgnoreCase("PDF")) {
+      JasperExportManager.exportReportToPdfStream(jp, output);
+      mediais = new ByteArrayInputStream(output.toByteArray());
+      amedia = new AMedia("SummaryPenjualan.pdf", "pdf", "application/pdf", mediais);
+
+      callReportWindow(this.amedia, "PDF");
+    } else if (outputFormat.equalsIgnoreCase("XLS")) {
+      JExcelApiExporter exporterXLS = new JExcelApiExporter();
+      exporterXLS.setParameter(JExcelApiExporterParameter.JASPER_PRINT, jp);
+      exporterXLS.setParameter(JExcelApiExporterParameter.OUTPUT_STREAM, output);
+      exporterXLS.setParameter(JExcelApiExporterParameter.IS_DETECT_CELL_TYPE, Boolean.TRUE);
+      exporterXLS.setParameter(JExcelApiExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.TRUE);
+      exporterXLS.setParameter(JExcelApiExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS,
+          Boolean.TRUE);
+      exporterXLS.exportReport();
+      mediais = new ByteArrayInputStream(output.toByteArray());
+      amedia = new AMedia("FileFormatExcel", "xls", "application/vnd.ms-excel", mediais);
+
+      callReportWindow(this.amedia, "XLS");
+    } else if (outputFormat.equalsIgnoreCase("RTF") || outputFormat.equalsIgnoreCase("DOC")) {
+      JRRtfExporter exporterRTF = new JRRtfExporter();
+      exporterRTF.setParameter(JRExporterParameter.JASPER_PRINT, jp);
+      exporterRTF.setParameter(JRExporterParameter.OUTPUT_STREAM, output);
+      exporterRTF.exportReport();
+      mediais = new ByteArrayInputStream(output.toByteArray());
+      amedia = new AMedia("FileFormatRTF", "rtf", "application/rtf", mediais);
+
+      callReportWindow(this.amedia, "RTF-DOC");
+    }
+  }
+
+  private List<SummaryPenjualan> generateData(Karyawan karyawan, List<Penjualan> listPenjualan) {
+    Map<String, SummaryPenjualan> mapBarang = new HashMap<String, SummaryPenjualan>();
+    PenjualanService penjualanService = (PenjualanService) SpringUtil.getBean("penjualanService");
+    for (Penjualan penjualan : listPenjualan) {
+      List<PenjualanDetail> penjualanDetails =
+          penjualanService.getPenjualanDetailsByPenjualan(penjualan);
+      for (PenjualanDetail penjualanDetail : penjualanDetails) {
+        String kodeBarang = penjualanDetail.getBarang().getKodeBarang();
+        SummaryPenjualan sp = mapBarang.get(kodeBarang);
+        if (sp == null) {
+          sp = new SummaryPenjualan();
+          sp.setNamaDivisi(karyawan.getNamaPanggilan());
+          sp.setNamaBarang(penjualanDetail.getBarang().getNamaBarang());
+          sp.setUnitSetTerjual(penjualanDetail.getQty());
+          sp.setPenjualanBarang(penjualanDetail.getTotal());
+          sp.setPenerimaanPenjualan(penjualanDetail.getDownPayment());
+          sp.setSisaPiutang(penjualanDetail.getTotal().subtract(penjualanDetail.getDownPayment()));
+          mapBarang.put(kodeBarang, sp);
+        } else {
+          sp.setUnitSetTerjual(sp.getUnitSetTerjual() + penjualanDetail.getQty());
+          sp.setPenjualanBarang(sp.getPenjualanBarang().add(penjualanDetail.getTotal()));
+          sp.setPenerimaanPenjualan(sp.getPenerimaanPenjualan().add(
+              penjualanDetail.getDownPayment()));
+          sp.setSisaPiutang(sp.getSisaPiutang().add(
+              penjualanDetail.getTotal().subtract(penjualanDetail.getDownPayment())));
+        }
+      }
+    }
+
+    List<SummaryPenjualan> summaryPenjualanList = new ArrayList<SummaryPenjualan>();
+    for (Map.Entry<String, SummaryPenjualan> kodeBarangMap : mapBarang.entrySet()) {
+      SummaryPenjualan sp = kodeBarangMap.getValue();
+      summaryPenjualanList.add(sp);
+    }
+
+    return summaryPenjualanList;
+  }
 }

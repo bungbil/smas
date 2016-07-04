@@ -9,67 +9,67 @@ import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.stereotype.Repository;
 
 import billy.backend.dao.BillyBasisDAO;
-
 import billy.backend.dao.WilayahDAO;
 import billy.backend.model.Wilayah;
 
 @Repository
 public class WilayahDAOImpl extends BillyBasisDAO<Wilayah> implements WilayahDAO {
 
-	@Override
-	public Wilayah getNewWilayah() {
-		return new Wilayah();
-	}
+  @Override
+  public void deleteWilayahById(long id) {
+    Wilayah Wilayah = getWilayahById(id);
+    if (Wilayah != null) {
+      delete(Wilayah);
+    }
+  }
 
-	@Override
-	public Wilayah getWilayahById(Long id) {
-		return get(Wilayah.class, id);
-	}
+  @Override
+  public List<Wilayah> getAllWilayahs() {
+    return getHibernateTemplate().loadAll(Wilayah.class);
+  }
 
-	@SuppressWarnings("unchecked")
-	public Wilayah getWilayahByKodeWilayah(String string) {
-		DetachedCriteria criteria = DetachedCriteria.forClass(Wilayah.class);
-		criteria.add(Restrictions.eq("kodeWilayah", string));
+  @Override
+  public int getCountAllWilayahs() {
+    return DataAccessUtils.intResult(getHibernateTemplate().find("select count(*) from Wilayah"));
+  }
 
-		return (Wilayah) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(criteria));
-	}
+  @Override
+  public Wilayah getNewWilayah() {
+    return new Wilayah();
+  }
 
-	@Override
-	public List<Wilayah> getAllWilayahs() {
-		return getHibernateTemplate().loadAll(Wilayah.class);
-	}
+  @Override
+  public Wilayah getWilayahById(Long id) {
+    return get(Wilayah.class, id);
+  }
 
-	@Override
-	public void deleteWilayahById(long id) {
-		Wilayah Wilayah = getWilayahById(id);
-		if (Wilayah != null) {
-			delete(Wilayah);
-		}
-	}
+  @Override
+  @SuppressWarnings("unchecked")
+  public Wilayah getWilayahByKodeWilayah(String string) {
+    DetachedCriteria criteria = DetachedCriteria.forClass(Wilayah.class);
+    criteria.add(Restrictions.eq("kodeWilayah", string));
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Wilayah> getWilayahsLikeKodeWilayah(String string) {
+    return (Wilayah) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(criteria));
+  }
 
-		DetachedCriteria criteria = DetachedCriteria.forClass(Wilayah.class);
-		criteria.add(Restrictions.ilike("kodeWilayah", string, MatchMode.ANYWHERE));
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Wilayah> getWilayahsLikeKodeWilayah(String string) {
 
-		return getHibernateTemplate().findByCriteria(criteria);
-	}
+    DetachedCriteria criteria = DetachedCriteria.forClass(Wilayah.class);
+    criteria.add(Restrictions.ilike("kodeWilayah", string, MatchMode.ANYWHERE));
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Wilayah> getWilayahsLikeNamaWilayah(String string) {
+    return getHibernateTemplate().findByCriteria(criteria);
+  }
 
-		DetachedCriteria criteria = DetachedCriteria.forClass(Wilayah.class);
-		criteria.add(Restrictions.ilike("namaWilayah", string, MatchMode.ANYWHERE));
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Wilayah> getWilayahsLikeNamaWilayah(String string) {
 
-		return getHibernateTemplate().findByCriteria(criteria);
-	}
+    DetachedCriteria criteria = DetachedCriteria.forClass(Wilayah.class);
+    criteria.add(Restrictions.ilike("namaWilayah", string, MatchMode.ANYWHERE));
 
-	@Override
-	public int getCountAllWilayahs() {
-		return DataAccessUtils.intResult(getHibernateTemplate().find("select count(*) from Wilayah"));
-	}
+    return getHibernateTemplate().findByCriteria(criteria);
+  }
 
 }

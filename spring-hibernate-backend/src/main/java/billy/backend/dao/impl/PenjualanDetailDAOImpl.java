@@ -15,51 +15,53 @@ import billy.backend.model.PenjualanDetail;
 
 
 @Repository
-public class PenjualanDetailDAOImpl extends BillyBasisDAO<PenjualanDetail> implements PenjualanDetailDAO {
+public class PenjualanDetailDAOImpl extends BillyBasisDAO<PenjualanDetail> implements
+    PenjualanDetailDAO {
 
-	@Override
-	public PenjualanDetail getNewPenjualanDetail() {
-		return new PenjualanDetail();
-	}
+  @Override
+  public void deletePenjualanDetailsByPenjualan(Penjualan entity) {
+    List<PenjualanDetail> penjualanDetail = getPenjualanDetailsByPenjualan(entity);
+    if (penjualanDetail != null) {
+      deleteAll(penjualanDetail);
+    }
+  }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<PenjualanDetail> getPenjualanDetailsByPenjualan(Penjualan entity) {
-		List<PenjualanDetail> result;
+  @Override
+  public int getCountAllPenjualanDetails() {
+    return DataAccessUtils.intResult(getHibernateTemplate().find(
+        "select count(*) from PenjualanDetail"));
+  }
 
-		DetachedCriteria criteria = DetachedCriteria.forClass(PenjualanDetail.class);
-		criteria.add(Restrictions.eq("penjualan", entity));
+  @Override
+  public int getCountPenjualanDetailsByPenjualan(Penjualan entity) {
+    DetachedCriteria criteria = DetachedCriteria.forClass(PenjualanDetail.class);
+    criteria.add(Restrictions.eq("penjualan", entity));
+    criteria.setProjection(Projections.rowCount());
+    return DataAccessUtils.intResult(getHibernateTemplate().findByCriteria(criteria));
+  }
 
-		result = getHibernateTemplate().findByCriteria(criteria);
+  @Override
+  public PenjualanDetail getNewPenjualanDetail() {
+    return new PenjualanDetail();
+  }
 
-		return result;
+  @Override
+  public PenjualanDetail getPenjualanDetailById(long id) {
+    return get(PenjualanDetail.class, id);
+  }
 
-	}
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<PenjualanDetail> getPenjualanDetailsByPenjualan(Penjualan entity) {
+    List<PenjualanDetail> result;
 
-	@Override
-	public int getCountPenjualanDetailsByPenjualan(Penjualan entity) {
-		DetachedCriteria criteria = DetachedCriteria.forClass(PenjualanDetail.class);
-		criteria.add(Restrictions.eq("penjualan", entity));
-		criteria.setProjection(Projections.rowCount());
-		return DataAccessUtils.intResult(getHibernateTemplate().findByCriteria(criteria));
-	}
+    DetachedCriteria criteria = DetachedCriteria.forClass(PenjualanDetail.class);
+    criteria.add(Restrictions.eq("penjualan", entity));
 
-	@Override
-	public PenjualanDetail getPenjualanDetailById(long id) {
-		return get(PenjualanDetail.class, id);
-	}
+    result = getHibernateTemplate().findByCriteria(criteria);
 
-	@Override
-	public void deletePenjualanDetailsByPenjualan(Penjualan entity) {
-		List<PenjualanDetail> penjualanDetail = getPenjualanDetailsByPenjualan(entity);
-		if (penjualanDetail != null) {
-			deleteAll(penjualanDetail);
-		}
-	}
+    return result;
 
-	@Override
-	public int getCountAllPenjualanDetails() {
-		return DataAccessUtils.intResult(getHibernateTemplate().find("select count(*) from PenjualanDetail"));
-	}
+  }
 
 }

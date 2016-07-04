@@ -3,22 +3,23 @@ package billy.backend.service;
 import java.util.List;
 
 import billy.backend.model.SatuanBarang;
+
 public interface SatuanBarangService {
 
-	public SatuanBarang getNewSatuanBarang();
+  public void delete(SatuanBarang entity);
 
-	public int getCountAllSatuanBarangs();
+  public List<SatuanBarang> getAllSatuanBarangs();
 
-	public SatuanBarang getSatuanBarangByID(Long id);
+  public int getCountAllSatuanBarangs();
 
-	public List<SatuanBarang> getAllSatuanBarangs();
+  public SatuanBarang getNewSatuanBarang();
 
-	public List<SatuanBarang> getSatuanBarangsLikeKodeSatuanBarang(String string);
-	
-	public List<SatuanBarang> getSatuanBarangsLikeDeskripsiSatuanBarang(String string);
+  public SatuanBarang getSatuanBarangByID(Long id);
 
-	public void saveOrUpdate(SatuanBarang entity);
+  public List<SatuanBarang> getSatuanBarangsLikeDeskripsiSatuanBarang(String string);
 
-	public void delete(SatuanBarang entity);
+  public List<SatuanBarang> getSatuanBarangsLikeKodeSatuanBarang(String string);
+
+  public void saveOrUpdate(SatuanBarang entity);
 
 }

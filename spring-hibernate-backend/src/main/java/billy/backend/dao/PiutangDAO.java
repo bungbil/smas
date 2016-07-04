@@ -7,22 +7,22 @@ import billy.backend.model.Piutang;
 
 public interface PiutangDAO {
 
-	public Piutang getNewPiutang();
+  public void delete(Piutang entity);
 
-	public List<Piutang> getPiutangsByPenjualan(Penjualan obj);
+  public void deletePiutangsByPenjualan(Penjualan obj);
 
-	public int getCountPiutangsByPenjualan(Penjualan obj);
+  public int getCountAllPiutangs();
 
-	public int getCountAllPiutangs();
+  public int getCountPiutangsByPenjualan(Penjualan obj);
 
-	public Piutang getPiutangById(long id);
+  public Piutang getNewPiutang();
 
-	public void deletePiutangsByPenjualan(Penjualan obj);
+  public Piutang getPiutangById(long id);
 
-	public void saveOrUpdate(Piutang entity);
+  public List<Piutang> getPiutangsByPenjualan(Penjualan obj);
 
-	public void delete(Piutang entity);
+  public void save(Piutang entity);
 
-	public void save(Piutang entity);
+  public void saveOrUpdate(Piutang entity);
 
 }

@@ -20,322 +20,340 @@ import org.zkoss.zul.Paging;
 import org.zkoss.zul.Panel;
 import org.zkoss.zul.Window;
 
-import de.forsthaus.UserWorkspace;
 import billy.backend.model.KategoriBarang;
 import billy.backend.service.KategoriBarangService;
+import de.forsthaus.UserWorkspace;
 import de.forsthaus.backend.util.HibernateSearchObject;
 import de.forsthaus.webui.util.GFCBaseListCtrl;
 
 public class KategoriBarangListCtrl extends GFCBaseListCtrl<KategoriBarang> implements Serializable {
 
-	private static final long serialVersionUID = -2170565288232491362L;
-	private static final Logger logger = Logger.getLogger(KategoriBarangListCtrl.class);
+  private static final long serialVersionUID = -2170565288232491362L;
+  private static final Logger logger = Logger.getLogger(KategoriBarangListCtrl.class);
 
-	protected Window windowKategoriBarangList; // autowired
-	protected Panel panelKategoriBarangList; // autowired
+  protected Window windowKategoriBarangList; // autowired
+  protected Panel panelKategoriBarangList; // autowired
 
-	protected Borderlayout borderLayout_kategoriBarangList; // autowired
-	protected Paging paging_KategoriBarangList; // autowired
-	protected Listbox listBoxKategoriBarang; // autowired
-	protected Listheader listheader_KategoriBarangList_Kode; // autowired
-	protected Listheader listheader_KategoriBarangList_Deskripsi; // autowired
-	protected Listheader listheader_KategoriBarangList_LastUpdate;
-	protected Listheader listheader_KategoriBarangList_UpdatedBy;	
+  protected Borderlayout borderLayout_kategoriBarangList; // autowired
+  protected Paging paging_KategoriBarangList; // autowired
+  protected Listbox listBoxKategoriBarang; // autowired
+  protected Listheader listheader_KategoriBarangList_Kode; // autowired
+  protected Listheader listheader_KategoriBarangList_Deskripsi; // autowired
+  protected Listheader listheader_KategoriBarangList_LastUpdate;
+  protected Listheader listheader_KategoriBarangList_UpdatedBy;
 
-	// NEEDED for ReUse in the SearchWindow
-	private HibernateSearchObject<KategoriBarang> searchObj;
+  // NEEDED for ReUse in the SearchWindow
+  private HibernateSearchObject<KategoriBarang> searchObj;
 
-	// row count for listbox
-	private int countRows;
+  // row count for listbox
+  private int countRows;
 
-	// Databinding
-	private AnnotateDataBinder binder;
-	private KategoriBarangMainCtrl kategoriBarangMainCtrl;
+  // Databinding
+  private AnnotateDataBinder binder;
+  private KategoriBarangMainCtrl kategoriBarangMainCtrl;
 
-	// ServiceDAOs / Domain Classes
-	private transient KategoriBarangService kategoriBarangService;
+  // ServiceDAOs / Domain Classes
+  private transient KategoriBarangService kategoriBarangService;
 
-	/**
-	 * default constructor.<br>
-	 */
-	public KategoriBarangListCtrl() {
-		super();
-	}
+  /**
+   * default constructor.<br>
+   */
+  public KategoriBarangListCtrl() {
+    super();
+  }
 
-	@Override
-	public void doAfterCompose(Component window) throws Exception {
-		super.doAfterCompose(window);
-		
-		this.self.setAttribute("controller", this, false);
-		if (arg.containsKey("ModuleMainController")) {
-			setKategoriBarangMainCtrl((KategoriBarangMainCtrl) arg.get("ModuleMainController"));
-			getKategoriBarangMainCtrl().setKategoriBarangListCtrl(this);
+  @Override
+  public void doAfterCompose(Component window) throws Exception {
+    super.doAfterCompose(window);
 
-			if (getKategoriBarangMainCtrl().getSelectedKategoriBarang() != null) {
-				setSelectedKategoriBarang(getKategoriBarangMainCtrl().getSelectedKategoriBarang());
-			} else
-				setSelectedKategoriBarang(null);
-		} else {
-			setSelectedKategoriBarang(null);
-		}
-	}
+    this.self.setAttribute("controller", this, false);
+    if (arg.containsKey("ModuleMainController")) {
+      setKategoriBarangMainCtrl((KategoriBarangMainCtrl) arg.get("ModuleMainController"));
+      getKategoriBarangMainCtrl().setKategoriBarangListCtrl(this);
 
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
-	// +++++++++++++++ Component Events ++++++++++++++++ //
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
+      if (getKategoriBarangMainCtrl().getSelectedKategoriBarang() != null) {
+        setSelectedKategoriBarang(getKategoriBarangMainCtrl().getSelectedKategoriBarang());
+      } else
+        setSelectedKategoriBarang(null);
+    } else {
+      setSelectedKategoriBarang(null);
+    }
+  }
 
-	/**
-	 * Automatically called method from zk.
-	 * 
-	 * @param event
-	 * @throws Exception
-	 */
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++ Component Events ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
-	public void onCreate$windowKategoriBarangList(Event event) throws Exception {
-		binder = (AnnotateDataBinder) event.getTarget().getAttribute("binder", true);
+  public void doFillListbox() {
 
-		doFillListbox();
+    doFitSize();
 
-		binder.loadAll();
-	}
+    // set the paging params
+    paging_KategoriBarangList.setPageSize(getCountRows());
+    paging_KategoriBarangList.setDetailed(true);
 
-	public void doFillListbox() {
+    // not used listheaders must be declared like ->
+    // lh.setSortAscending(""); lh.setSortDescending("")
+    listheader_KategoriBarangList_Kode.setSortAscending(new FieldComparator("kodeKategoriBarang",
+        true));
+    listheader_KategoriBarangList_Kode.setSortDescending(new FieldComparator("kodeKategoriBarang",
+        false));
 
-		doFitSize();
+    listheader_KategoriBarangList_Deskripsi.setSortAscending(new FieldComparator(
+        "deskripsiKategoriBarang", true));
+    listheader_KategoriBarangList_Deskripsi.setSortDescending(new FieldComparator(
+        "deskripsiKategoriBarang", false));
 
-		// set the paging params
-		paging_KategoriBarangList.setPageSize(getCountRows());
-		paging_KategoriBarangList.setDetailed(true);
+    listheader_KategoriBarangList_UpdatedBy
+        .setSortAscending(new FieldComparator("updatedBy", true));
+    listheader_KategoriBarangList_UpdatedBy.setSortDescending(new FieldComparator("updatedBy",
+        false));
 
-		// not used listheaders must be declared like ->
-		// lh.setSortAscending(""); lh.setSortDescending("")
-		listheader_KategoriBarangList_Kode.setSortAscending(new FieldComparator("kodeKategoriBarang", true));
-		listheader_KategoriBarangList_Kode.setSortDescending(new FieldComparator("kodeKategoriBarang", false));
-		
-		listheader_KategoriBarangList_Deskripsi.setSortAscending(new FieldComparator("deskripsiKategoriBarang", true));
-		listheader_KategoriBarangList_Deskripsi.setSortDescending(new FieldComparator("deskripsiKategoriBarang", false));		
-		
-		listheader_KategoriBarangList_UpdatedBy.setSortAscending(new FieldComparator("updatedBy", true));
-		listheader_KategoriBarangList_UpdatedBy.setSortDescending(new FieldComparator("updatedBy", false));
-		
-		listheader_KategoriBarangList_LastUpdate.setSortAscending(new FieldComparator("lastUpdate", true));
-		listheader_KategoriBarangList_LastUpdate.setSortDescending(new FieldComparator("lastUpdate", false));	
-		
-		// ++ create the searchObject and init sorting ++//
-		// ++ create the searchObject and init sorting ++//
-		searchObj = new HibernateSearchObject<KategoriBarang>(KategoriBarang.class, getCountRows());
-		searchObj.addSort("kodeKategoriBarang", false);
-		setSearchObj(searchObj);
+    listheader_KategoriBarangList_LastUpdate.setSortAscending(new FieldComparator("lastUpdate",
+        true));
+    listheader_KategoriBarangList_LastUpdate.setSortDescending(new FieldComparator("lastUpdate",
+        false));
 
-		// Set the BindingListModel
-		getPagedBindingListWrapper().init(searchObj, getListBoxKategoriBarang(), paging_KategoriBarangList);
-		BindingListModelList lml = (BindingListModelList) getListBoxKategoriBarang().getModel();
-		setKategoriBarangs(lml);
+    // ++ create the searchObject and init sorting ++//
+    // ++ create the searchObject and init sorting ++//
+    searchObj = new HibernateSearchObject<KategoriBarang>(KategoriBarang.class, getCountRows());
+    searchObj.addSort("kodeKategoriBarang", false);
+    setSearchObj(searchObj);
 
-		// check if first time opened and init databinding for selectedBean
-		if (getSelectedKategoriBarang() == null) {
-			// init the bean with the first record in the List
-			if (lml.getSize() > 0) {
-				final int rowIndex = 0;
-				// only for correct showing after Rendering. No effect as an
-				// Event
-				// yet.
-				getListBoxKategoriBarang().setSelectedIndex(rowIndex);
-				// get the first entry and cast them to the needed object
-				setSelectedKategoriBarang((KategoriBarang) lml.get(0));
+    // Set the BindingListModel
+    getPagedBindingListWrapper().init(searchObj, getListBoxKategoriBarang(),
+        paging_KategoriBarangList);
+    BindingListModelList lml = (BindingListModelList) getListBoxKategoriBarang().getModel();
+    setKategoriBarangs(lml);
 
-				// call the onSelect Event for showing the objects data in the
-				// statusBar
-				Events.sendEvent(new Event("onSelect", getListBoxKategoriBarang(), getSelectedKategoriBarang()));
-			}
-		}
+    // check if first time opened and init databinding for selectedBean
+    if (getSelectedKategoriBarang() == null) {
+      // init the bean with the first record in the List
+      if (lml.getSize() > 0) {
+        final int rowIndex = 0;
+        // only for correct showing after Rendering. No effect as an
+        // Event
+        // yet.
+        getListBoxKategoriBarang().setSelectedIndex(rowIndex);
+        // get the first entry and cast them to the needed object
+        setSelectedKategoriBarang((KategoriBarang) lml.get(0));
 
-	}
+        // call the onSelect Event for showing the objects data in the
+        // statusBar
+        Events.sendEvent(new Event("onSelect", getListBoxKategoriBarang(),
+            getSelectedKategoriBarang()));
+      }
+    }
 
-	/**
-	 * Selects the object in the listbox and change the tab.<br>
-	 * Event is forwarded in the corresponding listbox.
-	 */
-	public void onDoubleClickedKategoriBarangItem(Event event) {
-		// logger.debug(event.toString());
+  }
 
-		KategoriBarang anKategoriBarang = getSelectedKategoriBarang();
+  /**
+   * Recalculates the container size for this controller and resize them. Calculate how many rows
+   * have been place in the listbox. Get the currentDesktopHeight from a hidden Intbox from the
+   * index.zul that are filled by onClientInfo() in the indexCtroller.
+   */
+  public void doFitSize() {
 
-		if (anKategoriBarang != null) {
-			setSelectedKategoriBarang(anKategoriBarang);
-			setKategoriBarang(anKategoriBarang);
+    // normally 0 ! Or we have a i.e. a toolBar on top of the listBox.
+    final int specialSize = 5;
 
-			// check first, if the tabs are created
-			if (getKategoriBarangMainCtrl().getKategoriBarangDetailCtrl() == null) {
-				Events.sendEvent(new Event("onSelect", getKategoriBarangMainCtrl().tabKategoriBarangDetail, null));
-				// if we work with spring beanCreation than we must check a
-				// little bit deeper, because the Controller are preCreated ?
-			} else if (getKategoriBarangMainCtrl().getKategoriBarangDetailCtrl().getBinder() == null) {
-				Events.sendEvent(new Event("onSelect", getKategoriBarangMainCtrl().tabKategoriBarangDetail, null));
-			}
+    final int menuOffset = UserWorkspace.getInstance().getMenuOffset();
+    int height =
+        ((Intbox) Path.getComponent("/outerIndexWindow/currentDesktopHeight")).getValue()
+            .intValue();
+    height = height - menuOffset;
+    final int maxListBoxHeight = height - specialSize - 148;
+    setCountRows((int) Math.round(maxListBoxHeight / 17.7));
+    borderLayout_kategoriBarangList.setHeight(String.valueOf(maxListBoxHeight) + "px");
 
-			Events.sendEvent(new Event("onSelect", getKategoriBarangMainCtrl().tabKategoriBarangDetail, anKategoriBarang));
-		}
-	}
+    windowKategoriBarangList.invalidate();
+  }
 
-	/**
-	 * When a listItem in the corresponding listbox is selected.<br>
-	 * Event is forwarded in the corresponding listbox.
-	 * 
-	 * @param event
-	 */
-	public void onSelect$listBoxKategoriBarang(Event event) {
-		// logger.debug(event.toString());
+  public AnnotateDataBinder getBinder() {
+    return this.binder;
+  }
 
-		// selectedKategoriBarang is filled by annotated databinding mechanism
-		KategoriBarang anKategoriBarang = getSelectedKategoriBarang();
+  public int getCountRows() {
+    return this.countRows;
+  }
 
-		if (anKategoriBarang == null) {
-			return;
-		}
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++++ Business Logic ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
-		// check first, if the tabs are created
-		if (getKategoriBarangMainCtrl().getKategoriBarangDetailCtrl() == null) {
-			Events.sendEvent(new Event("onSelect", getKategoriBarangMainCtrl().tabKategoriBarangDetail, null));
-			// if we work with spring beanCreation than we must check a little
-			// bit deeper, because the Controller are preCreated ?
-		} else if (getKategoriBarangMainCtrl().getKategoriBarangDetailCtrl().getBinder() == null) {
-			Events.sendEvent(new Event("onSelect", getKategoriBarangMainCtrl().tabKategoriBarangDetail, null));
-		}
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
-		// INIT ALL RELATED Queries/OBJECTS/LISTS NEW
-		getKategoriBarangMainCtrl().getKategoriBarangDetailCtrl().setSelectedKategoriBarang(anKategoriBarang);
-		getKategoriBarangMainCtrl().getKategoriBarangDetailCtrl().setKategoriBarang(anKategoriBarang);
+  /**
+   * Best Pratice Hint:<br>
+   * The setters/getters for the local annotated data binded Beans/Sets are administered in the
+   * module's mainController. Working in this way you have clean line to share this beans/sets with
+   * other controllers.
+   */
+  /* Master BEANS */
+  public KategoriBarang getKategoriBarang() {
+    // STORED IN THE module's MainController
+    return getKategoriBarangMainCtrl().getSelectedKategoriBarang();
+  }
 
-		// store the selected bean values as current
-		getKategoriBarangMainCtrl().doStoreInitValues();
+  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+  // ++++++++++++++++++ getter / setter +++++++++++++++++++//
+  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++//
 
-		// show the objects data in the statusBar
-		String str = Labels.getLabel("common.KategoriBarang") + ": " + anKategoriBarang.getKodeKategoriBarang();
-		EventQueues.lookup("selectedObjectEventQueue", EventQueues.DESKTOP, true).publish(new Event("onChangeSelectedObject", null, str));
+  public KategoriBarangMainCtrl getKategoriBarangMainCtrl() {
+    return this.kategoriBarangMainCtrl;
+  }
 
-	}
+  public BindingListModelList getKategoriBarangs() {
+    // STORED IN THE module's MainController
+    return getKategoriBarangMainCtrl().getKategoriBarangs();
+  }
 
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
-	// +++++++++++++++++ Business Logic ++++++++++++++++ //
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  public KategoriBarangService getKategoriBarangService() {
+    return this.kategoriBarangService;
+  }
 
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
-	// ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  public Listbox getListBoxKategoriBarang() {
+    return this.listBoxKategoriBarang;
+  }
 
-	/**
-	 * Recalculates the container size for this controller and resize them.
-	 * 
-	 * Calculate how many rows have been place in the listbox. Get the
-	 * currentDesktopHeight from a hidden Intbox from the index.zul that are
-	 * filled by onClientInfo() in the indexCtroller.
-	 */
-	public void doFitSize() {
+  public HibernateSearchObject<KategoriBarang> getSearchObj() {
+    return this.searchObj;
+  }
 
-		// normally 0 ! Or we have a i.e. a toolBar on top of the listBox.
-		final int specialSize = 5;
+  public KategoriBarang getSelectedKategoriBarang() {
+    // STORED IN THE module's MainController
+    return getKategoriBarangMainCtrl().getSelectedKategoriBarang();
+  }
 
-		final int menuOffset = UserWorkspace.getInstance().getMenuOffset();
-		int height = ((Intbox) Path.getComponent("/outerIndexWindow/currentDesktopHeight")).getValue().intValue();
-		height = height - menuOffset;
-		final int maxListBoxHeight = height - specialSize - 148;
-		setCountRows((int) Math.round(maxListBoxHeight / 17.7));
-		borderLayout_kategoriBarangList.setHeight(String.valueOf(maxListBoxHeight) + "px");
+  /**
+   * Automatically called method from zk.
+   * 
+   * @param event
+   * @throws Exception
+   */
 
-		windowKategoriBarangList.invalidate();
-	}
+  public void onCreate$windowKategoriBarangList(Event event) throws Exception {
+    binder = (AnnotateDataBinder) event.getTarget().getAttribute("binder", true);
 
-	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++//
-	// ++++++++++++++++++ getter / setter +++++++++++++++++++//
-	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+    doFillListbox();
 
-	/**
-	 * Best Pratice Hint:<br>
-	 * The setters/getters for the local annotated data binded Beans/Sets are
-	 * administered in the module's mainController. Working in this way you have
-	 * clean line to share this beans/sets with other controllers.
-	 */
-	/* Master BEANS */
-	public KategoriBarang getKategoriBarang() {
-		// STORED IN THE module's MainController
-		return getKategoriBarangMainCtrl().getSelectedKategoriBarang();
-	}
+    binder.loadAll();
+  }
 
-	public void setKategoriBarang(KategoriBarang anKategoriBarang) {
-		// STORED IN THE module's MainController
-		getKategoriBarangMainCtrl().setSelectedKategoriBarang(anKategoriBarang);
-	}
+  /**
+   * Selects the object in the listbox and change the tab.<br>
+   * Event is forwarded in the corresponding listbox.
+   */
+  public void onDoubleClickedKategoriBarangItem(Event event) {
+    // logger.debug(event.toString());
 
-	public void setSelectedKategoriBarang(KategoriBarang selectedKategoriBarang) {
-		// STORED IN THE module's MainController
-		getKategoriBarangMainCtrl().setSelectedKategoriBarang(selectedKategoriBarang);
-	}
+    KategoriBarang anKategoriBarang = getSelectedKategoriBarang();
 
-	public KategoriBarang getSelectedKategoriBarang() {
-		// STORED IN THE module's MainController
-		return getKategoriBarangMainCtrl().getSelectedKategoriBarang();
-	}
+    if (anKategoriBarang != null) {
+      setSelectedKategoriBarang(anKategoriBarang);
+      setKategoriBarang(anKategoriBarang);
 
-	public void setKategoriBarangs(BindingListModelList kategoriBarangs) {
-		// STORED IN THE module's MainController
-		getKategoriBarangMainCtrl().setKategoriBarangs(kategoriBarangs);
-	}
+      // check first, if the tabs are created
+      if (getKategoriBarangMainCtrl().getKategoriBarangDetailCtrl() == null) {
+        Events.sendEvent(new Event("onSelect", getKategoriBarangMainCtrl().tabKategoriBarangDetail,
+            null));
+        // if we work with spring beanCreation than we must check a
+        // little bit deeper, because the Controller are preCreated ?
+      } else if (getKategoriBarangMainCtrl().getKategoriBarangDetailCtrl().getBinder() == null) {
+        Events.sendEvent(new Event("onSelect", getKategoriBarangMainCtrl().tabKategoriBarangDetail,
+            null));
+      }
 
-	public BindingListModelList getKategoriBarangs() {
-		// STORED IN THE module's MainController
-		return getKategoriBarangMainCtrl().getKategoriBarangs();
-	}
+      Events.sendEvent(new Event("onSelect", getKategoriBarangMainCtrl().tabKategoriBarangDetail,
+          anKategoriBarang));
+    }
+  }
 
-	public void setBinder(AnnotateDataBinder binder) {
-		this.binder = binder;
-	}
+  /**
+   * When a listItem in the corresponding listbox is selected.<br>
+   * Event is forwarded in the corresponding listbox.
+   * 
+   * @param event
+   */
+  public void onSelect$listBoxKategoriBarang(Event event) {
+    // logger.debug(event.toString());
 
-	public AnnotateDataBinder getBinder() {
-		return this.binder;
-	}
+    // selectedKategoriBarang is filled by annotated databinding mechanism
+    KategoriBarang anKategoriBarang = getSelectedKategoriBarang();
 
-	/* CONTROLLERS */
-	public void setKategoriBarangMainCtrl(KategoriBarangMainCtrl kategoriBarangMainCtrl) {
-		this.kategoriBarangMainCtrl = kategoriBarangMainCtrl;
-	}
+    if (anKategoriBarang == null) {
+      return;
+    }
 
-	public KategoriBarangMainCtrl getKategoriBarangMainCtrl() {
-		return this.kategoriBarangMainCtrl;
-	}
+    // check first, if the tabs are created
+    if (getKategoriBarangMainCtrl().getKategoriBarangDetailCtrl() == null) {
+      Events.sendEvent(new Event("onSelect", getKategoriBarangMainCtrl().tabKategoriBarangDetail,
+          null));
+      // if we work with spring beanCreation than we must check a little
+      // bit deeper, because the Controller are preCreated ?
+    } else if (getKategoriBarangMainCtrl().getKategoriBarangDetailCtrl().getBinder() == null) {
+      Events.sendEvent(new Event("onSelect", getKategoriBarangMainCtrl().tabKategoriBarangDetail,
+          null));
+    }
 
-	/* SERVICES */
-	public void setKategoriBarangService(KategoriBarangService kategoriBarangService) {
-		this.kategoriBarangService = kategoriBarangService;
-	}
+    // INIT ALL RELATED Queries/OBJECTS/LISTS NEW
+    getKategoriBarangMainCtrl().getKategoriBarangDetailCtrl().setSelectedKategoriBarang(
+        anKategoriBarang);
+    getKategoriBarangMainCtrl().getKategoriBarangDetailCtrl().setKategoriBarang(anKategoriBarang);
 
-	public KategoriBarangService getKategoriBarangService() {
-		return this.kategoriBarangService;
-	}
+    // store the selected bean values as current
+    getKategoriBarangMainCtrl().doStoreInitValues();
 
-	/* COMPONENTS and OTHERS */
-	public void setSearchObj(HibernateSearchObject<KategoriBarang> searchObj) {
-		this.searchObj = searchObj;
-	}
+    // show the objects data in the statusBar
+    String str =
+        Labels.getLabel("common.KategoriBarang") + ": " + anKategoriBarang.getKodeKategoriBarang();
+    EventQueues.lookup("selectedObjectEventQueue", EventQueues.DESKTOP, true).publish(
+        new Event("onChangeSelectedObject", null, str));
 
-	public HibernateSearchObject<KategoriBarang> getSearchObj() {
-		return this.searchObj;
-	}
+  }
 
-	public Listbox getListBoxKategoriBarang() {
-		return this.listBoxKategoriBarang;
-	}
+  public void setBinder(AnnotateDataBinder binder) {
+    this.binder = binder;
+  }
 
-	public void setListBoxKategoriBarang(Listbox listBoxKategoriBarang) {
-		this.listBoxKategoriBarang = listBoxKategoriBarang;
-	}
+  public void setCountRows(int countRows) {
+    this.countRows = countRows;
+  }
 
-	public int getCountRows() {
-		return this.countRows;
-	}
+  public void setKategoriBarang(KategoriBarang anKategoriBarang) {
+    // STORED IN THE module's MainController
+    getKategoriBarangMainCtrl().setSelectedKategoriBarang(anKategoriBarang);
+  }
 
-	public void setCountRows(int countRows) {
-		this.countRows = countRows;
-	}
+  /* CONTROLLERS */
+  public void setKategoriBarangMainCtrl(KategoriBarangMainCtrl kategoriBarangMainCtrl) {
+    this.kategoriBarangMainCtrl = kategoriBarangMainCtrl;
+  }
+
+  public void setKategoriBarangs(BindingListModelList kategoriBarangs) {
+    // STORED IN THE module's MainController
+    getKategoriBarangMainCtrl().setKategoriBarangs(kategoriBarangs);
+  }
+
+  /* SERVICES */
+  public void setKategoriBarangService(KategoriBarangService kategoriBarangService) {
+    this.kategoriBarangService = kategoriBarangService;
+  }
+
+  public void setListBoxKategoriBarang(Listbox listBoxKategoriBarang) {
+    this.listBoxKategoriBarang = listBoxKategoriBarang;
+  }
+
+  /* COMPONENTS and OTHERS */
+  public void setSearchObj(HibernateSearchObject<KategoriBarang> searchObj) {
+    this.searchObj = searchObj;
+  }
+
+  public void setSelectedKategoriBarang(KategoriBarang selectedKategoriBarang) {
+    // STORED IN THE module's MainController
+    getKategoriBarangMainCtrl().setSelectedKategoriBarang(selectedKategoriBarang);
+  }
 
 }

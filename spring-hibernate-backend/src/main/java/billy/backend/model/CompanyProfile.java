@@ -6,129 +6,131 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class CompanyProfile implements java.io.Serializable, Entity {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private long id = Long.MIN_VALUE +1;
-	private int version;
-	private String companyName;
-	private String address;
-	private String phone;
-	private String email;	
-	private Date lastUpdate;
-	private String updatedBy;
-	
-
-	public boolean isNew() {
-		return (getId() == Long.MIN_VALUE +1);
-	}
-
-	public CompanyProfile() {
-	}
-
-	public CompanyProfile(long id, String companyName, String address,
-			String phone, String email) {
-		this.setId(id);		
-		this.companyName = companyName;
-		this.address = address;
-		this.phone = phone;
-		this.email = email;
-	}
-
-	public CompanyProfile(long id, String companyName) {		
-		this.setId(id);
-		this.companyName = companyName;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public int getVersion() {
-		return this.version;
-	}
-
-	public void setVersion(int version) {
-		this.version = version;
-	}
+  private long id = Long.MIN_VALUE + 1;
+  private int version;
+  private String companyName;
+  private String address;
+  private String phone;
+  private String email;
+  private Date lastUpdate;
+  private String updatedBy;
 
 
-	public String getCompanyName() {
-		return companyName;
-	}
+  public CompanyProfile() {}
 
-	public void setCompanyName(String companyName) {
-		this.companyName = companyName;
-	}
+  public CompanyProfile(long id, String companyName) {
+    this.setId(id);
+    this.companyName = companyName;
+  }
 
-	public String getAddress() {
-		return address;
-	}
+  public CompanyProfile(long id, String companyName, String address, String phone, String email) {
+    this.setId(id);
+    this.companyName = companyName;
+    this.address = address;
+    this.phone = phone;
+    this.email = email;
+  }
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+  public boolean equals(CompanyProfile companyProfile) {
+    return getId() == companyProfile.getId();
+  }
 
-	public String getPhone() {
-		return phone;
-	}
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
 
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+    if (obj instanceof CompanyProfile) {
+      CompanyProfile companyProfile = (CompanyProfile) obj;
+      return equals(companyProfile);
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    return false;
+  }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+  public String getAddress() {
+    return address;
+  }
 
-	public Date getLastUpdate() {
-		return lastUpdate;
-	}
+  public String getCompanyName() {
+    return companyName;
+  }
 
-	public void setLastUpdate(Date lastUpdate) {
-		this.lastUpdate = lastUpdate;
-	}
+  public String getEmail() {
+    return email;
+  }
 
-	public String getUpdatedBy() {
-		return updatedBy;
-	}
 
-	public void setUpdatedBy(String updatedBy) {
-		this.updatedBy = updatedBy;
-	}
+  @Override
+  public long getId() {
+    return id;
+  }
 
-	@Override
-	public int hashCode() {
-		return Long.valueOf(getId()).hashCode();
-	}
+  public Date getLastUpdate() {
+    return lastUpdate;
+  }
 
-	public boolean equals(CompanyProfile companyProfile) {
-		return getId() == companyProfile.getId();
-	}
+  public String getPhone() {
+    return phone;
+  }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
+  public String getUpdatedBy() {
+    return updatedBy;
+  }
 
-		if (obj instanceof CompanyProfile) {
-			CompanyProfile companyProfile = (CompanyProfile) obj;
-			return equals(companyProfile);
-		}
+  public int getVersion() {
+    return this.version;
+  }
 
-		return false;
-	}
+  @Override
+  public int hashCode() {
+    return Long.valueOf(getId()).hashCode();
+  }
 
-	public String toString() {
-		return new ToStringBuilder(this).append("id", getId()).toString();
-	}
+  @Override
+  public boolean isNew() {
+    return (getId() == Long.MIN_VALUE + 1);
+  }
+
+  public void setAddress(String address) {
+    this.address = address;
+  }
+
+  public void setCompanyName(String companyName) {
+    this.companyName = companyName;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  @Override
+  public void setId(long id) {
+    this.id = id;
+  }
+
+  public void setLastUpdate(Date lastUpdate) {
+    this.lastUpdate = lastUpdate;
+  }
+
+  public void setPhone(String phone) {
+    this.phone = phone;
+  }
+
+  public void setUpdatedBy(String updatedBy) {
+    this.updatedBy = updatedBy;
+  }
+
+  public void setVersion(int version) {
+    this.version = version;
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this).append("id", getId()).toString();
+  }
 
 }

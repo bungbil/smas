@@ -3,20 +3,21 @@ package billy.backend.service;
 import java.util.List;
 
 import billy.backend.model.JobType;
+
 public interface JobTypeService {
 
-	public JobType getNewJobType();
+  public void delete(JobType entity);
 
-	public int getCountAllJobTypes();
+  public List<JobType> getAllJobTypes();
 
-	public JobType getJobTypeByID(Long id);
+  public int getCountAllJobTypes();
 
-	public List<JobType> getAllJobTypes();
-	
-	public List<JobType> getJobTypesLikeNamaJobType(String string);
+  public JobType getJobTypeByID(Long id);
 
-	public void saveOrUpdate(JobType entity);
+  public List<JobType> getJobTypesLikeNamaJobType(String string);
 
-	public void delete(JobType entity);
+  public JobType getNewJobType();
+
+  public void saveOrUpdate(JobType entity);
 
 }

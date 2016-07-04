@@ -6,93 +6,96 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class Status implements java.io.Serializable, Entity {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private long id = Long.MIN_VALUE +1;
-	private int version;
-	private String deskripsiStatus;
-	private Date lastUpdate;
-	private String updatedBy;
-	
+  private long id = Long.MIN_VALUE + 1;
+  private int version;
+  private String deskripsiStatus;
+  private Date lastUpdate;
+  private String updatedBy;
 
-	public boolean isNew() {
-		return (getId() == Long.MIN_VALUE +1);
-	}
 
-	public Status() {
-	}
+  public Status() {}
 
-	public Status(long id, String deskripsiStatus) {
-		this.setId(id);
-		this.deskripsiStatus = deskripsiStatus;
-	}
+  public Status(long id, String deskripsiStatus) {
+    this.setId(id);
+    this.deskripsiStatus = deskripsiStatus;
+  }
 
-	
-	public void setId(long id) {
-		this.id = id;
-	}
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
 
-	public long getId() {
-		return id;
-	}
+    if (obj instanceof Status) {
+      Status status = (Status) obj;
+      return equals(status);
+    }
 
-	public int getVersion() {
-		return this.version;
-	}
+    return false;
+  }
 
-	public void setVersion(int version) {
-		this.version = version;
-	}
 
-	public String getDeskripsiStatus() {
-		return deskripsiStatus;
-	}
+  public boolean equals(Status status) {
+    return getId() == status.getId();
+  }
 
-	public void setDeskripsiStatus(String deskripsiStatus) {
-		this.deskripsiStatus = deskripsiStatus;
-	}
+  public String getDeskripsiStatus() {
+    return deskripsiStatus;
+  }
 
-	public Date getLastUpdate() {
-		return lastUpdate;
-	}
+  @Override
+  public long getId() {
+    return id;
+  }
 
-	public void setLastUpdate(Date lastUpdate) {
-		this.lastUpdate = lastUpdate;
-	}
+  public Date getLastUpdate() {
+    return lastUpdate;
+  }
 
-	public String getUpdatedBy() {
-		return updatedBy;
-	}
+  public String getUpdatedBy() {
+    return updatedBy;
+  }
 
-	public void setUpdatedBy(String updatedBy) {
-		this.updatedBy = updatedBy;
-	}
+  public int getVersion() {
+    return this.version;
+  }
 
-	@Override
-	public int hashCode() {
-		return Long.valueOf(getId()).hashCode();
-	}
+  @Override
+  public int hashCode() {
+    return Long.valueOf(getId()).hashCode();
+  }
 
-	public boolean equals(Status status) {
-		return getId() == status.getId();
-	}
+  @Override
+  public boolean isNew() {
+    return (getId() == Long.MIN_VALUE + 1);
+  }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
+  public void setDeskripsiStatus(String deskripsiStatus) {
+    this.deskripsiStatus = deskripsiStatus;
+  }
 
-		if (obj instanceof Status) {
-			Status status = (Status) obj;
-			return equals(status);
-		}
+  @Override
+  public void setId(long id) {
+    this.id = id;
+  }
 
-		return false;
-	}
+  public void setLastUpdate(Date lastUpdate) {
+    this.lastUpdate = lastUpdate;
+  }
 
-	public String toString() {
-		return new ToStringBuilder(this).append("id", getId()).toString();
-	}
+  public void setUpdatedBy(String updatedBy) {
+    this.updatedBy = updatedBy;
+  }
+
+  public void setVersion(int version) {
+    this.version = version;
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this).append("id", getId()).toString();
+  }
 
 }

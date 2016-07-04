@@ -6,92 +6,95 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class JobType implements java.io.Serializable, Entity {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private long id = Long.MIN_VALUE +1;
-	private int version;	
-	private String namaJobType;	
-	private Date lastUpdate;
-	private String updatedBy;
-	
+  private long id = Long.MIN_VALUE + 1;
+  private int version;
+  private String namaJobType;
+  private Date lastUpdate;
+  private String updatedBy;
 
-	public boolean isNew() {
-		return (getId() == Long.MIN_VALUE +1);
-	}
 
-	public JobType() {
-	}
+  public JobType() {}
 
-	public JobType(long id, String namaJobType) {
-		this.setId(id);
-		this.namaJobType = namaJobType;
-	}
+  public JobType(long id, String namaJobType) {
+    this.setId(id);
+    this.namaJobType = namaJobType;
+  }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+  public boolean equals(JobType jobType) {
+    return getId() == jobType.getId();
+  }
 
-	public long getId() {
-		return id;
-	}
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
 
-	public int getVersion() {
-		return this.version;
-	}
+    if (obj instanceof JobType) {
+      JobType jobType = (JobType) obj;
+      return equals(jobType);
+    }
 
-	public void setVersion(int version) {
-		this.version = version;
-	}
+    return false;
+  }
 
-	public String getNamaJobType() {
-		return namaJobType;
-	}
+  @Override
+  public long getId() {
+    return id;
+  }
 
-	public void setNamaJobType(String namaJobType) {
-		this.namaJobType = namaJobType;
-	}
+  public Date getLastUpdate() {
+    return lastUpdate;
+  }
 
-	public Date getLastUpdate() {
-		return lastUpdate;
-	}
+  public String getNamaJobType() {
+    return namaJobType;
+  }
 
-	public void setLastUpdate(Date lastUpdate) {
-		this.lastUpdate = lastUpdate;
-	}
+  public String getUpdatedBy() {
+    return updatedBy;
+  }
 
-	public String getUpdatedBy() {
-		return updatedBy;
-	}
+  public int getVersion() {
+    return this.version;
+  }
 
-	public void setUpdatedBy(String updatedBy) {
-		this.updatedBy = updatedBy;
-	}
+  @Override
+  public int hashCode() {
+    return Long.valueOf(getId()).hashCode();
+  }
 
-	@Override
-	public int hashCode() {
-		return Long.valueOf(getId()).hashCode();
-	}
+  @Override
+  public boolean isNew() {
+    return (getId() == Long.MIN_VALUE + 1);
+  }
 
-	public boolean equals(JobType jobType) {
-		return getId() == jobType.getId();
-	}
+  @Override
+  public void setId(long id) {
+    this.id = id;
+  }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
+  public void setLastUpdate(Date lastUpdate) {
+    this.lastUpdate = lastUpdate;
+  }
 
-		if (obj instanceof JobType) {
-			JobType jobType = (JobType) obj;
-			return equals(jobType);
-		}
+  public void setNamaJobType(String namaJobType) {
+    this.namaJobType = namaJobType;
+  }
 
-		return false;
-	}
+  public void setUpdatedBy(String updatedBy) {
+    this.updatedBy = updatedBy;
+  }
 
-	public String toString() {
-		return new ToStringBuilder(this).append("id", getId()).toString();
-	}
+  public void setVersion(int version) {
+    this.version = version;
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this).append("id", getId()).toString();
+  }
 
 }

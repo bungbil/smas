@@ -3,22 +3,23 @@ package billy.backend.service;
 import java.util.List;
 
 import billy.backend.model.KategoriBarang;
+
 public interface KategoriBarangService {
 
-	public KategoriBarang getNewKategoriBarang();
+  public void delete(KategoriBarang entity);
 
-	public int getCountAllKategoriBarangs();
+  public List<KategoriBarang> getAllKategoriBarangs();
 
-	public KategoriBarang getKategoriBarangByID(Long id);
+  public int getCountAllKategoriBarangs();
 
-	public List<KategoriBarang> getAllKategoriBarangs();
+  public KategoriBarang getKategoriBarangByID(Long id);
 
-	public List<KategoriBarang> getKategoriBarangsLikeKodeKategoriBarang(String string);
-	
-	public List<KategoriBarang> getKategoriBarangsLikeDeskripsiKategoriBarang(String string);
+  public List<KategoriBarang> getKategoriBarangsLikeDeskripsiKategoriBarang(String string);
 
-	public void saveOrUpdate(KategoriBarang entity);
+  public List<KategoriBarang> getKategoriBarangsLikeKodeKategoriBarang(String string);
 
-	public void delete(KategoriBarang entity);
+  public KategoriBarang getNewKategoriBarang();
+
+  public void saveOrUpdate(KategoriBarang entity);
 
 }

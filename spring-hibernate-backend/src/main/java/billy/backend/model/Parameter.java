@@ -6,119 +6,122 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class Parameter implements java.io.Serializable, Entity {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private long id = Long.MIN_VALUE +1;
-	private int version;
-	private String paramName;
-	private String paramValue;
-	private String description;
-	private Date lastUpdate;
-	private String updatedBy;
-	
-
-	public boolean isNew() {
-		return (getId() == Long.MIN_VALUE +1);
-	}
-
-	public Parameter() {
-	}
-
-	public Parameter(long id, String paramName) {
-		this.setId(id);
-		this.paramName = paramName;
-	}
-
-	public Parameter(long id, String paramName, String paramValue, String description) {
-		this.setId(id);
-		this.paramName = paramName;
-		this.paramValue = paramValue;
-		this.description = description;	
-		
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public int getVersion() {
-		return this.version;
-	}
-
-	public void setVersion(int version) {
-		this.version = version;
-	}
+  private long id = Long.MIN_VALUE + 1;
+  private int version;
+  private String paramName;
+  private String paramValue;
+  private String description;
+  private Date lastUpdate;
+  private String updatedBy;
 
 
-	public String getParamName() {
-		return paramName;
-	}
+  public Parameter() {}
 
-	public void setParamName(String paramName) {
-		this.paramName = paramName;
-	}
+  public Parameter(long id, String paramName) {
+    this.setId(id);
+    this.paramName = paramName;
+  }
 
-	public String getParamValue() {
-		return paramValue;
-	}
+  public Parameter(long id, String paramName, String paramValue, String description) {
+    this.setId(id);
+    this.paramName = paramName;
+    this.paramValue = paramValue;
+    this.description = description;
 
-	public void setParamValue(String paramValue) {
-		this.paramValue = paramValue;
-	}
+  }
 
-	public String getDescription() {
-		return description;
-	}
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    if (obj instanceof Parameter) {
+      Parameter parameter = (Parameter) obj;
+      return equals(parameter);
+    }
 
-	public Date getLastUpdate() {
-		return lastUpdate;
-	}
+    return false;
+  }
 
-	public void setLastUpdate(Date lastUpdate) {
-		this.lastUpdate = lastUpdate;
-	}
+  public boolean equals(Parameter parameter) {
+    return getId() == parameter.getId();
+  }
 
-	public String getUpdatedBy() {
-		return updatedBy;
-	}
+  public String getDescription() {
+    return description;
+  }
 
-	public void setUpdatedBy(String updatedBy) {
-		this.updatedBy = updatedBy;
-	}
+  @Override
+  public long getId() {
+    return id;
+  }
 
-	@Override
-	public int hashCode() {
-		return Long.valueOf(getId()).hashCode();
-	}
+  public Date getLastUpdate() {
+    return lastUpdate;
+  }
 
-	public boolean equals(Parameter parameter) {
-		return getId() == parameter.getId();
-	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
+  public String getParamName() {
+    return paramName;
+  }
 
-		if (obj instanceof Parameter) {
-			Parameter parameter = (Parameter) obj;
-			return equals(parameter);
-		}
+  public String getParamValue() {
+    return paramValue;
+  }
 
-		return false;
-	}
+  public String getUpdatedBy() {
+    return updatedBy;
+  }
 
-	public String toString() {
-		return new ToStringBuilder(this).append("id", getId()).toString();
-	}
+  public int getVersion() {
+    return this.version;
+  }
+
+  @Override
+  public int hashCode() {
+    return Long.valueOf(getId()).hashCode();
+  }
+
+  @Override
+  public boolean isNew() {
+    return (getId() == Long.MIN_VALUE + 1);
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  @Override
+  public void setId(long id) {
+    this.id = id;
+  }
+
+  public void setLastUpdate(Date lastUpdate) {
+    this.lastUpdate = lastUpdate;
+  }
+
+  public void setParamName(String paramName) {
+    this.paramName = paramName;
+  }
+
+  public void setParamValue(String paramValue) {
+    this.paramValue = paramValue;
+  }
+
+  public void setUpdatedBy(String updatedBy) {
+    this.updatedBy = updatedBy;
+  }
+
+  public void setVersion(int version) {
+    this.version = version;
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this).append("id", getId()).toString();
+  }
 
 }

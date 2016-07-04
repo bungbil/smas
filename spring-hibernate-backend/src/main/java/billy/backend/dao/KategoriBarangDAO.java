@@ -6,26 +6,26 @@ import billy.backend.model.KategoriBarang;
 
 public interface KategoriBarangDAO {
 
-	public KategoriBarang getNewKategoriBarang();
+  public void delete(KategoriBarang entity);
 
-	public KategoriBarang getKategoriBarangById(Long id);
+  public void deleteKategoriBarangById(long id);
 
-	public KategoriBarang getKategoriBarangByKodeKategoriBarang(String string);
+  public List<KategoriBarang> getAllKategoriBarangs();
 
-	public List<KategoriBarang> getAllKategoriBarangs();
+  public int getCountAllKategoriBarangs();
 
-	public int getCountAllKategoriBarangs();
+  public KategoriBarang getKategoriBarangById(Long id);
 
-	public List<KategoriBarang> getKategoriBarangsLikeKodeKategoriBarang(String string);
+  public KategoriBarang getKategoriBarangByKodeKategoriBarang(String string);
 
-	public List<KategoriBarang> getKategoriBarangsLikeDeskripsiKategoriBarang(String string);	
+  public List<KategoriBarang> getKategoriBarangsLikeDeskripsiKategoriBarang(String string);
 
-	public void deleteKategoriBarangById(long id);
+  public List<KategoriBarang> getKategoriBarangsLikeKodeKategoriBarang(String string);
 
-	public void saveOrUpdate(KategoriBarang entity);
+  public KategoriBarang getNewKategoriBarang();
 
-	public void delete(KategoriBarang entity);
+  public void save(KategoriBarang entity);
 
-	public void save(KategoriBarang entity);
+  public void saveOrUpdate(KategoriBarang entity);
 
 }

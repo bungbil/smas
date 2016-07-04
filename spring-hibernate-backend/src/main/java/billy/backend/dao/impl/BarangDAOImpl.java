@@ -8,83 +8,82 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.stereotype.Repository;
 
-import billy.backend.dao.BillyBasisDAO;
-
 import billy.backend.dao.BarangDAO;
+import billy.backend.dao.BillyBasisDAO;
 import billy.backend.model.Barang;
-import billy.backend.model.Karyawan;
 
 @Repository
 public class BarangDAOImpl extends BillyBasisDAO<Barang> implements BarangDAO {
 
-	@Override
-	public Barang getNewBarang() {
-		return new Barang();
-	}
+  @Override
+  public void deleteBarangById(long id) {
+    Barang barang = getBarangById(id);
+    if (barang != null) {
+      delete(barang);
+    }
+  }
 
-	@Override
-	public Barang getBarangById(Long id) {
-		return get(Barang.class, id);
-	}
+  @Override
+  public List<Barang> getAllBarangs() {
+    return getHibernateTemplate().loadAll(Barang.class);
+  }
 
-	@SuppressWarnings("unchecked")
-	public Barang getBarangByKodeBarang(String string) {
-		DetachedCriteria criteria = DetachedCriteria.forClass(Barang.class);
-		criteria.add(Restrictions.eq("kodeBarang", string));
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Barang> getAllBarangsByWilayahId(Long id) {
+    DetachedCriteria criteria = DetachedCriteria.forClass(Barang.class);
+    criteria.add(Restrictions.eq("wilayah.id", id));
 
-		return (Barang) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(criteria));
-	}
+    return getHibernateTemplate().findByCriteria(criteria);
+  }
 
-	@Override
-	public List<Barang> getAllBarangs() {
-		return getHibernateTemplate().loadAll(Barang.class);
-	}
+  @Override
+  public Barang getBarangById(Long id) {
+    return get(Barang.class, id);
+  }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Barang> getAllBarangsByWilayahId(Long id) {
-		DetachedCriteria criteria = DetachedCriteria.forClass(Barang.class);
-		criteria.add(Restrictions.eq("wilayah.id", id));
+  @Override
+  @SuppressWarnings("unchecked")
+  public Barang getBarangByKodeBarang(String string) {
+    DetachedCriteria criteria = DetachedCriteria.forClass(Barang.class);
+    criteria.add(Restrictions.eq("kodeBarang", string));
 
-		return getHibernateTemplate().findByCriteria(criteria);		
-	}
-	
-	@Override
-	public void deleteBarangById(long id) {
-		Barang barang = getBarangById(id);
-		if (barang != null) {
-			delete(barang);
-		}
-	}
+    return (Barang) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(criteria));
+  }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Barang> getBarangsLikeKodeBarang(String string) {
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Barang> getBarangsLikeKodeBarang(String string) {
 
-		DetachedCriteria criteria = DetachedCriteria.forClass(Barang.class);
-		criteria.add(Restrictions.ilike("kodeBarang", string, MatchMode.ANYWHERE));
+    DetachedCriteria criteria = DetachedCriteria.forClass(Barang.class);
+    criteria.add(Restrictions.ilike("kodeBarang", string, MatchMode.ANYWHERE));
 
-		return getHibernateTemplate().findByCriteria(criteria);
-	}
+    return getHibernateTemplate().findByCriteria(criteria);
+  }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Barang> getBarangsLikeNamaBarang(String string) {
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Barang> getBarangsLikeNamaBarang(String string) {
 
-		DetachedCriteria criteria = DetachedCriteria.forClass(Barang.class);
-		criteria.add(Restrictions.ilike("namaBarang", string, MatchMode.ANYWHERE));
+    DetachedCriteria criteria = DetachedCriteria.forClass(Barang.class);
+    criteria.add(Restrictions.ilike("namaBarang", string, MatchMode.ANYWHERE));
 
-		return getHibernateTemplate().findByCriteria(criteria);
-	}
+    return getHibernateTemplate().findByCriteria(criteria);
+  }
 
-	@Override
-	public int getCountAllBarangs() {
-		return DataAccessUtils.intResult(getHibernateTemplate().find("select count(*) from Barang"));
-	}
-	 
-	@Override
-	public void initialize(Barang barang) {
-		super.initialize(barang);
-	}
+  @Override
+  public int getCountAllBarangs() {
+    return DataAccessUtils.intResult(getHibernateTemplate().find("select count(*) from Barang"));
+  }
+
+  @Override
+  public Barang getNewBarang() {
+    return new Barang();
+  }
+
+  @Override
+  public void initialize(Barang barang) {
+    super.initialize(barang);
+  }
 
 }

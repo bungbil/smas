@@ -6,107 +6,110 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class KategoriBarang implements java.io.Serializable, Entity {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private long id = Long.MIN_VALUE +1;
-	private int version;
-	private String kodeKategoriBarang;
-	private String deskripsiKategoriBarang;
-	private Date lastUpdate;
-	private String updatedBy;
-	
+  private long id = Long.MIN_VALUE + 1;
+  private int version;
+  private String kodeKategoriBarang;
+  private String deskripsiKategoriBarang;
+  private Date lastUpdate;
+  private String updatedBy;
 
-	public boolean isNew() {
-		return (getId() == Long.MIN_VALUE +1);
-	}
 
-	public KategoriBarang() {
-	}
+  public KategoriBarang() {}
 
-	public KategoriBarang(long id, String kodeKategoriBarang) {
-		this.setId(id);
-		this.kodeKategoriBarang = kodeKategoriBarang;
-	}
+  public KategoriBarang(long id, String kodeKategoriBarang) {
+    this.setId(id);
+    this.kodeKategoriBarang = kodeKategoriBarang;
+  }
 
-	public KategoriBarang(long id, String kodeKategoriBarang, String deskripsiKategoriBarang) {
-		this.setId(id);
-		this.kodeKategoriBarang = kodeKategoriBarang;
-		this.deskripsiKategoriBarang = deskripsiKategoriBarang;		
-	}
+  public KategoriBarang(long id, String kodeKategoriBarang, String deskripsiKategoriBarang) {
+    this.setId(id);
+    this.kodeKategoriBarang = kodeKategoriBarang;
+    this.deskripsiKategoriBarang = deskripsiKategoriBarang;
+  }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+  public boolean equals(KategoriBarang kategoriBarang) {
+    return getId() == kategoriBarang.getId();
+  }
 
-	public long getId() {
-		return id;
-	}
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
 
-	public int getVersion() {
-		return this.version;
-	}
+    if (obj instanceof KategoriBarang) {
+      KategoriBarang kategoriBarang = (KategoriBarang) obj;
+      return equals(kategoriBarang);
+    }
 
-	public void setVersion(int version) {
-		this.version = version;
-	}
+    return false;
+  }
 
-	public String getKodeKategoriBarang() {
-		return kodeKategoriBarang;
-	}
+  public String getDeskripsiKategoriBarang() {
+    return deskripsiKategoriBarang;
+  }
 
-	public void setKodeKategoriBarang(String kodeKategoriBarang) {
-		this.kodeKategoriBarang = kodeKategoriBarang;
-	}
+  @Override
+  public long getId() {
+    return id;
+  }
 
-	public Date getLastUpdate() {
-		return lastUpdate;
-	}
+  public String getKodeKategoriBarang() {
+    return kodeKategoriBarang;
+  }
 
-	public String getDeskripsiKategoriBarang() {
-		return deskripsiKategoriBarang;
-	}
+  public Date getLastUpdate() {
+    return lastUpdate;
+  }
 
-	public void setDeskripsiKategoriBarang(String deskripsiKategoriBarang) {
-		this.deskripsiKategoriBarang = deskripsiKategoriBarang;
-	}
+  public String getUpdatedBy() {
+    return updatedBy;
+  }
 
-	public void setLastUpdate(Date lastUpdate) {
-		this.lastUpdate = lastUpdate;
-	}
+  public int getVersion() {
+    return this.version;
+  }
 
-	public String getUpdatedBy() {
-		return updatedBy;
-	}
+  @Override
+  public int hashCode() {
+    return Long.valueOf(getId()).hashCode();
+  }
 
-	public void setUpdatedBy(String updatedBy) {
-		this.updatedBy = updatedBy;
-	}
+  @Override
+  public boolean isNew() {
+    return (getId() == Long.MIN_VALUE + 1);
+  }
 
-	@Override
-	public int hashCode() {
-		return Long.valueOf(getId()).hashCode();
-	}
+  public void setDeskripsiKategoriBarang(String deskripsiKategoriBarang) {
+    this.deskripsiKategoriBarang = deskripsiKategoriBarang;
+  }
 
-	public boolean equals(KategoriBarang kategoriBarang) {
-		return getId() == kategoriBarang.getId();
-	}
+  @Override
+  public void setId(long id) {
+    this.id = id;
+  }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
+  public void setKodeKategoriBarang(String kodeKategoriBarang) {
+    this.kodeKategoriBarang = kodeKategoriBarang;
+  }
 
-		if (obj instanceof KategoriBarang) {
-			KategoriBarang kategoriBarang = (KategoriBarang) obj;
-			return equals(kategoriBarang);
-		}
+  public void setLastUpdate(Date lastUpdate) {
+    this.lastUpdate = lastUpdate;
+  }
 
-		return false;
-	}
+  public void setUpdatedBy(String updatedBy) {
+    this.updatedBy = updatedBy;
+  }
 
-	public String toString() {
-		return new ToStringBuilder(this).append("id", getId()).toString();
-	}
+  public void setVersion(int version) {
+    this.version = version;
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this).append("id", getId()).toString();
+  }
 
 }

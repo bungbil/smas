@@ -9,67 +9,69 @@ import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.stereotype.Repository;
 
 import billy.backend.dao.BillyBasisDAO;
-
 import billy.backend.dao.SatuanBarangDAO;
 import billy.backend.model.SatuanBarang;
 
 @Repository
 public class SatuanBarangDAOImpl extends BillyBasisDAO<SatuanBarang> implements SatuanBarangDAO {
 
-	@Override
-	public SatuanBarang getNewSatuanBarang() {
-		return new SatuanBarang();
-	}
+  @Override
+  public void deleteSatuanBarangById(long id) {
+    SatuanBarang SatuanBarang = getSatuanBarangById(id);
+    if (SatuanBarang != null) {
+      delete(SatuanBarang);
+    }
+  }
 
-	@Override
-	public SatuanBarang getSatuanBarangById(Long id) {
-		return get(SatuanBarang.class, id);
-	}
+  @Override
+  public List<SatuanBarang> getAllSatuanBarangs() {
+    return getHibernateTemplate().loadAll(SatuanBarang.class);
+  }
 
-	@SuppressWarnings("unchecked")
-	public SatuanBarang getSatuanBarangByKodeSatuanBarang(String string) {
-		DetachedCriteria criteria = DetachedCriteria.forClass(SatuanBarang.class);
-		criteria.add(Restrictions.eq("kodeSatuanBarang", string));
+  @Override
+  public int getCountAllSatuanBarangs() {
+    return DataAccessUtils.intResult(getHibernateTemplate().find(
+        "select count(*) from SatuanBarang"));
+  }
 
-		return (SatuanBarang) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(criteria));
-	}
+  @Override
+  public SatuanBarang getNewSatuanBarang() {
+    return new SatuanBarang();
+  }
 
-	@Override
-	public List<SatuanBarang> getAllSatuanBarangs() {
-		return getHibernateTemplate().loadAll(SatuanBarang.class);
-	}
+  @Override
+  public SatuanBarang getSatuanBarangById(Long id) {
+    return get(SatuanBarang.class, id);
+  }
 
-	@Override
-	public void deleteSatuanBarangById(long id) {
-		SatuanBarang SatuanBarang = getSatuanBarangById(id);
-		if (SatuanBarang != null) {
-			delete(SatuanBarang);
-		}
-	}
+  @Override
+  @SuppressWarnings("unchecked")
+  public SatuanBarang getSatuanBarangByKodeSatuanBarang(String string) {
+    DetachedCriteria criteria = DetachedCriteria.forClass(SatuanBarang.class);
+    criteria.add(Restrictions.eq("kodeSatuanBarang", string));
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<SatuanBarang> getSatuanBarangsLikeKodeSatuanBarang(String string) {
+    return (SatuanBarang) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(
+        criteria));
+  }
 
-		DetachedCriteria criteria = DetachedCriteria.forClass(SatuanBarang.class);
-		criteria.add(Restrictions.ilike("kodeSatuanBarang", string, MatchMode.ANYWHERE));
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<SatuanBarang> getSatuanBarangsLikeDeskripsiSatuanBarang(String string) {
 
-		return getHibernateTemplate().findByCriteria(criteria);
-	}
+    DetachedCriteria criteria = DetachedCriteria.forClass(SatuanBarang.class);
+    criteria.add(Restrictions.ilike("deskripsiSatuanBarang", string, MatchMode.ANYWHERE));
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<SatuanBarang> getSatuanBarangsLikeDeskripsiSatuanBarang(String string) {
+    return getHibernateTemplate().findByCriteria(criteria);
+  }
 
-		DetachedCriteria criteria = DetachedCriteria.forClass(SatuanBarang.class);
-		criteria.add(Restrictions.ilike("deskripsiSatuanBarang", string, MatchMode.ANYWHERE));
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<SatuanBarang> getSatuanBarangsLikeKodeSatuanBarang(String string) {
 
-		return getHibernateTemplate().findByCriteria(criteria);
-	}
+    DetachedCriteria criteria = DetachedCriteria.forClass(SatuanBarang.class);
+    criteria.add(Restrictions.ilike("kodeSatuanBarang", string, MatchMode.ANYWHERE));
 
-	@Override
-	public int getCountAllSatuanBarangs() {
-		return DataAccessUtils.intResult(getHibernateTemplate().find("select count(*) from SatuanBarang"));
-	}
+    return getHibernateTemplate().findByCriteria(criteria);
+  }
 
 }

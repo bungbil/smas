@@ -8,44 +8,44 @@ import billy.backend.service.CompanyProfileService;
 
 public class CompanyProfileServiceImpl implements CompanyProfileService {
 
-	private CompanyProfileDAO companyProfileDAO;
+  private CompanyProfileDAO companyProfileDAO;
 
-	public CompanyProfileDAO getCompanyProfileDAO() {
-		return companyProfileDAO;
-	}
+  @Override
+  public void delete(CompanyProfile entity) {
+    getCompanyProfileDAO().delete(entity);
+  }
 
-	public void setCompanyProfileDAO(CompanyProfileDAO companyProfileDAO) {
-		this.companyProfileDAO = companyProfileDAO;
-	}
+  @Override
+  public List<CompanyProfile> getAllCompanyProfiles() {
+    return getCompanyProfileDAO().getAllCompanyProfiles();
+  }
 
-	@Override
-	public CompanyProfile getNewCompanyProfile() {
-		return getCompanyProfileDAO().getNewCompanyProfile();
-	}
+  @Override
+  public CompanyProfile getCompanyProfileByID(Long id) {
+    return getCompanyProfileDAO().getCompanyProfileById(id);
+  }
 
-	@Override
-	public CompanyProfile getCompanyProfileByID(Long id) {
-		return getCompanyProfileDAO().getCompanyProfileById(id);
-	}
+  public CompanyProfileDAO getCompanyProfileDAO() {
+    return companyProfileDAO;
+  }
 
-	@Override
-	public List<CompanyProfile> getAllCompanyProfiles() {
-		return getCompanyProfileDAO().getAllCompanyProfiles();
-	}
+  @Override
+  public int getCountAllCompanyProfiles() {
+    return getCompanyProfileDAO().getCountAllCompanyProfiles();
+  }
 
-	@Override
-	public void saveOrUpdate(CompanyProfile entity) {
-		getCompanyProfileDAO().saveOrUpdate(entity);
-	}
+  @Override
+  public CompanyProfile getNewCompanyProfile() {
+    return getCompanyProfileDAO().getNewCompanyProfile();
+  }
 
-	@Override
-	public void delete(CompanyProfile entity) {
-		getCompanyProfileDAO().delete(entity);
-	}
+  @Override
+  public void saveOrUpdate(CompanyProfile entity) {
+    getCompanyProfileDAO().saveOrUpdate(entity);
+  }
 
-	@Override
-	public int getCountAllCompanyProfiles() {
-		return getCompanyProfileDAO().getCountAllCompanyProfiles();
-	}
+  public void setCompanyProfileDAO(CompanyProfileDAO companyProfileDAO) {
+    this.companyProfileDAO = companyProfileDAO;
+  }
 
 }

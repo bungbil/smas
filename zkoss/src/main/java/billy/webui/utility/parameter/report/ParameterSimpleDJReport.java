@@ -1,20 +1,12 @@
 /**
- * Copyright 2010 the original author or authors.
- * 
- * This file is part of Zksample2. http://zksample2.sourceforge.net/
- *
- * Zksample2 is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * Zksample2 is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Zksample2.  If not, see <http://www.gnu.org/licenses/gpl.html>.
+ * Copyright 2010 the original author or authors. This file is part of Zksample2.
+ * http://zksample2.sourceforge.net/ Zksample2 is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later version. Zksample2 is
+ * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+ * Public License for more details. You should have received a copy of the GNU General Public
+ * License along with Zksample2. If not, see <http://www.gnu.org/licenses/gpl.html>.
  */
 package billy.webui.utility.parameter.report;
 
@@ -68,211 +60,215 @@ import de.forsthaus.webui.util.ZksampleMessageUtils;
  * <br>
  * This report shows a list of Offices.<br>
  * <br>
- * The report uses the FastReportBuilder that have many parameters defined as
- * defaults, so it's very easy to create a simple report with it.<br>
+ * The report uses the FastReportBuilder that have many parameters defined as defaults, so it's very
+ * easy to create a simple report with it.<br>
  * 
  * @author bbruhns
  * @author sge
- * 
  */
 public class ParameterSimpleDJReport extends Window implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+  /**
+   * EventListener for closing the Report Window.<br>
+   * 
+   * @author sge
+   */
+  public final class OnCloseReportEventListener implements EventListener {
+    @Override
+    public void onEvent(Event event) throws Exception {
+      closeReportWindow();
+    }
+  }
 
-	private Iframe iFrame;
-	private ByteArrayOutputStream output;
-	private InputStream mediais;
-	private AMedia amedia;
-	private final String zksample2title = "[Zksample2] DynamicJasper Report Sample";
+  private static final long serialVersionUID = 1L;
+  private Iframe iFrame;
+  private ByteArrayOutputStream output;
+  private InputStream mediais;
+  private AMedia amedia;
 
-	public ParameterSimpleDJReport(Component parent) throws InterruptedException {
-		super();
-		this.setParent(parent);
+  private final String zksample2title = "[Zksample2] DynamicJasper Report Sample";
 
-		try {
-			doPrint();
-		} catch (final Exception e) {
-			ZksampleMessageUtils.showErrorMessage(e.toString());
-		}
-	}
+  public ParameterSimpleDJReport(Component parent) throws InterruptedException {
+    super();
+    this.setParent(parent);
 
-	public void doPrint() throws JRException, ColumnBuilderException, ClassNotFoundException, IOException {
+    try {
+      doPrint();
+    } catch (final Exception e) {
+      ZksampleMessageUtils.showErrorMessage(e.toString());
+    }
+  }
 
-		final FastReportBuilder drb = new FastReportBuilder();
-		DynamicReport dr;
+  private void callReportWindow(AMedia aMedia, String format) {
+    final boolean modal = true;
 
-		/**
-		 * Set the styles. In a report created with DynamicReportBuilder we do
-		 * this in an other way.
-		 */
-		// Rows content
-		Style columnStyleNumbers = new Style();
-		columnStyleNumbers.setFont(Font.VERDANA_SMALL);
-		columnStyleNumbers.setHorizontalAlign(HorizontalAlign.RIGHT);
+    setTitle("Dynamic JasperReports. Sample Report for ZKoss");
+    setId("ReportWindow");
+    setVisible(true);
+    setMaximizable(true);
+    setMinimizable(true);
+    setSizable(true);
+    setClosable(true);
+    setHeight("100%");
+    setWidth("80%");
+    addEventListener("onClose", new OnCloseReportEventListener());
 
-		// Header for number row content
-		Style columnStyleNumbersBold = new Style();
-		columnStyleNumbersBold.setFont(Font.VERDANA_MEDIUM_BOLD);
-		columnStyleNumbersBold.setHorizontalAlign(HorizontalAlign.RIGHT);
-		columnStyleNumbersBold.setBorderBottom(Border.PEN_1_POINT());
+    iFrame = new Iframe();
+    iFrame.setId("jasperReportId");
+    iFrame.setWidth("100%");
+    iFrame.setHeight("100%");
+    iFrame.setContent(aMedia);
+    iFrame.setParent(this);
 
-		// Rows content
-		Style columnStyleText = new Style();
-		columnStyleText.setFont(Font.VERDANA_SMALL);
-		columnStyleText.setHorizontalAlign(HorizontalAlign.LEFT);
+    if (modal == true) {
+      try {
+        doModal();
+      } catch (final SuspendNotAllowedException e) {
+        throw new RuntimeException(e);
+      } catch (final InterruptedException e) {
+        throw new RuntimeException(e);
+      }
+    }
 
-		// Header for String row content
-		Style columnStyleTextBold = new Style();
-		columnStyleTextBold.setFont(Font.VERDANA_MEDIUM_BOLD);
-		columnStyleTextBold.setHorizontalAlign(HorizontalAlign.LEFT);
-		columnStyleTextBold.setBorderBottom(Border.PEN_1_POINT());
+  }
 
-		// Subtitle
-		Style subtitleStyle = new Style();
-		subtitleStyle.setHorizontalAlign(HorizontalAlign.LEFT);
-		subtitleStyle.setFont(Font.VERDANA_MEDIUM_BOLD);
+  /**
+   * We must clear something to prevent errors or problems <br>
+   * by opening the report a few times. <br>
+   * 
+   * @throws IOException
+   */
+  private void closeReportWindow() throws IOException {
 
-		// Localized column headers
-		String filNr = Labels.getLabel("common.Office.ID");
-		String filBezeichnung = Labels.getLabel("common.Description.Short");
-		String filName1 = Labels.getLabel("common.Name1");
-		String filName2 = Labels.getLabel("common.Name2");
-		String filOrt = Labels.getLabel("common.City");
+    // TODO check this
+    try {
+      this.amedia.getStreamData().close();
+      this.output.close();
+    } catch (final Exception e) {
+      throw new RuntimeException(e);
+    }
 
-		drb.addColumn(filNr, "filNr", String.class.getName(), 20, columnStyleText, columnStyleTextBold);
-		drb.addColumn(filBezeichnung, "filBezeichnung", String.class.getName(), 50, columnStyleText, columnStyleTextBold);
-		drb.addColumn(filName1, "filName1", String.class.getName(), 50, columnStyleText, columnStyleTextBold);
-		drb.addColumn(filName2, "filName2", String.class.getName(), 50, columnStyleText, columnStyleTextBold);
-		drb.addColumn(filOrt, "filOrt", String.class.getName(), 50, columnStyleText, columnStyleTextBold);
+    onClose();
 
-		// Sets the Report Columns, header, Title, Groups, Etc Formats
-		// DynamicJasper documentation
-		drb.setTitle(this.zksample2title);
-		drb.setSubtitle("List of Offices: " + ZksampleDateFormat.getDateTimeFormater().format(new Date()));
-		drb.setSubtitleStyle(subtitleStyle);
-		drb.setPrintBackgroundOnOddRows(true);
-		drb.setUseFullPageWidth(true);
-		dr = drb.build();
+  }
 
-		// Get information from database
-		OfficeService as = (OfficeService) SpringUtil.getBean("officeService");
-		List<Office> resultList = as.getAllOffices();
+  public void doPrint() throws JRException, ColumnBuilderException, ClassNotFoundException,
+      IOException {
 
-		// Create Datasource and put it in Dynamic Jasper Format
-		List data = new ArrayList(resultList.size());
+    final FastReportBuilder drb = new FastReportBuilder();
+    DynamicReport dr;
 
-		for (Office obj : resultList) {
-			Map<String, String> map = new HashMap<String, String>();
-			map.put("filNr", obj.getFilNr());
-			map.put("filBezeichnung", obj.getFilBezeichnung());
-			map.put("filName1", String.valueOf(obj.getFilName1()));
-			map.put("filName2", String.valueOf(obj.getFilName2()));
-			map.put("filOrt", String.valueOf(obj.getFilOrt()));
-			data.add(map);
-		}
+    /**
+     * Set the styles. In a report created with DynamicReportBuilder we do this in an other way.
+     */
+    // Rows content
+    Style columnStyleNumbers = new Style();
+    columnStyleNumbers.setFont(Font.VERDANA_SMALL);
+    columnStyleNumbers.setHorizontalAlign(HorizontalAlign.RIGHT);
 
-		// Generate the Jasper Print Object
-		JRDataSource ds = new JRBeanCollectionDataSource(data);
-		JasperPrint jp = DynamicJasperHelper.generateJasperPrint(dr, new ClassicLayoutManager(), ds);
+    // Header for number row content
+    Style columnStyleNumbersBold = new Style();
+    columnStyleNumbersBold.setFont(Font.VERDANA_MEDIUM_BOLD);
+    columnStyleNumbersBold.setHorizontalAlign(HorizontalAlign.RIGHT);
+    columnStyleNumbersBold.setBorderBottom(Border.PEN_1_POINT());
 
-		String outputFormat = "PDF";
+    // Rows content
+    Style columnStyleText = new Style();
+    columnStyleText.setFont(Font.VERDANA_SMALL);
+    columnStyleText.setHorizontalAlign(HorizontalAlign.LEFT);
 
-		output = new ByteArrayOutputStream();
+    // Header for String row content
+    Style columnStyleTextBold = new Style();
+    columnStyleTextBold.setFont(Font.VERDANA_MEDIUM_BOLD);
+    columnStyleTextBold.setHorizontalAlign(HorizontalAlign.LEFT);
+    columnStyleTextBold.setBorderBottom(Border.PEN_1_POINT());
 
-		if (outputFormat.equalsIgnoreCase("PDF")) {
-			JasperExportManager.exportReportToPdfStream(jp, output);
-			mediais = new ByteArrayInputStream(output.toByteArray());
-			amedia = new AMedia("FirstReport.pdf", "pdf", "application/pdf", mediais);
+    // Subtitle
+    Style subtitleStyle = new Style();
+    subtitleStyle.setHorizontalAlign(HorizontalAlign.LEFT);
+    subtitleStyle.setFont(Font.VERDANA_MEDIUM_BOLD);
 
-			callReportWindow(this.amedia, "PDF");
-		} else if (outputFormat.equalsIgnoreCase("XLS")) {
-			JExcelApiExporter exporterXLS = new JExcelApiExporter();
-			exporterXLS.setParameter(JExcelApiExporterParameter.JASPER_PRINT, jp);
-			exporterXLS.setParameter(JExcelApiExporterParameter.OUTPUT_STREAM, output);
-			exporterXLS.setParameter(JExcelApiExporterParameter.IS_DETECT_CELL_TYPE, Boolean.TRUE);
-			exporterXLS.setParameter(JExcelApiExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.TRUE);
-			exporterXLS.setParameter(JExcelApiExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
-			exporterXLS.exportReport();
-			mediais = new ByteArrayInputStream(output.toByteArray());
-			amedia = new AMedia("FileFormatExcel", "xls", "application/vnd.ms-excel", mediais);
+    // Localized column headers
+    String filNr = Labels.getLabel("common.Office.ID");
+    String filBezeichnung = Labels.getLabel("common.Description.Short");
+    String filName1 = Labels.getLabel("common.Name1");
+    String filName2 = Labels.getLabel("common.Name2");
+    String filOrt = Labels.getLabel("common.City");
 
-			callReportWindow(this.amedia, "XLS");
-		} else if (outputFormat.equalsIgnoreCase("RTF") || outputFormat.equalsIgnoreCase("DOC")) {
-			JRRtfExporter exporterRTF = new JRRtfExporter();
-			exporterRTF.setParameter(JRExporterParameter.JASPER_PRINT, jp);
-			exporterRTF.setParameter(JRExporterParameter.OUTPUT_STREAM, output);
-			exporterRTF.exportReport();
-			mediais = new ByteArrayInputStream(this.output.toByteArray());
-			amedia = new AMedia("FileFormatRTF", "rtf", "application/rtf", mediais);
+    drb.addColumn(filNr, "filNr", String.class.getName(), 20, columnStyleText, columnStyleTextBold);
+    drb.addColumn(filBezeichnung, "filBezeichnung", String.class.getName(), 50, columnStyleText,
+        columnStyleTextBold);
+    drb.addColumn(filName1, "filName1", String.class.getName(), 50, columnStyleText,
+        columnStyleTextBold);
+    drb.addColumn(filName2, "filName2", String.class.getName(), 50, columnStyleText,
+        columnStyleTextBold);
+    drb.addColumn(filOrt, "filOrt", String.class.getName(), 50, columnStyleText,
+        columnStyleTextBold);
 
-			callReportWindow(amedia, "RTF-DOC");
-		}
-	}
+    // Sets the Report Columns, header, Title, Groups, Etc Formats
+    // DynamicJasper documentation
+    drb.setTitle(this.zksample2title);
+    drb.setSubtitle("List of Offices: "
+        + ZksampleDateFormat.getDateTimeFormater().format(new Date()));
+    drb.setSubtitleStyle(subtitleStyle);
+    drb.setPrintBackgroundOnOddRows(true);
+    drb.setUseFullPageWidth(true);
+    dr = drb.build();
 
-	private void callReportWindow(AMedia aMedia, String format) {
-		final boolean modal = true;
+    // Get information from database
+    OfficeService as = (OfficeService) SpringUtil.getBean("officeService");
+    List<Office> resultList = as.getAllOffices();
 
-		setTitle("Dynamic JasperReports. Sample Report for ZKoss");
-		setId("ReportWindow");
-		setVisible(true);
-		setMaximizable(true);
-		setMinimizable(true);
-		setSizable(true);
-		setClosable(true);
-		setHeight("100%");
-		setWidth("80%");
-		addEventListener("onClose", new OnCloseReportEventListener());
+    // Create Datasource and put it in Dynamic Jasper Format
+    List data = new ArrayList(resultList.size());
 
-		iFrame = new Iframe();
-		iFrame.setId("jasperReportId");
-		iFrame.setWidth("100%");
-		iFrame.setHeight("100%");
-		iFrame.setContent(aMedia);
-		iFrame.setParent(this);
+    for (Office obj : resultList) {
+      Map<String, String> map = new HashMap<String, String>();
+      map.put("filNr", obj.getFilNr());
+      map.put("filBezeichnung", obj.getFilBezeichnung());
+      map.put("filName1", String.valueOf(obj.getFilName1()));
+      map.put("filName2", String.valueOf(obj.getFilName2()));
+      map.put("filOrt", String.valueOf(obj.getFilOrt()));
+      data.add(map);
+    }
 
-		if (modal == true) {
-			try {
-				doModal();
-			} catch (final SuspendNotAllowedException e) {
-				throw new RuntimeException(e);
-			} catch (final InterruptedException e) {
-				throw new RuntimeException(e);
-			}
-		}
+    // Generate the Jasper Print Object
+    JRDataSource ds = new JRBeanCollectionDataSource(data);
+    JasperPrint jp = DynamicJasperHelper.generateJasperPrint(dr, new ClassicLayoutManager(), ds);
 
-	}
+    String outputFormat = "PDF";
 
-	/**
-	 * EventListener for closing the Report Window.<br>
-	 * 
-	 * @author sge
-	 * 
-	 */
-	public final class OnCloseReportEventListener implements EventListener {
-		@Override
-		public void onEvent(Event event) throws Exception {
-			closeReportWindow();
-		}
-	}
+    output = new ByteArrayOutputStream();
 
-	/**
-	 * We must clear something to prevent errors or problems <br>
-	 * by opening the report a few times. <br>
-	 * 
-	 * @throws IOException
-	 */
-	private void closeReportWindow() throws IOException {
+    if (outputFormat.equalsIgnoreCase("PDF")) {
+      JasperExportManager.exportReportToPdfStream(jp, output);
+      mediais = new ByteArrayInputStream(output.toByteArray());
+      amedia = new AMedia("FirstReport.pdf", "pdf", "application/pdf", mediais);
 
-		// TODO check this
-		try {
-			this.amedia.getStreamData().close();
-			this.output.close();
-		} catch (final Exception e) {
-			throw new RuntimeException(e);
-		}
+      callReportWindow(this.amedia, "PDF");
+    } else if (outputFormat.equalsIgnoreCase("XLS")) {
+      JExcelApiExporter exporterXLS = new JExcelApiExporter();
+      exporterXLS.setParameter(JExcelApiExporterParameter.JASPER_PRINT, jp);
+      exporterXLS.setParameter(JExcelApiExporterParameter.OUTPUT_STREAM, output);
+      exporterXLS.setParameter(JExcelApiExporterParameter.IS_DETECT_CELL_TYPE, Boolean.TRUE);
+      exporterXLS.setParameter(JExcelApiExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.TRUE);
+      exporterXLS.setParameter(JExcelApiExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS,
+          Boolean.TRUE);
+      exporterXLS.exportReport();
+      mediais = new ByteArrayInputStream(output.toByteArray());
+      amedia = new AMedia("FileFormatExcel", "xls", "application/vnd.ms-excel", mediais);
 
-		onClose();
+      callReportWindow(this.amedia, "XLS");
+    } else if (outputFormat.equalsIgnoreCase("RTF") || outputFormat.equalsIgnoreCase("DOC")) {
+      JRRtfExporter exporterRTF = new JRRtfExporter();
+      exporterRTF.setParameter(JRExporterParameter.JASPER_PRINT, jp);
+      exporterRTF.setParameter(JRExporterParameter.OUTPUT_STREAM, output);
+      exporterRTF.exportReport();
+      mediais = new ByteArrayInputStream(this.output.toByteArray());
+      amedia = new AMedia("FileFormatRTF", "rtf", "application/rtf", mediais);
 
-	}
+      callReportWindow(amedia, "RTF-DOC");
+    }
+  }
 
 }

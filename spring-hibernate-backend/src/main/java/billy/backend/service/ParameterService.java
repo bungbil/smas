@@ -3,24 +3,25 @@ package billy.backend.service;
 import java.util.List;
 
 import billy.backend.model.Parameter;
+
 public interface ParameterService {
 
-	public Parameter getNewParameter();
+  public void delete(Parameter entity);
 
-	public int getCountAllParameters();
+  public List<Parameter> getAllParameters();
 
-	public Parameter getParameterByID(Long id);
-	
-	public Parameter getParameterByParamName(String string);
+  public int getCountAllParameters();
 
-	public List<Parameter> getAllParameters();
+  public Parameter getNewParameter();
 
-	public List<Parameter> getParametersLikeParamValue(String string);
-	
-	public List<Parameter> getParametersLikeDescription(String string);
+  public Parameter getParameterByID(Long id);
 
-	public void saveOrUpdate(Parameter entity);
+  public Parameter getParameterByParamName(String string);
 
-	public void delete(Parameter entity);
+  public List<Parameter> getParametersLikeDescription(String string);
+
+  public List<Parameter> getParametersLikeParamValue(String string);
+
+  public void saveOrUpdate(Parameter entity);
 
 }

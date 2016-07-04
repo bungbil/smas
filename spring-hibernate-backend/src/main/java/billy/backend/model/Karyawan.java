@@ -6,251 +6,254 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class Karyawan implements java.io.Serializable, Entity {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private long id = Long.MIN_VALUE +1;
-	private int version;
-	private String kodeKaryawan;
-	private String namaPanggilan;
-	private String namaKtp;
-	private String ktp;
-	private Date tanggalLahir;
-	private String telepon;
-	private String handphone;
-	private String email;
-	private String alamat;
-	private JobType jobType;
-	private String inisialDivisi;
-	private String statusDivisi;
-	private Karyawan supervisorDivisi;
-	private Date lastUpdate;
-	private String updatedBy;
-	private String catatan;
-	private byte[] profileImage;
-	private byte[] ktpImage;
-	private Date tanggalMulaiKerja;
-	private Date tanggalBerhentiKerja;
+  private long id = Long.MIN_VALUE + 1;
+  private int version;
+  private String kodeKaryawan;
+  private String namaPanggilan;
+  private String namaKtp;
+  private String ktp;
+  private Date tanggalLahir;
+  private String telepon;
+  private String handphone;
+  private String email;
+  private String alamat;
+  private JobType jobType;
+  private String inisialDivisi;
+  private String statusDivisi;
+  private Karyawan supervisorDivisi;
+  private Date lastUpdate;
+  private String updatedBy;
+  private String catatan;
+  private byte[] profileImage;
+  private byte[] ktpImage;
+  private Date tanggalMulaiKerja;
+  private Date tanggalBerhentiKerja;
 
-	public boolean isNew() {
-		return (getId() == Long.MIN_VALUE +1);
-	}
+  public Karyawan() {}
 
-	public Karyawan() {
-	}
+  public Karyawan(long id, String kodeKaryawan) {
+    this.setId(id);
+    this.kodeKaryawan = kodeKaryawan;
+  }
 
-	public Karyawan(long id, String kodeKaryawan) {
-		this.setId(id);
-		this.kodeKaryawan = kodeKaryawan;
-	}
+  public Karyawan(long id, String kodeKaryawan, String namaPanggilan) {
+    this.setId(id);
+    this.kodeKaryawan = kodeKaryawan;
+    this.namaPanggilan = namaPanggilan;
+  }
 
-	public Karyawan(long id, String kodeKaryawan, String namaPanggilan) {
-		this.setId(id);
-		this.kodeKaryawan = kodeKaryawan;
-		this.namaPanggilan = namaPanggilan;		
-	}
+  public boolean equals(Karyawan karyawan) {
+    return getId() == karyawan.getId();
+  }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
 
-	public long getId() {
-		return id;
-	}
+    if (obj instanceof Karyawan) {
+      Karyawan karyawan = (Karyawan) obj;
+      return equals(karyawan);
+    }
 
-	public int getVersion() {
-		return this.version;
-	}
+    return false;
+  }
 
-	public void setVersion(int version) {
-		this.version = version;
-	}
+  public String getAlamat() {
+    return alamat;
+  }
 
-	public String getKodeKaryawan() {
-		return kodeKaryawan;
-	}
+  public String getCatatan() {
+    return catatan;
+  }
 
-	public void setKodeKaryawan(String kodeKaryawan) {
-		this.kodeKaryawan = kodeKaryawan;
-	}
+  public String getEmail() {
+    return email;
+  }
+
+  public String getHandphone() {
+    return handphone;
+  }
+
+  @Override
+  public long getId() {
+    return id;
+  }
 
 
-	public String getNamaPanggilan() {
-		return namaPanggilan;
-	}
+  public String getInisialDivisi() {
+    return inisialDivisi;
+  }
 
-	public void setNamaPanggilan(String namaPanggilan) {
-		this.namaPanggilan = namaPanggilan;
-	}
+  public JobType getJobType() {
+    return jobType;
+  }
 
-	public String getNamaKtp() {
-		return namaKtp;
-	}
+  public String getKodeKaryawan() {
+    return kodeKaryawan;
+  }
 
-	public void setNamaKtp(String namaKtp) {
-		this.namaKtp = namaKtp;
-	}
+  public String getKtp() {
+    return ktp;
+  }
 
-	public String getKtp() {
-		return ktp;
-	}
+  public byte[] getKtpImage() {
+    return ktpImage;
+  }
 
-	public void setKtp(String ktp) {
-		this.ktp = ktp;
-	}
+  public Date getLastUpdate() {
+    return lastUpdate;
+  }
 
-	public String getInisialDivisi() {
-		return inisialDivisi;
-	}
+  public String getNamaKtp() {
+    return namaKtp;
+  }
 
-	public void setInisialDivisi(String inisialDivisi) {
-		this.inisialDivisi = inisialDivisi;
-	}
+  public String getNamaPanggilan() {
+    return namaPanggilan;
+  }
 
-	public String getStatusDivisi() {
-		return statusDivisi;
-	}
+  public byte[] getProfileImage() {
+    return profileImage;
+  }
 
-	public void setStatusDivisi(String statusDivisi) {
-		this.statusDivisi = statusDivisi;
-	}
+  public String getStatusDivisi() {
+    return statusDivisi;
+  }
 
-	public Date getTanggalLahir() {
-		return tanggalLahir;
-	}
+  public Karyawan getSupervisorDivisi() {
+    return supervisorDivisi;
+  }
 
-	public void setTanggalLahir(Date tanggalLahir) {
-		this.tanggalLahir = tanggalLahir;
-	}
+  public Date getTanggalBerhentiKerja() {
+    return tanggalBerhentiKerja;
+  }
 
-	public String getTelepon() {
-		return telepon;
-	}
+  public Date getTanggalLahir() {
+    return tanggalLahir;
+  }
 
-	public void setTelepon(String telepon) {
-		this.telepon = telepon;
-	}
+  public Date getTanggalMulaiKerja() {
+    return tanggalMulaiKerja;
+  }
 
-	public String getHandphone() {
-		return handphone;
-	}
+  public String getTelepon() {
+    return telepon;
+  }
 
-	public void setHandphone(String handphone) {
-		this.handphone = handphone;
-	}
+  public String getUpdatedBy() {
+    return updatedBy;
+  }
 
-	public String getEmail() {
-		return email;
-	}
+  public int getVersion() {
+    return this.version;
+  }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+  @Override
+  public int hashCode() {
+    return Long.valueOf(getId()).hashCode();
+  }
 
-	public String getAlamat() {
-		return alamat;
-	}
+  @Override
+  public boolean isNew() {
+    return (getId() == Long.MIN_VALUE + 1);
+  }
 
-	public void setAlamat(String alamat) {
-		this.alamat = alamat;
-	}
+  public void setAlamat(String alamat) {
+    this.alamat = alamat;
+  }
 
-	public JobType getJobType() {
-		return jobType;
-	}
+  public void setCatatan(String catatan) {
+    this.catatan = catatan;
+  }
 
-	public void setJobType(JobType jobType) {
-		this.jobType = jobType;
-	}
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-	public Karyawan getSupervisorDivisi() {
-		return supervisorDivisi;
-	}
+  public void setHandphone(String handphone) {
+    this.handphone = handphone;
+  }
 
-	public void setSupervisorDivisi(Karyawan supervisorDivisi) {
-		this.supervisorDivisi = supervisorDivisi;
-	}
+  @Override
+  public void setId(long id) {
+    this.id = id;
+  }
 
-	public Date getLastUpdate() {
-		return lastUpdate;
-	}
+  public void setInisialDivisi(String inisialDivisi) {
+    this.inisialDivisi = inisialDivisi;
+  }
 
-	public void setLastUpdate(Date lastUpdate) {
-		this.lastUpdate = lastUpdate;
-	}
+  public void setJobType(JobType jobType) {
+    this.jobType = jobType;
+  }
 
-	public String getUpdatedBy() {
-		return updatedBy;
-	}
+  public void setKodeKaryawan(String kodeKaryawan) {
+    this.kodeKaryawan = kodeKaryawan;
+  }
 
-	public void setUpdatedBy(String updatedBy) {
-		this.updatedBy = updatedBy;
-	}
+  public void setKtp(String ktp) {
+    this.ktp = ktp;
+  }
 
-	public String getCatatan() {
-		return catatan;
-	}
+  public void setKtpImage(byte[] ktpImage) {
+    this.ktpImage = ktpImage;
+  }
 
-	public void setCatatan(String catatan) {
-		this.catatan = catatan;
-	}
+  public void setLastUpdate(Date lastUpdate) {
+    this.lastUpdate = lastUpdate;
+  }
 
-	public byte[] getProfileImage() {
-		return profileImage;
-	}
+  public void setNamaKtp(String namaKtp) {
+    this.namaKtp = namaKtp;
+  }
 
-	public void setProfileImage(byte[] profileImage) {
-		this.profileImage = profileImage;
-	}
+  public void setNamaPanggilan(String namaPanggilan) {
+    this.namaPanggilan = namaPanggilan;
+  }
 
-	public byte[] getKtpImage() {
-		return ktpImage;
-	}
+  public void setProfileImage(byte[] profileImage) {
+    this.profileImage = profileImage;
+  }
 
-	public void setKtpImage(byte[] ktpImage) {
-		this.ktpImage = ktpImage;
-	}
+  public void setStatusDivisi(String statusDivisi) {
+    this.statusDivisi = statusDivisi;
+  }
 
-	public Date getTanggalMulaiKerja() {
-		return tanggalMulaiKerja;
-	}
+  public void setSupervisorDivisi(Karyawan supervisorDivisi) {
+    this.supervisorDivisi = supervisorDivisi;
+  }
 
-	public void setTanggalMulaiKerja(Date tanggalMulaiKerja) {
-		this.tanggalMulaiKerja = tanggalMulaiKerja;
-	}
+  public void setTanggalBerhentiKerja(Date tanggalBerhentiKerja) {
+    this.tanggalBerhentiKerja = tanggalBerhentiKerja;
+  }
 
-	public Date getTanggalBerhentiKerja() {
-		return tanggalBerhentiKerja;
-	}
+  public void setTanggalLahir(Date tanggalLahir) {
+    this.tanggalLahir = tanggalLahir;
+  }
 
-	public void setTanggalBerhentiKerja(Date tanggalBerhentiKerja) {
-		this.tanggalBerhentiKerja = tanggalBerhentiKerja;
-	}
+  public void setTanggalMulaiKerja(Date tanggalMulaiKerja) {
+    this.tanggalMulaiKerja = tanggalMulaiKerja;
+  }
 
-	@Override
-	public int hashCode() {
-		return Long.valueOf(getId()).hashCode();
-	}
+  public void setTelepon(String telepon) {
+    this.telepon = telepon;
+  }
 
-	public boolean equals(Karyawan karyawan) {
-		return getId() == karyawan.getId();
-	}
+  public void setUpdatedBy(String updatedBy) {
+    this.updatedBy = updatedBy;
+  }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
+  public void setVersion(int version) {
+    this.version = version;
+  }
 
-		if (obj instanceof Karyawan) {
-			Karyawan karyawan = (Karyawan) obj;
-			return equals(karyawan);
-		}
-
-		return false;
-	}
-
-	public String toString() {
-		return new ToStringBuilder(this).append("id", getId()).toString();
-	}
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this).append("id", getId()).toString();
+  }
 
 }

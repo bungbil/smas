@@ -6,118 +6,121 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class Wilayah implements java.io.Serializable, Entity {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private long id = Long.MIN_VALUE +1;
-	private int version;
-	private String kodeWilayah;
-	private String namaWilayah;
-	private String status;
-	private Date lastUpdate;
-	private String updatedBy;
-	
+  private long id = Long.MIN_VALUE + 1;
+  private int version;
+  private String kodeWilayah;
+  private String namaWilayah;
+  private String status;
+  private Date lastUpdate;
+  private String updatedBy;
 
-	public boolean isNew() {
-		return (getId() == Long.MIN_VALUE +1);
-	}
 
-	public Wilayah() {
-	}
+  public Wilayah() {}
 
-	public Wilayah(long id, String kodeWilayah) {
-		this.setId(id);
-		this.kodeWilayah = kodeWilayah;
-	}
+  public Wilayah(long id, String kodeWilayah) {
+    this.setId(id);
+    this.kodeWilayah = kodeWilayah;
+  }
 
-	public Wilayah(long id, String kodeWilayah, String namaWilayah, String status) {
-		this.setId(id);
-		this.kodeWilayah = kodeWilayah;
-		this.namaWilayah = namaWilayah;
-		this.status = status;	
-		
-	}
+  public Wilayah(long id, String kodeWilayah, String namaWilayah, String status) {
+    this.setId(id);
+    this.kodeWilayah = kodeWilayah;
+    this.namaWilayah = namaWilayah;
+    this.status = status;
 
-	public void setId(long id) {
-		this.id = id;
-	}
+  }
 
-	public long getId() {
-		return id;
-	}
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
 
-	public int getVersion() {
-		return this.version;
-	}
+    if (obj instanceof Wilayah) {
+      Wilayah wilayah = (Wilayah) obj;
+      return equals(wilayah);
+    }
 
-	public void setVersion(int version) {
-		this.version = version;
-	}
+    return false;
+  }
 
-	public String getKodeWilayah() {
-		return kodeWilayah;
-	}
+  public boolean equals(Wilayah wilayah) {
+    return getId() == wilayah.getId();
+  }
 
-	public void setKodeWilayah(String kodeWilayah) {
-		this.kodeWilayah = kodeWilayah;
-	}
+  @Override
+  public long getId() {
+    return id;
+  }
 
-	public String getNamaWilayah() {
-		return namaWilayah;
-	}
+  public String getKodeWilayah() {
+    return kodeWilayah;
+  }
 
-	public void setNamaWilayah(String namaWilayah) {
-		this.namaWilayah = namaWilayah;
-	}
+  public Date getLastUpdate() {
+    return lastUpdate;
+  }
 
-	public String getStatus() {
-		return status;
-	}
+  public String getNamaWilayah() {
+    return namaWilayah;
+  }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+  public String getStatus() {
+    return status;
+  }
 
-	public Date getLastUpdate() {
-		return lastUpdate;
-	}
+  public String getUpdatedBy() {
+    return updatedBy;
+  }
 
-	public void setLastUpdate(Date lastUpdate) {
-		this.lastUpdate = lastUpdate;
-	}
+  public int getVersion() {
+    return this.version;
+  }
 
-	public String getUpdatedBy() {
-		return updatedBy;
-	}
+  @Override
+  public int hashCode() {
+    return Long.valueOf(getId()).hashCode();
+  }
 
-	public void setUpdatedBy(String updatedBy) {
-		this.updatedBy = updatedBy;
-	}
+  @Override
+  public boolean isNew() {
+    return (getId() == Long.MIN_VALUE + 1);
+  }
 
-	@Override
-	public int hashCode() {
-		return Long.valueOf(getId()).hashCode();
-	}
+  @Override
+  public void setId(long id) {
+    this.id = id;
+  }
 
-	public boolean equals(Wilayah wilayah) {
-		return getId() == wilayah.getId();
-	}
+  public void setKodeWilayah(String kodeWilayah) {
+    this.kodeWilayah = kodeWilayah;
+  }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
+  public void setLastUpdate(Date lastUpdate) {
+    this.lastUpdate = lastUpdate;
+  }
 
-		if (obj instanceof Wilayah) {
-			Wilayah wilayah = (Wilayah) obj;
-			return equals(wilayah);
-		}
+  public void setNamaWilayah(String namaWilayah) {
+    this.namaWilayah = namaWilayah;
+  }
 
-		return false;
-	}
+  public void setStatus(String status) {
+    this.status = status;
+  }
 
-	public String toString() {
-		return new ToStringBuilder(this).append("id", getId()).toString();
-	}
+  public void setUpdatedBy(String updatedBy) {
+    this.updatedBy = updatedBy;
+  }
+
+  public void setVersion(int version) {
+    this.version = version;
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this).append("id", getId()).toString();
+  }
 
 }

@@ -6,24 +6,24 @@ import billy.backend.model.JobType;
 
 public interface JobTypeDAO {
 
-	public JobType getNewJobType();
+  public void delete(JobType entity);
 
-	public JobType getJobTypeById(Long id);
+  public void deleteJobTypeById(long id);
 
-	public JobType getJobTypeByNamaJobType(String string);
+  public List<JobType> getAllJobTypes();
 
-	public List<JobType> getAllJobTypes();
+  public int getCountAllJobTypes();
 
-	public int getCountAllJobTypes();
+  public JobType getJobTypeById(Long id);
 
-	public List<JobType> getJobTypesLikeNamaJobType(String string);	
+  public JobType getJobTypeByNamaJobType(String string);
 
-	public void deleteJobTypeById(long id);
+  public List<JobType> getJobTypesLikeNamaJobType(String string);
 
-	public void saveOrUpdate(JobType entity);
+  public JobType getNewJobType();
 
-	public void delete(JobType entity);
+  public void save(JobType entity);
 
-	public void save(JobType entity);
+  public void saveOrUpdate(JobType entity);
 
 }

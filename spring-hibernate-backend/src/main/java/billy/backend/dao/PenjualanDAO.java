@@ -9,34 +9,38 @@ import billy.backend.model.Penjualan;
 
 public interface PenjualanDAO {
 
-	public Penjualan getNewPenjualan();
+  public void delete(Penjualan entity);
 
-	public int getCountAllPenjualans();
-	public int getCountAllPenjualansByDivisi(Karyawan obj, Date startDate, Date endDate);
-	
-	public Penjualan getPenjualanById(long id);
+  public List<Penjualan> getAllPenjualans();
 
-	public Penjualan getPenjualanByNoFaktur(String string);
-	
-	public List<Penjualan> getAllPenjualans();
-	public List<Penjualan> getListNeedApprovalPenjualansByListNoFaktur(List<String> listNoFaktur);
-	public List<Penjualan> getAllPenjualansByListNoFaktur(List<String> listNoFaktur);
-	public BigDecimal getPenjualanSum(Penjualan obj);
+  public List<Penjualan> getAllPenjualansByDivisiAndRangeDate(Karyawan obj, Date startDate,
+      Date endDate);
 
-	public void refresh(Penjualan obj);
+  public List<Penjualan> getAllPenjualansByKaryawanAndRangeDate(Karyawan obj, Date startDate,
+      Date endDate);
 
-	public void initialize(Penjualan obj);
+  public List<Penjualan> getAllPenjualansByListNoFaktur(List<String> listNoFaktur);
 
-	public void saveOrUpdate(Penjualan entity);
+  public int getCountAllPenjualans();
 
-	public void delete(Penjualan entity);
+  public int getCountAllPenjualansByDivisi(Karyawan obj, Date startDate, Date endDate);
 
-	public void save(Penjualan entity);
+  public List<Penjualan> getListNeedApprovalPenjualansByListNoFaktur(List<String> listNoFaktur);
 
-	public List<Penjualan> getAllPenjualansByDivisiAndRangeDate(Karyawan obj,
-			Date startDate, Date endDate);
+  public Penjualan getNewPenjualan();
 
-	public List<Penjualan> getAllPenjualansByKaryawanAndRangeDate(Karyawan obj,
-			Date startDate, Date endDate);
+  public Penjualan getPenjualanById(long id);
+
+  public Penjualan getPenjualanByNoFaktur(String string);
+
+  public BigDecimal getPenjualanSum(Penjualan obj);
+
+  public void initialize(Penjualan obj);
+
+  public void refresh(Penjualan obj);
+
+  public void save(Penjualan entity);
+
+  public void saveOrUpdate(Penjualan entity);
 
 }

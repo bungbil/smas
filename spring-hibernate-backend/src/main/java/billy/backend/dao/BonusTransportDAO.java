@@ -6,24 +6,24 @@ import billy.backend.model.BonusTransport;
 
 public interface BonusTransportDAO {
 
-	public BonusTransport getNewBonusTransport();
+  public void delete(BonusTransport entity);
 
-	public BonusTransport getBonusTransportById(Long id);
+  public void deleteBonusTransportById(long id);
 
-	public BonusTransport getBonusTransportByDeskripsiBonusTransport(String string);
+  public List<BonusTransport> getAllBonusTransports();
 
-	public List<BonusTransport> getAllBonusTransports();
+  public BonusTransport getBonusTransportByDeskripsiBonusTransport(String string);
 
-	public int getCountAllBonusTransports();
+  public BonusTransport getBonusTransportById(Long id);
 
-	public List<BonusTransport> getBonusTransportsLikeDeskripsiBonusTransport(String string);
+  public List<BonusTransport> getBonusTransportsLikeDeskripsiBonusTransport(String string);
 
-	public void deleteBonusTransportById(long id);
+  public int getCountAllBonusTransports();
 
-	public void saveOrUpdate(BonusTransport entity);
+  public BonusTransport getNewBonusTransport();
 
-	public void delete(BonusTransport entity);
+  public void save(BonusTransport entity);
 
-	public void save(BonusTransport entity);
+  public void saveOrUpdate(BonusTransport entity);
 
 }

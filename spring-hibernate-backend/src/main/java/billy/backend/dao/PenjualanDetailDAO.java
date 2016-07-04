@@ -7,22 +7,22 @@ import billy.backend.model.PenjualanDetail;
 
 public interface PenjualanDetailDAO {
 
-	public PenjualanDetail getNewPenjualanDetail();
+  public void delete(PenjualanDetail entity);
 
-	public List<PenjualanDetail> getPenjualanDetailsByPenjualan(Penjualan obj);
+  public void deletePenjualanDetailsByPenjualan(Penjualan obj);
 
-	public int getCountPenjualanDetailsByPenjualan(Penjualan obj);
+  public int getCountAllPenjualanDetails();
 
-	public int getCountAllPenjualanDetails();
+  public int getCountPenjualanDetailsByPenjualan(Penjualan obj);
 
-	public PenjualanDetail getPenjualanDetailById(long id);
+  public PenjualanDetail getNewPenjualanDetail();
 
-	public void deletePenjualanDetailsByPenjualan(Penjualan obj);
+  public PenjualanDetail getPenjualanDetailById(long id);
 
-	public void saveOrUpdate(PenjualanDetail entity);
+  public List<PenjualanDetail> getPenjualanDetailsByPenjualan(Penjualan obj);
 
-	public void delete(PenjualanDetail entity);
-	
-	public void save(PenjualanDetail entity);
+  public void save(PenjualanDetail entity);
+
+  public void saveOrUpdate(PenjualanDetail entity);
 
 }

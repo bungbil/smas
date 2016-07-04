@@ -6,26 +6,26 @@ import billy.backend.model.SatuanBarang;
 
 public interface SatuanBarangDAO {
 
-	public SatuanBarang getNewSatuanBarang();
+  public void delete(SatuanBarang entity);
 
-	public SatuanBarang getSatuanBarangById(Long id);
+  public void deleteSatuanBarangById(long id);
 
-	public SatuanBarang getSatuanBarangByKodeSatuanBarang(String string);
+  public List<SatuanBarang> getAllSatuanBarangs();
 
-	public List<SatuanBarang> getAllSatuanBarangs();
+  public int getCountAllSatuanBarangs();
 
-	public int getCountAllSatuanBarangs();
+  public SatuanBarang getNewSatuanBarang();
 
-	public List<SatuanBarang> getSatuanBarangsLikeKodeSatuanBarang(String string);
+  public SatuanBarang getSatuanBarangById(Long id);
 
-	public List<SatuanBarang> getSatuanBarangsLikeDeskripsiSatuanBarang(String string);	
+  public SatuanBarang getSatuanBarangByKodeSatuanBarang(String string);
 
-	public void deleteSatuanBarangById(long id);
+  public List<SatuanBarang> getSatuanBarangsLikeDeskripsiSatuanBarang(String string);
 
-	public void saveOrUpdate(SatuanBarang entity);
+  public List<SatuanBarang> getSatuanBarangsLikeKodeSatuanBarang(String string);
 
-	public void delete(SatuanBarang entity);
+  public void save(SatuanBarang entity);
 
-	public void save(SatuanBarang entity);
+  public void saveOrUpdate(SatuanBarang entity);
 
 }

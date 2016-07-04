@@ -1,4 +1,4 @@
- package billy.backend.model;
+package billy.backend.model;
 
 import java.util.Date;
 
@@ -6,137 +6,141 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class SatuanBarang implements java.io.Serializable, Entity {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private long id = Long.MIN_VALUE +1;
-	private int version;
-	private String kodeSatuanBarang;
-	private String deskripsiSatuanBarang;
-	private boolean satuanStandarBarang;
-	private long nilaiStandarSatuan;
-	private long nilaiKonversi;	
-	private Date lastUpdate;
-	private String updatedBy;
-	
-
-	public boolean isNew() {
-		return (getId() == Long.MIN_VALUE +1);
-	}
-
-	public SatuanBarang() {
-	}
-
-	public SatuanBarang(long id, String kodeSatuanBarang) {
-		this.setId(id);
-		this.kodeSatuanBarang = kodeSatuanBarang;
-	}
-
-	public SatuanBarang(long id, String kodeSatuanBarang, String deskripsiSatuanBarang, boolean satuanStandarBarang) {
-		this.setId(id);
-		this.kodeSatuanBarang = kodeSatuanBarang;
-		this.deskripsiSatuanBarang = deskripsiSatuanBarang;
-		this.satuanStandarBarang = satuanStandarBarang;	
-		
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public int getVersion() {
-		return this.version;
-	}
-
-	public void setVersion(int version) {
-		this.version = version;
-	}
-
-	public String getKodeSatuanBarang() {
-		return kodeSatuanBarang;
-	}
-
-	public void setKodeSatuanBarang(String kodeSatuanBarang) {
-		this.kodeSatuanBarang = kodeSatuanBarang;
-	}
+  private long id = Long.MIN_VALUE + 1;
+  private int version;
+  private String kodeSatuanBarang;
+  private String deskripsiSatuanBarang;
+  private boolean satuanStandarBarang;
+  private long nilaiStandarSatuan;
+  private long nilaiKonversi;
+  private Date lastUpdate;
+  private String updatedBy;
 
 
-	public String getDeskripsiSatuanBarang() {
-		return deskripsiSatuanBarang;
-	}
+  public SatuanBarang() {}
 
-	public void setDeskripsiSatuanBarang(String deskripsiSatuanBarang) {
-		this.deskripsiSatuanBarang = deskripsiSatuanBarang;
-	}
+  public SatuanBarang(long id, String kodeSatuanBarang) {
+    this.setId(id);
+    this.kodeSatuanBarang = kodeSatuanBarang;
+  }
 
-	public boolean isSatuanStandarBarang() {
-		return satuanStandarBarang;
-	}
+  public SatuanBarang(long id, String kodeSatuanBarang, String deskripsiSatuanBarang,
+      boolean satuanStandarBarang) {
+    this.setId(id);
+    this.kodeSatuanBarang = kodeSatuanBarang;
+    this.deskripsiSatuanBarang = deskripsiSatuanBarang;
+    this.satuanStandarBarang = satuanStandarBarang;
 
-	public void setSatuanStandarBarang(boolean satuanStandarBarang) {
-		this.satuanStandarBarang = satuanStandarBarang;
-	}
+  }
 
-	public long getNilaiStandarSatuan() {
-		return nilaiStandarSatuan;
-	}
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
 
-	public void setNilaiStandarSatuan(long nilaiStandarSatuan) {
-		this.nilaiStandarSatuan = nilaiStandarSatuan;
-	}
+    if (obj instanceof SatuanBarang) {
+      SatuanBarang satuanBarang = (SatuanBarang) obj;
+      return equals(satuanBarang);
+    }
 
-	public long getNilaiKonversi() {
-		return nilaiKonversi;
-	}
+    return false;
+  }
 
-	public void setNilaiKonversi(long nilaiKonversi) {
-		this.nilaiKonversi = nilaiKonversi;
-	}
+  public boolean equals(SatuanBarang satuanBarang) {
+    return getId() == satuanBarang.getId();
+  }
 
-	public Date getLastUpdate() {
-		return lastUpdate;
-	}
+  public String getDeskripsiSatuanBarang() {
+    return deskripsiSatuanBarang;
+  }
 
-	public void setLastUpdate(Date lastUpdate) {
-		this.lastUpdate = lastUpdate;
-	}
+  @Override
+  public long getId() {
+    return id;
+  }
 
-	public String getUpdatedBy() {
-		return updatedBy;
-	}
+  public String getKodeSatuanBarang() {
+    return kodeSatuanBarang;
+  }
 
-	public void setUpdatedBy(String updatedBy) {
-		this.updatedBy = updatedBy;
-	}
+  public Date getLastUpdate() {
+    return lastUpdate;
+  }
 
-	@Override
-	public int hashCode() {
-		return Long.valueOf(getId()).hashCode();
-	}
+  public long getNilaiKonversi() {
+    return nilaiKonversi;
+  }
 
-	public boolean equals(SatuanBarang satuanBarang) {
-		return getId() == satuanBarang.getId();
-	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
+  public long getNilaiStandarSatuan() {
+    return nilaiStandarSatuan;
+  }
 
-		if (obj instanceof SatuanBarang) {
-			SatuanBarang satuanBarang = (SatuanBarang) obj;
-			return equals(satuanBarang);
-		}
+  public String getUpdatedBy() {
+    return updatedBy;
+  }
 
-		return false;
-	}
+  public int getVersion() {
+    return this.version;
+  }
 
-	public String toString() {
-		return new ToStringBuilder(this).append("id", getId()).toString();
-	}
+  @Override
+  public int hashCode() {
+    return Long.valueOf(getId()).hashCode();
+  }
+
+  @Override
+  public boolean isNew() {
+    return (getId() == Long.MIN_VALUE + 1);
+  }
+
+  public boolean isSatuanStandarBarang() {
+    return satuanStandarBarang;
+  }
+
+  public void setDeskripsiSatuanBarang(String deskripsiSatuanBarang) {
+    this.deskripsiSatuanBarang = deskripsiSatuanBarang;
+  }
+
+  @Override
+  public void setId(long id) {
+    this.id = id;
+  }
+
+  public void setKodeSatuanBarang(String kodeSatuanBarang) {
+    this.kodeSatuanBarang = kodeSatuanBarang;
+  }
+
+  public void setLastUpdate(Date lastUpdate) {
+    this.lastUpdate = lastUpdate;
+  }
+
+  public void setNilaiKonversi(long nilaiKonversi) {
+    this.nilaiKonversi = nilaiKonversi;
+  }
+
+  public void setNilaiStandarSatuan(long nilaiStandarSatuan) {
+    this.nilaiStandarSatuan = nilaiStandarSatuan;
+  }
+
+  public void setSatuanStandarBarang(boolean satuanStandarBarang) {
+    this.satuanStandarBarang = satuanStandarBarang;
+  }
+
+  public void setUpdatedBy(String updatedBy) {
+    this.updatedBy = updatedBy;
+  }
+
+  public void setVersion(int version) {
+    this.version = version;
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this).append("id", getId()).toString();
+  }
 
 }

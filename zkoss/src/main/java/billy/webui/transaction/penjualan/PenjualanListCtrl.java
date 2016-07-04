@@ -21,12 +21,13 @@ import org.zkoss.zul.Paging;
 import org.zkoss.zul.Panel;
 import org.zkoss.zul.Window;
 
-import com.googlecode.genericdao.search.Filter;
-
-import de.forsthaus.UserWorkspace;
 import billy.backend.model.Karyawan;
 import billy.backend.model.Penjualan;
 import billy.backend.service.PenjualanService;
+
+import com.googlecode.genericdao.search.Filter;
+
+import de.forsthaus.UserWorkspace;
 import de.forsthaus.backend.model.SecUser;
 import de.forsthaus.backend.util.HibernateSearchObject;
 import de.forsthaus.policy.model.UserImpl;
@@ -34,357 +35,368 @@ import de.forsthaus.webui.util.GFCBaseListCtrl;
 
 public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Serializable {
 
-	private static final long serialVersionUID = -2170565288232491362L;
-	private static final Logger logger = Logger.getLogger(PenjualanListCtrl.class);
+  private static final long serialVersionUID = -2170565288232491362L;
+  private static final Logger logger = Logger.getLogger(PenjualanListCtrl.class);
 
-	protected Window windowPenjualanList; // autowired
-	protected Panel panelPenjualanList; // autowired
+  protected Window windowPenjualanList; // autowired
+  protected Panel panelPenjualanList; // autowired
 
-	protected Borderlayout borderLayout_penjualanList; // autowired
-	protected Paging paging_PenjualanList; // autowired
-	protected Listbox listBoxPenjualan; // autowired
-	protected Listheader listheader_PenjualanList_NoFaktur; // autowired
-	protected Listheader listheader_PenjualanList_TglPenjualan; // autowired
-	protected Listheader listheader_PenjualanList_MetodePembayaran; // autowired
-	protected Listheader listheader_PenjualanList_Total; // autowired
-	protected Listheader listheader_PenjualanList_Piutang; // autowired
-	protected Listheader listheader_PenjualanList_Status; // autowired
-	protected Listheader listheader_PenjualanList_NamaPelanggan; // autowired
-	protected Listheader listheader_PenjualanList_Telepon; // autowired
-	protected Listheader listheader_PenjualanList_Sales1; // autowired
-	protected Listheader listheader_PenjualanList_Sales2; // autowired
-	protected Listheader listheader_PenjualanList_LastUpdate; // autowired
-	protected Listheader listheader_PenjualanList_UpdatedBy; // autowired
+  protected Borderlayout borderLayout_penjualanList; // autowired
+  protected Paging paging_PenjualanList; // autowired
+  protected Listbox listBoxPenjualan; // autowired
+  protected Listheader listheader_PenjualanList_NoFaktur; // autowired
+  protected Listheader listheader_PenjualanList_TglPenjualan; // autowired
+  protected Listheader listheader_PenjualanList_MetodePembayaran; // autowired
+  protected Listheader listheader_PenjualanList_Total; // autowired
+  protected Listheader listheader_PenjualanList_Piutang; // autowired
+  protected Listheader listheader_PenjualanList_Status; // autowired
+  protected Listheader listheader_PenjualanList_NamaPelanggan; // autowired
+  protected Listheader listheader_PenjualanList_Telepon; // autowired
+  protected Listheader listheader_PenjualanList_Sales1; // autowired
+  protected Listheader listheader_PenjualanList_Sales2; // autowired
+  protected Listheader listheader_PenjualanList_LastUpdate; // autowired
+  protected Listheader listheader_PenjualanList_UpdatedBy; // autowired
 
-	// NEEDED for ReUse in the SearchWindow
-	private HibernateSearchObject<Penjualan> searchObj;
+  // NEEDED for ReUse in the SearchWindow
+  private HibernateSearchObject<Penjualan> searchObj;
 
-	// row count for listbox
-	private int countRows;
+  // row count for listbox
+  private int countRows;
 
-	// Databinding
-	private AnnotateDataBinder binder;
-	private PenjualanMainCtrl penjualanMainCtrl;
+  // Databinding
+  private AnnotateDataBinder binder;
+  private PenjualanMainCtrl penjualanMainCtrl;
 
-	// ServiceDAOs / Domain Classes
-	private transient PenjualanService penjualanService;
+  // ServiceDAOs / Domain Classes
+  private transient PenjualanService penjualanService;
 
-	/**
-	 * default constructor.<br>
-	 */
-	public PenjualanListCtrl() {
-		super();
-	}
+  /**
+   * default constructor.<br>
+   */
+  public PenjualanListCtrl() {
+    super();
+  }
 
-	@Override
-	public void doAfterCompose(Component window) throws Exception {
-		super.doAfterCompose(window);
-		
-		this.self.setAttribute("controller", this, false);
-		if (arg.containsKey("ModuleMainController")) {
-			setPenjualanMainCtrl((PenjualanMainCtrl) arg.get("ModuleMainController"));
-			getPenjualanMainCtrl().setPenjualanListCtrl(this);
+  @Override
+  public void doAfterCompose(Component window) throws Exception {
+    super.doAfterCompose(window);
 
-			if (getPenjualanMainCtrl().getSelectedPenjualan() != null) {
-				setSelectedPenjualan(getPenjualanMainCtrl().getSelectedPenjualan());
-			} else
-				setSelectedPenjualan(null);
-		} else {
-			setSelectedPenjualan(null);
-		}
-	}
+    this.self.setAttribute("controller", this, false);
+    if (arg.containsKey("ModuleMainController")) {
+      setPenjualanMainCtrl((PenjualanMainCtrl) arg.get("ModuleMainController"));
+      getPenjualanMainCtrl().setPenjualanListCtrl(this);
 
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
-	// +++++++++++++++ Component Events ++++++++++++++++ //
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
+      if (getPenjualanMainCtrl().getSelectedPenjualan() != null) {
+        setSelectedPenjualan(getPenjualanMainCtrl().getSelectedPenjualan());
+      } else
+        setSelectedPenjualan(null);
+    } else {
+      setSelectedPenjualan(null);
+    }
+  }
 
-	/**
-	 * Automatically called method from zk.
-	 * 
-	 * @param event
-	 * @throws Exception
-	 */
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++ Component Events ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
-	public void onCreate$windowPenjualanList(Event event) throws Exception {
-		binder = (AnnotateDataBinder) event.getTarget().getAttribute("binder", true);
+  public void doFillListbox() {
 
-		doFillListbox();
+    doFitSize();
 
-		binder.loadAll();
-	}
+    // set the paging params
+    paging_PenjualanList.setPageSize(getCountRows());
+    paging_PenjualanList.setDetailed(true);
 
-	public void doFillListbox() {
+    // not used listheaders must be declared like ->
+    // lh.setSortAscending(""); lh.setSortDescending("")
+    listheader_PenjualanList_NoFaktur.setSortAscending(new FieldComparator("noFaktur", true));
+    listheader_PenjualanList_NoFaktur.setSortDescending(new FieldComparator("noFaktur", false));
 
-		doFitSize();
+    listheader_PenjualanList_TglPenjualan
+        .setSortAscending(new FieldComparator("tglPenjualan", true));
+    listheader_PenjualanList_TglPenjualan.setSortDescending(new FieldComparator("tglPenjualan",
+        false));
 
-		// set the paging params
-		paging_PenjualanList.setPageSize(getCountRows());
-		paging_PenjualanList.setDetailed(true);
+    listheader_PenjualanList_MetodePembayaran.setSortAscending(new FieldComparator(
+        "metodePembayaran", true));
+    listheader_PenjualanList_MetodePembayaran.setSortDescending(new FieldComparator(
+        "metodePembayaran", false));
 
-		// not used listheaders must be declared like ->
-		// lh.setSortAscending(""); lh.setSortDescending("")
-		listheader_PenjualanList_NoFaktur.setSortAscending(new FieldComparator("noFaktur", true));
-		listheader_PenjualanList_NoFaktur.setSortDescending(new FieldComparator("noFaktur", false));
-		
-		listheader_PenjualanList_TglPenjualan.setSortAscending(new FieldComparator("tglPenjualan", true));
-		listheader_PenjualanList_TglPenjualan.setSortDescending(new FieldComparator("tglPenjualan", false));
-		
-		listheader_PenjualanList_MetodePembayaran.setSortAscending(new FieldComparator("metodePembayaran", true));
-		listheader_PenjualanList_MetodePembayaran.setSortDescending(new FieldComparator("metodePembayaran", false));
-		
-		listheader_PenjualanList_Total.setSortAscending(new FieldComparator("grandTotal", true));
-		listheader_PenjualanList_Total.setSortDescending(new FieldComparator("grandTotal", false));
-		
-		listheader_PenjualanList_Piutang.setSortAscending(new FieldComparator("piutang", true));
-		listheader_PenjualanList_Piutang.setSortDescending(new FieldComparator("piutang", false));
-		
-		listheader_PenjualanList_Status.setSortAscending(new FieldComparator("status", true));
-		listheader_PenjualanList_Status.setSortDescending(new FieldComparator("status", false));
-		
-		listheader_PenjualanList_NamaPelanggan.setSortAscending(new FieldComparator("namaPelanggan", true));
-		listheader_PenjualanList_NamaPelanggan.setSortDescending(new FieldComparator("namaPelanggan", false));
-		
-		listheader_PenjualanList_Telepon.setSortAscending(new FieldComparator("telepon", true));
-		listheader_PenjualanList_Telepon.setSortDescending(new FieldComparator("telepon", false));
-		
-		listheader_PenjualanList_Sales1.setSortAscending(new FieldComparator("sales1", true));
-		listheader_PenjualanList_Sales1.setSortDescending(new FieldComparator("sales1", false));
-		
-		listheader_PenjualanList_Sales2.setSortAscending(new FieldComparator("sales2", true));
-		listheader_PenjualanList_Sales2.setSortDescending(new FieldComparator("sales2", false));
-		
-		listheader_PenjualanList_LastUpdate.setSortAscending(new FieldComparator("lastUpdate", true));
-		listheader_PenjualanList_LastUpdate.setSortDescending(new FieldComparator("lastUpdate", false));
-		
-		listheader_PenjualanList_UpdatedBy.setSortAscending(new FieldComparator("updatedBy", true));
-		listheader_PenjualanList_UpdatedBy.setSortDescending(new FieldComparator("updatedBy", false));
-				
-		
-		// ++ create the searchObject and init sorting ++//
-		// ++ create the searchObject and init sorting ++//
-		searchObj = new HibernateSearchObject<Penjualan>(Penjualan.class, getCountRows());
-		searchObj.addSort("noFaktur", false);
-		
-		SecUser secUser = ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSecUser();
-		if(secUser.getKaryawan()!=null){
-			Karyawan karyawan = secUser.getKaryawan();
-			if(karyawan.getSupervisorDivisi()!=null){
-				Karyawan supervisor = karyawan.getSupervisorDivisi();
-				searchObj.addFilter(new Filter("divisi.supervisorDivisi.id", supervisor.getId() , Filter.OP_EQUAL));
-			}			
-		}
-		
-		setSearchObj(searchObj);
+    listheader_PenjualanList_Total.setSortAscending(new FieldComparator("grandTotal", true));
+    listheader_PenjualanList_Total.setSortDescending(new FieldComparator("grandTotal", false));
 
-		// Set the BindingListModel
-		getPagedBindingListWrapper().init(searchObj, getListBoxPenjualan(), paging_PenjualanList);
-		BindingListModelList lml = (BindingListModelList) getListBoxPenjualan().getModel();
-		setPenjualans(lml);
+    listheader_PenjualanList_Piutang.setSortAscending(new FieldComparator("piutang", true));
+    listheader_PenjualanList_Piutang.setSortDescending(new FieldComparator("piutang", false));
 
-		// check if first time opened and init databinding for selectedBean
-		if (getSelectedPenjualan() == null) {
-			// init the bean with the first record in the List
-			if (lml.getSize() > 0) {
-				final int rowIndex = 0;
-				// only for correct showing after Rendering. No effect as an
-				// Event
-				// yet.
-				getListBoxPenjualan().setSelectedIndex(rowIndex);
-				// get the first entry and cast them to the needed object
-				setSelectedPenjualan((Penjualan) lml.get(0));
+    listheader_PenjualanList_Status.setSortAscending(new FieldComparator("status", true));
+    listheader_PenjualanList_Status.setSortDescending(new FieldComparator("status", false));
 
-				// call the onSelect Event for showing the objects data in the
-				// statusBar
-				Events.sendEvent(new Event("onSelect", getListBoxPenjualan(), getSelectedPenjualan()));
-			}
-		}
+    listheader_PenjualanList_NamaPelanggan.setSortAscending(new FieldComparator("namaPelanggan",
+        true));
+    listheader_PenjualanList_NamaPelanggan.setSortDescending(new FieldComparator("namaPelanggan",
+        false));
 
-	}
+    listheader_PenjualanList_Telepon.setSortAscending(new FieldComparator("telepon", true));
+    listheader_PenjualanList_Telepon.setSortDescending(new FieldComparator("telepon", false));
 
-	/**
-	 * Selects the object in the listbox and change the tab.<br>
-	 * Event is forwarded in the corresponding listbox.
-	 */
-	public void onDoubleClickedPenjualanItem(Event event) {
-		// logger.debug(event.toString());
+    listheader_PenjualanList_Sales1.setSortAscending(new FieldComparator("sales1", true));
+    listheader_PenjualanList_Sales1.setSortDescending(new FieldComparator("sales1", false));
 
-		Penjualan anPenjualan = getSelectedPenjualan();
+    listheader_PenjualanList_Sales2.setSortAscending(new FieldComparator("sales2", true));
+    listheader_PenjualanList_Sales2.setSortDescending(new FieldComparator("sales2", false));
 
-		if (anPenjualan != null) {
-			setSelectedPenjualan(anPenjualan);
-			setPenjualan(anPenjualan);
+    listheader_PenjualanList_LastUpdate.setSortAscending(new FieldComparator("lastUpdate", true));
+    listheader_PenjualanList_LastUpdate.setSortDescending(new FieldComparator("lastUpdate", false));
 
-			// check first, if the tabs are created
-			if (getPenjualanMainCtrl().getPenjualanDetailCtrl() == null) {
-				Events.sendEvent(new Event("onSelect", getPenjualanMainCtrl().tabPenjualanDetail, null));
-				// if we work with spring beanCreation than we must check a
-				// little bit deeper, because the Controller are preCreated ?
-			} else if (getPenjualanMainCtrl().getPenjualanDetailCtrl().getBinder() == null) {
-				Events.sendEvent(new Event("onSelect", getPenjualanMainCtrl().tabPenjualanDetail, null));
-			}
+    listheader_PenjualanList_UpdatedBy.setSortAscending(new FieldComparator("updatedBy", true));
+    listheader_PenjualanList_UpdatedBy.setSortDescending(new FieldComparator("updatedBy", false));
 
-			Events.sendEvent(new Event("onSelect", getPenjualanMainCtrl().tabPenjualanDetail, anPenjualan));
-		}
-	}
 
-	/**
-	 * When a listItem in the corresponding listbox is selected.<br>
-	 * Event is forwarded in the corresponding listbox.
-	 * 
-	 * @param event
-	 */
-	public void onSelect$listBoxPenjualan(Event event) {
-		// logger.debug(event.toString());
+    // ++ create the searchObject and init sorting ++//
+    // ++ create the searchObject and init sorting ++//
+    searchObj = new HibernateSearchObject<Penjualan>(Penjualan.class, getCountRows());
+    searchObj.addSort("noFaktur", false);
 
-		// selectedPenjualan is filled by annotated databinding mechanism
-		Penjualan anPenjualan = getSelectedPenjualan();
+    SecUser secUser =
+        ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+            .getSecUser();
+    if (secUser.getKaryawan() != null) {
+      Karyawan karyawan = secUser.getKaryawan();
+      if (karyawan.getSupervisorDivisi() != null) {
+        Karyawan supervisor = karyawan.getSupervisorDivisi();
+        searchObj.addFilter(new Filter("divisi.supervisorDivisi.id", supervisor.getId(),
+            Filter.OP_EQUAL));
+      }
+    }
 
-		if (anPenjualan == null) {
-			return;
-		}
+    setSearchObj(searchObj);
 
-		// check first, if the tabs are created
-		if (getPenjualanMainCtrl().getPenjualanDetailCtrl() == null) {
-			Events.sendEvent(new Event("onSelect", getPenjualanMainCtrl().tabPenjualanDetail, null));
-			// if we work with spring beanCreation than we must check a little
-			// bit deeper, because the Controller are preCreated ?
-		} else if (getPenjualanMainCtrl().getPenjualanDetailCtrl().getBinder() == null) {
-			Events.sendEvent(new Event("onSelect", getPenjualanMainCtrl().tabPenjualanDetail, null));
-		}
+    // Set the BindingListModel
+    getPagedBindingListWrapper().init(searchObj, getListBoxPenjualan(), paging_PenjualanList);
+    BindingListModelList lml = (BindingListModelList) getListBoxPenjualan().getModel();
+    setPenjualans(lml);
 
-		// INIT ALL RELATED Queries/OBJECTS/LISTS NEW
-		getPenjualanMainCtrl().getPenjualanDetailCtrl().setSelectedPenjualan(anPenjualan);
-		getPenjualanMainCtrl().getPenjualanDetailCtrl().setPenjualan(anPenjualan);
+    // check if first time opened and init databinding for selectedBean
+    if (getSelectedPenjualan() == null) {
+      // init the bean with the first record in the List
+      if (lml.getSize() > 0) {
+        final int rowIndex = 0;
+        // only for correct showing after Rendering. No effect as an
+        // Event
+        // yet.
+        getListBoxPenjualan().setSelectedIndex(rowIndex);
+        // get the first entry and cast them to the needed object
+        setSelectedPenjualan((Penjualan) lml.get(0));
 
-		// store the selected bean values as current
-		getPenjualanMainCtrl().doStoreInitValues();
+        // call the onSelect Event for showing the objects data in the
+        // statusBar
+        Events.sendEvent(new Event("onSelect", getListBoxPenjualan(), getSelectedPenjualan()));
+      }
+    }
 
-		// show the objects data in the statusBar
-		String str = Labels.getLabel("common.Penjualan") + ": " + anPenjualan.getNoFaktur();
-		EventQueues.lookup("selectedObjectEventQueue", EventQueues.DESKTOP, true).publish(new Event("onChangeSelectedObject", null, str));
+  }
 
-	}
+  /**
+   * Recalculates the container size for this controller and resize them. Calculate how many rows
+   * have been place in the listbox. Get the currentDesktopHeight from a hidden Intbox from the
+   * index.zul that are filled by onClientInfo() in the indexCtroller.
+   */
+  public void doFitSize() {
 
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
-	// +++++++++++++++++ Business Logic ++++++++++++++++ //
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
+    // normally 0 ! Or we have a i.e. a toolBar on top of the listBox.
+    final int specialSize = 5;
 
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
-	// ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
+    final int menuOffset = UserWorkspace.getInstance().getMenuOffset();
+    int height =
+        ((Intbox) Path.getComponent("/outerIndexWindow/currentDesktopHeight")).getValue()
+            .intValue();
+    height = height - menuOffset;
+    final int maxListBoxHeight = height - specialSize - 148;
+    setCountRows((int) Math.round(maxListBoxHeight / 17.7));
+    borderLayout_penjualanList.setHeight(String.valueOf(maxListBoxHeight) + "px");
 
-	/**
-	 * Recalculates the container size for this controller and resize them.
-	 * 
-	 * Calculate how many rows have been place in the listbox. Get the
-	 * currentDesktopHeight from a hidden Intbox from the index.zul that are
-	 * filled by onClientInfo() in the indexCtroller.
-	 */
-	public void doFitSize() {
+    windowPenjualanList.invalidate();
+  }
 
-		// normally 0 ! Or we have a i.e. a toolBar on top of the listBox.
-		final int specialSize = 5;
+  public AnnotateDataBinder getBinder() {
+    return this.binder;
+  }
 
-		final int menuOffset = UserWorkspace.getInstance().getMenuOffset();
-		int height = ((Intbox) Path.getComponent("/outerIndexWindow/currentDesktopHeight")).getValue().intValue();
-		height = height - menuOffset;
-		final int maxListBoxHeight = height - specialSize - 148;
-		setCountRows((int) Math.round(maxListBoxHeight / 17.7));
-		borderLayout_penjualanList.setHeight(String.valueOf(maxListBoxHeight) + "px");
+  public int getCountRows() {
+    return this.countRows;
+  }
 
-		windowPenjualanList.invalidate();
-	}
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++++ Business Logic ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
-	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++//
-	// ++++++++++++++++++ getter / setter +++++++++++++++++++//
-	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
-	/**
-	 * Best Pratice Hint:<br>
-	 * The setters/getters for the local annotated data binded Beans/Sets are
-	 * administered in the module's mainController. Working in this way you have
-	 * clean line to share this beans/sets with other controllers.
-	 */
-	/* Master BEANS */
-	public Penjualan getPenjualan() {
-		// STORED IN THE module's MainController
-		return getPenjualanMainCtrl().getSelectedPenjualan();
-	}
+  public Listbox getListBoxPenjualan() {
+    return this.listBoxPenjualan;
+  }
 
-	public void setPenjualan(Penjualan anPenjualan) {
-		// STORED IN THE module's MainController
-		getPenjualanMainCtrl().setSelectedPenjualan(anPenjualan);
-	}
+  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+  // ++++++++++++++++++ getter / setter +++++++++++++++++++//
+  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++//
 
-	public void setSelectedPenjualan(Penjualan selectedPenjualan) {
-		// STORED IN THE module's MainController
-		getPenjualanMainCtrl().setSelectedPenjualan(selectedPenjualan);
-	}
+  /**
+   * Best Pratice Hint:<br>
+   * The setters/getters for the local annotated data binded Beans/Sets are administered in the
+   * module's mainController. Working in this way you have clean line to share this beans/sets with
+   * other controllers.
+   */
+  /* Master BEANS */
+  public Penjualan getPenjualan() {
+    // STORED IN THE module's MainController
+    return getPenjualanMainCtrl().getSelectedPenjualan();
+  }
 
-	public Penjualan getSelectedPenjualan() {
-		// STORED IN THE module's MainController
-		return getPenjualanMainCtrl().getSelectedPenjualan();
-	}
+  public PenjualanMainCtrl getPenjualanMainCtrl() {
+    return this.penjualanMainCtrl;
+  }
 
-	public void setPenjualans(BindingListModelList penjualans) {
-		// STORED IN THE module's MainController
-		getPenjualanMainCtrl().setPenjualans(penjualans);
-	}
+  public BindingListModelList getPenjualans() {
+    // STORED IN THE module's MainController
+    return getPenjualanMainCtrl().getPenjualans();
+  }
 
-	public BindingListModelList getPenjualans() {
-		// STORED IN THE module's MainController
-		return getPenjualanMainCtrl().getPenjualans();
-	}
+  public PenjualanService getPenjualanService() {
+    return this.penjualanService;
+  }
 
-	public void setBinder(AnnotateDataBinder binder) {
-		this.binder = binder;
-	}
+  public HibernateSearchObject<Penjualan> getSearchObj() {
+    return this.searchObj;
+  }
 
-	public AnnotateDataBinder getBinder() {
-		return this.binder;
-	}
+  public Penjualan getSelectedPenjualan() {
+    // STORED IN THE module's MainController
+    return getPenjualanMainCtrl().getSelectedPenjualan();
+  }
 
-	/* CONTROLLERS */
-	public void setPenjualanMainCtrl(PenjualanMainCtrl penjualanMainCtrl) {
-		this.penjualanMainCtrl = penjualanMainCtrl;
-	}
+  /**
+   * Automatically called method from zk.
+   * 
+   * @param event
+   * @throws Exception
+   */
 
-	public PenjualanMainCtrl getPenjualanMainCtrl() {
-		return this.penjualanMainCtrl;
-	}
+  public void onCreate$windowPenjualanList(Event event) throws Exception {
+    binder = (AnnotateDataBinder) event.getTarget().getAttribute("binder", true);
 
-	/* SERVICES */
-	public void setPenjualanService(PenjualanService penjualanService) {
-		this.penjualanService = penjualanService;
-	}
+    doFillListbox();
 
-	public PenjualanService getPenjualanService() {
-		return this.penjualanService;
-	}
+    binder.loadAll();
+  }
 
-	/* COMPONENTS and OTHERS */
-	public void setSearchObj(HibernateSearchObject<Penjualan> searchObj) {
-		this.searchObj = searchObj;
-	}
+  /**
+   * Selects the object in the listbox and change the tab.<br>
+   * Event is forwarded in the corresponding listbox.
+   */
+  public void onDoubleClickedPenjualanItem(Event event) {
+    // logger.debug(event.toString());
 
-	public HibernateSearchObject<Penjualan> getSearchObj() {
-		return this.searchObj;
-	}
+    Penjualan anPenjualan = getSelectedPenjualan();
 
-	public Listbox getListBoxPenjualan() {
-		return this.listBoxPenjualan;
-	}
+    if (anPenjualan != null) {
+      setSelectedPenjualan(anPenjualan);
+      setPenjualan(anPenjualan);
 
-	public void setListBoxPenjualan(Listbox listBoxPenjualan) {
-		this.listBoxPenjualan = listBoxPenjualan;
-	}
+      // check first, if the tabs are created
+      if (getPenjualanMainCtrl().getPenjualanDetailCtrl() == null) {
+        Events.sendEvent(new Event("onSelect", getPenjualanMainCtrl().tabPenjualanDetail, null));
+        // if we work with spring beanCreation than we must check a
+        // little bit deeper, because the Controller are preCreated ?
+      } else if (getPenjualanMainCtrl().getPenjualanDetailCtrl().getBinder() == null) {
+        Events.sendEvent(new Event("onSelect", getPenjualanMainCtrl().tabPenjualanDetail, null));
+      }
 
-	public int getCountRows() {
-		return this.countRows;
-	}
+      Events
+          .sendEvent(new Event("onSelect", getPenjualanMainCtrl().tabPenjualanDetail, anPenjualan));
+    }
+  }
 
-	public void setCountRows(int countRows) {
-		this.countRows = countRows;
-	}
+  /**
+   * When a listItem in the corresponding listbox is selected.<br>
+   * Event is forwarded in the corresponding listbox.
+   * 
+   * @param event
+   */
+  public void onSelect$listBoxPenjualan(Event event) {
+    // logger.debug(event.toString());
+
+    // selectedPenjualan is filled by annotated databinding mechanism
+    Penjualan anPenjualan = getSelectedPenjualan();
+
+    if (anPenjualan == null) {
+      return;
+    }
+
+    // check first, if the tabs are created
+    if (getPenjualanMainCtrl().getPenjualanDetailCtrl() == null) {
+      Events.sendEvent(new Event("onSelect", getPenjualanMainCtrl().tabPenjualanDetail, null));
+      // if we work with spring beanCreation than we must check a little
+      // bit deeper, because the Controller are preCreated ?
+    } else if (getPenjualanMainCtrl().getPenjualanDetailCtrl().getBinder() == null) {
+      Events.sendEvent(new Event("onSelect", getPenjualanMainCtrl().tabPenjualanDetail, null));
+    }
+
+    // INIT ALL RELATED Queries/OBJECTS/LISTS NEW
+    getPenjualanMainCtrl().getPenjualanDetailCtrl().setSelectedPenjualan(anPenjualan);
+    getPenjualanMainCtrl().getPenjualanDetailCtrl().setPenjualan(anPenjualan);
+
+    // store the selected bean values as current
+    getPenjualanMainCtrl().doStoreInitValues();
+
+    // show the objects data in the statusBar
+    String str = Labels.getLabel("common.Penjualan") + ": " + anPenjualan.getNoFaktur();
+    EventQueues.lookup("selectedObjectEventQueue", EventQueues.DESKTOP, true).publish(
+        new Event("onChangeSelectedObject", null, str));
+
+  }
+
+  public void setBinder(AnnotateDataBinder binder) {
+    this.binder = binder;
+  }
+
+  public void setCountRows(int countRows) {
+    this.countRows = countRows;
+  }
+
+  public void setListBoxPenjualan(Listbox listBoxPenjualan) {
+    this.listBoxPenjualan = listBoxPenjualan;
+  }
+
+  public void setPenjualan(Penjualan anPenjualan) {
+    // STORED IN THE module's MainController
+    getPenjualanMainCtrl().setSelectedPenjualan(anPenjualan);
+  }
+
+  /* CONTROLLERS */
+  public void setPenjualanMainCtrl(PenjualanMainCtrl penjualanMainCtrl) {
+    this.penjualanMainCtrl = penjualanMainCtrl;
+  }
+
+  public void setPenjualans(BindingListModelList penjualans) {
+    // STORED IN THE module's MainController
+    getPenjualanMainCtrl().setPenjualans(penjualans);
+  }
+
+  /* SERVICES */
+  public void setPenjualanService(PenjualanService penjualanService) {
+    this.penjualanService = penjualanService;
+  }
+
+  /* COMPONENTS and OTHERS */
+  public void setSearchObj(HibernateSearchObject<Penjualan> searchObj) {
+    this.searchObj = searchObj;
+  }
+
+  public void setSelectedPenjualan(Penjualan selectedPenjualan) {
+    // STORED IN THE module's MainController
+    getPenjualanMainCtrl().setSelectedPenjualan(selectedPenjualan);
+  }
 
 }

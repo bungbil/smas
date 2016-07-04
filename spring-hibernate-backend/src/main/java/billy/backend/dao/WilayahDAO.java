@@ -6,26 +6,26 @@ import billy.backend.model.Wilayah;
 
 public interface WilayahDAO {
 
-	public Wilayah getNewWilayah();
+  public void delete(Wilayah entity);
 
-	public Wilayah getWilayahById(Long id);
+  public void deleteWilayahById(long id);
 
-	public Wilayah getWilayahByKodeWilayah(String string);
+  public List<Wilayah> getAllWilayahs();
 
-	public List<Wilayah> getAllWilayahs();
+  public int getCountAllWilayahs();
 
-	public int getCountAllWilayahs();
+  public Wilayah getNewWilayah();
 
-	public List<Wilayah> getWilayahsLikeKodeWilayah(String string);
+  public Wilayah getWilayahById(Long id);
 
-	public List<Wilayah> getWilayahsLikeNamaWilayah(String string);	
+  public Wilayah getWilayahByKodeWilayah(String string);
 
-	public void deleteWilayahById(long id);
+  public List<Wilayah> getWilayahsLikeKodeWilayah(String string);
 
-	public void saveOrUpdate(Wilayah entity);
+  public List<Wilayah> getWilayahsLikeNamaWilayah(String string);
 
-	public void delete(Wilayah entity);
+  public void save(Wilayah entity);
 
-	public void save(Wilayah entity);
+  public void saveOrUpdate(Wilayah entity);
 
 }

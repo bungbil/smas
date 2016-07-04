@@ -6,26 +6,26 @@ import billy.backend.model.Parameter;
 
 public interface ParameterDAO {
 
-	public Parameter getNewParameter();
+  public void delete(Parameter entity);
 
-	public Parameter getParameterById(Long id);
+  public void deleteParameterById(long id);
 
-	public Parameter getParameterByParamName(String string);
+  public List<Parameter> getAllParameters();
 
-	public List<Parameter> getAllParameters();
+  public int getCountAllParameters();
 
-	public int getCountAllParameters();
+  public Parameter getNewParameter();
 
-	public List<Parameter> getParametersLikeParamValue(String string);
+  public Parameter getParameterById(Long id);
 
-	public List<Parameter> getParametersLikeDescription(String string);	
+  public Parameter getParameterByParamName(String string);
 
-	public void deleteParameterById(long id);
+  public List<Parameter> getParametersLikeDescription(String string);
 
-	public void saveOrUpdate(Parameter entity);
+  public List<Parameter> getParametersLikeParamValue(String string);
 
-	public void delete(Parameter entity);
+  public void save(Parameter entity);
 
-	public void save(Parameter entity);
+  public void saveOrUpdate(Parameter entity);
 
 }

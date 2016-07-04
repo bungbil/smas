@@ -8,27 +8,31 @@ import billy.backend.model.Wilayah;
 
 public interface BarangService {
 
-	public Barang getNewBarang();
+  public void delete(Barang entity);
 
-	public int getCountAllBarangs();
+  public List<Barang> getAllBarangs();
 
-	public Barang getBarangByID(Long id);
-	
-	public Barang getBarangByKodeBarang(String string);
-	
-	public List<Barang> getAllBarangs();
-	public List<Barang> getAllBarangsByWilayah(Wilayah obj);
+  public List<Barang> getAllBarangsByWilayah(Wilayah obj);
 
-	public List<Barang> getBarangsLikeKodeBarang(String string);
-	
-	public List<Barang> getBarangsLikeNamaBarang(String string);
+  public Barang getBarangByID(Long id);
 
-	public void saveOrUpdate(Barang entity);
+  public Barang getBarangByKodeBarang(String string);
 
-	public void delete(Barang entity);
-	
-	public BigDecimal getHargaBarangByIntervalKredit(Barang obj,int interval);
-	public BigDecimal getCicilanPerBulanByIntervalKredit(Barang obj,int interval);
-	public BigDecimal getKomisiSalesByIntervalKredit(Barang obj,int interval);
-	public BigDecimal getTabunganSalesByIntervalKredit(Barang obj,int interval);
+  public List<Barang> getBarangsLikeKodeBarang(String string);
+
+  public List<Barang> getBarangsLikeNamaBarang(String string);
+
+  public BigDecimal getCicilanPerBulanByIntervalKredit(Barang obj, int interval);
+
+  public int getCountAllBarangs();
+
+  public BigDecimal getHargaBarangByIntervalKredit(Barang obj, int interval);
+
+  public BigDecimal getKomisiSalesByIntervalKredit(Barang obj, int interval);
+
+  public Barang getNewBarang();
+
+  public BigDecimal getTabunganSalesByIntervalKredit(Barang obj, int interval);
+
+  public void saveOrUpdate(Barang entity);
 }

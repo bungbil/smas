@@ -7,201 +7,203 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class BonusTransport implements java.io.Serializable, Entity {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private long id = Long.MIN_VALUE +1;
-	private int version;
-	private String deskripsiBonusTransport;
-	private JobType jobType;
-	private boolean multipleUnit;
-	private Integer startRangeUnit;
-	private Integer endRangeUnit;
-	private BigDecimal honor;
-	private BigDecimal or;	
-	private BigDecimal transport;
-	private BigDecimal bonus;
-	private boolean statusPusat;
-	private boolean statusDaerah;
-	private Date lastUpdate;
-	private String updatedBy;
-	
-
-	public boolean isNew() {
-		return (getId() == Long.MIN_VALUE +1);
-	}
-
-	public BonusTransport() {
-	}
-
-	public BonusTransport(long id, String deskripsiBonusTransport) {
-		this.setId(id);
-		this.deskripsiBonusTransport = deskripsiBonusTransport;
-	}	
-
-	public BonusTransport(long id, String deskripsiBonusTransport,
-			JobType jobType, boolean multipleUnit, Integer startRangeUnit,
-			Integer endRangeUnit, BigDecimal honor, BigDecimal or,
-			BigDecimal transport, BigDecimal bonus) {
-		
-		this.id = id;
-		this.deskripsiBonusTransport = deskripsiBonusTransport;
-		this.jobType = jobType;
-		this.multipleUnit = multipleUnit;
-		this.startRangeUnit = startRangeUnit;
-		this.endRangeUnit = endRangeUnit;
-		this.honor = honor;
-		this.or = or;		
-		this.transport = transport;
-		this.bonus = bonus;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public int getVersion() {
-		return this.version;
-	}
-
-	public void setVersion(int version) {
-		this.version = version;
-	}
+  private long id = Long.MIN_VALUE + 1;
+  private int version;
+  private String deskripsiBonusTransport;
+  private JobType jobType;
+  private boolean multipleUnit;
+  private Integer startRangeUnit;
+  private Integer endRangeUnit;
+  private BigDecimal honor;
+  private BigDecimal or;
+  private BigDecimal transport;
+  private BigDecimal bonus;
+  private boolean statusPusat;
+  private boolean statusDaerah;
+  private Date lastUpdate;
+  private String updatedBy;
 
 
-	public String getDeskripsiBonusTransport() {
-		return deskripsiBonusTransport;
-	}
+  public BonusTransport() {}
 
-	public void setDeskripsiBonusTransport(String deskripsiBonusTransport) {
-		this.deskripsiBonusTransport = deskripsiBonusTransport;
-	}
+  public BonusTransport(long id, String deskripsiBonusTransport) {
+    this.setId(id);
+    this.deskripsiBonusTransport = deskripsiBonusTransport;
+  }
 
-	public JobType getJobType() {
-		return jobType;
-	}
+  public BonusTransport(long id, String deskripsiBonusTransport, JobType jobType,
+      boolean multipleUnit, Integer startRangeUnit, Integer endRangeUnit, BigDecimal honor,
+      BigDecimal or, BigDecimal transport, BigDecimal bonus) {
 
-	public void setJobType(JobType jobType) {
-		this.jobType = jobType;
-	}
+    this.id = id;
+    this.deskripsiBonusTransport = deskripsiBonusTransport;
+    this.jobType = jobType;
+    this.multipleUnit = multipleUnit;
+    this.startRangeUnit = startRangeUnit;
+    this.endRangeUnit = endRangeUnit;
+    this.honor = honor;
+    this.or = or;
+    this.transport = transport;
+    this.bonus = bonus;
+  }
 
-	public boolean isMultipleUnit() {
-		return multipleUnit;
-	}
+  public boolean equals(BonusTransport parameter) {
+    return getId() == parameter.getId();
+  }
 
-	public void setMultipleUnit(boolean multipleUnit) {
-		this.multipleUnit = multipleUnit;
-	}
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
 
-	public Integer getStartRangeUnit() {
-		return startRangeUnit;
-	}
+    if (obj instanceof BonusTransport) {
+      BonusTransport parameter = (BonusTransport) obj;
+      return equals(parameter);
+    }
 
-	public void setStartRangeUnit(Integer startRangeUnit) {
-		this.startRangeUnit = startRangeUnit;
-	}
+    return false;
+  }
 
-	public Integer getEndRangeUnit() {
-		return endRangeUnit;
-	}
+  public BigDecimal getBonus() {
+    return bonus;
+  }
 
-	public void setEndRangeUnit(Integer endRangeUnit) {
-		this.endRangeUnit = endRangeUnit;
-	}
+  public String getDeskripsiBonusTransport() {
+    return deskripsiBonusTransport;
+  }
 
-	public BigDecimal getHonor() {
-		return honor;
-	}
+  public Integer getEndRangeUnit() {
+    return endRangeUnit;
+  }
 
-	public void setHonor(BigDecimal honor) {
-		this.honor = honor;
-	}
 
-	public BigDecimal getOr() {
-		return or;
-	}
+  public BigDecimal getHonor() {
+    return honor;
+  }
 
-	public void setOr(BigDecimal or) {
-		this.or = or;
-	}
+  @Override
+  public long getId() {
+    return id;
+  }
 
-	
-	public boolean isStatusPusat() {
-		return statusPusat;
-	}
+  public JobType getJobType() {
+    return jobType;
+  }
 
-	public void setStatusPusat(boolean statusPusat) {
-		this.statusPusat = statusPusat;
-	}
+  public Date getLastUpdate() {
+    return lastUpdate;
+  }
 
-	public boolean isStatusDaerah() {
-		return statusDaerah;
-	}
+  public BigDecimal getOr() {
+    return or;
+  }
 
-	public void setStatusDaerah(boolean statusDaerah) {
-		this.statusDaerah = statusDaerah;
-	}
+  public Integer getStartRangeUnit() {
+    return startRangeUnit;
+  }
 
-	public BigDecimal getTransport() {
-		return transport;
-	}
+  public BigDecimal getTransport() {
+    return transport;
+  }
 
-	public void setTransport(BigDecimal transport) {
-		this.transport = transport;
-	}
+  public String getUpdatedBy() {
+    return updatedBy;
+  }
 
-	public BigDecimal getBonus() {
-		return bonus;
-	}
+  public int getVersion() {
+    return this.version;
+  }
 
-	public void setBonus(BigDecimal bonus) {
-		this.bonus = bonus;
-	}
+  @Override
+  public int hashCode() {
+    return Long.valueOf(getId()).hashCode();
+  }
 
-	public Date getLastUpdate() {
-		return lastUpdate;
-	}
+  public boolean isMultipleUnit() {
+    return multipleUnit;
+  }
 
-	public void setLastUpdate(Date lastUpdate) {
-		this.lastUpdate = lastUpdate;
-	}
+  @Override
+  public boolean isNew() {
+    return (getId() == Long.MIN_VALUE + 1);
+  }
 
-	public String getUpdatedBy() {
-		return updatedBy;
-	}
+  public boolean isStatusDaerah() {
+    return statusDaerah;
+  }
 
-	public void setUpdatedBy(String updatedBy) {
-		this.updatedBy = updatedBy;
-	}
+  public boolean isStatusPusat() {
+    return statusPusat;
+  }
 
-	@Override
-	public int hashCode() {
-		return Long.valueOf(getId()).hashCode();
-	}
 
-	public boolean equals(BonusTransport parameter) {
-		return getId() == parameter.getId();
-	}
+  public void setBonus(BigDecimal bonus) {
+    this.bonus = bonus;
+  }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
+  public void setDeskripsiBonusTransport(String deskripsiBonusTransport) {
+    this.deskripsiBonusTransport = deskripsiBonusTransport;
+  }
 
-		if (obj instanceof BonusTransport) {
-			BonusTransport parameter = (BonusTransport) obj;
-			return equals(parameter);
-		}
+  public void setEndRangeUnit(Integer endRangeUnit) {
+    this.endRangeUnit = endRangeUnit;
+  }
 
-		return false;
-	}
+  public void setHonor(BigDecimal honor) {
+    this.honor = honor;
+  }
 
-	public String toString() {
-		return new ToStringBuilder(this).append("id", getId()).toString();
-	}
+  @Override
+  public void setId(long id) {
+    this.id = id;
+  }
+
+  public void setJobType(JobType jobType) {
+    this.jobType = jobType;
+  }
+
+  public void setLastUpdate(Date lastUpdate) {
+    this.lastUpdate = lastUpdate;
+  }
+
+  public void setMultipleUnit(boolean multipleUnit) {
+    this.multipleUnit = multipleUnit;
+  }
+
+  public void setOr(BigDecimal or) {
+    this.or = or;
+  }
+
+  public void setStartRangeUnit(Integer startRangeUnit) {
+    this.startRangeUnit = startRangeUnit;
+  }
+
+  public void setStatusDaerah(boolean statusDaerah) {
+    this.statusDaerah = statusDaerah;
+  }
+
+  public void setStatusPusat(boolean statusPusat) {
+    this.statusPusat = statusPusat;
+  }
+
+  public void setTransport(BigDecimal transport) {
+    this.transport = transport;
+  }
+
+  public void setUpdatedBy(String updatedBy) {
+    this.updatedBy = updatedBy;
+  }
+
+  public void setVersion(int version) {
+    this.version = version;
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this).append("id", getId()).toString();
+  }
 
 }

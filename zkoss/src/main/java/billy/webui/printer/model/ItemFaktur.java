@@ -1,52 +1,51 @@
 package billy.webui.printer.model;
 
 public class ItemFaktur {
- 
-    private String namaBarang;
-    private String qty;
-    private String harga;
-    private String jumlah;
- 
-    
- 
-    public ItemFaktur(String namaBarang, String qty, String harga, String jumlah) {
-		
-		this.namaBarang = namaBarang;
-		this.qty = qty;
-		this.harga = harga;
-		this.jumlah = jumlah;
-	}
 
-	public String getNamaBarang() {
-        return namaBarang;
-    }
+  private String namaBarang;
+  private String qty;
+  private String harga;
+  private String jumlah;
 
-	public String getQty() {
-		return qty;
-	}
 
-	public void setQty(String qty) {
-		this.qty = qty;
-	}
+  public ItemFaktur(String namaBarang, String qty, String harga, String jumlah) {
 
-	public String getHarga() {
-		return harga;
-	}
+    this.namaBarang = namaBarang;
+    this.qty = qty;
+    this.harga = harga;
+    this.jumlah = jumlah;
+  }
 
-	public void setHarga(String harga) {
-		this.harga = harga;
-	}
+  public String getHarga() {
+    return harga;
+  }
 
-	public String getJumlah() {
-		return jumlah;
-	}
+  public String getJumlah() {
+    return jumlah;
+  }
 
-	public void setJumlah(String jumlah) {
-		this.jumlah = jumlah;
-	}
+  public String getNamaBarang() {
+    return namaBarang;
+  }
 
-	public void setNamaBarang(String namaBarang) {
-		this.namaBarang = namaBarang;
-	}
- 
+  public String getQty() {
+    return qty;
+  }
+
+  public void setHarga(String harga) {
+    this.harga = harga;
+  }
+
+  public void setJumlah(String jumlah) {
+    this.jumlah = jumlah;
+  }
+
+  public void setNamaBarang(String namaBarang) {
+    this.namaBarang = namaBarang;
+  }
+
+  public void setQty(String qty) {
+    this.qty = qty;
+  }
+
 }

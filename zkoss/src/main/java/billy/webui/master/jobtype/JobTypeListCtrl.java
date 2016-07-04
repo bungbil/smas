@@ -20,319 +20,320 @@ import org.zkoss.zul.Paging;
 import org.zkoss.zul.Panel;
 import org.zkoss.zul.Window;
 
-import de.forsthaus.UserWorkspace;
 import billy.backend.model.JobType;
 import billy.backend.service.JobTypeService;
+import de.forsthaus.UserWorkspace;
 import de.forsthaus.backend.util.HibernateSearchObject;
 import de.forsthaus.webui.util.GFCBaseListCtrl;
 
 public class JobTypeListCtrl extends GFCBaseListCtrl<JobType> implements Serializable {
 
-	private static final long serialVersionUID = -2170565288232491362L;
-	private static final Logger logger = Logger.getLogger(JobTypeListCtrl.class);
+  private static final long serialVersionUID = -2170565288232491362L;
+  private static final Logger logger = Logger.getLogger(JobTypeListCtrl.class);
 
-	protected Window windowJobTypeList; // autowired
-	protected Panel panelJobTypeList; // autowired
+  protected Window windowJobTypeList; // autowired
+  protected Panel panelJobTypeList; // autowired
 
-	protected Borderlayout borderLayout_jobTypeList; // autowired
-	protected Paging paging_JobTypeList; // autowired
-	protected Listbox listBoxJobType; // autowired
-	protected Listheader listheader_JobTypeList_Nama; // autowired
-	protected Listheader listheader_JobTypeList_LastUpdate;
-	protected Listheader listheader_JobTypeList_UpdatedBy;
-	// NEEDED for ReUse in the SearchWindow
-	private HibernateSearchObject<JobType> searchObj;
+  protected Borderlayout borderLayout_jobTypeList; // autowired
+  protected Paging paging_JobTypeList; // autowired
+  protected Listbox listBoxJobType; // autowired
+  protected Listheader listheader_JobTypeList_Nama; // autowired
+  protected Listheader listheader_JobTypeList_LastUpdate;
+  protected Listheader listheader_JobTypeList_UpdatedBy;
+  // NEEDED for ReUse in the SearchWindow
+  private HibernateSearchObject<JobType> searchObj;
 
-	// row count for listbox
-	private int countRows;
+  // row count for listbox
+  private int countRows;
 
-	// Databinding
-	private AnnotateDataBinder binder;
-	private JobTypeMainCtrl jobTypeMainCtrl;
+  // Databinding
+  private AnnotateDataBinder binder;
+  private JobTypeMainCtrl jobTypeMainCtrl;
 
-	// ServiceDAOs / Domain Classes
-	private transient JobTypeService jobTypeService;
+  // ServiceDAOs / Domain Classes
+  private transient JobTypeService jobTypeService;
 
-	/**
-	 * default constructor.<br>
-	 */
-	public JobTypeListCtrl() {
-		super();
-	}
+  /**
+   * default constructor.<br>
+   */
+  public JobTypeListCtrl() {
+    super();
+  }
 
-	@Override
-	public void doAfterCompose(Component window) throws Exception {
-		super.doAfterCompose(window);
-		
-		this.self.setAttribute("controller", this, false);
-		if (arg.containsKey("ModuleMainController")) {
-			setJobTypeMainCtrl((JobTypeMainCtrl) arg.get("ModuleMainController"));
-			getJobTypeMainCtrl().setJobTypeListCtrl(this);
+  @Override
+  public void doAfterCompose(Component window) throws Exception {
+    super.doAfterCompose(window);
 
-			if (getJobTypeMainCtrl().getSelectedJobType() != null) {
-				setSelectedJobType(getJobTypeMainCtrl().getSelectedJobType());
-			} else
-				setSelectedJobType(null);
-		} else {
-			setSelectedJobType(null);
-		}
-	}
+    this.self.setAttribute("controller", this, false);
+    if (arg.containsKey("ModuleMainController")) {
+      setJobTypeMainCtrl((JobTypeMainCtrl) arg.get("ModuleMainController"));
+      getJobTypeMainCtrl().setJobTypeListCtrl(this);
 
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
-	// +++++++++++++++ Component Events ++++++++++++++++ //
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
+      if (getJobTypeMainCtrl().getSelectedJobType() != null) {
+        setSelectedJobType(getJobTypeMainCtrl().getSelectedJobType());
+      } else
+        setSelectedJobType(null);
+    } else {
+      setSelectedJobType(null);
+    }
+  }
 
-	/**
-	 * Automatically called method from zk.
-	 * 
-	 * @param event
-	 * @throws Exception
-	 */
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++ Component Events ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
-	public void onCreate$windowJobTypeList(Event event) throws Exception {
-		binder = (AnnotateDataBinder) event.getTarget().getAttribute("binder", true);
+  public void doFillListbox() {
 
-		doFillListbox();
+    doFitSize();
 
-		binder.loadAll();
-	}
+    // set the paging params
+    paging_JobTypeList.setPageSize(getCountRows());
+    paging_JobTypeList.setDetailed(true);
 
-	public void doFillListbox() {
+    // not used listheaders must be declared like ->
+    // lh.setSortAscending(""); lh.setSortDescending("")
 
-		doFitSize();
+    listheader_JobTypeList_Nama.setSortAscending(new FieldComparator("namaJobType", true));
+    listheader_JobTypeList_Nama.setSortDescending(new FieldComparator("namaJobType", false));
 
-		// set the paging params
-		paging_JobTypeList.setPageSize(getCountRows());
-		paging_JobTypeList.setDetailed(true);
+    listheader_JobTypeList_UpdatedBy.setSortAscending(new FieldComparator("updatedBy", true));
+    listheader_JobTypeList_UpdatedBy.setSortDescending(new FieldComparator("updatedBy", false));
 
-		// not used listheaders must be declared like ->
-		// lh.setSortAscending(""); lh.setSortDescending("")
-		
-		listheader_JobTypeList_Nama.setSortAscending(new FieldComparator("namaJobType", true));
-		listheader_JobTypeList_Nama.setSortDescending(new FieldComparator("namaJobType", false));
-		
-		listheader_JobTypeList_UpdatedBy.setSortAscending(new FieldComparator("updatedBy", true));
-		listheader_JobTypeList_UpdatedBy.setSortDescending(new FieldComparator("updatedBy", false));
-		
-		listheader_JobTypeList_LastUpdate.setSortAscending(new FieldComparator("lastUpdate", true));
-		listheader_JobTypeList_LastUpdate.setSortDescending(new FieldComparator("lastUpdate", false));	
-		
-		
-		// ++ create the searchObject and init sorting ++//
-		// ++ create the searchObject and init sorting ++//
-		searchObj = new HibernateSearchObject<JobType>(JobType.class, getCountRows());
-		searchObj.addSort("namaJobType", false);
-		setSearchObj(searchObj);
+    listheader_JobTypeList_LastUpdate.setSortAscending(new FieldComparator("lastUpdate", true));
+    listheader_JobTypeList_LastUpdate.setSortDescending(new FieldComparator("lastUpdate", false));
 
-		// Set the BindingListModel
-		getPagedBindingListWrapper().init(searchObj, getListBoxJobType(), paging_JobTypeList);
-		BindingListModelList lml = (BindingListModelList) getListBoxJobType().getModel();
-		setJobTypes(lml);
 
-		// check if first time opened and init databinding for selectedBean
-		if (getSelectedJobType() == null) {
-			// init the bean with the first record in the List
-			if (lml.getSize() > 0) {
-				final int rowIndex = 0;
-				// only for correct showing after Rendering. No effect as an
-				// Event
-				// yet.
-				getListBoxJobType().setSelectedIndex(rowIndex);
-				// get the first entry and cast them to the needed object
-				setSelectedJobType((JobType) lml.get(0));
+    // ++ create the searchObject and init sorting ++//
+    // ++ create the searchObject and init sorting ++//
+    searchObj = new HibernateSearchObject<JobType>(JobType.class, getCountRows());
+    searchObj.addSort("namaJobType", false);
+    setSearchObj(searchObj);
 
-				// call the onSelect Event for showing the objects data in the
-				// statusBar
-				Events.sendEvent(new Event("onSelect", getListBoxJobType(), getSelectedJobType()));
-			}
-		}
+    // Set the BindingListModel
+    getPagedBindingListWrapper().init(searchObj, getListBoxJobType(), paging_JobTypeList);
+    BindingListModelList lml = (BindingListModelList) getListBoxJobType().getModel();
+    setJobTypes(lml);
 
-	}
+    // check if first time opened and init databinding for selectedBean
+    if (getSelectedJobType() == null) {
+      // init the bean with the first record in the List
+      if (lml.getSize() > 0) {
+        final int rowIndex = 0;
+        // only for correct showing after Rendering. No effect as an
+        // Event
+        // yet.
+        getListBoxJobType().setSelectedIndex(rowIndex);
+        // get the first entry and cast them to the needed object
+        setSelectedJobType((JobType) lml.get(0));
 
-	/**
-	 * Selects the object in the listbox and change the tab.<br>
-	 * Event is forwarded in the corresponding listbox.
-	 */
-	public void onDoubleClickedJobTypeItem(Event event) {
-		// logger.debug(event.toString());
+        // call the onSelect Event for showing the objects data in the
+        // statusBar
+        Events.sendEvent(new Event("onSelect", getListBoxJobType(), getSelectedJobType()));
+      }
+    }
 
-		JobType anJobType = getSelectedJobType();
+  }
 
-		if (anJobType != null) {
-			setSelectedJobType(anJobType);
-			setJobType(anJobType);
+  /**
+   * Recalculates the container size for this controller and resize them. Calculate how many rows
+   * have been place in the listbox. Get the currentDesktopHeight from a hidden Intbox from the
+   * index.zul that are filled by onClientInfo() in the indexCtroller.
+   */
+  public void doFitSize() {
 
-			// check first, if the tabs are created
-			if (getJobTypeMainCtrl().getJobTypeDetailCtrl() == null) {
-				Events.sendEvent(new Event("onSelect", getJobTypeMainCtrl().tabJobTypeDetail, null));
-				// if we work with spring beanCreation than we must check a
-				// little bit deeper, because the Controller are preCreated ?
-			} else if (getJobTypeMainCtrl().getJobTypeDetailCtrl().getBinder() == null) {
-				Events.sendEvent(new Event("onSelect", getJobTypeMainCtrl().tabJobTypeDetail, null));
-			}
+    // normally 0 ! Or we have a i.e. a toolBar on top of the listBox.
+    final int specialSize = 5;
 
-			Events.sendEvent(new Event("onSelect", getJobTypeMainCtrl().tabJobTypeDetail, anJobType));
-		}
-	}
+    final int menuOffset = UserWorkspace.getInstance().getMenuOffset();
+    int height =
+        ((Intbox) Path.getComponent("/outerIndexWindow/currentDesktopHeight")).getValue()
+            .intValue();
+    height = height - menuOffset;
+    final int maxListBoxHeight = height - specialSize - 148;
+    setCountRows((int) Math.round(maxListBoxHeight / 17.7));
+    borderLayout_jobTypeList.setHeight(String.valueOf(maxListBoxHeight) + "px");
 
-	/**
-	 * When a listItem in the corresponding listbox is selected.<br>
-	 * Event is forwarded in the corresponding listbox.
-	 * 
-	 * @param event
-	 */
-	public void onSelect$listBoxJobType(Event event) {
-		// logger.debug(event.toString());
+    windowJobTypeList.invalidate();
+  }
 
-		// selectedJobType is filled by annotated databinding mechanism
-		JobType anJobType = getSelectedJobType();
+  public AnnotateDataBinder getBinder() {
+    return this.binder;
+  }
 
-		if (anJobType == null) {
-			return;
-		}
+  public int getCountRows() {
+    return this.countRows;
+  }
 
-		// check first, if the tabs are created
-		if (getJobTypeMainCtrl().getJobTypeDetailCtrl() == null) {
-			Events.sendEvent(new Event("onSelect", getJobTypeMainCtrl().tabJobTypeDetail, null));
-			// if we work with spring beanCreation than we must check a little
-			// bit deeper, because the Controller are preCreated ?
-		} else if (getJobTypeMainCtrl().getJobTypeDetailCtrl().getBinder() == null) {
-			Events.sendEvent(new Event("onSelect", getJobTypeMainCtrl().tabJobTypeDetail, null));
-		}
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++++ Business Logic ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
-		// INIT ALL RELATED Queries/OBJECTS/LISTS NEW
-		getJobTypeMainCtrl().getJobTypeDetailCtrl().setSelectedJobType(anJobType);
-		getJobTypeMainCtrl().getJobTypeDetailCtrl().setJobType(anJobType);
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
-		// store the selected bean values as current
-		getJobTypeMainCtrl().doStoreInitValues();
+  /**
+   * Best Pratice Hint:<br>
+   * The setters/getters for the local annotated data binded Beans/Sets are administered in the
+   * module's mainController. Working in this way you have clean line to share this beans/sets with
+   * other controllers.
+   */
+  /* Master BEANS */
+  public JobType getJobType() {
+    // STORED IN THE module's MainController
+    return getJobTypeMainCtrl().getSelectedJobType();
+  }
 
-		// show the objects data in the statusBar
-		String str = Labels.getLabel("common.JobType") + ": " + anJobType.getNamaJobType();
-		EventQueues.lookup("selectedObjectEventQueue", EventQueues.DESKTOP, true).publish(new Event("onChangeSelectedObject", null, str));
+  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+  // ++++++++++++++++++ getter / setter +++++++++++++++++++//
+  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++//
 
-	}
+  public JobTypeMainCtrl getJobTypeMainCtrl() {
+    return this.jobTypeMainCtrl;
+  }
 
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
-	// +++++++++++++++++ Business Logic ++++++++++++++++ //
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  public BindingListModelList getJobTypes() {
+    // STORED IN THE module's MainController
+    return getJobTypeMainCtrl().getJobTypes();
+  }
 
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
-	// ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  public JobTypeService getJobTypeService() {
+    return this.jobTypeService;
+  }
 
-	/**
-	 * Recalculates the container size for this controller and resize them.
-	 * 
-	 * Calculate how many rows have been place in the listbox. Get the
-	 * currentDesktopHeight from a hidden Intbox from the index.zul that are
-	 * filled by onClientInfo() in the indexCtroller.
-	 */
-	public void doFitSize() {
+  public Listbox getListBoxJobType() {
+    return this.listBoxJobType;
+  }
 
-		// normally 0 ! Or we have a i.e. a toolBar on top of the listBox.
-		final int specialSize = 5;
+  public HibernateSearchObject<JobType> getSearchObj() {
+    return this.searchObj;
+  }
 
-		final int menuOffset = UserWorkspace.getInstance().getMenuOffset();
-		int height = ((Intbox) Path.getComponent("/outerIndexWindow/currentDesktopHeight")).getValue().intValue();
-		height = height - menuOffset;
-		final int maxListBoxHeight = height - specialSize - 148;
-		setCountRows((int) Math.round(maxListBoxHeight / 17.7));
-		borderLayout_jobTypeList.setHeight(String.valueOf(maxListBoxHeight) + "px");
+  public JobType getSelectedJobType() {
+    // STORED IN THE module's MainController
+    return getJobTypeMainCtrl().getSelectedJobType();
+  }
 
-		windowJobTypeList.invalidate();
-	}
+  /**
+   * Automatically called method from zk.
+   * 
+   * @param event
+   * @throws Exception
+   */
 
-	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++//
-	// ++++++++++++++++++ getter / setter +++++++++++++++++++//
-	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+  public void onCreate$windowJobTypeList(Event event) throws Exception {
+    binder = (AnnotateDataBinder) event.getTarget().getAttribute("binder", true);
 
-	/**
-	 * Best Pratice Hint:<br>
-	 * The setters/getters for the local annotated data binded Beans/Sets are
-	 * administered in the module's mainController. Working in this way you have
-	 * clean line to share this beans/sets with other controllers.
-	 */
-	/* Master BEANS */
-	public JobType getJobType() {
-		// STORED IN THE module's MainController
-		return getJobTypeMainCtrl().getSelectedJobType();
-	}
+    doFillListbox();
 
-	public void setJobType(JobType anJobType) {
-		// STORED IN THE module's MainController
-		getJobTypeMainCtrl().setSelectedJobType(anJobType);
-	}
+    binder.loadAll();
+  }
 
-	public void setSelectedJobType(JobType selectedJobType) {
-		// STORED IN THE module's MainController
-		getJobTypeMainCtrl().setSelectedJobType(selectedJobType);
-	}
+  /**
+   * Selects the object in the listbox and change the tab.<br>
+   * Event is forwarded in the corresponding listbox.
+   */
+  public void onDoubleClickedJobTypeItem(Event event) {
+    // logger.debug(event.toString());
 
-	public JobType getSelectedJobType() {
-		// STORED IN THE module's MainController
-		return getJobTypeMainCtrl().getSelectedJobType();
-	}
+    JobType anJobType = getSelectedJobType();
 
-	public void setJobTypes(BindingListModelList jobTypes) {
-		// STORED IN THE module's MainController
-		getJobTypeMainCtrl().setJobTypes(jobTypes);
-	}
+    if (anJobType != null) {
+      setSelectedJobType(anJobType);
+      setJobType(anJobType);
 
-	public BindingListModelList getJobTypes() {
-		// STORED IN THE module's MainController
-		return getJobTypeMainCtrl().getJobTypes();
-	}
+      // check first, if the tabs are created
+      if (getJobTypeMainCtrl().getJobTypeDetailCtrl() == null) {
+        Events.sendEvent(new Event("onSelect", getJobTypeMainCtrl().tabJobTypeDetail, null));
+        // if we work with spring beanCreation than we must check a
+        // little bit deeper, because the Controller are preCreated ?
+      } else if (getJobTypeMainCtrl().getJobTypeDetailCtrl().getBinder() == null) {
+        Events.sendEvent(new Event("onSelect", getJobTypeMainCtrl().tabJobTypeDetail, null));
+      }
 
-	public void setBinder(AnnotateDataBinder binder) {
-		this.binder = binder;
-	}
+      Events.sendEvent(new Event("onSelect", getJobTypeMainCtrl().tabJobTypeDetail, anJobType));
+    }
+  }
 
-	public AnnotateDataBinder getBinder() {
-		return this.binder;
-	}
+  /**
+   * When a listItem in the corresponding listbox is selected.<br>
+   * Event is forwarded in the corresponding listbox.
+   * 
+   * @param event
+   */
+  public void onSelect$listBoxJobType(Event event) {
+    // logger.debug(event.toString());
 
-	/* CONTROLLERS */
-	public void setJobTypeMainCtrl(JobTypeMainCtrl jobTypeMainCtrl) {
-		this.jobTypeMainCtrl = jobTypeMainCtrl;
-	}
+    // selectedJobType is filled by annotated databinding mechanism
+    JobType anJobType = getSelectedJobType();
 
-	public JobTypeMainCtrl getJobTypeMainCtrl() {
-		return this.jobTypeMainCtrl;
-	}
+    if (anJobType == null) {
+      return;
+    }
 
-	/* SERVICES */
-	public void setJobTypeService(JobTypeService jobTypeService) {
-		this.jobTypeService = jobTypeService;
-	}
+    // check first, if the tabs are created
+    if (getJobTypeMainCtrl().getJobTypeDetailCtrl() == null) {
+      Events.sendEvent(new Event("onSelect", getJobTypeMainCtrl().tabJobTypeDetail, null));
+      // if we work with spring beanCreation than we must check a little
+      // bit deeper, because the Controller are preCreated ?
+    } else if (getJobTypeMainCtrl().getJobTypeDetailCtrl().getBinder() == null) {
+      Events.sendEvent(new Event("onSelect", getJobTypeMainCtrl().tabJobTypeDetail, null));
+    }
 
-	public JobTypeService getJobTypeService() {
-		return this.jobTypeService;
-	}
+    // INIT ALL RELATED Queries/OBJECTS/LISTS NEW
+    getJobTypeMainCtrl().getJobTypeDetailCtrl().setSelectedJobType(anJobType);
+    getJobTypeMainCtrl().getJobTypeDetailCtrl().setJobType(anJobType);
 
-	/* COMPONENTS and OTHERS */
-	public void setSearchObj(HibernateSearchObject<JobType> searchObj) {
-		this.searchObj = searchObj;
-	}
+    // store the selected bean values as current
+    getJobTypeMainCtrl().doStoreInitValues();
 
-	public HibernateSearchObject<JobType> getSearchObj() {
-		return this.searchObj;
-	}
+    // show the objects data in the statusBar
+    String str = Labels.getLabel("common.JobType") + ": " + anJobType.getNamaJobType();
+    EventQueues.lookup("selectedObjectEventQueue", EventQueues.DESKTOP, true).publish(
+        new Event("onChangeSelectedObject", null, str));
 
-	public Listbox getListBoxJobType() {
-		return this.listBoxJobType;
-	}
+  }
 
-	public void setListBoxJobType(Listbox listBoxJobType) {
-		this.listBoxJobType = listBoxJobType;
-	}
+  public void setBinder(AnnotateDataBinder binder) {
+    this.binder = binder;
+  }
 
-	public int getCountRows() {
-		return this.countRows;
-	}
+  public void setCountRows(int countRows) {
+    this.countRows = countRows;
+  }
 
-	public void setCountRows(int countRows) {
-		this.countRows = countRows;
-	}
+  public void setJobType(JobType anJobType) {
+    // STORED IN THE module's MainController
+    getJobTypeMainCtrl().setSelectedJobType(anJobType);
+  }
+
+  /* CONTROLLERS */
+  public void setJobTypeMainCtrl(JobTypeMainCtrl jobTypeMainCtrl) {
+    this.jobTypeMainCtrl = jobTypeMainCtrl;
+  }
+
+  public void setJobTypes(BindingListModelList jobTypes) {
+    // STORED IN THE module's MainController
+    getJobTypeMainCtrl().setJobTypes(jobTypes);
+  }
+
+  /* SERVICES */
+  public void setJobTypeService(JobTypeService jobTypeService) {
+    this.jobTypeService = jobTypeService;
+  }
+
+  public void setListBoxJobType(Listbox listBoxJobType) {
+    this.listBoxJobType = listBoxJobType;
+  }
+
+  /* COMPONENTS and OTHERS */
+  public void setSearchObj(HibernateSearchObject<JobType> searchObj) {
+    this.searchObj = searchObj;
+  }
+
+  public void setSelectedJobType(JobType selectedJobType) {
+    // STORED IN THE module's MainController
+    getJobTypeMainCtrl().setSelectedJobType(selectedJobType);
+  }
 
 }

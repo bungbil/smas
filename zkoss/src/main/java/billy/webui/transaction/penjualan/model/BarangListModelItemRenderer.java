@@ -11,19 +11,19 @@ import billy.backend.model.Barang;
 
 public class BarangListModelItemRenderer implements ListitemRenderer, Serializable {
 
-	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(BarangListModelItemRenderer.class);
+  private static final long serialVersionUID = 1L;
+  private static final Logger logger = Logger.getLogger(BarangListModelItemRenderer.class);
 
-	@Override
-	public void render(Listitem item, Object data) throws Exception {
+  @Override
+  public void render(Listitem item, Object data) throws Exception {
 
-		final Barang entity = (Barang) data;
+    final Barang entity = (Barang) data;
 
-		final Listcell lc = new Listcell(entity.getNamaBarang()+"("+entity.getKodeBarang()+")");		
-		lc.setParent(item);
+    final Listcell lc = new Listcell(entity.getNamaBarang() + "(" + entity.getKodeBarang() + ")");
+    lc.setParent(item);
 
-		item.setAttribute("data", data);
+    item.setAttribute("data", data);
 
-	}
+  }
 
 }

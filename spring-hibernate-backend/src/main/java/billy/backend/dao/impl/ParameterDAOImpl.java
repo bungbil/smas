@@ -9,67 +9,68 @@ import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.stereotype.Repository;
 
 import billy.backend.dao.BillyBasisDAO;
-
 import billy.backend.dao.ParameterDAO;
 import billy.backend.model.Parameter;
 
 @Repository
 public class ParameterDAOImpl extends BillyBasisDAO<Parameter> implements ParameterDAO {
 
-	@Override
-	public Parameter getNewParameter() {
-		return new Parameter();
-	}
+  @Override
+  public void deleteParameterById(long id) {
+    Parameter Parameter = getParameterById(id);
+    if (Parameter != null) {
+      delete(Parameter);
+    }
+  }
 
-	@Override
-	public Parameter getParameterById(Long id) {
-		return get(Parameter.class, id);
-	}
+  @Override
+  public List<Parameter> getAllParameters() {
+    return getHibernateTemplate().loadAll(Parameter.class);
+  }
 
-	@SuppressWarnings("unchecked")
-	public Parameter getParameterByParamName(String paramName) {
-		DetachedCriteria criteria = DetachedCriteria.forClass(Parameter.class);
-		criteria.add(Restrictions.eq("paramName", paramName));
+  @Override
+  public int getCountAllParameters() {
+    return DataAccessUtils.intResult(getHibernateTemplate().find("select count(*) from Parameter"));
+  }
 
-		return (Parameter) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(criteria));
-	}
+  @Override
+  public Parameter getNewParameter() {
+    return new Parameter();
+  }
 
-	@Override
-	public List<Parameter> getAllParameters() {
-		return getHibernateTemplate().loadAll(Parameter.class);
-	}
+  @Override
+  public Parameter getParameterById(Long id) {
+    return get(Parameter.class, id);
+  }
 
-	@Override
-	public void deleteParameterById(long id) {
-		Parameter Parameter = getParameterById(id);
-		if (Parameter != null) {
-			delete(Parameter);
-		}
-	}
+  @Override
+  @SuppressWarnings("unchecked")
+  public Parameter getParameterByParamName(String paramName) {
+    DetachedCriteria criteria = DetachedCriteria.forClass(Parameter.class);
+    criteria.add(Restrictions.eq("paramName", paramName));
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Parameter> getParametersLikeParamValue(String string) {
+    return (Parameter) DataAccessUtils
+        .uniqueResult(getHibernateTemplate().findByCriteria(criteria));
+  }
 
-		DetachedCriteria criteria = DetachedCriteria.forClass(Parameter.class);
-		criteria.add(Restrictions.ilike("paramValue", string, MatchMode.ANYWHERE));
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Parameter> getParametersLikeDescription(String string) {
 
-		return getHibernateTemplate().findByCriteria(criteria);
-	}
+    DetachedCriteria criteria = DetachedCriteria.forClass(Parameter.class);
+    criteria.add(Restrictions.ilike("description", string, MatchMode.ANYWHERE));
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Parameter> getParametersLikeDescription(String string) {
+    return getHibernateTemplate().findByCriteria(criteria);
+  }
 
-		DetachedCriteria criteria = DetachedCriteria.forClass(Parameter.class);
-		criteria.add(Restrictions.ilike("description", string, MatchMode.ANYWHERE));
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Parameter> getParametersLikeParamValue(String string) {
 
-		return getHibernateTemplate().findByCriteria(criteria);
-	}
+    DetachedCriteria criteria = DetachedCriteria.forClass(Parameter.class);
+    criteria.add(Restrictions.ilike("paramValue", string, MatchMode.ANYWHERE));
 
-	@Override
-	public int getCountAllParameters() {
-		return DataAccessUtils.intResult(getHibernateTemplate().find("select count(*) from Parameter"));
-	}
+    return getHibernateTemplate().findByCriteria(criteria);
+  }
 
 }

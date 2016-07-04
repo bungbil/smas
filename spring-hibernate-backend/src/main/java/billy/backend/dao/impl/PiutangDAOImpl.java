@@ -17,49 +17,49 @@ import billy.backend.model.Piutang;
 @Repository
 public class PiutangDAOImpl extends BillyBasisDAO<Piutang> implements PiutangDAO {
 
-	@Override
-	public Piutang getNewPiutang() {
-		return new Piutang();
-	}
+  @Override
+  public void deletePiutangsByPenjualan(Penjualan entity) {
+    List<Piutang> piutang = getPiutangsByPenjualan(entity);
+    if (piutang != null) {
+      deleteAll(piutang);
+    }
+  }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Piutang> getPiutangsByPenjualan(Penjualan entity) {
-		List<Piutang> result;
+  @Override
+  public int getCountAllPiutangs() {
+    return DataAccessUtils.intResult(getHibernateTemplate().find("select count(*) from Piutang"));
+  }
 
-		DetachedCriteria criteria = DetachedCriteria.forClass(Piutang.class);
-		criteria.add(Restrictions.eq("penjualan", entity));
+  @Override
+  public int getCountPiutangsByPenjualan(Penjualan entity) {
+    DetachedCriteria criteria = DetachedCriteria.forClass(Piutang.class);
+    criteria.add(Restrictions.eq("penjualan", entity));
+    criteria.setProjection(Projections.rowCount());
+    return DataAccessUtils.intResult(getHibernateTemplate().findByCriteria(criteria));
+  }
 
-		result = getHibernateTemplate().findByCriteria(criteria);
+  @Override
+  public Piutang getNewPiutang() {
+    return new Piutang();
+  }
 
-		return result;
+  @Override
+  public Piutang getPiutangById(long id) {
+    return get(Piutang.class, id);
+  }
 
-	}
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Piutang> getPiutangsByPenjualan(Penjualan entity) {
+    List<Piutang> result;
 
-	@Override
-	public int getCountPiutangsByPenjualan(Penjualan entity) {
-		DetachedCriteria criteria = DetachedCriteria.forClass(Piutang.class);
-		criteria.add(Restrictions.eq("penjualan", entity));
-		criteria.setProjection(Projections.rowCount());
-		return DataAccessUtils.intResult(getHibernateTemplate().findByCriteria(criteria));
-	}
+    DetachedCriteria criteria = DetachedCriteria.forClass(Piutang.class);
+    criteria.add(Restrictions.eq("penjualan", entity));
 
-	@Override
-	public Piutang getPiutangById(long id) {
-		return get(Piutang.class, id);
-	}
+    result = getHibernateTemplate().findByCriteria(criteria);
 
-	@Override
-	public void deletePiutangsByPenjualan(Penjualan entity) {
-		List<Piutang> piutang = getPiutangsByPenjualan(entity);
-		if (piutang != null) {
-			deleteAll(piutang);
-		}
-	}
+    return result;
 
-	@Override
-	public int getCountAllPiutangs() {
-		return DataAccessUtils.intResult(getHibernateTemplate().find("select count(*) from Piutang"));
-	}
+  }
 
 }

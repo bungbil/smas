@@ -1,170 +1,129 @@
 package billy.webui.report.komisipenjualan.model;
 
 import java.math.BigDecimal;
- 
+
 public class KomisiPenjualan {
- 
-	private String nomorFaktur;
-    private String namaPelanggan;
-    private String kodePartner;
-    private String intervalKredit;
-    private String namaBarang;
-    private Double qtyKirim;
-    private BigDecimal penjualanBarang;
-    private BigDecimal penerimaanPenjualan;
-    private BigDecimal komisiPenjualan;
-    
-    
-    
-    
-    public KomisiPenjualan() {
-		
-	}
 
+  private String nomorFaktur;
+  private String namaPelanggan;
+  private String kodePartner;
+  private String intervalKredit;
+  private String namaBarang;
+  private Double qtyKirim;
+  private BigDecimal penjualanBarang;
+  private BigDecimal penerimaanPenjualan;
+  private BigDecimal komisiPenjualan;
 
 
+  public KomisiPenjualan() {
 
-	public KomisiPenjualan(String nomorFaktur, String namaPelanggan,
-			String kodePartner, String intervalKredit, String namaBarang,
-			Double qtyKirim, BigDecimal penjualanBarang,
-			BigDecimal penerimaanPenjualan, BigDecimal komisiPenjualan) {
-		super();
-		this.nomorFaktur = nomorFaktur;
-		this.namaPelanggan = namaPelanggan;
-		this.kodePartner = kodePartner;
-		this.intervalKredit = intervalKredit;
-		this.namaBarang = namaBarang;
-		this.qtyKirim = qtyKirim;
-		this.penjualanBarang = penjualanBarang;
-		this.penerimaanPenjualan = penerimaanPenjualan;
-		this.komisiPenjualan = komisiPenjualan;
-	}
+  }
 
 
+  public KomisiPenjualan(String nomorFaktur, String namaPelanggan, String kodePartner,
+      String intervalKredit, String namaBarang, Double qtyKirim, BigDecimal penjualanBarang,
+      BigDecimal penerimaanPenjualan, BigDecimal komisiPenjualan) {
+    super();
+    this.nomorFaktur = nomorFaktur;
+    this.namaPelanggan = namaPelanggan;
+    this.kodePartner = kodePartner;
+    this.intervalKredit = intervalKredit;
+    this.namaBarang = namaBarang;
+    this.qtyKirim = qtyKirim;
+    this.penjualanBarang = penjualanBarang;
+    this.penerimaanPenjualan = penerimaanPenjualan;
+    this.komisiPenjualan = komisiPenjualan;
+  }
 
 
-	public String getNomorFaktur() {
-		return nomorFaktur;
-	}
+  public String getIntervalKredit() {
+    return intervalKredit;
+  }
 
 
+  public String getKodePartner() {
+    return kodePartner;
+  }
 
 
-	public void setNomorFaktur(String nomorFaktur) {
-		this.nomorFaktur = nomorFaktur;
-	}
+  public BigDecimal getKomisiPenjualan() {
+    return komisiPenjualan;
+  }
 
 
+  public String getNamaBarang() {
+    return namaBarang;
+  }
 
 
-	public String getNamaPelanggan() {
-		return namaPelanggan;
-	}
+  public String getNamaPelanggan() {
+    return namaPelanggan;
+  }
 
 
+  public String getNomorFaktur() {
+    return nomorFaktur;
+  }
 
 
-	public void setNamaPelanggan(String namaPelanggan) {
-		this.namaPelanggan = namaPelanggan;
-	}
+  public BigDecimal getPenerimaanPenjualan() {
+    return penerimaanPenjualan;
+  }
 
 
+  public BigDecimal getPenjualanBarang() {
+    return penjualanBarang;
+  }
 
 
-	public String getKodePartner() {
-		return kodePartner;
-	}
+  public Double getQtyKirim() {
+    return qtyKirim;
+  }
 
 
+  public void setIntervalKredit(String intervalKredit) {
+    this.intervalKredit = intervalKredit;
+  }
 
 
-	public void setKodePartner(String kodePartner) {
-		this.kodePartner = kodePartner;
-	}
+  public void setKodePartner(String kodePartner) {
+    this.kodePartner = kodePartner;
+  }
 
 
+  public void setKomisiPenjualan(BigDecimal komisiPenjualan) {
+    this.komisiPenjualan = komisiPenjualan;
+  }
 
 
-	public String getIntervalKredit() {
-		return intervalKredit;
-	}
+  public void setNamaBarang(String namaBarang) {
+    this.namaBarang = namaBarang;
+  }
 
 
+  public void setNamaPelanggan(String namaPelanggan) {
+    this.namaPelanggan = namaPelanggan;
+  }
 
 
-	public void setIntervalKredit(String intervalKredit) {
-		this.intervalKredit = intervalKredit;
-	}
+  public void setNomorFaktur(String nomorFaktur) {
+    this.nomorFaktur = nomorFaktur;
+  }
 
 
+  public void setPenerimaanPenjualan(BigDecimal penerimaanPenjualan) {
+    this.penerimaanPenjualan = penerimaanPenjualan;
+  }
 
 
-	public String getNamaBarang() {
-		return namaBarang;
-	}
+  public void setPenjualanBarang(BigDecimal penjualanBarang) {
+    this.penjualanBarang = penjualanBarang;
+  }
 
 
-
-
-	public void setNamaBarang(String namaBarang) {
-		this.namaBarang = namaBarang;
-	}
-
-
-
-
-	public Double getQtyKirim() {
-		return qtyKirim;
-	}
-
-
-
-
-	public void setQtyKirim(Double qtyKirim) {
-		this.qtyKirim = qtyKirim;
-	}
-
-
-
-
-	public BigDecimal getPenjualanBarang() {
-		return penjualanBarang;
-	}
-
-
-
-
-	public void setPenjualanBarang(BigDecimal penjualanBarang) {
-		this.penjualanBarang = penjualanBarang;
-	}
-
-
-
-
-	public BigDecimal getPenerimaanPenjualan() {
-		return penerimaanPenjualan;
-	}
-
-
-
-
-	public void setPenerimaanPenjualan(BigDecimal penerimaanPenjualan) {
-		this.penerimaanPenjualan = penerimaanPenjualan;
-	}
-
-
-
-
-	public BigDecimal getKomisiPenjualan() {
-		return komisiPenjualan;
-	}
-
-
-
-
-	public void setKomisiPenjualan(BigDecimal komisiPenjualan) {
-		this.komisiPenjualan = komisiPenjualan;
-	}
+  public void setQtyKirim(Double qtyKirim) {
+    this.qtyKirim = qtyKirim;
+  }
 
 
 }

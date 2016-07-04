@@ -2,8 +2,6 @@ package billy.webui.master.satuanbarang;
 
 import java.io.Serializable;
 
-import javax.swing.plaf.basic.BasicBorders.RadioButtonBorder;
-
 import org.apache.log4j.Logger;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Path;
@@ -11,180 +9,178 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zkplus.databind.AnnotateDataBinder;
 import org.zkoss.zkplus.databind.BindingListModelList;
 import org.zkoss.zul.Borderlayout;
-import org.zkoss.zul.Button;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Intbox;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.Radio;
-import org.zkoss.zul.Radiogroup;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
-import de.forsthaus.UserWorkspace;
 import billy.backend.model.SatuanBarang;
 import billy.backend.service.SatuanBarangService;
+import de.forsthaus.UserWorkspace;
 import de.forsthaus.webui.util.GFCBaseCtrl;
 
 public class SatuanBarangDetailCtrl extends GFCBaseCtrl implements Serializable {
 
-	private static final long serialVersionUID = -8352659530536077973L;
-	private static final Logger logger = Logger.getLogger(SatuanBarangDetailCtrl.class);
+  private static final long serialVersionUID = -8352659530536077973L;
+  private static final Logger logger = Logger.getLogger(SatuanBarangDetailCtrl.class);
 
-	protected Window windowSatuanBarangDetail; // autowired
+  protected Window windowSatuanBarangDetail; // autowired
 
-	protected Borderlayout borderlayout_SatuanBarangDetail; // autowired
+  protected Borderlayout borderlayout_SatuanBarangDetail; // autowired
 
-	protected Textbox txtb_KodeSatuanBarang; // autowired
-	protected Textbox txtb_DeskripsiSatuanBarang; // autowired
-	protected Checkbox txtb_SatuanStandarBarang; // autowired		
-	protected Intbox txtb_NilaiStandarBarang;
-	protected Intbox txtb_NilaiKonversi;
-	// Databinding
-	protected transient AnnotateDataBinder binder;
-	private SatuanBarangMainCtrl satuanBarangMainCtrl;
+  protected Textbox txtb_KodeSatuanBarang; // autowired
+  protected Textbox txtb_DeskripsiSatuanBarang; // autowired
+  protected Checkbox txtb_SatuanStandarBarang; // autowired
+  protected Intbox txtb_NilaiStandarBarang;
+  protected Intbox txtb_NilaiKonversi;
+  // Databinding
+  protected transient AnnotateDataBinder binder;
+  private SatuanBarangMainCtrl satuanBarangMainCtrl;
 
-	// ServiceDAOs / Domain Classes
-	private transient SatuanBarangService satuanBarangService;
+  // ServiceDAOs / Domain Classes
+  private transient SatuanBarangService satuanBarangService;
 
-	/**
-	 * default constructor.<br>
-	 */
-	public SatuanBarangDetailCtrl() {
-		super();
-	}
+  /**
+   * default constructor.<br>
+   */
+  public SatuanBarangDetailCtrl() {
+    super();
+  }
 
-	@Override
-	public void doAfterCompose(Component window) throws Exception {
-		super.doAfterCompose(window);
+  @Override
+  public void doAfterCompose(Component window) throws Exception {
+    super.doAfterCompose(window);
 
-		this.self.setAttribute("controller", this, false);
+    this.self.setAttribute("controller", this, false);
 
-		if (arg.containsKey("ModuleMainController")) {
-			setSatuanBarangMainCtrl((SatuanBarangMainCtrl) arg.get("ModuleMainController"));
+    if (arg.containsKey("ModuleMainController")) {
+      setSatuanBarangMainCtrl((SatuanBarangMainCtrl) arg.get("ModuleMainController"));
 
-			// SET THIS CONTROLLER TO THE module's Parent/MainController
-			getSatuanBarangMainCtrl().setSatuanBarangDetailCtrl(this);
+      // SET THIS CONTROLLER TO THE module's Parent/MainController
+      getSatuanBarangMainCtrl().setSatuanBarangDetailCtrl(this);
 
-			// Get the selected object.
-			// Check if this Controller if created on first time. If so,
-			// than the selectedXXXBean should be null
-			if (getSatuanBarangMainCtrl().getSelectedSatuanBarang() != null) {
-				setSelectedSatuanBarang(getSatuanBarangMainCtrl().getSelectedSatuanBarang());				
-			} else
-				setSelectedSatuanBarang(null);
-		} else {
-			setSelectedSatuanBarang(null);
-		}
+      // Get the selected object.
+      // Check if this Controller if created on first time. If so,
+      // than the selectedXXXBean should be null
+      if (getSatuanBarangMainCtrl().getSelectedSatuanBarang() != null) {
+        setSelectedSatuanBarang(getSatuanBarangMainCtrl().getSelectedSatuanBarang());
+      } else
+        setSelectedSatuanBarang(null);
+    } else {
+      setSelectedSatuanBarang(null);
+    }
 
-	}
+  }
 
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
-	// +++++++++++++++ Component Events ++++++++++++++++ //
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++ Component Events ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
-	/**
-	 * Automatically called method from zk.
-	 * 
-	 * @param event
-	 * @throws Exception
-	 */
-	public void onCreate$windowSatuanBarangDetail(Event event) throws Exception {
-		binder = (AnnotateDataBinder) event.getTarget().getAttribute("binder", true);
+  public void doFitSize(Event event) {
 
-		binder.loadAll();
+    final int menuOffset = UserWorkspace.getInstance().getMenuOffset();
+    int height =
+        ((Intbox) Path.getComponent("/outerIndexWindow/currentDesktopHeight")).getValue()
+            .intValue();
+    height = height - menuOffset;
+    final int maxListBoxHeight = height - 152;
+    borderlayout_SatuanBarangDetail.setHeight(String.valueOf(maxListBoxHeight) + "px");
 
-		doFitSize(event);
-	}
+    windowSatuanBarangDetail.invalidate();
+  }
 
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
-	// +++++++++++++++++ Business Logic ++++++++++++++++ //
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++++ Business Logic ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
-	// ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
-	public void doFitSize(Event event) {
+  public void doReadOnlyMode(boolean b) {
+    txtb_KodeSatuanBarang.setReadonly(b);
+    txtb_DeskripsiSatuanBarang.setReadonly(b);
+    txtb_SatuanStandarBarang.setDisabled(b);
+    txtb_NilaiStandarBarang.setReadonly(b);
+    txtb_NilaiKonversi.setReadonly(b);
 
-		final int menuOffset = UserWorkspace.getInstance().getMenuOffset();
-		int height = ((Intbox) Path.getComponent("/outerIndexWindow/currentDesktopHeight")).getValue().intValue();
-		height = height - menuOffset;
-		final int maxListBoxHeight = height - 152;
-		borderlayout_SatuanBarangDetail.setHeight(String.valueOf(maxListBoxHeight) + "px");
+  }
 
-		windowSatuanBarangDetail.invalidate();
-	}
+  public AnnotateDataBinder getBinder() {
+    return this.binder;
+  }
 
-	public void doReadOnlyMode(boolean b) {
-		txtb_KodeSatuanBarang.setReadonly(b);
-		txtb_DeskripsiSatuanBarang.setReadonly(b);		
-		txtb_SatuanStandarBarang.setDisabled(b);
-		txtb_NilaiStandarBarang.setReadonly(b);
-		txtb_NilaiKonversi.setReadonly(b);
-		
-	}
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
-	// ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
-	// +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  /* Master BEANS */
+  public SatuanBarang getSatuanBarang() {
+    // STORED IN THE module's MainController
+    return getSatuanBarangMainCtrl().getSelectedSatuanBarang();
+  }
 
-	/* Master BEANS */
-	public SatuanBarang getSatuanBarang() {
-		// STORED IN THE module's MainController
-		return getSatuanBarangMainCtrl().getSelectedSatuanBarang();
-	}
+  public SatuanBarangMainCtrl getSatuanBarangMainCtrl() {
+    return this.satuanBarangMainCtrl;
+  }
 
-	public void setSatuanBarang(SatuanBarang anSatuanBarang) {
-		// STORED IN THE module's MainController
-		getSatuanBarangMainCtrl().setSelectedSatuanBarang(anSatuanBarang);
-	}
+  public BindingListModelList getSatuanBarangs() {
+    // STORED IN THE module's MainController
+    return getSatuanBarangMainCtrl().getSatuanBarangs();
+  }
 
-	public SatuanBarang getSelectedSatuanBarang() {
-		// STORED IN THE module's MainController
-		return getSatuanBarangMainCtrl().getSelectedSatuanBarang();
-	}
+  public SatuanBarangService getSatuanBarangService() {
+    return this.satuanBarangService;
+  }
 
-	public void setSelectedSatuanBarang(SatuanBarang selectedSatuanBarang) {
-		// STORED IN THE module's MainController
-		getSatuanBarangMainCtrl().setSelectedSatuanBarang(selectedSatuanBarang);
-	}
+  public SatuanBarang getSelectedSatuanBarang() {
+    // STORED IN THE module's MainController
+    return getSatuanBarangMainCtrl().getSelectedSatuanBarang();
+  }
 
-	public BindingListModelList getSatuanBarangs() {
-		// STORED IN THE module's MainController
-		return getSatuanBarangMainCtrl().getSatuanBarangs();
-	}
+  /**
+   * Automatically called method from zk.
+   * 
+   * @param event
+   * @throws Exception
+   */
+  public void onCreate$windowSatuanBarangDetail(Event event) throws Exception {
+    binder = (AnnotateDataBinder) event.getTarget().getAttribute("binder", true);
 
-	public void setSatuanBarangs(BindingListModelList satuanBarangs) {
-		// STORED IN THE module's MainController
-		getSatuanBarangMainCtrl().setSatuanBarangs(satuanBarangs);
-	}
+    binder.loadAll();
 
-	public AnnotateDataBinder getBinder() {
-		return this.binder;
-	}
+    doFitSize(event);
+  }
 
-	public void setBinder(AnnotateDataBinder binder) {
-		this.binder = binder;
-	}
+  public void setBinder(AnnotateDataBinder binder) {
+    this.binder = binder;
+  }
 
-	/* CONTROLLERS */
-	public void setSatuanBarangMainCtrl(SatuanBarangMainCtrl satuanBarangMainCtrl) {
-		this.satuanBarangMainCtrl = satuanBarangMainCtrl;
-	}
+  public void setSatuanBarang(SatuanBarang anSatuanBarang) {
+    // STORED IN THE module's MainController
+    getSatuanBarangMainCtrl().setSelectedSatuanBarang(anSatuanBarang);
+  }
 
-	public SatuanBarangMainCtrl getSatuanBarangMainCtrl() {
-		return this.satuanBarangMainCtrl;
-	}
+  /* CONTROLLERS */
+  public void setSatuanBarangMainCtrl(SatuanBarangMainCtrl satuanBarangMainCtrl) {
+    this.satuanBarangMainCtrl = satuanBarangMainCtrl;
+  }
 
-	/* SERVICES */
-	public void setSatuanBarangService(SatuanBarangService satuanBarangService) {
-		this.satuanBarangService = satuanBarangService;
-	}
+  public void setSatuanBarangs(BindingListModelList satuanBarangs) {
+    // STORED IN THE module's MainController
+    getSatuanBarangMainCtrl().setSatuanBarangs(satuanBarangs);
+  }
 
-	public SatuanBarangService getSatuanBarangService() {
-		return this.satuanBarangService;
-	}
+  /* SERVICES */
+  public void setSatuanBarangService(SatuanBarangService satuanBarangService) {
+    this.satuanBarangService = satuanBarangService;
+  }
 
-	/* COMPONENTS and OTHERS */
+  public void setSelectedSatuanBarang(SatuanBarang selectedSatuanBarang) {
+    // STORED IN THE module's MainController
+    getSatuanBarangMainCtrl().setSelectedSatuanBarang(selectedSatuanBarang);
+  }
+
+  /* COMPONENTS and OTHERS */
 
 }

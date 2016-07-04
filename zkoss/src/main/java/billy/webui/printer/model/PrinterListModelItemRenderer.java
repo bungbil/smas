@@ -12,19 +12,19 @@ import org.zkoss.zul.ListitemRenderer;
 
 public class PrinterListModelItemRenderer implements ListitemRenderer, Serializable {
 
-	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(PrinterListModelItemRenderer.class);
+  private static final long serialVersionUID = 1L;
+  private static final Logger logger = Logger.getLogger(PrinterListModelItemRenderer.class);
 
-	@Override
-	public void render(Listitem item, Object data) throws Exception {
+  @Override
+  public void render(Listitem item, Object data) throws Exception {
 
-		final PrintService entity = (PrintService) data;
+    final PrintService entity = (PrintService) data;
 
-		final Listcell lc = new Listcell(entity.getName());		
-		lc.setParent(item);
+    final Listcell lc = new Listcell(entity.getName());
+    lc.setParent(item);
 
-		item.setAttribute("data", data);
+    item.setAttribute("data", data);
 
-	}
+  }
 
 }
