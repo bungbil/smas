@@ -1,4 +1,4 @@
-package billy.webui.report.komisipenjualan;
+package billy.webui.report.perhitungankomisi;
 
 
 import java.io.Serializable;
@@ -22,20 +22,20 @@ import billy.backend.model.Penjualan;
 import billy.backend.service.KaryawanService;
 import billy.backend.service.PenjualanService;
 import billy.webui.master.karyawan.model.KaryawanListModelItemRenderer;
-import billy.webui.report.komisipenjualan.report.KomisiPenjualanDJReport;
+import billy.webui.report.perhitungankomisi.report.PerhitunganKomisiDJReport;
 import de.forsthaus.UserWorkspace;
 import de.forsthaus.backend.model.SecUser;
 import de.forsthaus.policy.model.UserImpl;
 import de.forsthaus.webui.util.GFCBaseCtrl;
 import de.forsthaus.webui.util.ZksampleMessageUtils;
 
-public class ReportKomisiPenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
+public class ReportPerhitunganKomisiMainCtrl extends GFCBaseCtrl implements Serializable {
 
   private static final long serialVersionUID = 1L;
-  private static final Logger logger = Logger.getLogger(ReportKomisiPenjualanMainCtrl.class);
+  private static final Logger logger = Logger.getLogger(ReportPerhitunganKomisiMainCtrl.class);
 
 
-  protected Window windowReportKomisiPenjualanMain; // autowired
+  protected Window windowReportPerhitunganKomisiMain; // autowired
   protected Listbox lbox_Sales;
   protected Datebox txtb_tanggalAwalPenjualan;
   protected Datebox txtb_tanggalAkhirPenjualan;
@@ -51,7 +51,7 @@ public class ReportKomisiPenjualanMainCtrl extends GFCBaseCtrl implements Serial
   /**
    * default constructor.<br>
    */
-  public ReportKomisiPenjualanMainCtrl() {
+  public ReportPerhitunganKomisiMainCtrl() {
     super();
   }
 
@@ -77,7 +77,7 @@ public class ReportKomisiPenjualanMainCtrl extends GFCBaseCtrl implements Serial
   private void doCheckRights() {
 
     final UserWorkspace workspace = getUserWorkspace();
-    btnView.setDisabled(!workspace.isAllowed("button_ReportKomisiPenjualanMain_btnView"));
+    btnView.setDisabled(!workspace.isAllowed("button_ReportPerhitunganKomisiMain_btnView"));
   }
 
   public void doReset() {
@@ -109,7 +109,7 @@ public class ReportKomisiPenjualanMainCtrl extends GFCBaseCtrl implements Serial
   public void onClick$btnView(Event event) throws Exception {
     if (validToPrint()) {
       final Window win = (Window) Path.getComponent("/outerIndexWindow");
-      new KomisiPenjualanDJReport(win, karyawan, txtb_tanggalAwalPenjualan.getValue(),
+      new PerhitunganKomisiDJReport(win, karyawan, txtb_tanggalAwalPenjualan.getValue(),
           txtb_tanggalAkhirPenjualan.getValue(), listPenjualan);
     } else {
       showErrorCetak();
@@ -123,8 +123,8 @@ public class ReportKomisiPenjualanMainCtrl extends GFCBaseCtrl implements Serial
    * @param event
    * @throws Exception
    */
-  public void onCreate$windowReportKomisiPenjualanMain(Event event) throws Exception {
-    windowReportKomisiPenjualanMain.setContentStyle("padding:0px;");
+  public void onCreate$windowReportPerhitunganKomisiMain(Event event) throws Exception {
+    windowReportPerhitunganKomisiMain.setContentStyle("padding:0px;");
 
     doCheckRights();
 

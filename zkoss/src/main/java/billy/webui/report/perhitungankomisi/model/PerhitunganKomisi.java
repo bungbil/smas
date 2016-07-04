@@ -1,8 +1,8 @@
-package billy.webui.report.komisipenjualan.model;
+package billy.webui.report.perhitungankomisi.model;
 
 import java.math.BigDecimal;
 
-public class KomisiPenjualan {
+public class PerhitunganKomisi {
 
   private String nomorFaktur;
   private String namaPelanggan;
@@ -15,12 +15,12 @@ public class KomisiPenjualan {
   private BigDecimal komisiPenjualan;
 
 
-  public KomisiPenjualan() {
+  public PerhitunganKomisi() {
 
   }
 
 
-  public KomisiPenjualan(String nomorFaktur, String namaPelanggan, String kodePartner,
+  public PerhitunganKomisi(String nomorFaktur, String namaPelanggan, String kodePartner,
       String intervalKredit, String namaBarang, Double qtyKirim, BigDecimal penjualanBarang,
       BigDecimal penerimaanPenjualan, BigDecimal komisiPenjualan) {
     super();

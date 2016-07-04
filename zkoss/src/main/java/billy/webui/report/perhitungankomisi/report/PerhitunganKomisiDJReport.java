@@ -1,4 +1,4 @@
-package billy.webui.report.komisipenjualan.report;
+package billy.webui.report.perhitungankomisi.report;
 
 
 import java.io.ByteArrayInputStream;
@@ -56,11 +56,11 @@ import billy.backend.model.PenjualanDetail;
 import billy.backend.service.BonusTransportService;
 import billy.backend.service.CompanyProfileService;
 import billy.backend.service.PenjualanService;
-import billy.webui.report.komisipenjualan.model.KomisiPenjualan;
+import billy.webui.report.perhitungankomisi.model.PerhitunganKomisi;
 import de.forsthaus.webui.util.ZksampleDateFormat;
 import de.forsthaus.webui.util.ZksampleMessageUtils;
 
-public class KomisiPenjualanDJReport extends Window implements Serializable {
+public class PerhitunganKomisiDJReport extends Window implements Serializable {
 
   /**
    * EventListener for closing the Report Window.<br>
@@ -82,10 +82,10 @@ public class KomisiPenjualanDJReport extends Window implements Serializable {
   private BigDecimal totalKomisi = BigDecimal.ZERO;
   private Double totalQty = 0.0;
   private AMedia amedia;
-  private static final Logger logger = Logger.getLogger(KomisiPenjualanDJReport.class);
+  private static final Logger logger = Logger.getLogger(PerhitunganKomisiDJReport.class);
   DecimalFormat df = new DecimalFormat("#,###");
 
-  public KomisiPenjualanDJReport(Component parent, Karyawan karyawan, Date startDate, Date endDate,
+  public PerhitunganKomisiDJReport(Component parent, Karyawan karyawan, Date startDate, Date endDate,
       List<Penjualan> listPenjualan) throws InterruptedException {
     super();
     this.setParent(parent);
@@ -100,7 +100,7 @@ public class KomisiPenjualanDJReport extends Window implements Serializable {
   private void callReportWindow(AMedia aMedia, String format) {
     boolean modal = true;
 
-    setTitle("Laporan Komisi Penjualan Detail");
+    setTitle("Laporan Perhitungan Komisi");
     setId("ReportWindow");
     setVisible(true);
     setMaximizable(true);
@@ -153,7 +153,7 @@ public class KomisiPenjualanDJReport extends Window implements Serializable {
   public void doPrint(Karyawan karyawan, Date startDate, Date endDate, List<Penjualan> listPenjualan)
       throws JRException, ColumnBuilderException, ClassNotFoundException, IOException {
 
-    List<KomisiPenjualan> resultList = generateData(karyawan, listPenjualan);
+    List<PerhitunganKomisi> resultList = generateData(karyawan, listPenjualan);
     /**
      * STYLES
      */
@@ -209,7 +209,7 @@ public class KomisiPenjualanDJReport extends Window implements Serializable {
 
     // Sets the Report Columns, header, Title, Groups, Etc Formats
     // DynamicJasper documentation
-    drb.setTitle("PERHITUNGAN KOMISI DETAIL");
+    drb.setTitle("PERHITUNGAN KOMISI");
     // drb.setSubtitle("Tanggal Penjualan : "+ZksampleDateFormat.getDateFormater().format(startDate)+" - "+ZksampleDateFormat.getDateFormater().format(endDate));
     // drb.setSubtitleStyle(subtitleStyle);
 
@@ -414,7 +414,7 @@ public class KomisiPenjualanDJReport extends Window implements Serializable {
     if (outputFormat.equalsIgnoreCase("PDF")) {
       JasperExportManager.exportReportToPdfStream(jp, output);
       mediais = new ByteArrayInputStream(output.toByteArray());
-      amedia = new AMedia("KomisiPenjualan.pdf", "pdf", "application/pdf", mediais);
+      amedia = new AMedia("PerhitunganKomisiPenjualan.pdf", "pdf", "application/pdf", mediais);
 
       callReportWindow(this.amedia, "PDF");
     } else if (outputFormat.equalsIgnoreCase("XLS")) {
@@ -442,8 +442,8 @@ public class KomisiPenjualanDJReport extends Window implements Serializable {
     }
   }
 
-  private List<KomisiPenjualan> generateData(Karyawan karyawan, List<Penjualan> listPenjualan) {
-    List<KomisiPenjualan> komisiPenjualanList = new ArrayList<KomisiPenjualan>();
+  private List<PerhitunganKomisi> generateData(Karyawan karyawan, List<Penjualan> listPenjualan) {
+    List<PerhitunganKomisi> komisiPenjualanList = new ArrayList<PerhitunganKomisi>();
     PenjualanService penjualanService = (PenjualanService) SpringUtil.getBean("penjualanService");
 
     for (Penjualan penjualan : listPenjualan) {
@@ -451,7 +451,7 @@ public class KomisiPenjualanDJReport extends Window implements Serializable {
           penjualanService.getPenjualanDetailsByPenjualan(penjualan);
       for (PenjualanDetail penjualanDetail : penjualanDetails) {
 
-        KomisiPenjualan data = new KomisiPenjualan();
+        PerhitunganKomisi data = new PerhitunganKomisi();
         data.setNomorFaktur(penjualan.getNoFaktur());
         data.setNamaPelanggan(penjualan.getNamaPelanggan());
         data.setIntervalKredit(penjualan.getIntervalKredit() + " Bulan");
