@@ -145,8 +145,8 @@
 			iconName="/images/icons/view.gif" rightName="menuItem_Report_PerhitunganKomisi"/>
 		<menuItem id="menu_Item_Komisi" zulNavigation="/WEB-INF/pages/report/komisi/komisiMain.zul"
 			iconName="/images/icons/view.gif" rightName="menuItem_Report_Komisi"/>
-		<menuItem id="menu_Item_TabunganSales" zulNavigation="/WEB-INF/pages/report/tabungansales/tabunganSalesMain.zul"
-			iconName="/images/icons/view.gif"  rightName="menuItem_Report_TabunganSales"/>
+		<menuItem id="menu_Item_Tabungan" zulNavigation="/WEB-INF/pages/report/tabungan/summaryTabunganMain.zul"
+			iconName="/images/icons/view.gif"  rightName="menuItem_Report_Tabungan"/>
 		
 		<!-- 
 		<menuItem id="menu_Item_ReportPenerimaanPembayaran" zulNavigation="/WEB-INF/pages/report/penerimaanpembayaran/penerimaanPembayaranMain.zul"

@@ -1,4 +1,4 @@
-package billy.webui.report.perhitungankomisi;
+package billy.webui.report.tabungan;
 
 
 import java.io.Serializable;
@@ -14,31 +14,27 @@ import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Datebox;
-import org.zkoss.zul.ListModelList;
-import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Window;
 
 import billy.backend.model.Karyawan;
 import billy.backend.model.Penjualan;
 import billy.backend.service.KaryawanService;
 import billy.backend.service.PenjualanService;
-import billy.webui.master.karyawan.model.KaryawanListModelItemRenderer;
-import billy.webui.report.perhitungankomisi.report.PerhitunganKomisiDJReport;
+import billy.webui.report.tabungan.report.SummaryTabunganDJReport;
 import de.forsthaus.UserWorkspace;
 import de.forsthaus.backend.model.SecUser;
 import de.forsthaus.policy.model.UserImpl;
 import de.forsthaus.webui.util.GFCBaseCtrl;
 import de.forsthaus.webui.util.ZksampleMessageUtils;
 
-public class ReportPerhitunganKomisiMainCtrl extends GFCBaseCtrl implements Serializable {
+public class ReportTabunganMainCtrl extends GFCBaseCtrl implements Serializable {
 
   private static final long serialVersionUID = 1L;
-  private static final Logger logger = Logger.getLogger(ReportPerhitunganKomisiMainCtrl.class);
+  private static final Logger logger = Logger.getLogger(ReportTabunganMainCtrl.class);
 
 
-  protected Window windowReportPerhitunganKomisiMain; // autowired
-  protected Listbox lbox_Sales;
+  protected Window windowReportTabunganMain; // autowired
+
   protected Datebox txtb_tanggalAwalPenjualan;
   protected Datebox txtb_tanggalAkhirPenjualan;
   protected Button btnView;
@@ -49,11 +45,12 @@ public class ReportPerhitunganKomisiMainCtrl extends GFCBaseCtrl implements Seri
 
   List<Penjualan> listPenjualan = new ArrayList<Penjualan>();
   Karyawan karyawan = null;
+  List<Karyawan> listDivisi = new ArrayList<Karyawan>();
 
   /**
    * default constructor.<br>
    */
-  public ReportPerhitunganKomisiMainCtrl() {
+  public ReportTabunganMainCtrl() {
     super();
   }
 
@@ -79,29 +76,20 @@ public class ReportPerhitunganKomisiMainCtrl extends GFCBaseCtrl implements Seri
   private void doCheckRights() {
 
     final UserWorkspace workspace = getUserWorkspace();
-    btnView.setDisabled(!workspace.isAllowed("button_ReportPerhitunganKomisiMain_btnView"));
+    btnView.setDisabled(!workspace.isAllowed("button_ReportTabunganMain_btnView"));
   }
 
   public void doReset() {
-    SecUser userLogin =
-        ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-            .getSecUser();
-    List<Karyawan> listSales = getKaryawanService().getAllSalesKaryawansByUserLogin(userLogin);
-
-    lbox_Sales.setModel(new ListModelList(listSales));
-    lbox_Sales.setItemRenderer(new KaryawanListModelItemRenderer());
 
     Date date = new Date(); // your date
     Calendar cal = Calendar.getInstance();
     cal.setTime(date);
     int year = cal.get(Calendar.YEAR);
-    int month = cal.get(Calendar.MONTH);
-    cal.set(year, month, 1, 0, 0, 0);
+    cal.set(year, 0, 1, 0, 0, 0);
     Date startDate = cal.getTime();
     txtb_tanggalAwalPenjualan.setValue(startDate);
     txtb_tanggalAkhirPenjualan.setValue(date);
     listPenjualan = new ArrayList<Penjualan>();
-
 
   }
 
@@ -118,7 +106,7 @@ public class ReportPerhitunganKomisiMainCtrl extends GFCBaseCtrl implements Seri
   public void onClick$btnView(Event event) throws Exception {
     if (validToPrint()) {
       final Window win = (Window) Path.getComponent("/outerIndexWindow");
-      new PerhitunganKomisiDJReport(win, karyawan, txtb_tanggalAwalPenjualan.getValue(),
+      new SummaryTabunganDJReport(win, txtb_tanggalAwalPenjualan.getValue(),
           txtb_tanggalAkhirPenjualan.getValue(), listPenjualan);
     } else {
       showErrorCetak();
@@ -132,8 +120,8 @@ public class ReportPerhitunganKomisiMainCtrl extends GFCBaseCtrl implements Seri
    * @param event
    * @throws Exception
    */
-  public void onCreate$windowReportPerhitunganKomisiMain(Event event) throws Exception {
-    windowReportPerhitunganKomisiMain.setContentStyle("padding:0px;");
+  public void onCreate$windowReportTabunganMain(Event event) throws Exception {
+    windowReportTabunganMain.setContentStyle("padding:0px;");
 
     doCheckRights();
 
@@ -167,17 +155,20 @@ public class ReportPerhitunganKomisiMainCtrl extends GFCBaseCtrl implements Seri
   }
 
   public boolean validToPrint() throws Exception {
-    Listitem itemSales = lbox_Sales.getSelectedItem();
-    if (itemSales != null) {
-      ListModelList lml1 = (ListModelList) lbox_Sales.getListModel();
-      karyawan = (Karyawan) lml1.get(itemSales.getIndex());
-    }
-
-    if (karyawan != null && txtb_tanggalAwalPenjualan.getValue() != null
+    if (txtb_tanggalAwalPenjualan.getValue() != null
         && txtb_tanggalAkhirPenjualan.getValue() != null) {
-      listPenjualan =
-          getPenjualanService().getAllPenjualansBySalesAndRangeDate(karyawan,
-              txtb_tanggalAwalPenjualan.getValue(), txtb_tanggalAkhirPenjualan.getValue());
+      SecUser userLogin =
+          ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+              .getSecUser();
+
+      listDivisi = getKaryawanService().getAllDivisiKaryawansByUserLogin(userLogin);
+
+      for (Karyawan divisi : listDivisi) {
+        List<Penjualan> penjualans =
+            getPenjualanService().getAllPenjualansByDivisiAndRangeDate(divisi,
+                txtb_tanggalAwalPenjualan.getValue(), txtb_tanggalAkhirPenjualan.getValue());
+        listPenjualan.addAll(penjualans);
+      }
       if (listPenjualan.size() > 0) {
         return true;
       }

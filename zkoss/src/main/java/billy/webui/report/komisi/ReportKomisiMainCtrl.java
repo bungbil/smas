@@ -2,6 +2,8 @@ package billy.webui.report.komisi;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -90,8 +92,15 @@ public class ReportKomisiMainCtrl extends GFCBaseCtrl implements Serializable {
     lbox_Divisi.setModel(new ListModelList(listDivisi));
     lbox_Divisi.setItemRenderer(new KaryawanListModelItemRenderer());
 
-    txtb_tanggalAwalPenjualan.setValue(null);
-    txtb_tanggalAkhirPenjualan.setValue(null);
+    Date date = new Date(); // your date
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(date);
+    int year = cal.get(Calendar.YEAR);
+    int month = cal.get(Calendar.MONTH);
+    cal.set(year, month, 1, 0, 0, 0);
+    Date startDate = cal.getTime();
+    txtb_tanggalAwalPenjualan.setValue(startDate);
+    txtb_tanggalAkhirPenjualan.setValue(date);
     listPenjualan = new ArrayList<Penjualan>();
 
   }

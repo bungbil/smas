@@ -39,7 +39,12 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 (234, 1, 234, 0),
 (235, 1, 235, 0);
 
-
+INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
+(236, 2, 'menuItem_Report_Tabungan', 0),
+(237, 6, 'button_ReportTabunganMain_btnView', 0);
+INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
+(236, 1, 236, 0),
+(237, 1, 237, 0);
 
 
 

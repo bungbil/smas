@@ -513,6 +513,11 @@
 		<property name="karyawanService" ref="karyawanService" />		
 	</bean>
 	
+	<!-- ReportTabungan -->
+	<bean id="reportTabunganMainCtrl" class="billy.webui.report.tabungan.ReportTabunganMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="penjualanService" ref="penjualanService" />		
+		<property name="karyawanService" ref="karyawanService" />		
+	</bean>
 </beans>
 
 	
