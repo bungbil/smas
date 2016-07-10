@@ -151,7 +151,10 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
       kuitansi.setAngsuranKe("2");
       kuitansi.setTglAngsuran(formatDate.format(penjualan.getTglAngsuran2()));
       kuitansi.setNamaSupervisor(penjualan.getDivisi().getSupervisorDivisi().getNamaPanggilan());
-
+      kuitansi.setNamaKolektor("");
+      if (penjualan.getKolektor() != null) {
+        kuitansi.setNamaKolektor(penjualan.getKolektor().getNamaPanggilan());
+      }
       List<PenjualanDetail> listPenjualanDetail = as.getPenjualanDetailsByPenjualan(penjualan);
       for (PenjualanDetail detail : listPenjualanDetail) {
         String namaBarang = detail.getBarang().getNamaBarang();
@@ -268,8 +271,10 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
         sb.append(item.getQty());
       }
 
-
-      addNewLine(sb, 4);
+      addNewLine(sb, 1);
+      addWhiteSpace(sb, 5);
+      sb.append("(" + kuitansi.getNamaKolektor() + ")");
+      addNewLine(sb, 3);
       addWhiteSpace(sb, 20);
       sb.append(kuitansi.getJumlahInWord());
       addNewLine(sb, 3);
@@ -284,7 +289,10 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
       addWhiteSpace(sb, 60);
       sb.append(kuitansi.getTglAngsuran());
       addNewLine(sb, 4);
-      addWhiteSpace(sb, 30);
+      addWhiteSpace(sb, 6);
+      sb.append(kuitansi.getNamaKolektor());
+      int maxLengthKolektor = 17;
+      addWhiteSpace(sb, maxLengthKolektor - kuitansi.getNamaKolektor().length());
       sb.append(kuitansi.getNamaSupervisor());
       addNewLine(sb, 3);
 

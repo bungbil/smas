@@ -106,6 +106,10 @@
 		<property name="approvedBy" type="string">
 			<column name="approved_by" length="50" />
 		</property>			
+		<many-to-one name="kolektor" class="billy.backend.model.Karyawan"
+			fetch="select" lazy="false">
+			<column name="kolektor_id" not-null="false" />
+		</many-to-one>
 		<property name="lastUpdate" type="timestamp">
 			<column name="last_update" length="29" />
 		</property>	

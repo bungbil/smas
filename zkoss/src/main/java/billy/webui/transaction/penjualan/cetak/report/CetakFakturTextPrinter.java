@@ -215,7 +215,8 @@ public class CetakFakturTextPrinter extends Window implements Serializable {
       addNewLine(sb, 5);
       addWhiteSpace(sb, 6);
       sb.append(faktur.getNamaSupervisor());
-      addWhiteSpace(sb, 10);
+      int maxLengthSupervisor = 17;
+      addWhiteSpace(sb, maxLengthSupervisor - faktur.getNamaSupervisor().length());
       sb.append(faktur.getNamaPengirim());
       addNewLine(sb, 5);
     }

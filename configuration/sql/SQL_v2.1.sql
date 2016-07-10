@@ -8,7 +8,8 @@ alter table penjualan_detail
 	add column opr_divisi			numeric(12,2)		 null default 0,
 	add column or_divisi			numeric(12,2)		 null default 0;
 
-	
+alter table penjualan
+	add column kolektor_id			INT8                 null;
 	
 INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
 (227, 2, 'menuItem_Transaction_CetakPenjualan', 0),
@@ -70,7 +71,7 @@ CREATE TABLE piutang (
    pembayaran			numeric(12,2)		 not null default 0,
    piutang				numeric(12,2)		 not null default 0,
    tgl_jatuh_tempo		date				 not null,
-   kolektor_id			INT8                 not null,
+   kolektor_id			INT8                 null,
    keterangan			varchar(300)          null,
    last_update       	timestamp,          
    updated_by       	varchar(50)          null,

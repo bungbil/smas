@@ -45,7 +45,7 @@
 		</property>
    		<many-to-one name="kolektor" class="billy.backend.model.Karyawan"
 			fetch="select" lazy="false">
-			<column name="kolektor_id" not-null="true" />
+			<column name="kolektor_id" not-null="false" />
 		</many-to-one>
    		<property name="keterangan" type="string">
 			<column name="keterangan" length="300" />

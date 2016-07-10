@@ -3,8 +3,6 @@ package billy.backend.model;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 public class Penjualan implements java.io.Serializable, Entity {
 
   private static final long serialVersionUID = 1L;
@@ -33,7 +31,7 @@ public class Penjualan implements java.io.Serializable, Entity {
 
   private BigDecimal kreditPerBulan;
   private Date tglAngsuran2;
-
+  private Karyawan kolektor;
 
   private Status status;
   private BigDecimal total;
@@ -51,38 +49,51 @@ public class Penjualan implements java.io.Serializable, Entity {
 
   public Penjualan() {}
 
-  public Penjualan(long id, String noFaktur, Date tglPenjualan, String metodePembayaran,
-      Status status, Karyawan sales1, Karyawan sales2, Karyawan divisi, Wilayah wilayah,
-      String namaPelanggan, String telepon, String alamat, Date rencanaKirim, Karyawan pengirim,
-      BigDecimal downPayment, int intervalKredit, BigDecimal diskon, Date tglAngsuran2,
-      BigDecimal total, BigDecimal grandTotal, BigDecimal kreditPerBulan, String remark,
-      String mandiri, String noOrderSheet) {
 
+  public Penjualan(long id, int version, String noFaktur, String mandiri, String noOrderSheet,
+      Date tglPenjualan, Date rencanaKirim, Wilayah wilayah, Karyawan sales1, Karyawan sales2,
+      Karyawan pengirim, String namaPelanggan, String telepon, String alamat, String remark,
+      String metodePembayaran, BigDecimal diskon, BigDecimal downPayment, int intervalKredit,
+      BigDecimal kreditPerBulan, Date tglAngsuran2, Karyawan kolektor, Status status,
+      BigDecimal total, BigDecimal grandTotal, Karyawan divisi, BigDecimal piutang,
+      boolean needApproval, String reasonApproval, String approvedRemark, String approvedBy,
+      Date lastUpdate, String updatedBy) {
+    super();
     this.id = id;
+    this.version = version;
     this.noFaktur = noFaktur;
+    this.mandiri = mandiri;
+    this.noOrderSheet = noOrderSheet;
     this.tglPenjualan = tglPenjualan;
-    this.metodePembayaran = metodePembayaran;
-    this.status = status;
+    this.rencanaKirim = rencanaKirim;
+    this.wilayah = wilayah;
     this.sales1 = sales1;
     this.sales2 = sales2;
-    this.divisi = divisi;
-    this.wilayah = wilayah;
+    this.pengirim = pengirim;
     this.namaPelanggan = namaPelanggan;
     this.telepon = telepon;
     this.alamat = alamat;
-    this.rencanaKirim = rencanaKirim;
-    this.pengirim = pengirim;
+    this.remark = remark;
+    this.metodePembayaran = metodePembayaran;
+    this.diskon = diskon;
     this.downPayment = downPayment;
     this.intervalKredit = intervalKredit;
-    this.diskon = diskon;
+    this.kreditPerBulan = kreditPerBulan;
     this.tglAngsuran2 = tglAngsuran2;
+    this.kolektor = kolektor;
+    this.status = status;
     this.total = total;
     this.grandTotal = grandTotal;
-    this.kreditPerBulan = kreditPerBulan;
-    this.remark = remark;
-    this.mandiri = mandiri;
-    this.noOrderSheet = noOrderSheet;
+    this.divisi = divisi;
+    this.piutang = piutang;
+    this.needApproval = needApproval;
+    this.reasonApproval = reasonApproval;
+    this.approvedRemark = approvedRemark;
+    this.approvedBy = approvedBy;
+    this.lastUpdate = lastUpdate;
+    this.updatedBy = updatedBy;
   }
+
 
   @Override
   public boolean equals(Object obj) {
@@ -137,6 +148,10 @@ public class Penjualan implements java.io.Serializable, Entity {
 
   public int getIntervalKredit() {
     return intervalKredit;
+  }
+
+  public Karyawan getKolektor() {
+    return kolektor;
   }
 
   public BigDecimal getKreditPerBulan() {
@@ -278,6 +293,10 @@ public class Penjualan implements java.io.Serializable, Entity {
     this.intervalKredit = intervalKredit;
   }
 
+  public void setKolektor(Karyawan kolektor) {
+    this.kolektor = kolektor;
+  }
+
   public void setKreditPerBulan(BigDecimal kreditPerBulan) {
     this.kreditPerBulan = kreditPerBulan;
   }
@@ -373,7 +392,15 @@ public class Penjualan implements java.io.Serializable, Entity {
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this).append("id", getId()).toString();
+    return String
+        .format(
+            "Penjualan [id=%s, version=%s, noFaktur=%s, mandiri=%s, noOrderSheet=%s, tglPenjualan=%s, rencanaKirim=%s, wilayah=%s, sales1=%s, sales2=%s, pengirim=%s, namaPelanggan=%s, telepon=%s, alamat=%s, remark=%s, metodePembayaran=%s, diskon=%s, downPayment=%s, intervalKredit=%s, kreditPerBulan=%s, tglAngsuran2=%s, kolektor=%s, status=%s, total=%s, grandTotal=%s, divisi=%s, piutang=%s, needApproval=%s, reasonApproval=%s, approvedRemark=%s, approvedBy=%s, lastUpdate=%s, updatedBy=%s]",
+            id, version, noFaktur, mandiri, noOrderSheet, tglPenjualan, rencanaKirim, wilayah,
+            sales1, sales2, pengirim, namaPelanggan, telepon, alamat, remark, metodePembayaran,
+            diskon, downPayment, intervalKredit, kreditPerBulan, tglAngsuran2, kolektor, status,
+            total, grandTotal, divisi, piutang, needApproval, reasonApproval, approvedRemark,
+            approvedBy, lastUpdate, updatedBy);
   }
+
 
 }
