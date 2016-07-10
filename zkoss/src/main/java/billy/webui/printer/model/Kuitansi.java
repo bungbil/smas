@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Kuitansi {
 
-  private String nomorFaktur;
+  private String nomorKuitansi;
   private String mandiri;
   private String namaSales1;
   private String namaSales2;
@@ -91,8 +91,8 @@ public class Kuitansi {
     return namaSupervisor;
   }
 
-  public String getNomorFaktur() {
-    return nomorFaktur;
+  public String getNomorKuitansi() {
+    return nomorKuitansi;
   }
 
   public String getSisaPembayaran() {
@@ -167,8 +167,8 @@ public class Kuitansi {
     this.namaSupervisor = namaSupervisor;
   }
 
-  public void setNomorFaktur(String nomorFaktur) {
-    this.nomorFaktur = nomorFaktur;
+  public void setNomorKuitansi(String nomorKuitansi) {
+    this.nomorKuitansi = nomorKuitansi;
   }
 
   public void setSisaPembayaran(String sisaPembayaran) {
