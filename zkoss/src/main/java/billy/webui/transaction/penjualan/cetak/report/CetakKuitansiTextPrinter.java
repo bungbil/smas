@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -107,7 +108,13 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
     List<Kuitansi> listKuitansi = new ArrayList<Kuitansi>();
     for (Penjualan penjualan : listPenjualan) {
       Kuitansi kuitansi = new Kuitansi();
-      kuitansi.setNomorFaktur(penjualan.getNoFaktur());
+
+      Calendar cal = Calendar.getInstance();
+      cal.setTime(penjualan.getTglAngsuran2());
+      int month = cal.get(Calendar.MONTH);
+      int date = cal.get(Calendar.DATE);
+
+      kuitansi.setNomorFaktur(date + "." + month + "." + penjualan.getNoFaktur());
       kuitansi.setMandiri(penjualan.getMandiri());
       kuitansi.setNamaSales1(penjualan.getSales1().getNamaPanggilan() + "("
           + penjualan.getSales1().getSupervisorDivisi().getInisialDivisi() + ")");
