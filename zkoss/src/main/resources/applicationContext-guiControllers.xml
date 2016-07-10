@@ -458,6 +458,7 @@
 	<!-- Penjualan -->
 	<bean id="penjualanMainCtrl" class="billy.webui.transaction.penjualan.PenjualanMainCtrl" parent="basisCtrl" scope="prototype">
 		<property name="penjualanService" ref="penjualanService" />
+		<property name="piutangService" ref="piutangService" />
 		<property name="penjualanListCtrl" ref="penjualanListCtrl" />
 		<property name="penjualanDetailCtrl" ref="penjualanDetailCtrl" />
 	</bean>
@@ -475,6 +476,7 @@
 	<!-- ApprovalPenjualan -->
 	<bean id="approvalPenjualanMainCtrl" class="billy.webui.transaction.penjualan.approval.ApprovalPenjualanMainCtrl" parent="basisCtrl" scope="prototype">
 		<property name="penjualanService" ref="penjualanService" />
+		<property name="piutangService" ref="piutangService" />
 		<property name="approvalPenjualanListCtrl" ref="approvalPenjualanListCtrl" />
 		<property name="approvalPenjualanDetailCtrl" ref="approvalPenjualanDetailCtrl" />
 	</bean>

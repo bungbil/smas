@@ -28,18 +28,16 @@
 		<property name="tglPembayaran" type="date">
 			<column name="tgl_pembayaran"/>
 		</property>
-  		<property name="status" type="string">
-			<column name="status" length="50" not-null="true" />
-		</property>
+  		<many-to-one name="status" class="billy.backend.model.Status"
+			fetch="select" lazy="false">
+			<column name="status_id" not-null="false" />
+		</many-to-one>
    		<property name="nilaiTagihan" type="big_decimal">
 			<column name="nilai_tagihan" precision="12" />
 		</property>	
    		<property name="pembayaran" type="big_decimal">
 			<column name="pembayaran" precision="12" />
-		</property>	
-   		<property name="piutang" type="big_decimal">
-			<column name="piutang" precision="12" />
-		</property>	
+		</property>	   		
    		<property name="tglJatuhTempo" type="date">
 			<column name="tgl_jatuh_tempo"/>
 		</property>

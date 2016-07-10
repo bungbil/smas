@@ -1,10 +1,13 @@
 package billy.backend.service.impl;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import billy.backend.dao.PiutangDAO;
 import billy.backend.model.Penjualan;
 import billy.backend.model.Piutang;
+import billy.backend.model.Status;
 import billy.backend.service.PiutangService;
 
 public class PiutangServiceImpl implements PiutangService {
@@ -24,11 +27,56 @@ public class PiutangServiceImpl implements PiutangService {
   }
 
   @Override
+  public void generatePiutangByIntervalKredit(Penjualan penjualan, int intervalKredit, Status status) {
+
+    Calendar cal = Calendar.getInstance();
+    for (int i = 2; i <= intervalKredit; i++) {
+      Date tglJatuhTempo = penjualan.getTglAngsuran2();
+      cal.setTime(tglJatuhTempo);
+      Piutang piutang = getNewPiutang();
+
+      if (i > 2) {
+        cal.add(Calendar.MONTH, i - 2);
+        tglJatuhTempo = cal.getTime();
+      }
+
+      int month = cal.get(Calendar.MONTH) + 1;
+      int date = cal.get(Calendar.DATE);
+      piutang.setTglJatuhTempo(tglJatuhTempo);
+
+      String monthString = String.valueOf(month);
+      String dateString = String.valueOf(date);
+      if (dateString.length() == 1) {
+        dateString = "0" + dateString;
+      }
+      if (monthString.length() == 1) {
+        monthString = "0" + monthString;
+      }
+      piutang.setNoKuitansi(dateString + "." + monthString + "." + penjualan.getNoFaktur());
+
+      piutang.setNilaiTagihan(penjualan.getKreditPerBulan());
+      piutang.setPembayaranKe(i);
+      piutang.setPenjualan(penjualan);
+      piutang.setStatus(status);
+      piutang.setLastUpdate(new Date());
+      piutang.setUpdatedBy("SYSTEM");
+
+      piutang.setPembayaran(null);
+      piutang.setTglPembayaran(null);
+      piutang.setKolektor(null);
+      piutang.setKeterangan(null);
+
+      saveOrUpdate(piutang);
+    }
+
+  }
+
+
+  @Override
   public int getCountPiutangsByPenjualan(Penjualan penjualan) {
     int result = getPiutangDAO().getCountPiutangsByPenjualan(penjualan);
     return result;
   }
-
 
   @Override
   public Piutang getNewPiutang() {

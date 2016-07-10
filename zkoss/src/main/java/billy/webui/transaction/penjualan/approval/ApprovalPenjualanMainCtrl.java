@@ -30,6 +30,7 @@ import billy.backend.model.Karyawan;
 import billy.backend.model.Penjualan;
 import billy.backend.model.Status;
 import billy.backend.service.PenjualanService;
+import billy.backend.service.PiutangService;
 
 import com.googlecode.genericdao.search.Filter;
 
@@ -95,7 +96,7 @@ public class ApprovalPenjualanMainCtrl extends GFCBaseCtrl implements Serializab
 
   // ServiceDAOs / Domain Classes
   private PenjualanService penjualanService;
-
+  private PiutangService piutangService;
   // always a copy from the bean before modifying. Used for reseting
   private Penjualan originalPenjualan;
 
@@ -120,10 +121,6 @@ public class ApprovalPenjualanMainCtrl extends GFCBaseCtrl implements Serializab
      */
     this.self.setAttribute("controller", this, false);
   }
-
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // +++++++++++++++ Component Events ++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   /**
    * 1. Cancel the current action.<br>
@@ -172,6 +169,10 @@ public class ApprovalPenjualanMainCtrl extends GFCBaseCtrl implements Serializab
     btnNext.setVisible(workspace.isAllowed("button_ApprovalPenjualanMain_btnNext"));
     btnLast.setVisible(workspace.isAllowed("button_ApprovalPenjualanMain_btnLast"));
   }
+
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++ Component Events ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   /**
    * Deletes the selected Bean from the DB.
@@ -245,7 +246,6 @@ public class ApprovalPenjualanMainCtrl extends GFCBaseCtrl implements Serializab
     getApprovalPenjualanDetailCtrl().doRefresh();
   }
 
-
   /**
    * Sets all UI-components to writable-mode. Sets the buttons to edit-Mode. Checks first, if the
    * NEEDED TABS with its contents are created. If not, than create it by simulate an onSelect()
@@ -289,7 +289,6 @@ public class ApprovalPenjualanMainCtrl extends GFCBaseCtrl implements Serializab
     // set focus
     getApprovalPenjualanDetailCtrl().txtb_NoOrderSheet.focus();
   }
-
 
   /**
    * Opens the help screen for the current module.
@@ -356,6 +355,7 @@ public class ApprovalPenjualanMainCtrl extends GFCBaseCtrl implements Serializab
 
   }
 
+
   /**
    * Reset the selected object to its origin property values.
    * 
@@ -381,6 +381,7 @@ public class ApprovalPenjualanMainCtrl extends GFCBaseCtrl implements Serializab
       }
     }
   }
+
 
   /**
    * Resizes the container from the selected Tab.
@@ -425,6 +426,16 @@ public class ApprovalPenjualanMainCtrl extends GFCBaseCtrl implements Serializab
 
       // save it to database
       getPenjualanService().saveOrUpdate(getApprovalPenjualanDetailCtrl().getPenjualan());
+
+      // generatePiutang
+      if (getPiutangService().getCountPiutangsByPenjualan(
+          getApprovalPenjualanDetailCtrl().getPenjualan()) == 0) {
+        Status status2 =
+            getApprovalPenjualanDetailCtrl().getStatusService().getStatusByID(new Long(4)); // PIUTANG_BARU
+        getPiutangService().generatePiutangByIntervalKredit(
+            getApprovalPenjualanDetailCtrl().getPenjualan(),
+            getApprovalPenjualanDetailCtrl().getPenjualan().getIntervalKredit(), status2);
+      }
 
       // if saving is successfully than actualize the beans as
       // origins.
@@ -576,13 +587,17 @@ public class ApprovalPenjualanMainCtrl extends GFCBaseCtrl implements Serializab
     return this.penjualanService;
   }
 
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // +++++++++++++++++ Business Logic ++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  public PiutangService getPiutangService() {
+    return piutangService;
+  }
 
   public Penjualan getSelectedPenjualan() {
     return this.selectedPenjualan;
   }
+
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++++ Business Logic ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   /**
    * when the checkBox 'Show All' for filtering is checked. <br>
@@ -674,10 +689,6 @@ public class ApprovalPenjualanMainCtrl extends GFCBaseCtrl implements Serializab
     doSkip(event);
   }
 
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-
   /**
    * When the "help" button is clicked.
    * 
@@ -687,6 +698,10 @@ public class ApprovalPenjualanMainCtrl extends GFCBaseCtrl implements Serializab
   public void onClick$btnHelp(Event event) throws InterruptedException {
     doHelp(event);
   }
+
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   /**
    * when the "go last record" button is clicked.
@@ -728,10 +743,6 @@ public class ApprovalPenjualanMainCtrl extends GFCBaseCtrl implements Serializab
     doSkip(event);
   }
 
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-
   /**
    * when the "refresh" button is clicked. <br>
    * <br>
@@ -742,6 +753,10 @@ public class ApprovalPenjualanMainCtrl extends GFCBaseCtrl implements Serializab
   public void onClick$btnRefresh(Event event) throws InterruptedException {
     doResizeSelectedTab(event);
   }
+
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   /**
    * When the "save" button is clicked.
@@ -953,6 +968,10 @@ public class ApprovalPenjualanMainCtrl extends GFCBaseCtrl implements Serializab
 
   public void setPenjualanService(PenjualanService penjualanService) {
     this.penjualanService = penjualanService;
+  }
+
+  public void setPiutangService(PiutangService piutangService) {
+    this.piutangService = piutangService;
   }
 
   public void setSelectedPenjualan(Penjualan selectedPenjualan) {

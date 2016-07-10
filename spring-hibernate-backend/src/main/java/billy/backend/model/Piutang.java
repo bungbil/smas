@@ -15,10 +15,10 @@ public class Piutang implements java.io.Serializable, Entity {
   private String noKuitansi;
   private int pembayaranKe;
   private Date tglPembayaran;
-  private String status;
+  private Status status;
   private BigDecimal nilaiTagihan;
   private BigDecimal pembayaran;
-  private BigDecimal piutang;
+
   private Date tglJatuhTempo;
   private Karyawan kolektor;
   private String keterangan;
@@ -28,8 +28,8 @@ public class Piutang implements java.io.Serializable, Entity {
   public Piutang() {}
 
   public Piutang(long id, Penjualan penjualan, String noKuitansi, int pembayaranKe,
-      Date tglPembayaran, String status, BigDecimal nilaiTagihan, BigDecimal pembayaran,
-      BigDecimal piutang, Date tglJatuhTempo, Karyawan kolektor, String keterangan) {
+      Date tglPembayaran, Status status, BigDecimal nilaiTagihan, BigDecimal pembayaran,
+      Date tglJatuhTempo, Karyawan kolektor, String keterangan) {
 
     this.id = id;
     this.penjualan = penjualan;
@@ -39,7 +39,6 @@ public class Piutang implements java.io.Serializable, Entity {
     this.status = status;
     this.nilaiTagihan = nilaiTagihan;
     this.pembayaran = pembayaran;
-    this.piutang = piutang;
     this.tglJatuhTempo = tglJatuhTempo;
     this.kolektor = kolektor;
     this.keterangan = keterangan;
@@ -101,11 +100,8 @@ public class Piutang implements java.io.Serializable, Entity {
     return penjualan;
   }
 
-  public BigDecimal getPiutang() {
-    return piutang;
-  }
 
-  public String getStatus() {
+  public Status getStatus() {
     return status;
   }
 
@@ -172,11 +168,7 @@ public class Piutang implements java.io.Serializable, Entity {
     this.penjualan = penjualan;
   }
 
-  public void setPiutang(BigDecimal piutang) {
-    this.piutang = piutang;
-  }
-
-  public void setStatus(String status) {
+  public void setStatus(Status status) {
     this.status = status;
   }
 

@@ -111,10 +111,17 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
 
       Calendar cal = Calendar.getInstance();
       cal.setTime(penjualan.getTglAngsuran2());
-      int month = cal.get(Calendar.MONTH);
+      int month = cal.get(Calendar.MONTH) + 1;
       int date = cal.get(Calendar.DATE);
-
-      kuitansi.setNomorKuitansi(date + "." + month + "." + penjualan.getNoFaktur());
+      String monthString = String.valueOf(month);
+      String dateString = String.valueOf(date);
+      if (dateString.length() == 1) {
+        dateString = "0" + dateString;
+      }
+      if (monthString.length() == 1) {
+        monthString = "0" + monthString;
+      }
+      kuitansi.setNomorKuitansi(dateString + "." + monthString + "." + penjualan.getNoFaktur());
       kuitansi.setMandiri(penjualan.getMandiri());
       kuitansi.setNamaSales1(penjualan.getSales1().getNamaPanggilan() + "("
           + penjualan.getSales1().getSupervisorDivisi().getInisialDivisi() + ")");

@@ -36,6 +36,7 @@ import billy.backend.model.PenjualanDetail;
 import billy.backend.model.Status;
 import billy.backend.model.Wilayah;
 import billy.backend.service.PenjualanService;
+import billy.backend.service.PiutangService;
 
 import com.googlecode.genericdao.search.Filter;
 
@@ -101,6 +102,7 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
 
   // ServiceDAOs / Domain Classes
   private PenjualanService penjualanService;
+  private PiutangService piutangService;
 
   // always a copy from the bean before modifying. Used for reseting
   private Penjualan originalPenjualan;
@@ -492,6 +494,17 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
         getPenjualanService().saveOrUpdate(penjualanDetail);
       }
 
+      // generatePiutang
+      if (getPenjualanDetailCtrl().getPenjualan().getIntervalKredit() > 1
+          && !getPenjualanDetailCtrl().getPenjualan().isNeedApproval()) {
+        if (getPiutangService()
+            .getCountPiutangsByPenjualan(getPenjualanDetailCtrl().getPenjualan()) == 0) {
+          Status status = getPenjualanDetailCtrl().getStatusService().getStatusByID(new Long(4)); // PIUTANG_BARU
+          getPiutangService().generatePiutangByIntervalKredit(
+              getPenjualanDetailCtrl().getPenjualan(),
+              getPenjualanDetailCtrl().getPenjualan().getIntervalKredit(), status);
+        }
+      }
       // if saving is successfully than actualize the beans as
       // origins.
       doStoreInitValues();
@@ -650,6 +663,10 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
   // +++++++++++++++++ Business Logic ++++++++++++++++ //
   // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
+  public PiutangService getPiutangService() {
+    return piutangService;
+  }
+
   public Penjualan getSelectedPenjualan() {
     return this.selectedPenjualan;
   }
@@ -742,10 +759,6 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
     doSkip(event);
   }
 
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-
   /**
    * When the "help" button is clicked.
    * 
@@ -755,6 +768,10 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
   public void onClick$btnHelp(Event event) throws InterruptedException {
     doHelp(event);
   }
+
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   /**
    * when the "go last record" button is clicked.
@@ -796,10 +813,6 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
     doSkip(event);
   }
 
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-
   /**
    * when the "refresh" button is clicked. <br>
    * <br>
@@ -810,6 +823,10 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
   public void onClick$btnRefresh(Event event) throws InterruptedException {
     doResizeSelectedTab(event);
   }
+
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   public void onClick$btnSave(Event event) throws InterruptedException {
 
@@ -1053,6 +1070,10 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
 
   public void setPenjualanService(PenjualanService penjualanService) {
     this.penjualanService = penjualanService;
+  }
+
+  public void setPiutangService(PiutangService piutangService) {
+    this.piutangService = piutangService;
   }
 
   public void setSelectedPenjualan(Penjualan selectedPenjualan) {

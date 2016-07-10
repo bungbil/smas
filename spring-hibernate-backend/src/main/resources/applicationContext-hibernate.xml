@@ -337,4 +337,8 @@
 		<property name="penjualanDetailDAO" ref="penjualanDetailDAO" />		
 	</bean>
 	
+	<bean name="piutangService" class="billy.backend.service.impl.PiutangServiceImpl">
+		<property name="piutangDAO" ref="piutangDAO" />
+	</bean>
+	
 </beans>
