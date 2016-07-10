@@ -8,6 +8,8 @@ alter table penjualan_detail
 	add column opr_divisi			numeric(12,2)		 null default 0,
 	add column or_divisi			numeric(12,2)		 null default 0;
 
+	
+	
 INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
 (227, 2, 'menuItem_Transaction_CetakPenjualan', 0),
 (228, 6, 'button_CetakPenjualanMain_btnCetakFaktur', 0),

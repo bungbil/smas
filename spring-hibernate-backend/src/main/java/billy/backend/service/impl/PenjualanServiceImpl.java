@@ -3,6 +3,8 @@ package billy.backend.service.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -59,7 +61,16 @@ public class PenjualanServiceImpl implements PenjualanService {
 
   @Override
   public List<Penjualan> getAllPenjualansByListNoFaktur(List<String> listNoFaktur) {
-    return getPenjualanDAO().getAllPenjualansByListNoFaktur(listNoFaktur);
+    List<Penjualan> allPenjualan = getPenjualanDAO().getAllPenjualansByListNoFaktur(listNoFaktur);
+
+    Collections.sort(allPenjualan, new Comparator<Penjualan>() {
+      @Override
+      public int compare(Penjualan obj1, Penjualan obj2) {
+        return obj1.getNoFaktur().compareTo(obj2.getNoFaktur());
+      }
+    });
+
+    return allPenjualan;
   }
 
   @Override
