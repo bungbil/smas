@@ -428,12 +428,13 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
         getPenjualanDetailCtrl().getPenjualan().setWilayah(wilayah);
       }
 
-      Listitem itemStatus = getPenjualanDetailCtrl().lbox_Status.getSelectedItem();
-      if (itemStatus != null) {
-        ListModelList lml1 = (ListModelList) getPenjualanDetailCtrl().lbox_Status.getListModel();
-        Status status = (Status) lml1.get(itemStatus.getIndex());
-        getPenjualanDetailCtrl().getPenjualan().setStatus(status);
-      }
+      /*
+       * Listitem itemStatus = getPenjualanDetailCtrl().lbox_Status.getSelectedItem(); if
+       * (itemStatus != null) { ListModelList lml1 = (ListModelList)
+       * getPenjualanDetailCtrl().lbox_Status.getListModel(); Status status = (Status)
+       * lml1.get(itemStatus.getIndex()); getPenjualanDetailCtrl().getPenjualan().setStatus(status);
+       * }
+       */
 
       Listitem itemSales1 = getPenjualanDetailCtrl().lbox_Sales1.getSelectedItem();
       if (itemSales1 != null) {
@@ -466,6 +467,8 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
       if (getPenjualanDetailCtrl().radioStatusCash.isSelected()) {
         getPenjualanDetailCtrl().getPenjualan().setMetodePembayaran(
             getPenjualanDetailCtrl().radioStatusCash.getLabel());
+        Status status = getPenjualanDetailCtrl().getStatusService().getStatusByID(new Long(2));// LUNAS
+        getPenjualanDetailCtrl().getPenjualan().setStatus(status);
       }
       if (getPenjualanDetailCtrl().radioStatusKredit.isSelected()) {
         getPenjualanDetailCtrl().getPenjualan().setMetodePembayaran(
@@ -847,6 +850,8 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
     }
 
     if (getSelectedPenjualan().isNeedApproval()) {
+      Status status = getPenjualanDetailCtrl().getStatusService().getStatusByID(new Long(1)); // BUTUH_APPROVAL
+      getPenjualanDetailCtrl().getPenjualan().setStatus(status);
       final Penjualan anPenjualan = getSelectedPenjualan();
       if (anPenjualan != null) {
 
@@ -875,7 +880,11 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
             }) == MultiLineMessageBox.YES) {
         }
       }
+
+
     } else {
+      Status status = getPenjualanDetailCtrl().getStatusService().getStatusByID(new Long(3));// KREDIT_BERJALAN
+      getPenjualanDetailCtrl().getPenjualan().setStatus(status);
       doSave(event);
     }
   }

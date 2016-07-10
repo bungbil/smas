@@ -45,15 +45,15 @@
 							label="Metode Pembayaran" />
 						<listheader id="listheader_PenjualanList_Total"
 							sclass="FDListBoxHeader1" 
-							sort="auto" width="10%"
+							sort="auto" width="9%"
 							label="Total" />						
 						<listheader id="listheader_PenjualanList_Piutang"
 							sclass="FDListBoxHeader1" 
-							sort="auto" width="10%"
+							sort="auto" width="9%"
 							label="Piutang" />
 						<listheader id="listheader_PenjualanList_Status"
 							sclass="FDListBoxHeader1" 
-							sort="auto" width="10%"
+							sort="auto" width="12%"
 							label="Status" />
 						<listheader id="listheader_PenjualanList_NamaPelanggan"
 							sclass="FDListBoxHeader1" 

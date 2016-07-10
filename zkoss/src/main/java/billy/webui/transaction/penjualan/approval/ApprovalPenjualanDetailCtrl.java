@@ -253,7 +253,7 @@ public class ApprovalPenjualanDetailCtrl extends GFCBaseCtrl implements Serializ
     txtb_Diskon.setReadonly(b);
 
     txtb_DownPayment.setReadonly(b);
-    lbox_Status.setDisabled(b);
+    // lbox_Status.setDisabled(b);
 
     lbox_Barang.setDisabled(b);
     txtb_NamaBarang.setReadonly(b);

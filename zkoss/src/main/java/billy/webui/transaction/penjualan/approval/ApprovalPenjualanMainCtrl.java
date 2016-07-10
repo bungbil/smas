@@ -28,6 +28,7 @@ import org.zkoss.zul.Window;
 
 import billy.backend.model.Karyawan;
 import billy.backend.model.Penjualan;
+import billy.backend.model.Status;
 import billy.backend.service.PenjualanService;
 
 import com.googlecode.genericdao.search.Filter;
@@ -417,6 +418,10 @@ public class ApprovalPenjualanMainCtrl extends GFCBaseCtrl implements Serializab
               .getUsername();
       getApprovalPenjualanDetailCtrl().getPenjualan().setLastUpdate(new Date());
       getApprovalPenjualanDetailCtrl().getPenjualan().setUpdatedBy(userName);
+
+      Status status =
+          getApprovalPenjualanDetailCtrl().getStatusService().getStatusByID(new Long(3)); // KREDIT_BERJALAN
+      getApprovalPenjualanDetailCtrl().getPenjualan().setStatus(status);
 
       // save it to database
       getPenjualanService().saveOrUpdate(getApprovalPenjualanDetailCtrl().getPenjualan());
