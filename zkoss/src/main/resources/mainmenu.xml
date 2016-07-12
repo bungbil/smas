@@ -125,13 +125,13 @@
 		<menuItem id="menu_Item_CetakPenjualan" zulNavigation="/WEB-INF/pages/transaction/cetakpenjualan/cetakPenjualanMain.zul"
 			iconName="/images/icons/view.gif" rightName="menuItem_Transaction_CetakPenjualan" />	
 			
+	 	<menuItem id="menu_Item_Piutang" zulNavigation="/WEB-INF/pages/transaction/piutang/piutangMain.zul"
+			iconName="/images/icons/view.gif" rightName="menuItem_Transaction_Piutang" />
 	
-		
-		<!--		
-	 	<menuItem id="menu_Item_Piutang" zulNavigation="/WEB-INF/pages/transaction/piutang/piutangList.zul"
+		<!--<menuItem id="menu_Item_ApprovalPiutang" zulNavigation="/WEB-INF/pages/transaction/approvalpiutang/approvalPiutangList.zul"
 			iconName="/images/icons/view.gif" />
-		<menuItem id="menu_Item_ApprovalPiutang" zulNavigation="/WEB-INF/pages/transaction/approvalpiutang/approvalPiutangList.zul"
-			iconName="/images/icons/view.gif" />
+		<menuItem id="menu_Item_CetakKuitansi" zulNavigation="/WEB-INF/pages/transaction/cetakkuitansi/cetakKuitansiMain.zul"
+			iconName="/images/icons/view.gif" rightName="menuItem_Transaction_CetakKuitansi" />	
 		<menuItem id="menu_Item_Kolektor" zulNavigation="/WEB-INF/pages/transaction/kolektor/kolektorList.zul"
 			iconName="/images/icons/view.gif" />
 		<menuItem id="menu_Item_TabunganSales" zulNavigation="/WEB-INF/pages/transaction/tabungansales/tabungansalesList.zul"

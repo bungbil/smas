@@ -48,7 +48,18 @@
    		<property name="keterangan" type="string">
 			<column name="keterangan" length="300" />
 		</property>
-	
+		<property name="needApproval" type="boolean">
+			<column name="need_approval"  />
+		</property>
+		<property name="reasonApproval" type="string">
+			<column name="reason_approval" length="254" />
+		</property>
+		<property name="approvedRemark" type="string">
+			<column name="approved_remark" length="254" />
+		</property>
+		<property name="approvedBy" type="string">
+			<column name="approved_by" length="50" />
+		</property>			
 		<property name="lastUpdate" type="timestamp">
 			<column name="last_update" length="29" />
 		</property>	

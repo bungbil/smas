@@ -421,7 +421,7 @@ public class ApprovalPenjualanMainCtrl extends GFCBaseCtrl implements Serializab
       getApprovalPenjualanDetailCtrl().getPenjualan().setUpdatedBy(userName);
 
       Status status =
-          getApprovalPenjualanDetailCtrl().getStatusService().getStatusByID(new Long(3)); // KREDIT_BERJALAN
+          getApprovalPenjualanDetailCtrl().getStatusService().getStatusByID(new Long(3)); // PROSES
       getApprovalPenjualanDetailCtrl().getPenjualan().setStatus(status);
 
       // save it to database

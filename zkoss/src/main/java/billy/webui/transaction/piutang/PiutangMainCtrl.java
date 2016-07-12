@@ -1,9 +1,8 @@
-package billy.webui.transaction.penjualan;
+package billy.webui.transaction.piutang;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Date;
 
@@ -31,11 +30,8 @@ import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 import billy.backend.model.Karyawan;
-import billy.backend.model.Penjualan;
-import billy.backend.model.PenjualanDetail;
+import billy.backend.model.Piutang;
 import billy.backend.model.Status;
-import billy.backend.model.Wilayah;
-import billy.backend.service.PenjualanService;
 import billy.backend.service.PiutangService;
 
 import com.googlecode.genericdao.search.Filter;
@@ -51,32 +47,32 @@ import de.forsthaus.webui.util.MultiLineMessageBox;
 import de.forsthaus.webui.util.ZksampleCommonUtils;
 import de.forsthaus.webui.util.ZksampleMessageUtils;
 
-public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
+public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
 
   private static final long serialVersionUID = 1L;
-  private static final Logger logger = Logger.getLogger(PenjualanMainCtrl.class);
+  private static final Logger logger = Logger.getLogger(PiutangMainCtrl.class);
 
 
-  protected Window windowPenjualanMain; // autowired
+  protected Window windowPiutangMain; // autowired
 
   // Tabs
-  protected Tabbox tabbox_PenjualanMain; // autowired
-  protected Tab tabPenjualanList; // autowired
-  protected Tab tabPenjualanDetail; // autowired
-  protected Tabpanel tabPanelPenjualanList; // autowired
-  protected Tabpanel tabPanelPenjualanDetail; // autowired
+  protected Tabbox tabbox_PiutangMain; // autowired
+  protected Tab tabPiutangList; // autowired
+  protected Tab tabPiutangDetail; // autowired
+  protected Tabpanel tabPanelPiutangList; // autowired
+  protected Tabpanel tabPanelPiutangDetail; // autowired
 
   // filter components
-  protected Checkbox checkbox_PenjualanList_ShowAll; // autowired
+  protected Checkbox checkbox_PiutangList_ShowAll; // autowired
   protected Textbox tb_Search_No_Faktur; // aurowired
   protected Textbox tb_Search_Nama_Pelanggan; // aurowired
   protected Textbox tb_Search_Alamat; // aurowired
-  protected Button button_PenjualanList_Search; // aurowired
+  protected Button button_PiutangList_Search; // aurowired
 
 
   // Button controller for the CRUD buttons
-  private final String btnCtroller_ClassPrefix = "button_PenjualanMain_";
-  private ButtonStatusCtrl btnCtrlPenjualan;
+  private final String btnCtroller_ClassPrefix = "button_PiutangMain_";
+  private ButtonStatusCtrl btnCtrlPiutang;
   protected Button btnNew; // autowired
   protected Button btnEdit; // autowired
   protected Button btnDelete; // autowired
@@ -93,28 +89,33 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
   protected Button btnHelp;
 
   // Tab-Controllers for getting the binders
-  private PenjualanListCtrl penjualanListCtrl;
-  private PenjualanDetailCtrl penjualanDetailCtrl;
+  private PiutangListCtrl piutangListCtrl;
+  private PiutangDetailCtrl piutangDetailCtrl;
 
   // Databinding
-  private Penjualan selectedPenjualan;
-  private BindingListModelList penjualans;
+  private Piutang selectedPiutang;
+  private BindingListModelList piutangs;
 
   // ServiceDAOs / Domain Classes
-  private PenjualanService penjualanService;
   private PiutangService piutangService;
 
+
   // always a copy from the bean before modifying. Used for reseting
-  private Penjualan originalPenjualan;
+  private Piutang originalPiutang;
 
   DecimalFormat df = new DecimalFormat("#,###");
+
 
   /**
    * default constructor.<br>
    */
-  public PenjualanMainCtrl() {
+  public PiutangMainCtrl() {
     super();
   }
+
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++ Component Events ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   @Override
   public void doAfterCompose(Component window) throws Exception {
@@ -122,16 +123,12 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
 
     /**
      * 1. Set an 'alias' for this composer name to access it in the zul-file.<br>
-     * 2. Set the penjualan 'recurse' to 'false' to avoid problems with managing more than one
+     * 2. Set the piutang 'recurse' to 'false' to avoid problems with managing more than one
      * zul-file in one page. Otherwise it would be overridden and can ends in curious error
      * messages.
      */
     this.self.setAttribute("controller", this, false);
   }
-
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // +++++++++++++++ Component Events ++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   /**
    * 1. Cancel the current action.<br>
@@ -148,15 +145,15 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
     doResetToInitValues();
 
     // check first, if the tabs are created
-    if (getPenjualanDetailCtrl().getBinder() != null) {
+    if (getPiutangDetailCtrl().getBinder() != null) {
 
       // refresh all dataBinder related controllers/components
-      getPenjualanDetailCtrl().getBinder().loadAll();
-      getPenjualanDetailCtrl().doRefresh();
+      getPiutangDetailCtrl().getBinder().loadAll();
+      getPiutangDetailCtrl().doRefresh();
       // set editable Mode
-      getPenjualanDetailCtrl().doReadOnlyMode(true);
+      getPiutangDetailCtrl().doReadOnlyMode(true);
 
-      btnCtrlPenjualan.setInitEdit();
+      btnCtrlPiutang.setInitEdit();
     }
   }
 
@@ -171,19 +168,20 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
   private void doCheckRights() {
 
     final UserWorkspace workspace = getUserWorkspace();
-    button_PenjualanList_Search.setVisible(workspace.isAllowed("button_PenjualanList_Search"));
-    tabPenjualanList.setVisible(workspace.isAllowed("windowPenjualanList"));
-    tabPenjualanDetail.setVisible(workspace.isAllowed("windowPenjualanDetail"));
-    btnEdit.setVisible(workspace.isAllowed("button_PenjualanMain_btnEdit"));
-    btnNew.setVisible(workspace.isAllowed("button_PenjualanMain_btnNew"));
-    btnDelete.setVisible(workspace.isAllowed("button_PenjualanMain_btnDelete"));
-    btnSave.setVisible(workspace.isAllowed("button_PenjualanMain_btnSave"));
-    btnCancel.setVisible(workspace.isAllowed("button_PenjualanMain_btnCancel"));
-    btnFirst.setVisible(workspace.isAllowed("button_PenjualanMain_btnFirst"));
-    btnPrevious.setVisible(workspace.isAllowed("button_PenjualanMain_btnPrevious"));
-    btnNext.setVisible(workspace.isAllowed("button_PenjualanMain_btnNext"));
-    btnLast.setVisible(workspace.isAllowed("button_PenjualanMain_btnLast"));
+    button_PiutangList_Search.setVisible(workspace.isAllowed("button_PiutangList_Search"));
+    tabPiutangList.setVisible(workspace.isAllowed("windowPiutangList"));
+    tabPiutangDetail.setVisible(workspace.isAllowed("windowPiutangDetail"));
+    btnEdit.setVisible(workspace.isAllowed("button_PiutangMain_btnEdit"));
+    btnNew.setVisible(workspace.isAllowed("button_PiutangMain_btnNew"));
+    btnDelete.setVisible(workspace.isAllowed("button_PiutangMain_btnDelete"));
+    btnSave.setVisible(workspace.isAllowed("button_PiutangMain_btnSave"));
+    btnCancel.setVisible(workspace.isAllowed("button_PiutangMain_btnCancel"));
+    btnFirst.setVisible(workspace.isAllowed("button_PiutangMain_btnFirst"));
+    btnPrevious.setVisible(workspace.isAllowed("button_PiutangMain_btnPrevious"));
+    btnNext.setVisible(workspace.isAllowed("button_PiutangMain_btnNext"));
+    btnLast.setVisible(workspace.isAllowed("button_PiutangMain_btnLast"));
   }
+
 
   /**
    * Deletes the selected Bean from the DB.
@@ -195,22 +193,22 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
   private void doDelete(Event event) throws InterruptedException {
     // logger.debug(event.toString());
     // check first, if the tabs are created, if not than create them
-    if (getPenjualanDetailCtrl().getBinder() == null) {
-      Events.sendEvent(new Event("onSelect", tabPenjualanDetail, null));
+    if (getPiutangDetailCtrl().getBinder() == null) {
+      Events.sendEvent(new Event("onSelect", tabPiutangDetail, null));
     }
 
     // check first, if the tabs are created
-    if (getPenjualanDetailCtrl().getBinder() == null) {
+    if (getPiutangDetailCtrl().getBinder() == null) {
       return;
     }
 
-    final Penjualan anPenjualan = getSelectedPenjualan();
-    if (anPenjualan != null) {
+    final Piutang anPiutang = getSelectedPiutang();
+    if (anPiutang != null) {
 
       // Show a confirm box
       final String msg =
           Labels.getLabel("message.Question.Are_you_sure_to_delete_this_record") + "\n\n --> "
-              + anPenjualan.getNoFaktur();
+              + anPiutang.getNoKuitansi();
       final String title = Labels.getLabel("message.Deleting.Record");
 
       MultiLineMessageBox.doSetTemplate();
@@ -218,7 +216,7 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
           true, new EventListener() {
             private void deleteBean() throws InterruptedException {
               try {
-                getPenjualanService().delete(anPenjualan);
+                getPiutangService().delete(anPiutang);
               } catch (DataAccessException e) {
                 ZksampleMessageUtils.showErrorMessage(e.getMostSpecificCause().toString());
               }
@@ -246,15 +244,15 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
 
     }
 
-    btnCtrlPenjualan.setInitEdit();
+    btnCtrlPiutang.setInitEdit();
 
-    setSelectedPenjualan(null);
+    setSelectedPiutang(null);
     // refresh the list
-    getPenjualanListCtrl().doFillListbox();
+    getPiutangListCtrl().doFillListbox();
 
     // refresh all dataBinder related controllers
-    getPenjualanDetailCtrl().getBinder().loadAll();
-    getPenjualanDetailCtrl().doRefresh();
+    getPiutangDetailCtrl().getBinder().loadAll();
+    getPiutangDetailCtrl().doRefresh();
   }
 
 
@@ -269,21 +267,21 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
   private void doEdit(Event event) {
     // logger.debug(event.toString());
     // get the current Tab for later checking if we must change it
-    Tab currentTab = tabbox_PenjualanMain.getSelectedTab();
+    Tab currentTab = tabbox_PiutangMain.getSelectedTab();
 
     // check first, if the tabs are created, if not than create it
-    if (getPenjualanDetailCtrl() == null) {
-      Events.sendEvent(new Event("onSelect", tabPenjualanDetail, null));
+    if (getPiutangDetailCtrl() == null) {
+      Events.sendEvent(new Event("onSelect", tabPiutangDetail, null));
       // if we work with spring beanCreation than we must check a little
       // bit deeper, because the Controller are preCreated ?
-    } else if (getPenjualanDetailCtrl().getBinder() == null) {
-      Events.sendEvent(new Event("onSelect", tabPenjualanDetail, null));
+    } else if (getPiutangDetailCtrl().getBinder() == null) {
+      Events.sendEvent(new Event("onSelect", tabPiutangDetail, null));
     }
 
     // check if the tab is one of the Detail tabs. If so do not change the
     // selection of it
-    if (!currentTab.equals(tabPenjualanDetail)) {
-      tabPenjualanDetail.setSelected(true);
+    if (!currentTab.equals(tabPiutangDetail)) {
+      tabPiutangDetail.setSelected(true);
     } else {
       currentTab.setSelected(true);
     }
@@ -291,15 +289,15 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
     // remember the old vars
     doStoreInitValues();
 
-    btnCtrlPenjualan.setBtnStatus_Edit();
+    btnCtrlPiutang.setBtnStatus_Edit();
 
-    getPenjualanDetailCtrl().doReadOnlyMode(false);
+    getPiutangDetailCtrl().doReadOnlyMode(false);
 
     // refresh the UI, because we can click the EditBtn from every tab.
-    getPenjualanDetailCtrl().getBinder().loadAll();
-    getPenjualanDetailCtrl().doRefresh();
+    getPiutangDetailCtrl().getBinder().loadAll();
+    getPiutangDetailCtrl().doRefresh();
     // set focus
-    getPenjualanDetailCtrl().txtb_NoOrderSheet.focus();
+    getPiutangDetailCtrl().txtb_tglPembayaran.focus();
   }
 
 
@@ -315,7 +313,6 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
     event.stopPropagation();
   }
 
-
   /**
    * Sets all UI-components to writable-mode. Stores the current Beans as originBeans and get new
    * Objects from the backend.
@@ -326,12 +323,12 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
   private void doNew(Event event) {
     // logger.debug(event.toString());
     // check first, if the tabs are created
-    if (getPenjualanDetailCtrl() == null) {
-      Events.sendEvent(new Event("onSelect", tabPenjualanDetail, null));
+    if (getPiutangDetailCtrl() == null) {
+      Events.sendEvent(new Event("onSelect", tabPiutangDetail, null));
       // if we work with spring beanCreation than we must check a little
       // bit deeper, because the Controller are preCreated ?
-    } else if (getPenjualanDetailCtrl().getBinder() == null) {
-      Events.sendEvent(new Event("onSelect", tabPenjualanDetail, null));
+    } else if (getPiutangDetailCtrl().getBinder() == null) {
+      Events.sendEvent(new Event("onSelect", tabPiutangDetail, null));
     }
 
     // remember the current object
@@ -340,31 +337,31 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
     /** !!! DO NOT BREAK THE TIERS !!! */
     // We don't create a new DomainObject() in the frontend.
     // We GET it from the backend.
-    final Penjualan anPenjualan = getPenjualanService().getNewPenjualan();
+    final Piutang anPiutang = getPiutangService().getNewPiutang();
 
     // set the beans in the related databinded controllers
-    getPenjualanDetailCtrl().setPenjualan(anPenjualan);
-    getPenjualanDetailCtrl().setSelectedPenjualan(anPenjualan);
+    getPiutangDetailCtrl().setPiutang(anPiutang);
+    getPiutangDetailCtrl().setSelectedPiutang(anPiutang);
 
     // Refresh the binding mechanism
-    getPenjualanDetailCtrl().setSelectedPenjualan(getSelectedPenjualan());
+    getPiutangDetailCtrl().setSelectedPiutang(getSelectedPiutang());
 
     try {
-      getPenjualanDetailCtrl().doRefresh();
-      getPenjualanDetailCtrl().getBinder().loadAll();
+      getPiutangDetailCtrl().doRefresh();
+      getPiutangDetailCtrl().getBinder().loadAll();
 
     } catch (Exception e) {
       // do nothing
     }
-    // getPenjualanDetailCtrl().emptyAllValue();
+    // getPiutangDetailCtrl().emptyAllValue();
     // set editable Mode
-    getPenjualanDetailCtrl().doReadOnlyMode(false);
+    getPiutangDetailCtrl().doReadOnlyMode(false);
     // set the ButtonStatus to New-Mode
-    btnCtrlPenjualan.setInitNew();
+    btnCtrlPiutang.setInitNew();
 
-    tabPenjualanDetail.setSelected(true);
+    tabPiutangDetail.setSelected(true);
     // set focus
-    getPenjualanDetailCtrl().txtb_NoOrderSheet.focus();
+    getPiutangDetailCtrl().txtb_tglPembayaran.focus();
 
   }
 
@@ -375,12 +372,12 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
    */
   public void doResetToInitValues() {
 
-    if (getOriginalPenjualan() != null) {
+    if (getOriginalPiutang() != null) {
 
       try {
-        setSelectedPenjualan((Penjualan) ZksampleBeanUtils.cloneBean(getOriginalPenjualan()));
+        setSelectedPiutang((Piutang) ZksampleBeanUtils.cloneBean(getOriginalPiutang()));
         // TODO Bug in DataBinder??
-        windowPenjualanMain.invalidate();
+        windowPiutangMain.invalidate();
 
       } catch (final IllegalAccessException e) {
         throw new RuntimeException(e);
@@ -402,11 +399,11 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
   private void doResizeSelectedTab(Event event) {
     // logger.debug(event.toString());
 
-    if (tabbox_PenjualanMain.getSelectedTab() == tabPenjualanDetail) {
-      getPenjualanDetailCtrl().doFitSize(event);
-    } else if (tabbox_PenjualanMain.getSelectedTab() == tabPenjualanList) {
+    if (tabbox_PiutangMain.getSelectedTab() == tabPiutangDetail) {
+      getPiutangDetailCtrl().doFitSize(event);
+    } else if (tabbox_PiutangMain.getSelectedTab() == tabPiutangList) {
       // resize and fill Listbox new
-      getPenjualanListCtrl().doFillListbox();
+      getPiutangListCtrl().doFillListbox();
     }
   }
 
@@ -419,103 +416,36 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
   private void doSave(Event event) throws InterruptedException {
     // logger.debug(event.toString());
     // save all components data in the several tabs to the bean
-    getPenjualanDetailCtrl().getBinder().saveAll();
+    getPiutangDetailCtrl().getBinder().saveAll();
 
     try {
-      /* if a job type is selected get the object from the listbox */
-      Listitem item = getPenjualanDetailCtrl().lbox_Wilayah.getSelectedItem();
-      if (item != null) {
-        ListModelList lml1 = (ListModelList) getPenjualanDetailCtrl().lbox_Wilayah.getListModel();
-        Wilayah wilayah = (Wilayah) lml1.get(item.getIndex());
-        getPenjualanDetailCtrl().getPenjualan().setWilayah(wilayah);
+      Listitem itemKolektor = getPiutangDetailCtrl().lbox_Kolektor.getSelectedItem();
+      if (itemKolektor != null) {
+        ListModelList lml1 = (ListModelList) getPiutangDetailCtrl().lbox_Kolektor.getListModel();
+        Karyawan karyawan = (Karyawan) lml1.get(itemKolektor.getIndex());
+        getPiutangDetailCtrl().getPiutang().setKolektor(karyawan);
       }
-
-      /*
-       * Listitem itemStatus = getPenjualanDetailCtrl().lbox_Status.getSelectedItem(); if
-       * (itemStatus != null) { ListModelList lml1 = (ListModelList)
-       * getPenjualanDetailCtrl().lbox_Status.getListModel(); Status status = (Status)
-       * lml1.get(itemStatus.getIndex()); getPenjualanDetailCtrl().getPenjualan().setStatus(status);
-       * }
-       */
-
-      Listitem itemSales1 = getPenjualanDetailCtrl().lbox_Sales1.getSelectedItem();
-      if (itemSales1 != null) {
-        ListModelList lml1 = (ListModelList) getPenjualanDetailCtrl().lbox_Sales1.getListModel();
-        Karyawan karyawan = (Karyawan) lml1.get(itemSales1.getIndex());
-        getPenjualanDetailCtrl().getPenjualan().setSales1(karyawan);
-        getPenjualanDetailCtrl().getPenjualan().setDivisi(karyawan.getSupervisorDivisi());
-      }
-
-      Listitem itemSales2 = getPenjualanDetailCtrl().lbox_Sales2.getSelectedItem();
-      if (itemSales2 != null) {
-        ListModelList lml1 = (ListModelList) getPenjualanDetailCtrl().lbox_Sales2.getListModel();
-        Karyawan karyawan = (Karyawan) lml1.get(itemSales2.getIndex());
-        getPenjualanDetailCtrl().getPenjualan().setSales2(karyawan);
-      }
-
-      Listitem itemPengirim = getPenjualanDetailCtrl().lbox_Pengirim.getSelectedItem();
-      if (itemPengirim != null) {
-        ListModelList lml1 = (ListModelList) getPenjualanDetailCtrl().lbox_Pengirim.getListModel();
-        Karyawan karyawan = (Karyawan) lml1.get(itemPengirim.getIndex());
-        getPenjualanDetailCtrl().getPenjualan().setPengirim(karyawan);
-      }
-
-      if (getPenjualanDetailCtrl().cmb_IntervalKredit.getValue() != null) {
-        int intervalKredit =
-            Integer.parseInt(getPenjualanDetailCtrl().cmb_IntervalKredit.getValue());
-        getPenjualanDetailCtrl().getPenjualan().setIntervalKredit(intervalKredit);
-      }
-
-      if (getPenjualanDetailCtrl().radioStatusCash.isSelected()) {
-        getPenjualanDetailCtrl().getPenjualan().setMetodePembayaran(
-            getPenjualanDetailCtrl().radioStatusCash.getLabel());
-        Status status = getPenjualanDetailCtrl().getStatusService().getStatusByID(new Long(2));// LUNAS
-        getPenjualanDetailCtrl().getPenjualan().setStatus(status);
-      }
-      if (getPenjualanDetailCtrl().radioStatusKredit.isSelected()) {
-        getPenjualanDetailCtrl().getPenjualan().setMetodePembayaran(
-            getPenjualanDetailCtrl().radioStatusKredit.getLabel());
-      }
-
-      getPenjualanDetailCtrl().getPenjualan().setPiutang(
-          getPenjualanDetailCtrl().getPenjualan().getGrandTotal());
 
       String userName =
           ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
               .getUsername();
-      getPenjualanDetailCtrl().getPenjualan().setLastUpdate(new Date());
-      getPenjualanDetailCtrl().getPenjualan().setUpdatedBy(userName);
+      getPiutangDetailCtrl().getPiutang().setLastUpdate(new Date());
+      getPiutangDetailCtrl().getPiutang().setUpdatedBy(userName);
 
       // save it to database
-      getPenjualanService().saveOrUpdate(getPenjualanDetailCtrl().getPenjualan());
+      getPiutangService().saveOrUpdate(getPiutangDetailCtrl().getPiutang());
 
-      // getPenjualanService().deletePenjualanDetailsByPenjualan(getPenjualanDetailCtrl().getPenjualan());
-      for (PenjualanDetail penjualanDetail : getPenjualanDetailCtrl().getListPenjualanDetail()) {
-        getPenjualanService().saveOrUpdate(penjualanDetail);
-      }
 
-      // generatePiutang
-      if (getPenjualanDetailCtrl().getPenjualan().getIntervalKredit() > 1
-          && !getPenjualanDetailCtrl().getPenjualan().isNeedApproval()) {
-        if (getPiutangService()
-            .getCountPiutangsByPenjualan(getPenjualanDetailCtrl().getPenjualan()) == 0) {
-          Status status = getPenjualanDetailCtrl().getStatusService().getStatusByID(new Long(3)); // PROSES
-          getPiutangService().generatePiutangByIntervalKredit(
-              getPenjualanDetailCtrl().getPenjualan(),
-              getPenjualanDetailCtrl().getPenjualan().getIntervalKredit(), status);
-        }
-      }
       // if saving is successfully than actualize the beans as
       // origins.
       doStoreInitValues();
       // refresh the list
-      getPenjualanListCtrl().doFillListbox();
+      getPiutangListCtrl().doFillListbox();
       // later refresh StatusBar
-      Events.postEvent("onSelect", getPenjualanListCtrl().getListBoxPenjualan(),
-          getSelectedPenjualan());
+      Events.postEvent("onSelect", getPiutangListCtrl().getListBoxPiutang(), getSelectedPiutang());
 
       // show the objects data in the statusBar
-      String str = getSelectedPenjualan().getNoFaktur();
+      String str = getSelectedPiutang().getNoKuitansi();
       EventQueues.lookup("selectedObjectEventQueue", EventQueues.DESKTOP, true).publish(
           new Event("onChangeSelectedObject", null, str));
 
@@ -528,8 +458,8 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
       return;
 
     } finally {
-      btnCtrlPenjualan.setInitEdit();
-      getPenjualanDetailCtrl().doReadOnlyMode(true);
+      btnCtrlPiutang.setInitEdit();
+      getPiutangDetailCtrl().doReadOnlyMode(true);
     }
   }
 
@@ -543,23 +473,23 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
 
     // get the model and the current selected record
     BindingListModelList blml =
-        (BindingListModelList) getPenjualanListCtrl().getListBoxPenjualan().getModel();
+        (BindingListModelList) getPiutangListCtrl().getListBoxPiutang().getModel();
 
     // check if data exists
     if (blml == null || blml.size() < 1)
       return;
 
-    int index = blml.indexOf(getSelectedPenjualan());
+    int index = blml.indexOf(getSelectedPiutang());
 
     /**
      * Check, if all tabs with data binded components are created So we work with spring
      * BeanCreation we must check a little bit deeper, because the Controller are preCreated ? After
      * that, go back to the current/selected tab.
      */
-    Tab currentTab = tabbox_PenjualanMain.getSelectedTab();
+    Tab currentTab = tabbox_PiutangMain.getSelectedTab();
 
-    if (getPenjualanDetailCtrl().getBinder() == null) {
-      Events.sendEvent(new Event(Events.ON_SELECT, tabPenjualanDetail, null));
+    if (getPiutangDetailCtrl().getBinder() == null) {
+      Events.sendEvent(new Event(Events.ON_SELECT, tabPiutangDetail, null));
     }
 
     // go back to selected tab
@@ -584,16 +514,16 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
       }
     }
 
-    getPenjualanListCtrl().getListBoxPenjualan().setSelectedIndex(index);
-    setSelectedPenjualan((Penjualan) blml.get(index));
+    getPiutangListCtrl().getListBoxPiutang().setSelectedIndex(index);
+    setSelectedPiutang((Piutang) blml.get(index));
 
     // call onSelect() for showing the objects data in the statusBar
-    Events.sendEvent(new Event(Events.ON_SELECT, getPenjualanListCtrl().getListBoxPenjualan(),
-        getSelectedPenjualan()));
+    Events.sendEvent(new Event(Events.ON_SELECT, getPiutangListCtrl().getListBoxPiutang(),
+        getSelectedPiutang()));
 
     // refresh master-detail MASTERS data
-    getPenjualanDetailCtrl().getBinder().loadAll();
-    getPenjualanDetailCtrl().doRefresh();
+    getPiutangDetailCtrl().getBinder().loadAll();
+    getPiutangDetailCtrl().doRefresh();
     // EXTRA: if we have a longtext field under the listbox, so we must
     // refresh
     // this binded component too
@@ -608,10 +538,10 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
    */
   public void doStoreInitValues() {
 
-    if (getSelectedPenjualan() != null) {
+    if (getSelectedPiutang() != null) {
 
       try {
-        setOriginalPenjualan((Penjualan) ZksampleBeanUtils.cloneBean(getSelectedPenjualan()));
+        setOriginalPiutang((Piutang) ZksampleBeanUtils.cloneBean(getSelectedPiutang()));
       } catch (final IllegalAccessException e) {
         throw new RuntimeException(e);
       } catch (final InstantiationException e) {
@@ -631,44 +561,29 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
    * @throws InterruptedException
    */
 
-  public long getDiffDays(Date start, Date end) {
-    long diff = end.getTime() - start.getTime();
-
-    long diffDays = diff / (24 * 60 * 60 * 1000);
-    return diffDays;
+  public Piutang getOriginalPiutang() {
+    return this.originalPiutang;
   }
 
-  public Penjualan getOriginalPenjualan() {
-    return this.originalPenjualan;
+  public PiutangDetailCtrl getPiutangDetailCtrl() {
+    return this.piutangDetailCtrl;
   }
 
-  public PenjualanDetailCtrl getPenjualanDetailCtrl() {
-    return this.penjualanDetailCtrl;
+  public PiutangListCtrl getPiutangListCtrl() {
+    return this.piutangListCtrl;
   }
 
-  public PenjualanListCtrl getPenjualanListCtrl() {
-    return this.penjualanListCtrl;
-  }
 
-  public BindingListModelList getPenjualans() {
-    return this.penjualans;
+  public BindingListModelList getPiutangs() {
+    return this.piutangs;
   }
-
-  /* SERVICES */
-  public PenjualanService getPenjualanService() {
-    return this.penjualanService;
-  }
-
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // +++++++++++++++++ Business Logic ++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   public PiutangService getPiutangService() {
     return piutangService;
   }
 
-  public Penjualan getSelectedPenjualan() {
-    return this.selectedPenjualan;
+  public Piutang getSelectedPiutang() {
+    return this.selectedPiutang;
   }
 
   /**
@@ -676,7 +591,7 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
    * 
    * @param event
    */
-  public void onCheck$checkbox_PenjualanList_ShowAll(Event event) {
+  public void onCheck$checkbox_PiutangList_ShowAll(Event event) {
     // logger.debug(event.toString());
 
     // empty the text search boxes
@@ -685,9 +600,9 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
     tb_Search_Alamat.setValue(""); // clear
 
     // ++ create the searchObject and init sorting ++//
-    HibernateSearchObject<Penjualan> soPenjualan =
-        new HibernateSearchObject<Penjualan>(Penjualan.class, getPenjualanListCtrl().getCountRows());
-    soPenjualan.addSort("noFaktur", false);
+    HibernateSearchObject<Piutang> soPiutang =
+        new HibernateSearchObject<Piutang>(Piutang.class, getPiutangListCtrl().getCountRows());
+    soPiutang.addSort("penjualan.noFaktur", false);
 
     SecUser secUser =
         ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
@@ -696,22 +611,22 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
       Karyawan karyawan = secUser.getKaryawan();
       if (karyawan.getSupervisorDivisi() != null) {
         Karyawan supervisor = karyawan.getSupervisorDivisi();
-        soPenjualan.addFilter(new Filter("divisi.supervisorDivisi.id", supervisor.getId(),
+        soPiutang.addFilter(new Filter("divisi.supervisorDivisi.id", supervisor.getId(),
             Filter.OP_EQUAL));
       }
     }
 
     // Change the BindingListModel.
-    if (getPenjualanListCtrl().getBinder() != null) {
-      getPenjualanListCtrl().getPagedBindingListWrapper().setSearchObject(soPenjualan);
+    if (getPiutangListCtrl().getBinder() != null) {
+      getPiutangListCtrl().getPagedBindingListWrapper().setSearchObject(soPiutang);
 
       // get the current Tab for later checking if we must change it
-      Tab currentTab = tabbox_PenjualanMain.getSelectedTab();
+      Tab currentTab = tabbox_PiutangMain.getSelectedTab();
 
       // check if the tab is one of the Detail tabs. If so do not
       // change the selection of it
-      if (!currentTab.equals(tabPenjualanList)) {
-        tabPenjualanList.setSelected(true);
+      if (!currentTab.equals(tabPiutangList)) {
+        tabPiutangList.setSelected(true);
       } else {
         currentTab.setSelected(true);
       }
@@ -759,6 +674,10 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
     doSkip(event);
   }
 
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+
   /**
    * When the "help" button is clicked.
    * 
@@ -768,10 +687,6 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
   public void onClick$btnHelp(Event event) throws InterruptedException {
     doHelp(event);
   }
-
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   /**
    * when the "go last record" button is clicked.
@@ -813,6 +728,10 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
     doSkip(event);
   }
 
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+
   /**
    * when the "refresh" button is clicked. <br>
    * <br>
@@ -824,53 +743,38 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
     doResizeSelectedTab(event);
   }
 
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-
   public void onClick$btnSave(Event event) throws InterruptedException {
 
     /*
-     * validasi butuh approval - tgl angsuran ke 2 > 45 hari tgl penjualan - harga barang berubah
+     * validasi butuh approval
      */
     String message = "";
-    if (getPenjualanDetailCtrl().getPenjualan().getTglAngsuran2() != null) {
-      if (getDiffDays(getPenjualanDetailCtrl().getPenjualan().getTglPenjualan(),
-          getPenjualanDetailCtrl().getPenjualan().getTglAngsuran2()) > 45) {
-        message += "- Tanggal Angsuran ke 2 melebihi 45 hari \n";
-      }
+    if (getPiutangDetailCtrl().getPiutang().getNilaiTagihan()
+        .compareTo(getPiutangDetailCtrl().getPiutang().getPembayaran()) == 1) {
+      message += "- Kurang Pembayaran \n";
     }
-    int interval = Integer.parseInt(getPenjualanDetailCtrl().cmb_IntervalKredit.getValue());
-    for (PenjualanDetail penjualanDetail : getPenjualanDetailCtrl().getListPenjualanDetail()) {
-      BigDecimal hargaBarang =
-          getPenjualanDetailCtrl().getBarangService().getHargaBarangByIntervalKredit(
-              penjualanDetail.getBarang(), interval);
-      BigDecimal hargaBarangDiList = penjualanDetail.getHarga();
-
-      if (hargaBarang.compareTo(hargaBarangDiList) != 0) {
-        message +=
-            "- Harga Barang " + penjualanDetail.getBarang().getNamaBarang() + " berubah dari "
-                + df.format(hargaBarang) + " ke " + df.format(hargaBarangDiList) + " \n";
-      }
+    if (getPiutangDetailCtrl().getPiutang().getNilaiTagihan()
+        .compareTo(getPiutangDetailCtrl().getPiutang().getPembayaran()) == -1) {
+      message += "- Lebih Pembayaran \n";
     }
 
     if (message != "") {
-      getPenjualanDetailCtrl().getPenjualan().setNeedApproval(true);
-      getPenjualanDetailCtrl().getPenjualan().setReasonApproval(message);
-      getPenjualanDetailCtrl().txtb_ReasonApproval.setValue(message);
-      getPenjualanDetailCtrl().label_butuhApproval.setValue("Ya");
+      getPiutangDetailCtrl().getPiutang().setNeedApproval(true);
+      getPiutangDetailCtrl().getPiutang().setReasonApproval(message);
+      getPiutangDetailCtrl().txtb_ReasonApproval.setValue(message);
+      getPiutangDetailCtrl().label_butuhApproval.setValue("Ya");
     } else {
-      getPenjualanDetailCtrl().getPenjualan().setNeedApproval(false);
-      getPenjualanDetailCtrl().getPenjualan().setReasonApproval("");
-      getPenjualanDetailCtrl().txtb_ReasonApproval.setValue("");
-      getPenjualanDetailCtrl().label_butuhApproval.setValue("Tidak");
+      getPiutangDetailCtrl().getPiutang().setNeedApproval(false);
+      getPiutangDetailCtrl().getPiutang().setReasonApproval("");
+      getPiutangDetailCtrl().txtb_ReasonApproval.setValue("");
+      getPiutangDetailCtrl().label_butuhApproval.setValue("Tidak");
     }
 
-    if (getSelectedPenjualan().isNeedApproval()) {
-      Status status = getPenjualanDetailCtrl().getStatusService().getStatusByID(new Long(1)); // BUTUH_APPROVAL
-      getPenjualanDetailCtrl().getPenjualan().setStatus(status);
-      final Penjualan anPenjualan = getSelectedPenjualan();
-      if (anPenjualan != null) {
+    if (getSelectedPiutang().isNeedApproval()) {
+      Status status = getPiutangDetailCtrl().getStatusService().getStatusByID(new Long(1)); // BUTUH_APPROVAL
+      getPiutangDetailCtrl().getPiutang().setStatus(status);
+      final Piutang anPiutang = getSelectedPiutang();
+      if (anPiutang != null) {
 
         // Show a confirm box
         String msg = message;
@@ -900,41 +804,40 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
 
 
     } else {
-      Status status = getPenjualanDetailCtrl().getStatusService().getStatusByID(new Long(3));// PROSES
-      getPenjualanDetailCtrl().getPenjualan().setStatus(status);
+      Status status = getPiutangDetailCtrl().getStatusService().getStatusByID(new Long(2));// LUNAS
+      getPiutangDetailCtrl().getPiutang().setStatus(status);
       doSave(event);
     }
   }
 
   /**
-   * Filter the penjualan list <br>
+   * Filter the piutang list <br>
    */
-  public void onClick$button_PenjualanList_Search(Event event) throws Exception {
+  public void onClick$button_PiutangList_Search(Event event) throws Exception {
     // logger.debug(event.toString());
 
     // if not empty
     if (StringUtils.isNotEmpty(tb_Search_No_Faktur.getValue())
         || StringUtils.isNotEmpty(tb_Search_Nama_Pelanggan.getValue())
         || StringUtils.isNotEmpty(tb_Search_Alamat.getValue())) {
-      checkbox_PenjualanList_ShowAll.setChecked(false); // unCheck
+      checkbox_PiutangList_ShowAll.setChecked(false); // unCheck
 
       // ++ create the searchObject and init sorting ++//
-      HibernateSearchObject<Penjualan> soPenjualan =
-          new HibernateSearchObject<Penjualan>(Penjualan.class, getPenjualanListCtrl()
-              .getCountRows());
+      HibernateSearchObject<Piutang> soPiutang =
+          new HibernateSearchObject<Piutang>(Piutang.class, getPiutangListCtrl().getCountRows());
       // check which field have input
       if (StringUtils.isNotEmpty(tb_Search_No_Faktur.getValue())) {
-        soPenjualan.addFilter(new Filter("noFaktur", tb_Search_No_Faktur.getValue(),
+        soPiutang.addFilter(new Filter("penjualan.noFaktur", tb_Search_No_Faktur.getValue(),
             Filter.OP_EQUAL));
       }
 
       if (StringUtils.isNotEmpty(tb_Search_Nama_Pelanggan.getValue())) {
-        soPenjualan.addFilter(new Filter("namaPelanggan", "%"
+        soPiutang.addFilter(new Filter("penjualan.namaPelanggan", "%"
             + tb_Search_Nama_Pelanggan.getValue().toUpperCase() + "%", Filter.OP_ILIKE));
       }
 
       if (StringUtils.isNotEmpty(tb_Search_Alamat.getValue())) {
-        soPenjualan.addFilter(new Filter("alamat", "%" + tb_Search_Alamat.getValue() + "%",
+        soPiutang.addFilter(new Filter("penjualan.alamat", "%" + tb_Search_Alamat.getValue() + "%",
             Filter.OP_ILIKE));
       }
       SecUser secUser =
@@ -944,22 +847,22 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
         Karyawan karyawan = secUser.getKaryawan();
         if (karyawan.getSupervisorDivisi() != null) {
           Karyawan supervisor = karyawan.getSupervisorDivisi();
-          soPenjualan.addFilter(new Filter("divisi.supervisorDivisi.id", supervisor.getId(),
-              Filter.OP_EQUAL));
+          soPiutang.addFilter(new Filter("penjualan.divisi.supervisorDivisi.id",
+              supervisor.getId(), Filter.OP_EQUAL));
         }
       }
 
       // Change the BindingListModel.
-      if (getPenjualanListCtrl().getBinder() != null) {
-        getPenjualanListCtrl().getPagedBindingListWrapper().setSearchObject(soPenjualan);
+      if (getPiutangListCtrl().getBinder() != null) {
+        getPiutangListCtrl().getPagedBindingListWrapper().setSearchObject(soPiutang);
 
         // get the current Tab for later checking if we must change it
-        Tab currentTab = tabbox_PenjualanMain.getSelectedTab();
+        Tab currentTab = tabbox_PiutangMain.getSelectedTab();
 
         // check if the tab is one of the Detail tabs. If so do not
         // change the selection of it
-        if (!currentTab.equals(tabPenjualanList)) {
-          tabPenjualanList.setSelected(true);
+        if (!currentTab.equals(tabPiutangList)) {
+          tabPiutangList.setSelected(true);
         } else {
           currentTab.setSelected(true);
         }
@@ -973,11 +876,11 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
    * @param event
    * @throws Exception
    */
-  public void onCreate$windowPenjualanMain(Event event) throws Exception {
-    windowPenjualanMain.setContentStyle("padding:0px;");
+  public void onCreate$windowPiutangMain(Event event) throws Exception {
+    windowPiutangMain.setContentStyle("padding:0px;");
 
     // create the Button Controller. Disable not used buttons during working
-    btnCtrlPenjualan =
+    btnCtrlPiutang =
         new ButtonStatusCtrl(getUserWorkspace(), btnCtroller_ClassPrefix, true, null, btnPrint,
             btnFirst, btnPrevious, btnNext, btnLast, btnNew, btnEdit, btnDelete, btnSave,
             btnCancel, null);
@@ -988,96 +891,92 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
      * Initiate the first loading by selecting the customerList tab and create the components from
      * the zul-file.
      */
-    tabPenjualanList.setSelected(true);
+    tabPiutangList.setSelected(true);
 
-    if (tabPanelPenjualanList != null) {
-      ZksampleCommonUtils.createTabPanelContent(this.tabPanelPenjualanList, this,
-          "ModuleMainController", "/WEB-INF/pages/transaction/penjualan/penjualanList.zul");
+    if (tabPanelPiutangList != null) {
+      ZksampleCommonUtils.createTabPanelContent(this.tabPanelPiutangList, this,
+          "ModuleMainController", "/WEB-INF/pages/transaction/piutang/piutangList.zul");
     }
 
     // init the buttons for editMode
-    btnCtrlPenjualan.setInitEdit();
+    btnCtrlPiutang.setInitEdit();
   }
 
   /**
-   * When the tab 'tabPanelPenjualanDetail' is selected.<br>
+   * When the tab 'tabPanelPiutangDetail' is selected.<br>
    * Loads the zul-file into the tab.
    * 
    * @param event
    * @throws IOException
    */
-  public void onSelect$tabPenjualanDetail(Event event) throws IOException {
+  public void onSelect$tabPiutangDetail(Event event) throws IOException {
     // logger.debug(event.toString());
 
     // Check if the tabpanel is already loaded
-    if (tabPanelPenjualanDetail.getFirstChild() != null) {
-      tabPenjualanDetail.setSelected(true);
+    if (tabPanelPiutangDetail.getFirstChild() != null) {
+      tabPiutangDetail.setSelected(true);
 
       // refresh the Binding mechanism
-      getPenjualanDetailCtrl().setPenjualan(getSelectedPenjualan());
-      getPenjualanDetailCtrl().getBinder().loadAll();
-      getPenjualanDetailCtrl().doRefresh();
+      getPiutangDetailCtrl().setPiutang(getSelectedPiutang());
+      getPiutangDetailCtrl().getBinder().loadAll();
+      getPiutangDetailCtrl().doRefresh();
       return;
     }
 
-    if (tabPanelPenjualanDetail != null) {
-      ZksampleCommonUtils.createTabPanelContent(this.tabPanelPenjualanDetail, this,
-          "ModuleMainController", "/WEB-INF/pages/transaction/penjualan/penjualanDetail.zul");
+    if (tabPanelPiutangDetail != null) {
+      ZksampleCommonUtils.createTabPanelContent(this.tabPanelPiutangDetail, this,
+          "ModuleMainController", "/WEB-INF/pages/transaction/piutang/piutangDetail.zul");
     }
   }
 
   /**
-   * When the tab 'tabPenjualanList' is selected.<br>
+   * When the tab 'tabPiutangList' is selected.<br>
    * Loads the zul-file into the tab.
    * 
    * @param event
    * @throws IOException
    */
-  public void onSelect$tabPenjualanList(Event event) throws IOException {
+  public void onSelect$tabPiutangList(Event event) throws IOException {
     // logger.debug(event.toString());
 
     // Check if the tabpanel is already loaded
-    if (tabPanelPenjualanList.getFirstChild() != null) {
-      tabPenjualanList.setSelected(true);
+    if (tabPanelPiutangList.getFirstChild() != null) {
+      tabPiutangList.setSelected(true);
 
       return;
     }
 
-    if (tabPanelPenjualanList != null) {
-      ZksampleCommonUtils.createTabPanelContent(this.tabPanelPenjualanList, this,
-          "ModuleMainController", "/WEB-INF/pages/transaction/penjualan/penjualanList.zul");
+    if (tabPanelPiutangList != null) {
+      ZksampleCommonUtils.createTabPanelContent(this.tabPanelPiutangList, this,
+          "ModuleMainController", "/WEB-INF/pages/transaction/piutang/piutangList.zul");
     }
 
   }
 
   /* Master BEANS */
-  public void setOriginalPenjualan(Penjualan originalPenjualan) {
-    this.originalPenjualan = originalPenjualan;
+  public void setOriginalPiutang(Piutang originalPiutang) {
+    this.originalPiutang = originalPiutang;
   }
 
-  public void setPenjualanDetailCtrl(PenjualanDetailCtrl penjualanDetailCtrl) {
-    this.penjualanDetailCtrl = penjualanDetailCtrl;
+  public void setPiutangDetailCtrl(PiutangDetailCtrl piutangDetailCtrl) {
+    this.piutangDetailCtrl = piutangDetailCtrl;
   }
 
   /* CONTROLLERS */
-  public void setPenjualanListCtrl(PenjualanListCtrl penjualanListCtrl) {
-    this.penjualanListCtrl = penjualanListCtrl;
+  public void setPiutangListCtrl(PiutangListCtrl piutangListCtrl) {
+    this.piutangListCtrl = piutangListCtrl;
   }
 
-  public void setPenjualans(BindingListModelList penjualans) {
-    this.penjualans = penjualans;
-  }
-
-  public void setPenjualanService(PenjualanService penjualanService) {
-    this.penjualanService = penjualanService;
+  public void setPiutangs(BindingListModelList piutangs) {
+    this.piutangs = piutangs;
   }
 
   public void setPiutangService(PiutangService piutangService) {
     this.piutangService = piutangService;
   }
 
-  public void setSelectedPenjualan(Penjualan selectedPenjualan) {
-    this.selectedPenjualan = selectedPenjualan;
+  public void setSelectedPiutang(Piutang selectedPiutang) {
+    this.selectedPiutang = selectedPiutang;
   }
 
   /* COMPONENTS and OTHERS */

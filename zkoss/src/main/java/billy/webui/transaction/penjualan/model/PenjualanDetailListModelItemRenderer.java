@@ -1,4 +1,4 @@
-package billy.webui.transaction.penjualan.detail.model;
+package billy.webui.transaction.penjualan.model;
 
 import java.io.Serializable;
 import java.text.DecimalFormat;

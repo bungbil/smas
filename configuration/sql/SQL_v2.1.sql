@@ -53,8 +53,8 @@ TRUNCATE TABLE STATUS;
 INSERT INTO STATUS (STATUS_ID,DESKRIPSI_STATUS,VERSION) values
 (1,'BUTUH_APPROVAL',1),
 (2,'LUNAS',1),
-(3,'KREDIT_BERJALAN',1),
-(4,'PIUTANG_BARU',1),
+(3,'PROSES',1),
+(4,'KURANG_BAYAR',1),
 (5,'DISKON',1),
 (6,'TARIK_BARANG',1),
 (7,'MASALAH',1);
@@ -81,6 +81,10 @@ CREATE TABLE piutang (
    tgl_jatuh_tempo		date				 not null,
    kolektor_id			INT8                 null,
    keterangan			varchar(300)         null,
+   need_approval		boolean				 not null default false,
+   reason_approval		varchar(254)   		 null,
+   approved_remark		varchar(254)   		 null,
+   approved_by			varchar(50)	 		 null,
    last_update       	timestamp,          
    updated_by       	varchar(50)          null,
    version              int4                 not null default 0,
@@ -105,3 +109,42 @@ alter table piutang
       references penjualan (penjualan_id)
       on delete cascade on update cascade;
 
+      
+      
+
+/* Piutang */
+/* --> Page Piutang */
+INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
+(238, 2, 'menuItem_Transaction_Piutang', 0),
+(239, 0, 'windowPiutangList', 0),
+(240, 0, 'windowPiutangDetail', 0),
+/* window_PiutangList Buttons*/
+(241, 6, 'button_PiutangList_Search', 0),
+/* window_PiutangDialog BUTTONS */
+(242, 6, 'button_PiutangMain_btnNew', 0),
+(243, 6, 'button_PiutangMain_btnEdit', 0),
+(244, 6, 'button_PiutangMain_btnDelete', 0),
+(245, 6, 'button_PiutangMain_btnSave', 0),
+(246, 6, 'button_PiutangMain_btnClose', 0),
+/* Piutang navigation buttons */
+(247, 6, 'button_PiutangMain_btnCancel', 0),
+(248, 6, 'button_PiutangMain_btnFirst', 0),
+(249, 6, 'button_PiutangMain_btnPrevious', 0),
+(250, 6, 'button_PiutangMain_btnNext', 0),
+(251, 6, 'button_PiutangMain_btnLast', 0);
+
+INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
+(238, 1, 238, 0),
+(239, 1, 239, 0),
+(240, 1, 240, 0),
+(241, 1, 241, 0),
+(242, 1, 242, 0),
+(243, 1, 243, 0),
+(244, 1, 244, 0),
+(245, 1, 245, 0),
+(246, 1, 246, 0),
+(247, 1, 247, 0),
+(248, 1, 248, 0),
+(249, 1, 249, 0),
+(250, 1, 250, 0),
+(251, 1, 251, 0);      

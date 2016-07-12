@@ -128,8 +128,10 @@ public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Ser
     listheader_PenjualanList_Piutang.setSortAscending(new FieldComparator("piutang", true));
     listheader_PenjualanList_Piutang.setSortDescending(new FieldComparator("piutang", false));
 
-    listheader_PenjualanList_Status.setSortAscending(new FieldComparator("status", true));
-    listheader_PenjualanList_Status.setSortDescending(new FieldComparator("status", false));
+    listheader_PenjualanList_Status.setSortAscending(new FieldComparator("status.deskripsiStatus",
+        true));
+    listheader_PenjualanList_Status.setSortDescending(new FieldComparator("status.deskripsiStatus",
+        false));
 
     listheader_PenjualanList_NamaPelanggan.setSortAscending(new FieldComparator("namaPelanggan",
         true));
@@ -139,11 +141,15 @@ public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Ser
     listheader_PenjualanList_Telepon.setSortAscending(new FieldComparator("telepon", true));
     listheader_PenjualanList_Telepon.setSortDescending(new FieldComparator("telepon", false));
 
-    listheader_PenjualanList_Sales1.setSortAscending(new FieldComparator("sales1", true));
-    listheader_PenjualanList_Sales1.setSortDescending(new FieldComparator("sales1", false));
+    listheader_PenjualanList_Sales1.setSortAscending(new FieldComparator("sales1.namaPanggilan",
+        true));
+    listheader_PenjualanList_Sales1.setSortDescending(new FieldComparator("sales1.namaPanggilan",
+        false));
 
-    listheader_PenjualanList_Sales2.setSortAscending(new FieldComparator("sales2", true));
-    listheader_PenjualanList_Sales2.setSortDescending(new FieldComparator("sales2", false));
+    listheader_PenjualanList_Sales2.setSortAscending(new FieldComparator("sales2.namaPanggilan",
+        true));
+    listheader_PenjualanList_Sales2.setSortDescending(new FieldComparator("sales2.namaPanggilan",
+        false));
 
     listheader_PenjualanList_LastUpdate.setSortAscending(new FieldComparator("lastUpdate", true));
     listheader_PenjualanList_LastUpdate.setSortDescending(new FieldComparator("lastUpdate", false));

@@ -1,4 +1,4 @@
-package billy.webui.transaction.penjualan.model;
+package billy.webui.master.barang.model;
 
 import java.io.Serializable;
 

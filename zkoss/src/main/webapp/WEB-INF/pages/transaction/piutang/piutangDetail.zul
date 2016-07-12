@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+
+<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- Namespace dependent DataBinding Initiator.          -->
+<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./windowPiutangDetail" ?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+	<window id="windowPiutangDetail" apply="${piutangDetailCtrl}" border="none" width="100%">
+
+		<borderlayout id="borderlayout_PiutangDetail">
+			<center border="none" autoscroll="true">
+
+				<hbox align="stretch" pack="stretch" sclass="FDCenterNoBorder" width="100%">
+
+					<!-- Left CONTENT AREA -->
+					<!-- simulates a columnLayout -->
+					<cell width="100%">
+						<vbox align="stretch" pack="stretch" width="100%">
+							<div>
+
+								<panel border="none">
+									<panelchildren>
+
+										<groupbox mold="3d" closable="false">
+											<caption image="/images/icons/view.gif" label="${c:l('common.Details')}" />
+
+											<grid sclass="GridLayoutNoBorder" fixedLayout="true"
+												style="border:0px; padding-left:5px; padding-right:5px;">
+												<columns>
+													<column width="150px" />
+													<column />
+													<column width="50px" />
+													<column width="150px" />
+													<column />
+												</columns>
+												<rows>
+													<row>
+														<label value="No Faktur" />															
+														<textbox id="txtb_NoFaktur" value="@{controller.piutang.penjualan.noFaktur}"
+															readonly="true" constraint="no empty" maxlength="50" width="250px" />
+														<label />
+														<label value="No Kuitansi" />															
+														<textbox id="txtb_NoKuitansi" value="@{controller.piutang.noKuitansi}"
+															readonly="true" constraint="no empty" maxlength="50" width="250px" />
+													</row>
+													<row>
+														<label value="Pembayaran Ke-" />															
+														<textbox id="txtb_PembayaranKe" value="@{controller.piutang.pembayaranKe}"
+															readonly="true" maxlength="20" width="250px" />
+														<label />
+														<label 	value="Tanggal Jatuh Tempo" />
+														<datebox id="txtb_TglJatuhTempo"	value="@{controller.piutang.tglJatuhTempo}" 
+															format="dd/MM/yyyy" disabled="true" width="150px" constraint="no empty"/>	
+														<label />	
+													</row>
+													<row>
+									                	<label value="Tagihan"/>
+							                    		<decimalbox id="txb_NilaiTagihan" value="@{controller.piutang.nilaiTagihan}" readonly="true" format=",###.#" hflex="1" />										                
+							                    		<label />	
+									                	<label value="Status"/>
+									                    <listbox id="lbox_Status" mold="select" disabled="true"
+																multiple="false" rows="1" hflex="1" width="100px" xmlns:w="client">
+																<attribute w:name="doBlur_"><![CDATA[
+														            function(evt) {
+														                this.$doBlur_(evt);
+														                if (this.$n().value == '') {
+														                    zAu.wrongValue_(this, 'Please select.....');
+														                } else {
+														                    zAu.cmd0.clearWrongValue(this.uuid);
+														                }
+														            }
+														        ]]></attribute>															
+														</listbox>										                    						                    				                    									                    									                    											                     
+									                </row>
+													<row>
+														<separator bar="true"></separator>
+														<separator bar="true"></separator>
+														<separator bar="true"></separator>
+														<separator bar="true"></separator>
+														<separator bar="true"></separator>
+													</row>
+													<row>
+														<label id="label_Kolektor" value="Kolektor" />
+														<listbox id="lbox_Kolektor" mold="select" disabled="true"
+																multiple="false" rows="1" width="300px" xmlns:w="client">
+																<attribute w:name="doBlur_"><![CDATA[
+														            function(evt) {
+														                this.$doBlur_(evt);
+														                if (this.$n().value == '') {
+														                    zAu.wrongValue_(this, 'Please select.....');
+														                } else {
+														                    zAu.cmd0.clearWrongValue(this.uuid);
+														                }
+														            }
+														        ]]></attribute>															
+														</listbox>		
+														<label />
+														<label />
+														<label />
+															
+																						
+													</row>	
+													<row>
+														<label 	value="Tanggal Pembayaran" />															
+														<datebox id="txtb_tglPembayaran"	value="@{controller.piutang.tglPembayaran}" 
+															format="dd/MM/yyyy" disabled="true" width="150px" constraint="no empty"/>				
+														<label />
+														<label />
+														<label />													
+													</row>
+													<row>
+														<label value="Pembayaran"/>
+							                    		<decimalbox id="txtb_Pembayaran" value="@{controller.piutang.pembayaran}" readonly="true" format=",###.#" hflex="1" />										                
+							                    		<label />	
+														<label />
+														<label />													
+													</row>
+													<row>
+														<label value="Keterangan" />															
+														<textbox id="txtb_Keterangan" value="@{controller.piutang.keterangan}"
+															readonly="true" maxlength="300" hflex="1" rows="2"  />
+														<label />	
+														<label />
+														<label />	
+													</row>
+													
+													<row>
+														<separator bar="true"></separator>
+														<separator bar="true"></separator>
+														<separator bar="true"></separator>
+														<separator bar="true"></separator>
+														<separator bar="true"></separator>
+													</row>
+													<row>
+									                	<label value="Butuh Approval ?"/>
+									                    <label id="label_butuhApproval"/>	
+									                    <label />
+							                    		<label value="Approved By"/>
+							                    		<textbox id="txtb_ApprovedBy" value="@{controller.piutang.approvedBy}"
+															readonly="true" maxlength="100" hflex="1"  />							                    				                    									                    									                    											                      
+									                </row>
+									                <row>
+									                	<label value="Alasan butuh Approval"/>
+									                    <textbox id="txtb_ReasonApproval" value="@{controller.piutang.reasonApproval}"
+															readonly="true" maxlength="500" hflex="1" rows="4"  />
+									                    <label />
+							                    		<label value="Approved Remark"/>
+							                    		<textbox id="txtb_ApprovedRemark" value="@{controller.piutang.approvedRemark}"
+															readonly="true" maxlength="500" hflex="1" rows="4"  />						                    				                    									                    									                    											                      
+									                </row>
+									                <row>
+									                	<label/>
+									                	<label/>
+									                    <label />
+							                    		<label/>
+							                    		<button id="btnApprovePiutang" visible="false" label="Confirm Approval"  	/>					                    				                    									                    									                    											                      
+									                </row>													
+												</rows>
+											</grid>											
+										</groupbox>
+									</panelchildren>
+								</panel>
+							</div>
+						</vbox>
+					</cell>
+				</hbox>
+			</center>
+		</borderlayout>
+	</window>
+</zk>
