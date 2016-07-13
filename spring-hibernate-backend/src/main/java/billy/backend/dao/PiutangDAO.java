@@ -1,7 +1,9 @@
 package billy.backend.dao;
 
+import java.util.Date;
 import java.util.List;
 
+import billy.backend.model.Karyawan;
 import billy.backend.model.Penjualan;
 import billy.backend.model.Piutang;
 
@@ -10,6 +12,11 @@ public interface PiutangDAO {
   public void delete(Piutang entity);
 
   public void deletePiutangsByPenjualan(Penjualan obj);
+
+  public List<Piutang> getAllPiutangsByDivisiAndRangeDate(Karyawan obj, Date startDate, Date endDate);
+
+  public List<Piutang> getAllPiutangsByKaryawanAndRangeDate(Karyawan obj, Date startDate,
+      Date endDate);
 
   public int getCountAllPiutangs();
 

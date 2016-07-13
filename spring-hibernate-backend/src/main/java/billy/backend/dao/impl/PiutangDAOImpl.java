@@ -1,7 +1,9 @@
 package billy.backend.dao.impl;
 
+import java.util.Date;
 import java.util.List;
 
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import billy.backend.dao.BillyBasisDAO;
 import billy.backend.dao.PiutangDAO;
+import billy.backend.model.Karyawan;
 import billy.backend.model.Penjualan;
 import billy.backend.model.Piutang;
 
@@ -23,6 +26,30 @@ public class PiutangDAOImpl extends BillyBasisDAO<Piutang> implements PiutangDAO
     if (piutang != null) {
       deleteAll(piutang);
     }
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Piutang> getAllPiutangsByDivisiAndRangeDate(Karyawan obj, Date startDate, Date endDate) {
+    DetachedCriteria criteria = DetachedCriteria.forClass(Piutang.class);
+    criteria.add(Restrictions.ge("tglJatuhTempo", startDate));
+    criteria.add(Restrictions.le("tglJatuhTempo", endDate));
+    criteria.add(Restrictions.eq("penjualan.divisi.id", obj.getId()));
+    return getHibernateTemplate().findByCriteria(criteria);
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Piutang> getAllPiutangsByKaryawanAndRangeDate(Karyawan obj, Date startDate,
+      Date endDate) {
+    DetachedCriteria criteria = DetachedCriteria.forClass(Piutang.class);
+    criteria.add(Restrictions.ge("tglJatuhTempo", startDate));
+    criteria.add(Restrictions.le("tglJatuhTempo", endDate));
+    // criteria.add(Restrictions.eq("sales1.id", obj.getId()));
+    Criterion sales1 = Restrictions.eq("penjualan.sales1.id", obj.getId());
+    Criterion sales2 = Restrictions.eq("penjualan.sales2.id", obj.getId());
+    criteria.add(Restrictions.or(sales1, sales2));
+    return getHibernateTemplate().findByCriteria(criteria);
   }
 
   @Override

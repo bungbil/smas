@@ -1,4 +1,4 @@
-package billy.webui.transaction.piutang;
+package billy.webui.transaction.piutang.approval;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -21,8 +21,6 @@ import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zkplus.databind.BindingListModelList;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Checkbox;
-import org.zkoss.zul.ListModelList;
-import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Tabbox;
@@ -48,31 +46,31 @@ import de.forsthaus.webui.util.MultiLineMessageBox;
 import de.forsthaus.webui.util.ZksampleCommonUtils;
 import de.forsthaus.webui.util.ZksampleMessageUtils;
 
-public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
+public class ApprovalPiutangMainCtrl extends GFCBaseCtrl implements Serializable {
 
   private static final long serialVersionUID = 1L;
-  private static final Logger logger = Logger.getLogger(PiutangMainCtrl.class);
+  private static final Logger logger = Logger.getLogger(ApprovalPiutangMainCtrl.class);
 
 
-  protected Window windowPiutangMain; // autowired
+  protected Window windowApprovalPiutangMain; // autowired
 
   // Tabs
-  protected Tabbox tabbox_PiutangMain; // autowired
-  protected Tab tabPiutangList; // autowired
-  protected Tab tabPiutangDetail; // autowired
-  protected Tabpanel tabPanelPiutangList; // autowired
-  protected Tabpanel tabPanelPiutangDetail; // autowired
+  protected Tabbox tabbox_ApprovalPiutangMain; // autowired
+  protected Tab tabApprovalPiutangList; // autowired
+  protected Tab tabApprovalPiutangDetail; // autowired
+  protected Tabpanel tabPanelApprovalPiutangList; // autowired
+  protected Tabpanel tabPanelApprovalPiutangDetail; // autowired
 
   // filter components
-  protected Checkbox checkbox_PiutangList_ShowAll; // autowired
+  protected Checkbox checkbox_ApprovalPiutangList_ShowAll; // autowired
   protected Textbox tb_Search_No_Faktur; // aurowired
   protected Textbox tb_Search_Nama_Pelanggan; // aurowired
   protected Textbox tb_Search_Alamat; // aurowired
-  protected Button button_PiutangList_Search; // aurowired
+  protected Button button_ApprovalPiutangList_Search; // aurowired
 
 
   // Button controller for the CRUD buttons
-  private final String btnCtroller_ClassPrefix = "button_PiutangMain_";
+  private final String btnCtroller_ClassPrefix = "button_ApprovalPiutangMain_";
   private ButtonStatusCtrl btnCtrlPiutang;
   protected Button btnNew; // autowired
   protected Button btnEdit; // autowired
@@ -90,8 +88,8 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
   protected Button btnHelp;
 
   // Tab-Controllers for getting the binders
-  private PiutangListCtrl piutangListCtrl;
-  private PiutangDetailCtrl piutangDetailCtrl;
+  private ApprovalPiutangListCtrl approvalPiutangListCtrl;
+  private ApprovalPiutangDetailCtrl approvalPiutangDetailCtrl;
 
   // Databinding
   private Piutang selectedPiutang;
@@ -110,7 +108,7 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
   /**
    * default constructor.<br>
    */
-  public PiutangMainCtrl() {
+  public ApprovalPiutangMainCtrl() {
     super();
   }
 
@@ -146,13 +144,13 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
     doResetToInitValues();
 
     // check first, if the tabs are created
-    if (getPiutangDetailCtrl().getBinder() != null) {
+    if (getApprovalPiutangDetailCtrl().getBinder() != null) {
 
       // refresh all dataBinder related controllers/components
-      getPiutangDetailCtrl().getBinder().loadAll();
-      getPiutangDetailCtrl().doRefresh();
+      getApprovalPiutangDetailCtrl().getBinder().loadAll();
+      getApprovalPiutangDetailCtrl().doRefresh();
       // set editable Mode
-      getPiutangDetailCtrl().doReadOnlyMode(true);
+      getApprovalPiutangDetailCtrl().doReadOnlyMode(true);
 
       btnCtrlPiutang.setInitEdit();
     }
@@ -169,18 +167,14 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
   private void doCheckRights() {
 
     final UserWorkspace workspace = getUserWorkspace();
-    button_PiutangList_Search.setVisible(workspace.isAllowed("button_PiutangList_Search"));
-    tabPiutangList.setVisible(workspace.isAllowed("windowPiutangList"));
-    tabPiutangDetail.setVisible(workspace.isAllowed("windowPiutangDetail"));
-    btnEdit.setVisible(workspace.isAllowed("button_PiutangMain_btnEdit"));
-    btnNew.setVisible(workspace.isAllowed("button_PiutangMain_btnNew"));
-    btnDelete.setVisible(workspace.isAllowed("button_PiutangMain_btnDelete"));
-    btnSave.setVisible(workspace.isAllowed("button_PiutangMain_btnSave"));
-    btnCancel.setVisible(workspace.isAllowed("button_PiutangMain_btnCancel"));
-    btnFirst.setVisible(workspace.isAllowed("button_PiutangMain_btnFirst"));
-    btnPrevious.setVisible(workspace.isAllowed("button_PiutangMain_btnPrevious"));
-    btnNext.setVisible(workspace.isAllowed("button_PiutangMain_btnNext"));
-    btnLast.setVisible(workspace.isAllowed("button_PiutangMain_btnLast"));
+    button_ApprovalPiutangList_Search.setVisible(workspace
+        .isAllowed("button_ApprovalPiutangList_Search"));
+    tabApprovalPiutangList.setVisible(workspace.isAllowed("windowApprovalPiutangList"));
+    tabApprovalPiutangDetail.setVisible(workspace.isAllowed("windowApprovalPiutangDetail"));
+    btnFirst.setVisible(workspace.isAllowed("button_ApprovalPiutangMain_btnFirst"));
+    btnPrevious.setVisible(workspace.isAllowed("button_ApprovalPiutangMain_btnPrevious"));
+    btnNext.setVisible(workspace.isAllowed("button_ApprovalPiutangMain_btnNext"));
+    btnLast.setVisible(workspace.isAllowed("button_ApprovalPiutangMain_btnLast"));
   }
 
 
@@ -194,12 +188,12 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
   private void doDelete(Event event) throws InterruptedException {
     // logger.debug(event.toString());
     // check first, if the tabs are created, if not than create them
-    if (getPiutangDetailCtrl().getBinder() == null) {
-      Events.sendEvent(new Event("onSelect", tabPiutangDetail, null));
+    if (getApprovalPiutangDetailCtrl().getBinder() == null) {
+      Events.sendEvent(new Event("onSelect", tabApprovalPiutangDetail, null));
     }
 
     // check first, if the tabs are created
-    if (getPiutangDetailCtrl().getBinder() == null) {
+    if (getApprovalPiutangDetailCtrl().getBinder() == null) {
       return;
     }
 
@@ -249,11 +243,11 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
 
     setSelectedPiutang(null);
     // refresh the list
-    getPiutangListCtrl().doFillListbox();
+    getApprovalPiutangListCtrl().doFillListbox();
 
     // refresh all dataBinder related controllers
-    getPiutangDetailCtrl().getBinder().loadAll();
-    getPiutangDetailCtrl().doRefresh();
+    getApprovalPiutangDetailCtrl().getBinder().loadAll();
+    getApprovalPiutangDetailCtrl().doRefresh();
   }
 
 
@@ -268,21 +262,21 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
   private void doEdit(Event event) {
     // logger.debug(event.toString());
     // get the current Tab for later checking if we must change it
-    Tab currentTab = tabbox_PiutangMain.getSelectedTab();
+    Tab currentTab = tabbox_ApprovalPiutangMain.getSelectedTab();
 
     // check first, if the tabs are created, if not than create it
-    if (getPiutangDetailCtrl() == null) {
-      Events.sendEvent(new Event("onSelect", tabPiutangDetail, null));
+    if (getApprovalPiutangDetailCtrl() == null) {
+      Events.sendEvent(new Event("onSelect", tabApprovalPiutangDetail, null));
       // if we work with spring beanCreation than we must check a little
       // bit deeper, because the Controller are preCreated ?
-    } else if (getPiutangDetailCtrl().getBinder() == null) {
-      Events.sendEvent(new Event("onSelect", tabPiutangDetail, null));
+    } else if (getApprovalPiutangDetailCtrl().getBinder() == null) {
+      Events.sendEvent(new Event("onSelect", tabApprovalPiutangDetail, null));
     }
 
     // check if the tab is one of the Detail tabs. If so do not change the
     // selection of it
-    if (!currentTab.equals(tabPiutangDetail)) {
-      tabPiutangDetail.setSelected(true);
+    if (!currentTab.equals(tabApprovalPiutangDetail)) {
+      tabApprovalPiutangDetail.setSelected(true);
     } else {
       currentTab.setSelected(true);
     }
@@ -292,13 +286,13 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
 
     btnCtrlPiutang.setBtnStatus_Edit();
 
-    getPiutangDetailCtrl().doReadOnlyMode(false);
+    getApprovalPiutangDetailCtrl().doReadOnlyMode(false);
 
     // refresh the UI, because we can click the EditBtn from every tab.
-    getPiutangDetailCtrl().getBinder().loadAll();
-    getPiutangDetailCtrl().doRefresh();
+    getApprovalPiutangDetailCtrl().getBinder().loadAll();
+    getApprovalPiutangDetailCtrl().doRefresh();
     // set focus
-    getPiutangDetailCtrl().txtb_tglPembayaran.focus();
+    getApprovalPiutangDetailCtrl().txtb_tglPembayaran.focus();
   }
 
 
@@ -324,12 +318,12 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
   private void doNew(Event event) {
     // logger.debug(event.toString());
     // check first, if the tabs are created
-    if (getPiutangDetailCtrl() == null) {
-      Events.sendEvent(new Event("onSelect", tabPiutangDetail, null));
+    if (getApprovalPiutangDetailCtrl() == null) {
+      Events.sendEvent(new Event("onSelect", tabApprovalPiutangDetail, null));
       // if we work with spring beanCreation than we must check a little
       // bit deeper, because the Controller are preCreated ?
-    } else if (getPiutangDetailCtrl().getBinder() == null) {
-      Events.sendEvent(new Event("onSelect", tabPiutangDetail, null));
+    } else if (getApprovalPiutangDetailCtrl().getBinder() == null) {
+      Events.sendEvent(new Event("onSelect", tabApprovalPiutangDetail, null));
     }
 
     // remember the current object
@@ -341,28 +335,28 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
     final Piutang anPiutang = getPiutangService().getNewPiutang();
 
     // set the beans in the related databinded controllers
-    getPiutangDetailCtrl().setPiutang(anPiutang);
-    getPiutangDetailCtrl().setSelectedPiutang(anPiutang);
+    getApprovalPiutangDetailCtrl().setPiutang(anPiutang);
+    getApprovalPiutangDetailCtrl().setSelectedPiutang(anPiutang);
 
     // Refresh the binding mechanism
-    getPiutangDetailCtrl().setSelectedPiutang(getSelectedPiutang());
+    getApprovalPiutangDetailCtrl().setSelectedPiutang(getSelectedPiutang());
 
     try {
-      getPiutangDetailCtrl().doRefresh();
-      getPiutangDetailCtrl().getBinder().loadAll();
+      getApprovalPiutangDetailCtrl().doRefresh();
+      getApprovalPiutangDetailCtrl().getBinder().loadAll();
 
     } catch (Exception e) {
       // do nothing
     }
     // getPiutangDetailCtrl().emptyAllValue();
     // set editable Mode
-    getPiutangDetailCtrl().doReadOnlyMode(false);
+    getApprovalPiutangDetailCtrl().doReadOnlyMode(false);
     // set the ButtonStatus to New-Mode
     btnCtrlPiutang.setInitNew();
 
-    tabPiutangDetail.setSelected(true);
+    tabApprovalPiutangDetail.setSelected(true);
     // set focus
-    getPiutangDetailCtrl().txtb_tglPembayaran.focus();
+    getApprovalPiutangDetailCtrl().txtb_tglPembayaran.focus();
 
   }
 
@@ -378,7 +372,7 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
       try {
         setSelectedPiutang((Piutang) ZksampleBeanUtils.cloneBean(getOriginalPiutang()));
         // TODO Bug in DataBinder??
-        windowPiutangMain.invalidate();
+        windowApprovalPiutangMain.invalidate();
 
       } catch (final IllegalAccessException e) {
         throw new RuntimeException(e);
@@ -400,11 +394,11 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
   private void doResizeSelectedTab(Event event) {
     // logger.debug(event.toString());
 
-    if (tabbox_PiutangMain.getSelectedTab() == tabPiutangDetail) {
-      getPiutangDetailCtrl().doFitSize(event);
-    } else if (tabbox_PiutangMain.getSelectedTab() == tabPiutangList) {
+    if (tabbox_ApprovalPiutangMain.getSelectedTab() == tabApprovalPiutangDetail) {
+      getApprovalPiutangDetailCtrl().doFitSize(event);
+    } else if (tabbox_ApprovalPiutangMain.getSelectedTab() == tabApprovalPiutangList) {
       // resize and fill Listbox new
-      getPiutangListCtrl().doFillListbox();
+      getApprovalPiutangListCtrl().doFillListbox();
     }
   }
 
@@ -414,37 +408,42 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
    * @param event
    * @throws InterruptedException
    */
-  private void doSave(Event event) throws InterruptedException {
+  public void doSave(Event event) throws InterruptedException {
     // logger.debug(event.toString());
     // save all components data in the several tabs to the bean
-    getPiutangDetailCtrl().getBinder().saveAll();
+    getApprovalPiutangDetailCtrl().getBinder().saveAll();
 
     try {
-      Listitem itemKolektor = getPiutangDetailCtrl().lbox_Kolektor.getSelectedItem();
-      if (itemKolektor != null) {
-        ListModelList lml1 = (ListModelList) getPiutangDetailCtrl().lbox_Kolektor.getListModel();
-        Karyawan karyawan = (Karyawan) lml1.get(itemKolektor.getIndex());
-        getPiutangDetailCtrl().getPiutang().setKolektor(karyawan);
-        getPiutangDetailCtrl().getPiutang().getPenjualan().setKolektor(karyawan);
-      }
+
+
+      getApprovalPiutangDetailCtrl().txtb_ApprovedBy.setReadonly(true);
+      getApprovalPiutangDetailCtrl().txtb_ApprovedRemark.setReadonly(true);
+      getApprovalPiutangDetailCtrl().getPiutang().setNeedApproval(false);
+
 
       String userName =
           ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
               .getUsername();
-      getPiutangDetailCtrl().getPiutang().setLastUpdate(new Date());
-      getPiutangDetailCtrl().getPiutang().setUpdatedBy(userName);
+      getApprovalPiutangDetailCtrl().getPiutang().setLastUpdate(new Date());
+      getApprovalPiutangDetailCtrl().getPiutang().setUpdatedBy(userName);
+
+      // LOGIC untuk status DISKON, KURANG BAYAR, TARIK BARANG
+      Status status = getApprovalPiutangDetailCtrl().getStatusService().getStatusByID(new Long(4)); // KURANG_BAYAR
+      getApprovalPiutangDetailCtrl().getPiutang().setStatus(status);
+
 
       // save it to database
-      getPiutangService().saveOrUpdate(getPiutangDetailCtrl().getPiutang());
+      getPiutangService().saveOrUpdate(getApprovalPiutangDetailCtrl().getPiutang());
 
 
       // if saving is successfully than actualize the beans as
       // origins.
       doStoreInitValues();
       // refresh the list
-      getPiutangListCtrl().doFillListbox();
+      getApprovalPiutangListCtrl().doFillListbox();
       // later refresh StatusBar
-      Events.postEvent("onSelect", getPiutangListCtrl().getListBoxPiutang(), getSelectedPiutang());
+      Events.postEvent("onSelect", getApprovalPiutangListCtrl().getListBoxApprovalPiutang(),
+          getSelectedPiutang());
 
       // show the objects data in the statusBar
       String str = getSelectedPiutang().getNoKuitansi();
@@ -461,7 +460,7 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
 
     } finally {
       btnCtrlPiutang.setInitEdit();
-      getPiutangDetailCtrl().doReadOnlyMode(true);
+      getApprovalPiutangDetailCtrl().doReadOnlyMode(true);
     }
   }
 
@@ -475,7 +474,7 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
 
     // get the model and the current selected record
     BindingListModelList blml =
-        (BindingListModelList) getPiutangListCtrl().getListBoxPiutang().getModel();
+        (BindingListModelList) getApprovalPiutangListCtrl().getListBoxApprovalPiutang().getModel();
 
     // check if data exists
     if (blml == null || blml.size() < 1)
@@ -488,10 +487,10 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
      * BeanCreation we must check a little bit deeper, because the Controller are preCreated ? After
      * that, go back to the current/selected tab.
      */
-    Tab currentTab = tabbox_PiutangMain.getSelectedTab();
+    Tab currentTab = tabbox_ApprovalPiutangMain.getSelectedTab();
 
-    if (getPiutangDetailCtrl().getBinder() == null) {
-      Events.sendEvent(new Event(Events.ON_SELECT, tabPiutangDetail, null));
+    if (getApprovalPiutangDetailCtrl().getBinder() == null) {
+      Events.sendEvent(new Event(Events.ON_SELECT, tabApprovalPiutangDetail, null));
     }
 
     // go back to selected tab
@@ -516,16 +515,16 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
       }
     }
 
-    getPiutangListCtrl().getListBoxPiutang().setSelectedIndex(index);
+    getApprovalPiutangListCtrl().getListBoxApprovalPiutang().setSelectedIndex(index);
     setSelectedPiutang((Piutang) blml.get(index));
 
     // call onSelect() for showing the objects data in the statusBar
-    Events.sendEvent(new Event(Events.ON_SELECT, getPiutangListCtrl().getListBoxPiutang(),
-        getSelectedPiutang()));
+    Events.sendEvent(new Event(Events.ON_SELECT, getApprovalPiutangListCtrl()
+        .getListBoxApprovalPiutang(), getSelectedPiutang()));
 
     // refresh master-detail MASTERS data
-    getPiutangDetailCtrl().getBinder().loadAll();
-    getPiutangDetailCtrl().doRefresh();
+    getApprovalPiutangDetailCtrl().getBinder().loadAll();
+    getApprovalPiutangDetailCtrl().doRefresh();
     // EXTRA: if we have a longtext field under the listbox, so we must
     // refresh
     // this binded component too
@@ -556,6 +555,14 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
     }
   }
 
+  public ApprovalPiutangDetailCtrl getApprovalPiutangDetailCtrl() {
+    return this.approvalPiutangDetailCtrl;
+  }
+
+  public ApprovalPiutangListCtrl getApprovalPiutangListCtrl() {
+    return this.approvalPiutangListCtrl;
+  }
+
   /**
    * When the "save" button is clicked.
    * 
@@ -565,14 +572,6 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
 
   public Piutang getOriginalPiutang() {
     return this.originalPiutang;
-  }
-
-  public PiutangDetailCtrl getPiutangDetailCtrl() {
-    return this.piutangDetailCtrl;
-  }
-
-  public PiutangListCtrl getPiutangListCtrl() {
-    return this.piutangListCtrl;
   }
 
 
@@ -593,7 +592,7 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
    * 
    * @param event
    */
-  public void onCheck$checkbox_PiutangList_ShowAll(Event event) {
+  public void onCheck$checkbox_ApprovalPiutangList_ShowAll(Event event) {
     // logger.debug(event.toString());
 
     // empty the text search boxes
@@ -603,9 +602,10 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
 
     // ++ create the searchObject and init sorting ++//
     HibernateSearchObject<Piutang> soPiutang =
-        new HibernateSearchObject<Piutang>(Piutang.class, getPiutangListCtrl().getCountRows());
+        new HibernateSearchObject<Piutang>(Piutang.class, getApprovalPiutangListCtrl()
+            .getCountRows());
     soPiutang.addSort("penjualan.noFaktur", false);
-
+    soPiutang.addFilter(new Filter("needApproval", true, Filter.OP_EQUAL));
     SecUser secUser =
         ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
             .getSecUser();
@@ -619,16 +619,16 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
     }
 
     // Change the BindingListModel.
-    if (getPiutangListCtrl().getBinder() != null) {
-      getPiutangListCtrl().getPagedBindingListWrapper().setSearchObject(soPiutang);
+    if (getApprovalPiutangListCtrl().getBinder() != null) {
+      getApprovalPiutangListCtrl().getPagedBindingListWrapper().setSearchObject(soPiutang);
 
       // get the current Tab for later checking if we must change it
-      Tab currentTab = tabbox_PiutangMain.getSelectedTab();
+      Tab currentTab = tabbox_ApprovalPiutangMain.getSelectedTab();
 
       // check if the tab is one of the Detail tabs. If so do not
       // change the selection of it
-      if (!currentTab.equals(tabPiutangList)) {
-        tabPiutangList.setSelected(true);
+      if (!currentTab.equals(tabApprovalPiutangList)) {
+        tabApprovalPiutangList.setSelected(true);
       } else {
         currentTab.setSelected(true);
       }
@@ -751,30 +751,30 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
      * validasi butuh approval
      */
     String message = "";
-    if (getPiutangDetailCtrl().getPiutang().getNilaiTagihan()
-        .compareTo(getPiutangDetailCtrl().getPiutang().getPembayaran()) == 1) {
+    if (getApprovalPiutangDetailCtrl().getPiutang().getNilaiTagihan()
+        .compareTo(getApprovalPiutangDetailCtrl().getPiutang().getPembayaran()) == 1) {
       message += "- Kurang Pembayaran \n";
     }
-    if (getPiutangDetailCtrl().getPiutang().getNilaiTagihan()
-        .compareTo(getPiutangDetailCtrl().getPiutang().getPembayaran()) == -1) {
+    if (getApprovalPiutangDetailCtrl().getPiutang().getNilaiTagihan()
+        .compareTo(getApprovalPiutangDetailCtrl().getPiutang().getPembayaran()) == -1) {
       message += "- Lebih Pembayaran \n";
     }
 
     if (message != "") {
-      getPiutangDetailCtrl().getPiutang().setNeedApproval(true);
-      getPiutangDetailCtrl().getPiutang().setReasonApproval(message);
-      getPiutangDetailCtrl().txtb_ReasonApproval.setValue(message);
-      getPiutangDetailCtrl().label_butuhApproval.setValue("Ya");
+      getApprovalPiutangDetailCtrl().getPiutang().setNeedApproval(true);
+      getApprovalPiutangDetailCtrl().getPiutang().setReasonApproval(message);
+      getApprovalPiutangDetailCtrl().txtb_ReasonApproval.setValue(message);
+      getApprovalPiutangDetailCtrl().label_butuhApproval.setValue("Ya");
     } else {
-      getPiutangDetailCtrl().getPiutang().setNeedApproval(false);
-      getPiutangDetailCtrl().getPiutang().setReasonApproval("");
-      getPiutangDetailCtrl().txtb_ReasonApproval.setValue("");
-      getPiutangDetailCtrl().label_butuhApproval.setValue("Tidak");
+      getApprovalPiutangDetailCtrl().getPiutang().setNeedApproval(false);
+      getApprovalPiutangDetailCtrl().getPiutang().setReasonApproval("");
+      getApprovalPiutangDetailCtrl().txtb_ReasonApproval.setValue("");
+      getApprovalPiutangDetailCtrl().label_butuhApproval.setValue("Tidak");
     }
 
     if (getSelectedPiutang().isNeedApproval()) {
-      Status status = getPiutangDetailCtrl().getStatusService().getStatusByID(new Long(1)); // BUTUH_APPROVAL
-      getPiutangDetailCtrl().getPiutang().setStatus(status);
+      Status status = getApprovalPiutangDetailCtrl().getStatusService().getStatusByID(new Long(1)); // BUTUH_APPROVAL
+      getApprovalPiutangDetailCtrl().getPiutang().setStatus(status);
       final Piutang anPiutang = getSelectedPiutang();
       if (anPiutang != null) {
 
@@ -806,14 +806,14 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
 
 
     } else {
-      Status status = getPiutangDetailCtrl().getStatusService().getStatusByID(new Long(2));// LUNAS
-      getPiutangDetailCtrl().getPiutang().setStatus(status);
+      Status status = getApprovalPiutangDetailCtrl().getStatusService().getStatusByID(new Long(2));// LUNAS
+      getApprovalPiutangDetailCtrl().getPiutang().setStatus(status);
 
       // set sisa piutang di penjualan
       BigDecimal sisaPiutangPenjualan =
-          getPiutangDetailCtrl().getPiutang().getPenjualan().getPiutang();
-      BigDecimal pembayaranPiutang = getPiutangDetailCtrl().getPiutang().getPembayaran();
-      getPiutangDetailCtrl().getPiutang().getPenjualan()
+          getApprovalPiutangDetailCtrl().getPiutang().getPenjualan().getPiutang();
+      BigDecimal pembayaranPiutang = getApprovalPiutangDetailCtrl().getPiutang().getPembayaran();
+      getApprovalPiutangDetailCtrl().getPiutang().getPenjualan()
           .setPiutang(sisaPiutangPenjualan.subtract(pembayaranPiutang));
       doSave(event);
     }
@@ -822,19 +822,21 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
   /**
    * Filter the piutang list <br>
    */
-  public void onClick$button_PiutangList_Search(Event event) throws Exception {
+  public void onClick$button_ApprovalPiutangList_Search(Event event) throws Exception {
     // logger.debug(event.toString());
 
     // if not empty
     if (StringUtils.isNotEmpty(tb_Search_No_Faktur.getValue())
         || StringUtils.isNotEmpty(tb_Search_Nama_Pelanggan.getValue())
         || StringUtils.isNotEmpty(tb_Search_Alamat.getValue())) {
-      checkbox_PiutangList_ShowAll.setChecked(false); // unCheck
+      checkbox_ApprovalPiutangList_ShowAll.setChecked(false); // unCheck
 
       // ++ create the searchObject and init sorting ++//
       HibernateSearchObject<Piutang> soPiutang =
-          new HibernateSearchObject<Piutang>(Piutang.class, getPiutangListCtrl().getCountRows());
+          new HibernateSearchObject<Piutang>(Piutang.class, getApprovalPiutangListCtrl()
+              .getCountRows());
       // check which field have input
+      soPiutang.addFilter(new Filter("needApproval", true, Filter.OP_EQUAL));
       if (StringUtils.isNotEmpty(tb_Search_No_Faktur.getValue())) {
         soPiutang.addFilter(new Filter("penjualan.noFaktur", tb_Search_No_Faktur.getValue(),
             Filter.OP_EQUAL));
@@ -862,16 +864,16 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
       }
 
       // Change the BindingListModel.
-      if (getPiutangListCtrl().getBinder() != null) {
-        getPiutangListCtrl().getPagedBindingListWrapper().setSearchObject(soPiutang);
+      if (getApprovalPiutangListCtrl().getBinder() != null) {
+        getApprovalPiutangListCtrl().getPagedBindingListWrapper().setSearchObject(soPiutang);
 
         // get the current Tab for later checking if we must change it
-        Tab currentTab = tabbox_PiutangMain.getSelectedTab();
+        Tab currentTab = tabbox_ApprovalPiutangMain.getSelectedTab();
 
         // check if the tab is one of the Detail tabs. If so do not
         // change the selection of it
-        if (!currentTab.equals(tabPiutangList)) {
-          tabPiutangList.setSelected(true);
+        if (!currentTab.equals(tabApprovalPiutangList)) {
+          tabApprovalPiutangList.setSelected(true);
         } else {
           currentTab.setSelected(true);
         }
@@ -885,8 +887,8 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
    * @param event
    * @throws Exception
    */
-  public void onCreate$windowPiutangMain(Event event) throws Exception {
-    windowPiutangMain.setContentStyle("padding:0px;");
+  public void onCreate$windowApprovalPiutangMain(Event event) throws Exception {
+    windowApprovalPiutangMain.setContentStyle("padding:0px;");
 
     // create the Button Controller. Disable not used buttons during working
     btnCtrlPiutang =
@@ -900,11 +902,12 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
      * Initiate the first loading by selecting the customerList tab and create the components from
      * the zul-file.
      */
-    tabPiutangList.setSelected(true);
+    tabApprovalPiutangList.setSelected(true);
 
-    if (tabPanelPiutangList != null) {
-      ZksampleCommonUtils.createTabPanelContent(this.tabPanelPiutangList, this,
-          "ModuleMainController", "/WEB-INF/pages/transaction/piutang/piutangList.zul");
+    if (tabPanelApprovalPiutangList != null) {
+      ZksampleCommonUtils.createTabPanelContent(this.tabPanelApprovalPiutangList, this,
+          "ModuleMainController",
+          "/WEB-INF/pages/transaction/approvalpiutang/approvalPiutangList.zul");
     }
 
     // init the buttons for editMode
@@ -918,23 +921,24 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
    * @param event
    * @throws IOException
    */
-  public void onSelect$tabPiutangDetail(Event event) throws IOException {
+  public void onSelect$tabApprovalPiutangDetail(Event event) throws IOException {
     // logger.debug(event.toString());
 
     // Check if the tabpanel is already loaded
-    if (tabPanelPiutangDetail.getFirstChild() != null) {
-      tabPiutangDetail.setSelected(true);
+    if (tabPanelApprovalPiutangDetail.getFirstChild() != null) {
+      tabApprovalPiutangDetail.setSelected(true);
 
       // refresh the Binding mechanism
-      getPiutangDetailCtrl().setPiutang(getSelectedPiutang());
-      getPiutangDetailCtrl().getBinder().loadAll();
-      getPiutangDetailCtrl().doRefresh();
+      getApprovalPiutangDetailCtrl().setPiutang(getSelectedPiutang());
+      getApprovalPiutangDetailCtrl().getBinder().loadAll();
+      getApprovalPiutangDetailCtrl().doRefresh();
       return;
     }
 
-    if (tabPanelPiutangDetail != null) {
-      ZksampleCommonUtils.createTabPanelContent(this.tabPanelPiutangDetail, this,
-          "ModuleMainController", "/WEB-INF/pages/transaction/piutang/piutangDetail.zul");
+    if (tabPanelApprovalPiutangDetail != null) {
+      ZksampleCommonUtils.createTabPanelContent(this.tabPanelApprovalPiutangDetail, this,
+          "ModuleMainController",
+          "/WEB-INF/pages/transaction/approvalpiutang/approvalPiutangDetail.zul");
     }
   }
 
@@ -945,35 +949,36 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
    * @param event
    * @throws IOException
    */
-  public void onSelect$tabPiutangList(Event event) throws IOException {
+  public void onSelect$tabApprovalPiutangList(Event event) throws IOException {
     // logger.debug(event.toString());
 
     // Check if the tabpanel is already loaded
-    if (tabPanelPiutangList.getFirstChild() != null) {
-      tabPiutangList.setSelected(true);
+    if (tabPanelApprovalPiutangList.getFirstChild() != null) {
+      tabApprovalPiutangList.setSelected(true);
 
       return;
     }
 
-    if (tabPanelPiutangList != null) {
-      ZksampleCommonUtils.createTabPanelContent(this.tabPanelPiutangList, this,
-          "ModuleMainController", "/WEB-INF/pages/transaction/piutang/piutangList.zul");
+    if (tabPanelApprovalPiutangList != null) {
+      ZksampleCommonUtils.createTabPanelContent(this.tabPanelApprovalPiutangList, this,
+          "ModuleMainController",
+          "/WEB-INF/pages/transaction/approvalpiutang/approvalPiutangList.zul");
     }
 
+  }
+
+  public void setApprovalPiutangDetailCtrl(ApprovalPiutangDetailCtrl piutangDetailCtrl) {
+    this.approvalPiutangDetailCtrl = piutangDetailCtrl;
+  }
+
+  /* CONTROLLERS */
+  public void setApprovalPiutangListCtrl(ApprovalPiutangListCtrl piutangListCtrl) {
+    this.approvalPiutangListCtrl = piutangListCtrl;
   }
 
   /* Master BEANS */
   public void setOriginalPiutang(Piutang originalPiutang) {
     this.originalPiutang = originalPiutang;
-  }
-
-  public void setPiutangDetailCtrl(PiutangDetailCtrl piutangDetailCtrl) {
-    this.piutangDetailCtrl = piutangDetailCtrl;
-  }
-
-  /* CONTROLLERS */
-  public void setPiutangListCtrl(PiutangListCtrl piutangListCtrl) {
-    this.piutangListCtrl = piutangListCtrl;
   }
 
   public void setPiutangs(BindingListModelList piutangs) {

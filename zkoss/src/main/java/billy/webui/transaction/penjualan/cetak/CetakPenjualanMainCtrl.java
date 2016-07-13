@@ -28,7 +28,7 @@ import billy.backend.service.PenjualanService;
 import billy.webui.master.karyawan.model.KaryawanListModelItemRenderer;
 import billy.webui.printer.model.PrinterListModelItemRenderer;
 import billy.webui.transaction.penjualan.cetak.report.CetakFakturTextPrinter;
-import billy.webui.transaction.penjualan.cetak.report.CetakKuitansiTextPrinter;
+import billy.webui.transaction.penjualan.cetak.report.CetakKuitansiA2TextPrinter;
 import de.forsthaus.UserWorkspace;
 import de.forsthaus.backend.model.SecUser;
 import de.forsthaus.policy.model.UserImpl;
@@ -194,7 +194,7 @@ public class CetakPenjualanMainCtrl extends GFCBaseCtrl implements Serializable 
       listPenjualan = getPenjualanService().getAllPenjualansByListNoFaktur(listNoFaktur);
       final Window win = (Window) Path.getComponent("/outerIndexWindow");
       // new CetakKuitansiA2DJReport(win);
-      new CetakKuitansiTextPrinter(win, listPenjualan, selectedPrinter);
+      new CetakKuitansiA2TextPrinter(win, listPenjualan, selectedPrinter);
     } else {
       showErrorCetak();
     }

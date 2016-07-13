@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:w="http://www.zkoss.org/2005/zk/client"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+	<window id="windowCetakPiutangMain" apply="${cetakPiutangMainCtrl}"
+		border="none" width="100%">
+
+		<div sclass="z-toolbar" style="padding:0">
+			<hbox pack="stretch" sclass="hboxRemoveWhiteStrips"
+				width="100%">
+				<cell width="100%">
+					<vbox align="stretch" pack="stretch" sclass="FDCenterNoBorder" width="100%">
+						<div>
+							<panel border="none">
+								<panelchildren>
+									<groupbox mold="3d" closable="false">
+										<caption image="/images/icons/view.gif" label="Cetak Piutang" />
+				
+										<grid sclass="GridLayoutNoBorder" fixedLayout="true"
+											style="border:0px; padding-left:5px; padding-right:5px;">
+											<columns>
+												<column width="350px" />
+												<column />
+											</columns>
+											<rows>
+												<row>
+													<label value="Divisi" />
+													<hbox>														
+														<listbox id="lbox_Divisi" mold="select"
+															multiple="false" rows="1" width="250px">															
+														</listbox>	
+														<button id="btnReset" label="Reset"  width="100px" 	/>												
+													</hbox>																										
+												</row>
+												<row>
+													<label value="Tanggal Awal Jatuh Tempo" />
+													<datebox id="txtb_tanggalAwalJatuhTempo"
+															format="dd/MM/yyyy" width="150px" constraint="no empty"/>
+												</row>
+												<row>
+													<label value="Tanggal Akhir Jatuh Tempo" />
+													<datebox id="txtb_tanggalAkhirJatuhTempo" 
+															format="dd/MM/yyyy" width="150px" constraint="no empty"/>
+												</row>
+												<row>
+													<label value="Pilih Printer Dot Matrix" />
+													<hbox>
+														
+														<listbox id="lbox_Printer" mold="select"
+															multiple="false" rows="1" width="250px">															
+														</listbox>	
+														<button id="btnRefeshPrinter" label="Cari Printer"  width="100px" 	/>
+												
+													</hbox>
+												</row>
+												<row>
+													<label />
+													<button id="btnCetakKuitansi" label="Cetak Kuitansi"  	/>
+												</row>
+												
+											</rows>
+										</grid>
+										
+									</groupbox>
+									
+									
+								</panelchildren>
+							</panel>
+						</div>
+					</vbox>
+				</cell>
+			</hbox>						
+		</div>
+	</window>
+</zk>
+

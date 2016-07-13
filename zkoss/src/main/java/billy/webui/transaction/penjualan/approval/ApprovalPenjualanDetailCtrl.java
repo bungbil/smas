@@ -265,102 +265,104 @@ public class ApprovalPenjualanDetailCtrl extends GFCBaseCtrl implements Serializ
   }
 
   public void doRefresh() {
+    if (getSelectedPenjualan() != null) {
+      List<Wilayah> listWilayah = getWilayahService().getAllWilayahs();
+      lbox_Wilayah.setModel(new ListModelList(listWilayah));
+      lbox_Wilayah.setItemRenderer(new WilayahListModelItemRenderer());
+      if (getSelectedPenjualan().getWilayah() != null) {
+        ListModelList lml = (ListModelList) lbox_Wilayah.getModel();
+        Wilayah wilayah =
+            getWilayahService().getWilayahByID(getSelectedPenjualan().getWilayah().getId());
+        lbox_Wilayah.setSelectedIndex(lml.indexOf(wilayah));
+      }
+      List<Status> listStatus = getStatusService().getAllStatuss();
+      lbox_Status.setModel(new ListModelList(listStatus));
+      lbox_Status.setItemRenderer(new StatusListModelItemRenderer());
+      if (getSelectedPenjualan().getStatus() != null) {
+        ListModelList lml = (ListModelList) lbox_Status.getModel();
+        Status status =
+            getStatusService().getStatusByID(getSelectedPenjualan().getStatus().getId());
+        lbox_Status.setSelectedIndex(lml.indexOf(status));
+      }
+      SecUser userLogin =
+          ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+              .getSecUser();
+      List<Karyawan> listKaryawan = getKaryawanService().getAllSalesKaryawansByUserLogin(userLogin);
 
-    List<Wilayah> listWilayah = getWilayahService().getAllWilayahs();
-    lbox_Wilayah.setModel(new ListModelList(listWilayah));
-    lbox_Wilayah.setItemRenderer(new WilayahListModelItemRenderer());
-    if (getSelectedPenjualan().getWilayah() != null) {
-      ListModelList lml = (ListModelList) lbox_Wilayah.getModel();
-      Wilayah wilayah =
-          getWilayahService().getWilayahByID(getSelectedPenjualan().getWilayah().getId());
-      lbox_Wilayah.setSelectedIndex(lml.indexOf(wilayah));
-    }
-    List<Status> listStatus = getStatusService().getAllStatuss();
-    lbox_Status.setModel(new ListModelList(listStatus));
-    lbox_Status.setItemRenderer(new StatusListModelItemRenderer());
-    if (getSelectedPenjualan().getStatus() != null) {
-      ListModelList lml = (ListModelList) lbox_Status.getModel();
-      Status status = getStatusService().getStatusByID(getSelectedPenjualan().getStatus().getId());
-      lbox_Status.setSelectedIndex(lml.indexOf(status));
-    }
-    SecUser userLogin =
-        ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-            .getSecUser();
-    List<Karyawan> listKaryawan = getKaryawanService().getAllSalesKaryawansByUserLogin(userLogin);
+      lbox_Sales1.setModel(new ListModelList(listKaryawan));
+      lbox_Sales1.setItemRenderer(new KaryawanListModelItemRenderer());
+      if (getSelectedPenjualan().getSales1() != null) {
+        ListModelList lml = (ListModelList) lbox_Sales1.getModel();
+        Karyawan karyawan =
+            getKaryawanService().getKaryawanByID(getSelectedPenjualan().getSales1().getId());
+        lbox_Sales1.setSelectedIndex(lml.indexOf(karyawan));
+      }
 
-    lbox_Sales1.setModel(new ListModelList(listKaryawan));
-    lbox_Sales1.setItemRenderer(new KaryawanListModelItemRenderer());
-    if (getSelectedPenjualan().getSales1() != null) {
-      ListModelList lml = (ListModelList) lbox_Sales1.getModel();
-      Karyawan karyawan =
-          getKaryawanService().getKaryawanByID(getSelectedPenjualan().getSales1().getId());
-      lbox_Sales1.setSelectedIndex(lml.indexOf(karyawan));
-    }
+      lbox_Sales2.setModel(new ListModelList(listKaryawan));
+      lbox_Sales2.setItemRenderer(new KaryawanListModelItemRenderer());
+      if (getSelectedPenjualan().getSales2() != null) {
+        ListModelList lml = (ListModelList) lbox_Sales2.getModel();
+        Karyawan karyawan =
+            getKaryawanService().getKaryawanByID(getSelectedPenjualan().getSales2().getId());
+        lbox_Sales2.setSelectedIndex(lml.indexOf(karyawan));
+      }
 
-    lbox_Sales2.setModel(new ListModelList(listKaryawan));
-    lbox_Sales2.setItemRenderer(new KaryawanListModelItemRenderer());
-    if (getSelectedPenjualan().getSales2() != null) {
-      ListModelList lml = (ListModelList) lbox_Sales2.getModel();
-      Karyawan karyawan =
-          getKaryawanService().getKaryawanByID(getSelectedPenjualan().getSales2().getId());
-      lbox_Sales2.setSelectedIndex(lml.indexOf(karyawan));
-    }
+      lbox_Pengirim.setModel(new ListModelList(listKaryawan));
+      lbox_Pengirim.setItemRenderer(new KaryawanListModelItemRenderer());
+      if (getSelectedPenjualan().getPengirim() != null) {
+        ListModelList lml = (ListModelList) lbox_Pengirim.getModel();
+        Karyawan karyawan =
+            getKaryawanService().getKaryawanByID(getSelectedPenjualan().getPengirim().getId());
+        lbox_Pengirim.setSelectedIndex(lml.indexOf(karyawan));
+      }
 
-    lbox_Pengirim.setModel(new ListModelList(listKaryawan));
-    lbox_Pengirim.setItemRenderer(new KaryawanListModelItemRenderer());
-    if (getSelectedPenjualan().getPengirim() != null) {
-      ListModelList lml = (ListModelList) lbox_Pengirim.getModel();
-      Karyawan karyawan =
-          getKaryawanService().getKaryawanByID(getSelectedPenjualan().getPengirim().getId());
-      lbox_Pengirim.setSelectedIndex(lml.indexOf(karyawan));
-    }
+      if (getSelectedPenjualan().getIntervalKredit() != 0) {
+        cmb_IntervalKredit.setValue(String.valueOf(getSelectedPenjualan().getIntervalKredit()));
+      } else {
+        cmb_IntervalKredit.setValue("1");
+      }
 
-    if (getSelectedPenjualan().getIntervalKredit() != 0) {
-      cmb_IntervalKredit.setValue(String.valueOf(getSelectedPenjualan().getIntervalKredit()));
-    } else {
-      cmb_IntervalKredit.setValue("1");
-    }
-
-    if (getSelectedPenjualan().getMetodePembayaran() != null) {
-      if (getSelectedPenjualan().getMetodePembayaran().equals(radioStatusCash.getLabel())) {
+      if (getSelectedPenjualan().getMetodePembayaran() != null) {
+        if (getSelectedPenjualan().getMetodePembayaran().equals(radioStatusCash.getLabel())) {
+          radioStatusCash.setSelected(true);
+          txtb_TglAngsuran2.setDisabled(true);
+        }
+        if (getSelectedPenjualan().getMetodePembayaran().equals(radioStatusKredit.getLabel())) {
+          radioStatusKredit.setSelected(true);
+        }
+      } else {
         radioStatusCash.setSelected(true);
         txtb_TglAngsuran2.setDisabled(true);
       }
-      if (getSelectedPenjualan().getMetodePembayaran().equals(radioStatusKredit.getLabel())) {
-        radioStatusKredit.setSelected(true);
+
+      List<Barang> listBarang =
+          getBarangService().getAllBarangsByWilayah(getSelectedPenjualan().getWilayah());
+      lbox_Barang.setModel(new ListModelList(listBarang));
+      lbox_Barang.setItemRenderer(new BarangListModelItemRenderer());
+      clearBarang();
+
+      if (getSelectedPenjualan().getNoFaktur() != null) {
+        listApprovalPenjualanDetail =
+            getPenjualanService().getPenjualanDetailsByPenjualan(getSelectedPenjualan());
+      } else {
+        listApprovalPenjualanDetail = new ArrayList<PenjualanDetail>();
       }
-    } else {
-      radioStatusCash.setSelected(true);
-      txtb_TglAngsuran2.setDisabled(true);
-    }
+      doFillListboxPenjualanDetail();
 
-    List<Barang> listBarang =
-        getBarangService().getAllBarangsByWilayah(getSelectedPenjualan().getWilayah());
-    lbox_Barang.setModel(new ListModelList(listBarang));
-    lbox_Barang.setItemRenderer(new BarangListModelItemRenderer());
-    clearBarang();
+      if (getSelectedPenjualan().getDiskon() != null) {
+        BigDecimal diskonTotal = BigDecimal.ZERO;
+        diskonTotal = diskonTotal.add(getSelectedPenjualan().getDiskon());
+        diskonTotal = diskonTotal.add(getSelectedPenjualan().getDownPayment());
+        label_DiskonDP.setValue(diskonTotal);
+      } else {
+        label_DiskonDP.setValue(BigDecimal.ZERO);
+      }
 
-    if (getSelectedPenjualan().getNoFaktur() != null) {
-      listApprovalPenjualanDetail =
-          getPenjualanService().getPenjualanDetailsByPenjualan(getSelectedPenjualan());
-    } else {
-      listApprovalPenjualanDetail = new ArrayList<PenjualanDetail>();
-    }
-    doFillListboxPenjualanDetail();
-
-    if (getSelectedPenjualan().getDiskon() != null) {
-      BigDecimal diskonTotal = BigDecimal.ZERO;
-      diskonTotal = diskonTotal.add(getSelectedPenjualan().getDiskon());
-      diskonTotal = diskonTotal.add(getSelectedPenjualan().getDownPayment());
-      label_DiskonDP.setValue(diskonTotal);
-    } else {
-      label_DiskonDP.setValue(BigDecimal.ZERO);
-    }
-
-    if (getSelectedPenjualan().isNeedApproval()) {
-      label_butuhApproval.setValue("Ya");
-    } else {
-      label_butuhApproval.setValue("Tidak");
+      if (getSelectedPenjualan().isNeedApproval()) {
+        label_butuhApproval.setValue("Ya");
+      } else {
+        label_butuhApproval.setValue("Tidak");
+      }
     }
   }
 

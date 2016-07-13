@@ -148,3 +148,38 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 (249, 1, 249, 0),
 (250, 1, 250, 0),
 (251, 1, 251, 0);      
+
+
+
+/* Approval Piutang */
+/* --> Page Approval Piutang */
+INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
+(252, 2, 'menuItem_Transaction_ApprovalPiutang', 0),
+(253, 0, 'windowApprovalPiutangList', 0),
+(254, 0, 'windowApprovalPiutangDetail', 0),
+/* window_ApprovalPiutangList Buttons*/
+(255, 6, 'button_ApprovalPiutangList_Search', 0),
+/* Approval Piutang navigation buttons */
+(256, 6, 'button_ApprovalPiutangMain_btnFirst', 0),
+(257, 6, 'button_ApprovalPiutangnMain_btnPrevious', 0),
+(258, 6, 'button_ApprovalPiutangMain_btnNext', 0),
+(259, 6, 'button_ApprovalPiutangMain_btnLast', 0);
+
+INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
+(252, 1, 252, 0),
+(253, 1, 253, 0),
+(254, 1, 254, 0),
+(255, 1, 255, 0),
+(256, 1, 256, 0),
+(257, 1, 257, 0),
+(258, 1, 258, 0),
+(259, 1, 259, 0);
+
+
+INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
+(260, 2, 'menuItem_Transaction_CetakPiutang', 0),
+(261, 6, 'button_CetakPiutangMain_btnCetakKuitansi', 0);
+
+INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
+(260, 1, 260, 0),
+(261, 1, 261, 0);

@@ -36,10 +36,10 @@ import billy.webui.printer.model.ItemFaktur;
 import billy.webui.printer.model.Kuitansi;
 import de.forsthaus.webui.util.ZksampleMessageUtils;
 
-public class CetakKuitansiTextPrinter extends Window implements Serializable {
+public class CetakKuitansiA2TextPrinter extends Window implements Serializable {
 
   private static final long serialVersionUID = 1L;
-  private static final Logger logger = Logger.getLogger(CetakKuitansiTextPrinter.class);
+  private static final Logger logger = Logger.getLogger(CetakKuitansiA2TextPrinter.class);
   static String[] angkaTerbilang = {"", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh",
       "Delapan", "Sembilan", "Sepuluh", "Sebelas"};
 
@@ -73,7 +73,7 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
   }
 
 
-  public CetakKuitansiTextPrinter(Component parent, List<Penjualan> listPenjualan,
+  public CetakKuitansiA2TextPrinter(Component parent, List<Penjualan> listPenjualan,
       PrintService selectedPrinter) throws InterruptedException {
     super();
     this.setParent(parent);

@@ -537,7 +537,26 @@
 		<property name="statusService" ref="statusService" />
 	</bean>
 	
+	<!-- Piutang -->
+	<bean id="approvalPiutangMainCtrl" class="billy.webui.transaction.piutang.approval.ApprovalPiutangMainCtrl" parent="basisCtrl" scope="prototype">		
+		<property name="piutangService" ref="piutangService" />
+		<property name="approvalPiutangListCtrl" ref="approvalPiutangListCtrl" />
+		<property name="approvalPiutangDetailCtrl" ref="approvalPiutangDetailCtrl" />
+	</bean>
+	<bean id="approvalPiutangListCtrl" class="billy.webui.transaction.piutang.approval.ApprovalPiutangListCtrl" parent="basisCtrl" scope="prototype">
+		<property name="piutangService" ref="piutangService" />
+	</bean>
+	<bean id="approvalPiutangDetailCtrl" class="billy.webui.transaction.piutang.approval.ApprovalPiutangDetailCtrl" parent="basisCtrl" scope="prototype">
+		<property name="piutangService" ref="piutangService" />
+		<property name="karyawanService" ref="karyawanService" />
+		<property name="statusService" ref="statusService" />
+	</bean>
 	
+	<!-- CetakPiutang -->
+	<bean id="cetakPiutangMainCtrl" class="billy.webui.transaction.piutang.cetak.CetakPiutangMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="piutangService" ref="piutangService" />		
+		<property name="karyawanService" ref="karyawanService" />
+	</bean>
 </beans>
 
 	

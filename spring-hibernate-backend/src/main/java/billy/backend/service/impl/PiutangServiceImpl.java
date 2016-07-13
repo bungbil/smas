@@ -1,10 +1,12 @@
 package billy.backend.service.impl;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import billy.backend.dao.PiutangDAO;
+import billy.backend.model.Karyawan;
 import billy.backend.model.Penjualan;
 import billy.backend.model.Piutang;
 import billy.backend.model.Status;
@@ -71,6 +73,19 @@ public class PiutangServiceImpl implements PiutangService {
 
   }
 
+
+  @Override
+  public List<Piutang> getAllPiutangsByDivisiAndRangeDate(Karyawan obj, Date startDate, Date endDate) {
+    List<Piutang> allPiutang = new ArrayList<Piutang>();
+    List<Piutang> allPiutangSalesUnderDivisi =
+        getPiutangDAO().getAllPiutangsByDivisiAndRangeDate(obj, startDate, endDate);
+    List<Piutang> allPiutangKaryawanDivisi =
+        getPiutangDAO().getAllPiutangsByKaryawanAndRangeDate(obj, startDate, endDate);
+    allPiutang.addAll(allPiutangSalesUnderDivisi);
+    allPiutang.addAll(allPiutangKaryawanDivisi);
+
+    return allPiutang;
+  }
 
   @Override
   public int getCountPiutangsByPenjualan(Penjualan penjualan) {
