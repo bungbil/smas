@@ -183,3 +183,10 @@ INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
 INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
 (260, 1, 260, 0),
 (261, 1, 261, 0);
+
+INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
+(262, 2, 'menuItem_Report_PenerimaanPembayaran', 0),
+(263, 6, 'button_ReportPenerimaanPembayaranMain_btnView', 0);
+INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
+(262, 1, 262, 0),
+(263, 1, 263, 0);

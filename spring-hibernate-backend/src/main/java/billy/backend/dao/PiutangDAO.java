@@ -18,6 +18,9 @@ public interface PiutangDAO {
   public List<Piutang> getAllPiutangsByKaryawanAndRangeDate(Karyawan obj, Date startDate,
       Date endDate);
 
+  public List<Piutang> getAllPiutangsByKolektorAndRangeDate(Karyawan obj, Date startDate,
+      Date endDate);
+
   public int getCountAllPiutangs();
 
   public int getCountPiutangsByPenjualan(Penjualan obj);

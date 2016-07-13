@@ -52,6 +52,17 @@ public class PiutangDAOImpl extends BillyBasisDAO<Piutang> implements PiutangDAO
     return getHibernateTemplate().findByCriteria(criteria);
   }
 
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Piutang> getAllPiutangsByKolektorAndRangeDate(Karyawan obj, Date startDate,
+      Date endDate) {
+    DetachedCriteria criteria = DetachedCriteria.forClass(Piutang.class);
+    criteria.add(Restrictions.ge("tglPembayaran", startDate));
+    criteria.add(Restrictions.le("tglPembayaran", endDate));
+    criteria.add(Restrictions.eq("kolektor.id", obj.getId()));
+    return getHibernateTemplate().findByCriteria(criteria);
+  }
+
   @Override
   public int getCountAllPiutangs() {
     return DataAccessUtils.intResult(getHibernateTemplate().find("select count(*) from Piutang"));

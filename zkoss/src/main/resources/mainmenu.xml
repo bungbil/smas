@@ -150,10 +150,10 @@
 		<menuItem id="menu_Item_Tabungan" zulNavigation="/WEB-INF/pages/report/tabungan/summaryTabunganMain.zul"
 			iconName="/images/icons/view.gif"  rightName="menuItem_Report_Tabungan"/>
 		
-		<!-- 
+		
 		<menuItem id="menu_Item_ReportPenerimaanPembayaran" zulNavigation="/WEB-INF/pages/report/penerimaanpembayaran/penerimaanPembayaranMain.zul"
-			iconName="/images/icons/view.gif" /> 
-		<menuItem id="menu_Item_ReportKolektor" zulNavigation="/WEB-INF/pages/report/kolektor/KolektorFilterPage.zul"
+			iconName="/images/icons/view.gif"  rightName="menuItem_Report_PenerimaanPembayaran"/> 
+		<!-- <menuItem id="menu_Item_ReportKolektor" zulNavigation="/WEB-INF/pages/report/kolektor/KolektorFilterPage.zul"
 			iconName="/images/icons/view.gif" />	
 			
 				

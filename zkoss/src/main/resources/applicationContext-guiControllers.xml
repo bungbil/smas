@@ -557,6 +557,12 @@
 		<property name="piutangService" ref="piutangService" />		
 		<property name="karyawanService" ref="karyawanService" />
 	</bean>
+	
+	<!-- ReportPenerimaanPembayaran -->
+	<bean id="reportPenerimaanPembayaranMainCtrl" class="billy.webui.report.penerimaanpembayaran.ReportPenerimaanPembayaranMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="piutangService" ref="piutangService" />		
+		<property name="karyawanService" ref="karyawanService" />		
+	</bean>
 </beans>
 
 	
