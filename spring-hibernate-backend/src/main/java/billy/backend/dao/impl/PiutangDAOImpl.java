@@ -30,7 +30,8 @@ public class PiutangDAOImpl extends BillyBasisDAO<Piutang> implements PiutangDAO
 
   @SuppressWarnings("unchecked")
   @Override
-  public List<Piutang> getAllPiutangsByDivisiAndRangeDate(Karyawan obj, Date startDate, Date endDate) {
+  public List<Piutang> getAllPiutangsByDivisiAndRangeDateTglJatuhTempo(Karyawan obj,
+      Date startDate, Date endDate) {
     DetachedCriteria criteria = DetachedCriteria.forClass(Piutang.class);
     criteria.add(Restrictions.ge("tglJatuhTempo", startDate));
     criteria.add(Restrictions.le("tglJatuhTempo", endDate));
@@ -40,8 +41,19 @@ public class PiutangDAOImpl extends BillyBasisDAO<Piutang> implements PiutangDAO
 
   @SuppressWarnings("unchecked")
   @Override
-  public List<Piutang> getAllPiutangsByKaryawanAndRangeDate(Karyawan obj, Date startDate,
-      Date endDate) {
+  public List<Piutang> getAllPiutangsByDivisiAndRangeDateTglPembayaran(Karyawan obj,
+      Date startDate, Date endDate) {
+    DetachedCriteria criteria = DetachedCriteria.forClass(Piutang.class);
+    criteria.add(Restrictions.ge("tglPembayaran", startDate));
+    criteria.add(Restrictions.le("tglPembayaran", endDate));
+    criteria.add(Restrictions.eq("penjualan.divisi.id", obj.getId()));
+    return getHibernateTemplate().findByCriteria(criteria);
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Piutang> getAllPiutangsByKaryawanAndRangeDateTglJatuhTempo(Karyawan obj,
+      Date startDate, Date endDate) {
     DetachedCriteria criteria = DetachedCriteria.forClass(Piutang.class);
     criteria.add(Restrictions.ge("tglJatuhTempo", startDate));
     criteria.add(Restrictions.le("tglJatuhTempo", endDate));
@@ -54,8 +66,22 @@ public class PiutangDAOImpl extends BillyBasisDAO<Piutang> implements PiutangDAO
 
   @SuppressWarnings("unchecked")
   @Override
-  public List<Piutang> getAllPiutangsByKolektorAndRangeDate(Karyawan obj, Date startDate,
-      Date endDate) {
+  public List<Piutang> getAllPiutangsByKaryawanAndRangeDateTglPembayaran(Karyawan obj,
+      Date startDate, Date endDate) {
+    DetachedCriteria criteria = DetachedCriteria.forClass(Piutang.class);
+    criteria.add(Restrictions.ge("tglPembayaran", startDate));
+    criteria.add(Restrictions.le("tglPembayaran", endDate));
+    // criteria.add(Restrictions.eq("sales1.id", obj.getId()));
+    Criterion sales1 = Restrictions.eq("penjualan.sales1.id", obj.getId());
+    Criterion sales2 = Restrictions.eq("penjualan.sales2.id", obj.getId());
+    criteria.add(Restrictions.or(sales1, sales2));
+    return getHibernateTemplate().findByCriteria(criteria);
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Piutang> getAllPiutangsByKolektorAndRangeDateTglPembayaran(Karyawan obj,
+      Date startDate, Date endDate) {
     DetachedCriteria criteria = DetachedCriteria.forClass(Piutang.class);
     criteria.add(Restrictions.ge("tglPembayaran", startDate));
     criteria.add(Restrictions.le("tglPembayaran", endDate));

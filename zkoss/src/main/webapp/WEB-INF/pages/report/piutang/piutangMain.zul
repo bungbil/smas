@@ -8,7 +8,7 @@
 	xmlns:w="http://www.zkoss.org/2005/zk/client"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
-	<window id="windowReportPenerimaanPembayaranMain" apply="${reportPenerimaanPembayaranMainCtrl}"
+	<window id="windowReportPiutangMain" apply="${reportPiutangMainCtrl}"
 		border="none" width="100%">
 
 		<div sclass="z-toolbar" style="padding:0">
@@ -20,7 +20,7 @@
 							<panel border="none">
 								<panelchildren>
 									<groupbox mold="3d" closable="false">
-										<caption image="/images/icons/view.gif" label="Laporan Penerimaan Pembayaran" />
+										<caption image="/images/icons/view.gif" label="Laporan Piutang Kuitansi" />
 				
 										<grid sclass="GridLayoutNoBorder" fixedLayout="true"
 											style="border:0px; padding-left:5px; padding-right:5px;">
@@ -30,19 +30,32 @@
 											</columns>
 											<rows>
 												<row>
-													<label value="Kolektor" />
-													<listbox id="lbox_Kolektor" mold="select"
+													<label value="Divisi" />
+													<listbox id="lbox_Divisi" mold="select"
 															multiple="false" rows="1" width="250px">															
 													</listbox>	
 												</row>
 												<row>
-													<label value="Tanggal Awal Pembayaran" />
-													<datebox id="txtb_tanggalAwalPembayaran"
+									                <label value="Tanggal" />
+													<radiogroup id="radiogroup_Tanggal" >
+														<grid>
+													        <rows>													            
+													            <row>
+													                 <radio id="radioTglJatuhTempo" label="TANGGAL JATUH TEMPO" radiogroup="radiogroup_Tanggal" selected="true"/>
+											               			 <radio id="radioTglPembayaran" label="TANGGAL PEMBAYARAN" radiogroup="radiogroup_Tanggal"/>												               			 
+													            </row>													            
+													        </rows>
+													    </grid>
+										      		</radiogroup>	
+									            </row>
+												<row>
+													<label value="Tanggal Awal" />
+													<datebox id="txtb_tanggalAwal"
 															format="dd/MM/yyyy" width="150px" constraint="no empty"/>
 												</row>
 												<row>
-													<label value="Tanggal Akhir Pembayaran" />
-													<datebox id="txtb_tanggalAkhirPembayaran" 
+													<label value="Tanggal Akhir" />
+													<datebox id="txtb_tanggalAkhir" 
 															format="dd/MM/yyyy" width="150px" constraint="no empty"/>
 												</row>												
 												<row>

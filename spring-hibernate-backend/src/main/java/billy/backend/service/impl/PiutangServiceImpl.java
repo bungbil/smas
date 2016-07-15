@@ -75,12 +75,13 @@ public class PiutangServiceImpl implements PiutangService {
 
 
   @Override
-  public List<Piutang> getAllPiutangsByDivisiAndRangeDate(Karyawan obj, Date startDate, Date endDate) {
+  public List<Piutang> getAllPiutangsByDivisiAndRangeDateTglJatuhTempo(Karyawan obj,
+      Date startDate, Date endDate) {
     List<Piutang> allPiutang = new ArrayList<Piutang>();
     List<Piutang> allPiutangSalesUnderDivisi =
-        getPiutangDAO().getAllPiutangsByDivisiAndRangeDate(obj, startDate, endDate);
+        getPiutangDAO().getAllPiutangsByDivisiAndRangeDateTglJatuhTempo(obj, startDate, endDate);
     List<Piutang> allPiutangKaryawanDivisi =
-        getPiutangDAO().getAllPiutangsByKaryawanAndRangeDate(obj, startDate, endDate);
+        getPiutangDAO().getAllPiutangsByKaryawanAndRangeDateTglJatuhTempo(obj, startDate, endDate);
     allPiutang.addAll(allPiutangSalesUnderDivisi);
     allPiutang.addAll(allPiutangKaryawanDivisi);
 
@@ -88,9 +89,24 @@ public class PiutangServiceImpl implements PiutangService {
   }
 
   @Override
-  public List<Piutang> getAllPiutangsByKolektorAndRangeDate(Karyawan obj, Date startDate,
-      Date endDate) {
-    return getPiutangDAO().getAllPiutangsByKolektorAndRangeDate(obj, startDate, endDate);
+  public List<Piutang> getAllPiutangsByDivisiAndRangeDateTglPembayaran(Karyawan obj,
+      Date startDate, Date endDate) {
+    List<Piutang> allPiutang = new ArrayList<Piutang>();
+    List<Piutang> allPiutangSalesUnderDivisi =
+        getPiutangDAO().getAllPiutangsByDivisiAndRangeDateTglPembayaran(obj, startDate, endDate);
+    List<Piutang> allPiutangKaryawanDivisi =
+        getPiutangDAO().getAllPiutangsByKaryawanAndRangeDateTglPembayaran(obj, startDate, endDate);
+    allPiutang.addAll(allPiutangSalesUnderDivisi);
+    allPiutang.addAll(allPiutangKaryawanDivisi);
+
+    return allPiutang;
+  }
+
+  @Override
+  public List<Piutang> getAllPiutangsByKolektorAndRangeDateTglPembayaran(Karyawan obj,
+      Date startDate, Date endDate) {
+    return getPiutangDAO().getAllPiutangsByKolektorAndRangeDateTglPembayaran(obj, startDate,
+        endDate);
   }
 
   @Override

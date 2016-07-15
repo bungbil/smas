@@ -14,10 +14,14 @@ public interface PiutangService {
 
   public void generatePiutangByIntervalKredit(Penjualan penjualan, int intervalKredit, Status status);
 
-  public List<Piutang> getAllPiutangsByDivisiAndRangeDate(Karyawan obj, Date startDate, Date endDate);
+  public List<Piutang> getAllPiutangsByDivisiAndRangeDateTglJatuhTempo(Karyawan obj,
+      Date startDate, Date endDate);
 
-  public List<Piutang> getAllPiutangsByKolektorAndRangeDate(Karyawan obj, Date startDate,
-      Date endDate);
+  public List<Piutang> getAllPiutangsByDivisiAndRangeDateTglPembayaran(Karyawan obj,
+      Date startDate, Date endDate);
+
+  public List<Piutang> getAllPiutangsByKolektorAndRangeDateTglPembayaran(Karyawan obj,
+      Date startDate, Date endDate);
 
   public int getCountPiutangsByPenjualan(Penjualan penjualan);
 

@@ -563,6 +563,12 @@
 		<property name="piutangService" ref="piutangService" />		
 		<property name="karyawanService" ref="karyawanService" />		
 	</bean>
+	
+	<!-- ReportPiutang -->
+	<bean id="reportPiutangMainCtrl" class="billy.webui.report.piutang.ReportPiutangMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="piutangService" ref="piutangService" />		
+		<property name="karyawanService" ref="karyawanService" />		
+	</bean>
 </beans>
 
 	

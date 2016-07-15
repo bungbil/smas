@@ -1,13 +1,10 @@
-package billy.webui.transaction.piutang.cetak;
-
+package billy.webui.report.piutang;
 
 import java.io.Serializable;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
-
-import javax.print.PrintService;
-import javax.print.PrintServiceLookup;
 
 import org.apache.log4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +16,8 @@ import org.zkoss.zul.Datebox;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
+import org.zkoss.zul.Radio;
+import org.zkoss.zul.Radiogroup;
 import org.zkoss.zul.Window;
 
 import billy.backend.model.Karyawan;
@@ -26,41 +25,40 @@ import billy.backend.model.Piutang;
 import billy.backend.service.KaryawanService;
 import billy.backend.service.PiutangService;
 import billy.webui.master.karyawan.model.KaryawanListModelItemRenderer;
-import billy.webui.printer.model.PrinterListModelItemRenderer;
-import billy.webui.transaction.piutang.cetak.report.CetakKuitansiTextPrinter;
+import billy.webui.report.piutang.report.PiutangDJReport;
 import de.forsthaus.UserWorkspace;
 import de.forsthaus.backend.model.SecUser;
 import de.forsthaus.policy.model.UserImpl;
 import de.forsthaus.webui.util.GFCBaseCtrl;
 import de.forsthaus.webui.util.ZksampleMessageUtils;
 
-public class CetakPiutangMainCtrl extends GFCBaseCtrl implements Serializable {
+public class ReportPiutangMainCtrl extends GFCBaseCtrl implements Serializable {
 
   private static final long serialVersionUID = 1L;
-  private static final Logger logger = Logger.getLogger(CetakPiutangMainCtrl.class);
+  private static final Logger logger = Logger.getLogger(ReportPiutangMainCtrl.class);
 
 
-  protected Window windowCetakPiutangMain; // autowired
+  protected Window windowReportPiutangMain; // autowired
   protected Listbox lbox_Divisi;
-  protected Listbox lbox_Printer;
-  protected Datebox txtb_tanggalAwalJatuhTempo;
-  protected Datebox txtb_tanggalAkhirJatuhTempo;
-  protected Button btnCetakKuitansi;
-  protected Button btnReset;
+  protected Datebox txtb_tanggalAwal;
+  protected Datebox txtb_tanggalAkhir;
+  protected Radiogroup radiogroup_Tanggal;
+  protected Radio radioTglJatuhTempo;
+  protected Radio radioTglPembayaran;
+  protected Button btnView;
+
 
   // ServiceDAOs / Domain Classes
   private PiutangService piutangService;
   private KaryawanService karyawanService;
 
-  private PrintService selectedPrinter;
   List<Piutang> listPiutang = new ArrayList<Piutang>();
-
-  DecimalFormat df = new DecimalFormat("#,###");
+  Karyawan karyawan = null;
 
   /**
    * default constructor.<br>
    */
-  public CetakPiutangMainCtrl() {
+  public ReportPiutangMainCtrl() {
     super();
   }
 
@@ -84,9 +82,8 @@ public class CetakPiutangMainCtrl extends GFCBaseCtrl implements Serializable {
    */
   // TODO move it to zul
   private void doCheckRights() {
-
     final UserWorkspace workspace = getUserWorkspace();
-    btnCetakKuitansi.setDisabled(!workspace.isAllowed("button_CetakPiutangMain_btnCetakKuitansi"));
+    btnView.setDisabled(!workspace.isAllowed("button_ReportPiutangMain_btnView"));
   }
 
   public void doReset() {
@@ -97,12 +94,19 @@ public class CetakPiutangMainCtrl extends GFCBaseCtrl implements Serializable {
 
     lbox_Divisi.setModel(new ListModelList(listDivisi));
     lbox_Divisi.setItemRenderer(new KaryawanListModelItemRenderer());
+    radioTglJatuhTempo.setSelected(true);
 
-    txtb_tanggalAwalJatuhTempo.setValue(null);
-    txtb_tanggalAkhirJatuhTempo.setValue(null);
+    Date date = new Date(); // your date
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(date);
+    int year = cal.get(Calendar.YEAR);
+    int month = cal.get(Calendar.MONTH);
+    cal.set(year, month, 1, 0, 0, 0);
+    Date startDate = cal.getTime();
+    txtb_tanggalAwal.setValue(startDate);
+    txtb_tanggalAkhir.setValue(date);
     listPiutang = new ArrayList<Piutang>();
 
-    selectedPrinter = null;
   }
 
   public KaryawanService getKaryawanService() {
@@ -114,26 +118,19 @@ public class CetakPiutangMainCtrl extends GFCBaseCtrl implements Serializable {
     return this.piutangService;
   }
 
-
-  public void onClick$btnCetakKuitansi(Event event) throws Exception {
+  public void onClick$btnView(Event event) throws Exception {
     if (validToPrint()) {
-
       final Window win = (Window) Path.getComponent("/outerIndexWindow");
-      // new CetakKuitansiA2DJReport(win);
-      new CetakKuitansiTextPrinter(win, listPiutang, selectedPrinter);
+      if (radioTglJatuhTempo.isSelected()) {
+        new PiutangDJReport(win, karyawan, txtb_tanggalAwal.getValue(),
+            txtb_tanggalAkhir.getValue(), listPiutang, radioTglJatuhTempo.getLabel());
+      } else if (radioTglPembayaran.isSelected()) {
+        new PiutangDJReport(win, karyawan, txtb_tanggalAwal.getValue(),
+            txtb_tanggalAkhir.getValue(), listPiutang, radioTglPembayaran.getLabel());
+      }
     } else {
       showErrorCetak();
     }
-  }
-
-  public void onClick$btnRefeshPrinter(Event event) throws Exception {
-    PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
-    lbox_Printer.setModel(new ListModelList(printServices));
-    lbox_Printer.setItemRenderer(new PrinterListModelItemRenderer());
-  }
-
-  public void onClick$btnReset(Event event) throws Exception {
-    doReset();
   }
 
   /**
@@ -142,11 +139,9 @@ public class CetakPiutangMainCtrl extends GFCBaseCtrl implements Serializable {
    * @param event
    * @throws Exception
    */
-  public void onCreate$windowCetakPiutangMain(Event event) throws Exception {
-    windowCetakPiutangMain.setContentStyle("padding:0px;");
-
+  public void onCreate$windowReportPiutangMain(Event event) throws Exception {
+    windowReportPiutangMain.setContentStyle("padding:0px;");
     doCheckRights();
-
     doReset();
   }
 
@@ -168,38 +163,40 @@ public class CetakPiutangMainCtrl extends GFCBaseCtrl implements Serializable {
   }
 
   public void showErrorCetak() throws Exception {
-
-    ZksampleMessageUtils
-        .showErrorMessage("List Kuitansi tidak ditemukan / Silakan dipilih Printernya");
+    if (listPiutang.size() == 0) {
+      ZksampleMessageUtils
+          .showErrorMessage("Tidak ada piutang terbayar di range waktu pembayaran ini");
+    } else {
+      ZksampleMessageUtils.showErrorMessage("Error!!!");
+    }
 
   }
 
   public boolean validToPrint() throws Exception {
-
-    Karyawan karyawan = null;
     Listitem itemDivisi = lbox_Divisi.getSelectedItem();
     if (itemDivisi != null) {
       ListModelList lml1 = (ListModelList) lbox_Divisi.getListModel();
       karyawan = (Karyawan) lml1.get(itemDivisi.getIndex());
     }
-    PrintService printer = null;
-    Listitem itemPrinter = lbox_Printer.getSelectedItem();
-    if (itemPrinter != null) {
-      ListModelList lml1 = (ListModelList) lbox_Printer.getListModel();
-      printer = (PrintService) lml1.get(itemPrinter.getIndex());
-      selectedPrinter = printer;
-      logger.info("Printer : " + printer.getName());
-    }
-    if (karyawan != null && printer != null && txtb_tanggalAwalJatuhTempo.getValue() != null
-        && txtb_tanggalAkhirJatuhTempo.getValue() != null) {
 
-      listPiutang =
-          getPiutangService().getAllPiutangsByDivisiAndRangeDateTglJatuhTempo(karyawan,
-              txtb_tanggalAwalJatuhTempo.getValue(), txtb_tanggalAkhirJatuhTempo.getValue());
+    if (karyawan != null && txtb_tanggalAwal.getValue() != null
+        && txtb_tanggalAkhir.getValue() != null) {
+
+      if (radioTglJatuhTempo.isSelected()) {
+        listPiutang =
+            getPiutangService().getAllPiutangsByDivisiAndRangeDateTglJatuhTempo(karyawan,
+                txtb_tanggalAwal.getValue(), txtb_tanggalAkhir.getValue());
+
+      } else if (radioTglPembayaran.isSelected()) {
+        listPiutang =
+            getPiutangService().getAllPiutangsByDivisiAndRangeDateTglPembayaran(karyawan,
+                txtb_tanggalAwal.getValue(), txtb_tanggalAkhir.getValue());
+
+      }
+
+
       if (listPiutang.size() > 0) {
         return true;
-      } else {
-        return false;
       }
     }
     return false;

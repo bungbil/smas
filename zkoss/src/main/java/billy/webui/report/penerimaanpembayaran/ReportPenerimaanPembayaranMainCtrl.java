@@ -171,7 +171,7 @@ public class ReportPenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements S
         && txtb_tanggalAkhirPembayaran.getValue() != null) {
 
       listPiutang =
-          getPiutangService().getAllPiutangsByKolektorAndRangeDate(karyawan,
+          getPiutangService().getAllPiutangsByKolektorAndRangeDateTglPembayaran(karyawan,
               txtb_tanggalAwalPembayaran.getValue(), txtb_tanggalAkhirPembayaran.getValue());
       if (listPiutang.size() > 0) {
         return true;
