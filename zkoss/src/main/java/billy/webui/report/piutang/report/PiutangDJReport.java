@@ -79,7 +79,7 @@ public class PiutangDJReport extends Window implements Serializable {
 
   private AMedia amedia;
   private static final Logger logger = Logger.getLogger(PiutangDJReport.class);
-  private static final String title = "LAPORAN KUITANSI MENURUT ";
+  private static final String title = "LAPORAN KWITANSI MENURUT ";
   private static final SimpleDateFormat DATE_FORMATER = new SimpleDateFormat("ddMMyyyy");
 
   public PiutangDJReport(Component parent, Karyawan karyawan, Date startDate, Date endDate,
@@ -296,7 +296,7 @@ public class PiutangDJReport extends Window implements Serializable {
 
     AbstractColumn colBillingDate =
         ColumnBuilder.getNew().setColumnProperty("tglKuitansi", Date.class.getName()).build();
-    colBillingDate.setTitle("Tanggal Kuitansi");
+    colBillingDate.setTitle("Tanggal Kwitansi");
     colBillingDate.setWidth(35);
     colBillingDate.setPattern("dd-MM-yyyy");
     colBillingDate.setHeaderStyle(columnHeaderStyleNumber);

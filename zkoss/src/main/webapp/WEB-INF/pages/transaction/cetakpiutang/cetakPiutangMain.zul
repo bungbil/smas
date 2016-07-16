@@ -63,7 +63,7 @@
 												</row>
 												<row>
 													<label />
-													<button id="btnCetakKuitansi" label="Cetak Kuitansi"  	/>
+													<button id="btnCetakKuitansi" label="Cetak Kwitansi"  	/>
 												</row>
 												
 											</rows>

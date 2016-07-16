@@ -38,7 +38,7 @@
 						<listheader id="listheader_PiutangList_NoKuitansi"
 							sclass="FDListBoxHeader1" 
 							sort="auto" width="10%"
-							label="No Piutang" />
+							label="No Kwitansi" />
 						<listheader id="listheader_PiutangList_PembayaranKe"
 							sclass="FDListBoxHeader1" 
 							sort="auto" width="5%"

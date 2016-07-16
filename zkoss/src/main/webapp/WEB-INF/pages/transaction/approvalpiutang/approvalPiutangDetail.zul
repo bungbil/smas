@@ -45,7 +45,7 @@
 														<textbox id="txtb_NoFaktur" value="@{controller.piutang.penjualan.noFaktur}"
 															readonly="true" constraint="no empty" maxlength="50" width="250px" />
 														<label />
-														<label value="No Kuitansi" />															
+														<label value="No Kwitansi" />															
 														<textbox id="txtb_NoKuitansi" value="@{controller.piutang.noKuitansi}"
 															readonly="true" constraint="no empty" maxlength="50" width="250px" />
 													</row>
