@@ -86,7 +86,7 @@
 							style="padding-left: 5px" />
 						<listcell label="@{piutang.pembayaranKe}"
 							style="padding-left: 5px" />
-						<listcell label="@{piutang.tglPembayaran}"
+						<listcell label="@{piutang.tglPembayaran, converter='org.zkoss.zkplus.databind.DateFormatConverter'}" self="@{format(dd/MM/yyyy)}"
 							style="padding-left: 5px" />
 						<listcell label="@{piutang.status.deskripsiStatus}"
 							style="padding-left: 5px" />
@@ -94,7 +94,7 @@
 							style="padding-left: 5px" />
 						<listcell label="@{piutang.pembayaran}"
 							style="padding-left: 5px" />
-						<listcell label="@{piutang.tglJatuhTempo}"
+						<listcell label="@{piutang.tglJatuhTempo, converter='org.zkoss.zkplus.databind.DateFormatConverter'}" self="@{format(dd/MM/yyyy)}"
 							style="padding-left: 5px" />
 						<listcell label="@{piutang.kolektor.namaPanggilan}"
 							style="padding-left: 5px" />																		

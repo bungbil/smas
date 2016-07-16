@@ -108,15 +108,7 @@
 		<!-- <menuItem id="menu_Item_JobType" zulNavigation="/WEB-INF/pages/master/jobtype/jobTypeMain.zul"
 			iconName="/images/icons/index_16x16.gif" rightName="menuItem_Master_JobType"  /> -->			
 	</menu>
-	<!-- Transaction MenuTree -->
-	<!-- <menu id="menu_Category_Transaction" >
-		<menuItem id="menu_Item_Penjualan" zulNavigation="/WEB-INF/pages/transaction/penjualan/penjualanMain.zul"
-			iconName="/images/icons/view.gif" />
-		<menuItem id="menu_Item_ApprovalPenjualan" zulNavigation="/WEB-INF/pages/transaction/approvalpenjualan/approvalPenjualanMain.zul"
-			iconName="/images/icons/view.gif" />
-		<menuItem id="menu_Item_CetakPenjualan" zulNavigation="/WEB-INF/pages/transaction/cetakpenjualan/cetakPenjualanMain.zul"
-			iconName="/images/icons/view.gif" />	
-			-->
+	<!-- Transaction MenuTree -->	
 	<menu id="menu_Category_Transaction" rightName="menuCat_Transaction" >
 		<menuItem id="menu_Item_Penjualan" zulNavigation="/WEB-INF/pages/transaction/penjualan/penjualanMain.zul"
 			iconName="/images/icons/view.gif" rightName="menuItem_Transaction_Penjualan"  /> 

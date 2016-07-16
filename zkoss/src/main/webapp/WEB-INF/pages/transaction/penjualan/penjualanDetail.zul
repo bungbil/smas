@@ -171,8 +171,9 @@
 															<grid>
 														        <rows>													            
 														            <row>
+														                 <radio id="radioStatusKredit" label="Kredit" radiogroup="radiogroup_MetodePembayaran" disabled="true"/>
 														                 <radio id="radioStatusCash" label="Cash" radiogroup="radiogroup_MetodePembayaran" disabled="true"/>
-												               			 <radio id="radioStatusKredit" label="Kredit" radiogroup="radiogroup_MetodePembayaran" disabled="true"/>												               			 
+												               			 												               			 
 														            </row>													            
 														        </rows>
 														    </grid>

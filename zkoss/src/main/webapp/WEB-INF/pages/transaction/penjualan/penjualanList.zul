@@ -86,7 +86,7 @@
 
 						<listcell label="@{penjualan.noFaktur}"
 							style="padding-left: 5px" />
-						<listcell label="@{penjualan.tglPenjualan}"
+						<listcell label="@{penjualan.tglPenjualan, converter='org.zkoss.zkplus.databind.DateFormatConverter'}" self="@{format(dd/MM/yyyy)}"
 							style="padding-left: 5px" />
 						<listcell label="@{penjualan.metodePembayaran}"
 							style="padding-left: 5px" />
