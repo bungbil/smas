@@ -19,6 +19,7 @@ import org.zkoss.zul.Datebox;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
+import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 import billy.backend.model.Karyawan;
@@ -42,6 +43,7 @@ public class CetakPiutangMainCtrl extends GFCBaseCtrl implements Serializable {
 
   protected Window windowCetakPiutangMain; // autowired
   protected Listbox lbox_Divisi;
+  protected Textbox txtb_KodeDivisi;
   protected Listbox lbox_Printer;
   protected Datebox txtb_tanggalAwalJatuhTempo;
   protected Datebox txtb_tanggalAkhirJatuhTempo;
@@ -67,6 +69,13 @@ public class CetakPiutangMainCtrl extends GFCBaseCtrl implements Serializable {
   @Override
   public void doAfterCompose(Component window) throws Exception {
     super.doAfterCompose(window);
+
+    PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+    lbox_Printer.setModel(new ListModelList(printServices));
+    lbox_Printer.setItemRenderer(new PrinterListModelItemRenderer());
+    PrintService service = PrintServiceLookup.lookupDefaultPrintService();
+    ListModelList lml = (ListModelList) lbox_Printer.getModel();
+    lbox_Printer.setSelectedIndex(lml.indexOf(service));
 
     this.self.setAttribute("controller", this, false);
   }
@@ -112,6 +121,19 @@ public class CetakPiutangMainCtrl extends GFCBaseCtrl implements Serializable {
   /* SERVICES */
   public PiutangService getPiutangService() {
     return this.piutangService;
+  }
+
+  public void onChange$txtb_KodeDivisi(Event event) throws InterruptedException {
+    if (txtb_KodeDivisi.getValue() != null) {
+      ListModelList lml = (ListModelList) lbox_Divisi.getModel();
+      Karyawan karyawan =
+          getKaryawanService().getKaryawanByKodeKaryawan(txtb_KodeDivisi.getValue().trim());
+      if (karyawan != null) {
+        lbox_Divisi.setSelectedIndex(lml.indexOf(karyawan));
+      } else {
+        lbox_Divisi.setSelectedIndex(-1);
+      }
+    }
   }
 
 

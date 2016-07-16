@@ -94,14 +94,21 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
   protected Label label_butuhApproval;
   protected Textbox txtb_ReasonApproval;
   protected Button btnApprovePenjualan;
-  public Textbox txtb_ApprovedBy;
-  public Textbox txtb_ApprovedRemark;
+  protected Textbox txtb_ApprovedBy;
+  protected Textbox txtb_ApprovedRemark;
 
   protected Listbox lbox_Barang;
   protected Textbox txtb_NamaBarang;
   protected Intbox txtb_JumlahBarang;
   protected Decimalbox txtb_HargaBarang;
   protected Button btnNewBarang;
+
+  protected Textbox txtb_KodeWilayah;
+  protected Textbox txtb_KodePengirim;
+  protected Textbox txtb_KodeSales1;
+  protected Textbox txtb_KodeSales2;
+  protected Textbox txtb_KodeBarang;
+
 
   public List<PenjualanDetail> listPenjualanDetail = new ArrayList<PenjualanDetail>();
   // Databinding
@@ -286,7 +293,11 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
     txtb_HargaBarang.setReadonly(b);
     btnNewBarang.setDisabled(b);
 
-
+    txtb_KodeWilayah.setReadonly(b);
+    txtb_KodePengirim.setReadonly(b);
+    txtb_KodeSales1.setReadonly(b);
+    txtb_KodeSales2.setReadonly(b);
+    txtb_KodeBarang.setReadonly(b);
   }
 
   public void doRefresh() {
@@ -571,6 +582,70 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 
   public void onChange$lbox_Sales1(Event event) throws InterruptedException {
     generateNewNoFaktur();
+  }
+
+  public void onChange$txtb_KodeBarang(Event event) throws InterruptedException {
+    if (txtb_KodeBarang.getValue() != null) {
+      ListModelList lml = (ListModelList) lbox_Barang.getModel();
+      Barang barang = getBarangService().getBarangByKodeBarang(txtb_KodeBarang.getValue().trim());
+      if (barang != null) {
+        lbox_Barang.setSelectedIndex(lml.indexOf(barang));
+      } else {
+        lbox_Barang.setSelectedIndex(-1);
+      }
+    }
+  }
+
+  public void onChange$txtb_KodePengirim(Event event) throws InterruptedException {
+    if (txtb_KodePengirim.getValue() != null) {
+      ListModelList lml = (ListModelList) lbox_Pengirim.getModel();
+      Karyawan karyawan =
+          getKaryawanService().getKaryawanByKodeKaryawan(txtb_KodePengirim.getValue().trim());
+      if (karyawan != null) {
+        lbox_Pengirim.setSelectedIndex(lml.indexOf(karyawan));
+      } else {
+        lbox_Pengirim.setSelectedIndex(-1);
+      }
+    }
+  }
+
+  public void onChange$txtb_KodeSales1(Event event) throws InterruptedException {
+    if (txtb_KodeSales1.getValue() != null) {
+      ListModelList lml = (ListModelList) lbox_Sales1.getModel();
+      Karyawan karyawan =
+          getKaryawanService().getKaryawanByKodeKaryawan(txtb_KodeSales1.getValue().trim());
+      if (karyawan != null) {
+        lbox_Sales1.setSelectedIndex(lml.indexOf(karyawan));
+      } else {
+        lbox_Sales1.setSelectedIndex(-1);
+      }
+    }
+  }
+
+  public void onChange$txtb_KodeSales2(Event event) throws InterruptedException {
+    if (txtb_KodeSales2.getValue() != null) {
+      ListModelList lml = (ListModelList) lbox_Sales2.getModel();
+      Karyawan karyawan =
+          getKaryawanService().getKaryawanByKodeKaryawan(txtb_KodeSales2.getValue().trim());
+      if (karyawan != null) {
+        lbox_Sales2.setSelectedIndex(lml.indexOf(karyawan));
+      } else {
+        lbox_Sales2.setSelectedIndex(-1);
+      }
+    }
+  }
+
+  public void onChange$txtb_KodeWilayah(Event event) throws InterruptedException {
+    if (txtb_KodeWilayah.getValue() != null) {
+      ListModelList lml = (ListModelList) lbox_Wilayah.getModel();
+      Wilayah wilayah =
+          getWilayahService().getWilayahByKodeWilayah(txtb_KodeWilayah.getValue().trim());
+      if (wilayah != null) {
+        lbox_Wilayah.setSelectedIndex(lml.indexOf(wilayah));
+      } else {
+        lbox_Wilayah.setSelectedIndex(-1);
+      }
+    }
   }
 
   public void onChange$txtb_TglPenjualan(Event event) throws InterruptedException {

@@ -27,6 +27,7 @@ alter table penjualan
 alter table piutang   
    add column diskon			numeric(12,0)		 null default 0;
    
-   
+alter table karyawan   
+   add column jenis_kelamin			varchar(20)		 null ;
    
    

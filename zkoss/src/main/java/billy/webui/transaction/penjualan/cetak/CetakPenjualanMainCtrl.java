@@ -43,6 +43,7 @@ public class CetakPenjualanMainCtrl extends GFCBaseCtrl implements Serializable 
 
   protected Window windowCetakPenjualanMain; // autowired
   protected Listbox lbox_Divisi;
+  protected Textbox txtb_KodeDivisi;
   protected Listbox lbox_Printer;
   protected Textbox txtb_NoFakturAwal;
   protected Textbox txtb_NoFakturAkhir;
@@ -71,6 +72,13 @@ public class CetakPenjualanMainCtrl extends GFCBaseCtrl implements Serializable 
   @Override
   public void doAfterCompose(Component window) throws Exception {
     super.doAfterCompose(window);
+
+    PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+    lbox_Printer.setModel(new ListModelList(printServices));
+    lbox_Printer.setItemRenderer(new PrinterListModelItemRenderer());
+    PrintService service = PrintServiceLookup.lookupDefaultPrintService();
+    ListModelList lml = (ListModelList) lbox_Printer.getModel();
+    lbox_Printer.setSelectedIndex(lml.indexOf(service));
 
     this.self.setAttribute("controller", this, false);
   }
@@ -174,6 +182,19 @@ public class CetakPenjualanMainCtrl extends GFCBaseCtrl implements Serializable 
       ZksampleMessageUtils
           .showErrorMessage("No Faktur Awal tidak valid, harap memasukkan 10 digit");
       return;
+    }
+  }
+
+  public void onChange$txtb_KodeDivisi(Event event) throws InterruptedException {
+    if (txtb_KodeDivisi.getValue() != null) {
+      ListModelList lml = (ListModelList) lbox_Divisi.getModel();
+      Karyawan karyawan =
+          getKaryawanService().getKaryawanByKodeKaryawan(txtb_KodeDivisi.getValue().trim());
+      if (karyawan != null) {
+        lbox_Divisi.setSelectedIndex(lml.indexOf(karyawan));
+      } else {
+        lbox_Divisi.setSelectedIndex(-1);
+      }
     }
   }
 

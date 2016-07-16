@@ -63,19 +63,23 @@
 															format="dd/MM/yyyy" disabled="true" width="150px" constraint="no empty"/>	
 														<label />	
 														<label value="Wilayah" />																													
-														<listbox id="lbox_Wilayah" mold="select" disabled="true"
-																			multiple="false" rows="1"  width="150px" xmlns:w="client">
-																 <attribute w:name="doBlur_"><![CDATA[
-														            function(evt) {
-														                this.$doBlur_(evt);
-														                if (this.$n().value == '') {
-														                    zAu.wrongValue_(this, 'Please select.....');
-														                } else {
-														                    zAu.cmd0.clearWrongValue(this.uuid);
-														                }
-														            }
-														        ]]></attribute>																											
-														</listbox>													
+														<hbox>
+															<textbox id="txtb_KodeWilayah" value="@{controller.penjualan.wilayah.kodeWilayah}"
+																readonly="true"  maxlength="50" width="100px" />
+															<listbox id="lbox_Wilayah" mold="select" disabled="true"
+																				multiple="false" rows="1"  width="150px" xmlns:w="client">
+																	 <attribute w:name="doBlur_"><![CDATA[
+															            function(evt) {
+															                this.$doBlur_(evt);
+															                if (this.$n().value == '') {
+															                    zAu.wrongValue_(this, 'Please select.....');
+															                } else {
+															                    zAu.cmd0.clearWrongValue(this.uuid);
+															                }
+															            }
+															        ]]></attribute>																											
+															</listbox>
+														</hbox>													
 													</row>
 													<row>
 														<label 	value="Rencana Kirim" />															
@@ -83,40 +87,52 @@
 															format="dd/MM/yyyy" disabled="true" width="150px" constraint="no empty"/>				
 														<label />	
 														<label id="label_Sales1" value="Sales 1" />
-														<listbox id="lbox_Sales1" mold="select" disabled="true"
-																multiple="false" rows="1" width="300px" xmlns:w="client">
-																<attribute w:name="doBlur_"><![CDATA[
-														            function(evt) {
-														                this.$doBlur_(evt);
-														                if (this.$n().value == '') {
-														                    zAu.wrongValue_(this, 'Please select.....');
-														                } else {
-														                    zAu.cmd0.clearWrongValue(this.uuid);
-														                }
-														            }
-														        ]]></attribute>															
-														</listbox>										
+														<hbox>
+															<textbox id="txtb_KodeSales1" value="@{controller.penjualan.sales1.kodeKaryawan}"
+																readonly="true"  maxlength="50" width="100px" />
+															<listbox id="lbox_Sales1" mold="select" disabled="true"
+																	multiple="false" rows="1" width="150px" xmlns:w="client">
+																	<attribute w:name="doBlur_"><![CDATA[
+															            function(evt) {
+															                this.$doBlur_(evt);
+															                if (this.$n().value == '') {
+															                    zAu.wrongValue_(this, 'Please select.....');
+															                } else {
+															                    zAu.cmd0.clearWrongValue(this.uuid);
+															                }
+															            }
+															        ]]></attribute>															
+															</listbox>		
+														</hbox>								
 													</row>													
 													<row>
 														<label id="label_Pengirim" value="Pengirim" />
-														<listbox id="lbox_Pengirim" mold="select" disabled="true"
-																multiple="false" rows="1" width="150px" xmlns:w="client">
-																<attribute w:name="doBlur_"><![CDATA[
-														            function(evt) {
-														                this.$doBlur_(evt);
-														                if (this.$n().value == '') {
-														                    zAu.wrongValue_(this, 'Please select.....');
-														                } else {
-														                    zAu.cmd0.clearWrongValue(this.uuid);
-														                }
-														            }
-														        ]]></attribute>															
-														</listbox>
+														<hbox>
+															<textbox id="txtb_KodePengirim" value="@{controller.penjualan.pengirim.kodeKaryawan}"
+																readonly="true"  maxlength="50" width="100px" />
+															<listbox id="lbox_Pengirim" mold="select" disabled="true"
+																	multiple="false" rows="1" width="150px" xmlns:w="client">
+																	<attribute w:name="doBlur_"><![CDATA[
+															            function(evt) {
+															                this.$doBlur_(evt);
+															                if (this.$n().value == '') {
+															                    zAu.wrongValue_(this, 'Please select.....');
+															                } else {
+															                    zAu.cmd0.clearWrongValue(this.uuid);
+															                }
+															            }
+															        ]]></attribute>															
+															</listbox>
+														</hbox>
 														<label />
 														<label id="label_Sales2" value="Sales 2" />
-														<listbox id="lbox_Sales2" mold="select" disabled="true"
-																multiple="false" rows="1" width="300px">															
-														</listbox>
+														<hbox>
+															<textbox id="txtb_KodeSales2" value="@{controller.penjualan.sales2.kodeKaryawan}"
+																readonly="true"  maxlength="50" width="100px" />
+															<listbox id="lbox_Sales2" mold="select" disabled="true"
+																	multiple="false" rows="1" width="150px">															
+															</listbox>
+														</hbox>
 													</row>
 													
 													<row>
@@ -205,21 +221,30 @@
 											<grid sclass="GridLayoutNoBorder" fixedLayout="true"
 												style="border:0px; padding-left:5px; padding-right:5px;">
 									            <columns>
-									                <column  width="250px"/>
+									                <column  width="100px"/>
 									                <column />
 									                <column />
 									                <column />
 									                <column />
 									            </columns>
+									           
 									            <rows>
-									            	<row>
-									            	<listbox id="lbox_Barang" mold="select" disabled="true"
-															multiple="false" rows="1"  width="250px">															
-													</listbox>
-													<textbox id="txtb_NamaBarang" readonly="true" maxlength="50" hflex="1" rows="1"  />
-													<intbox id="txtb_JumlahBarang" readonly="true" maxlength="50" hflex="1"/>
-													<decimalbox id="txtb_HargaBarang" readonly="true" maxlength="50" format=",###.#" constraint="no negative" hflex="1" />
-									            	<button id="btnNewBarang" disabled="true" label="Tambah Barang"  	/>
+									            	 <row>									            	
+														<label value ="Kode Barang" />
+														<label value ="Pilih Barang" />
+										            	<label value ="Nama Barang" />
+										            	<label value ="qty" />
+														<label value ="Harga" />														
+									            	</row>	
+									            	<row>									            	
+														<textbox id="txtb_KodeBarang" readonly="true"  maxlength="50" width="100px" hflex="1" />
+										            	<listbox id="lbox_Barang" mold="select" disabled="true"
+																multiple="false" rows="1"  width="250px">															
+														</listbox>
+														<textbox id="txtb_NamaBarang" readonly="true" maxlength="50" hflex="1" rows="1"  />
+														<intbox id="txtb_JumlahBarang" readonly="true" maxlength="50" hflex="1"/>
+														<decimalbox id="txtb_HargaBarang" readonly="true" maxlength="50" format=",###.#" constraint="no negative" hflex="1" />
+										            	<button id="btnNewBarang" disabled="true" label="Tambah Barang"  	/>
 									            	</row>									            
 									            </rows>
 								            </grid>

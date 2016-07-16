@@ -33,6 +33,9 @@
 													<label value="Divisi" />
 													<hbox>
 														
+														<textbox id="txtb_KodeDivisi" 
+															  maxlength="50" width="100px" />
+														
 														<listbox id="lbox_Divisi" mold="select"
 															multiple="false" rows="1" width="250px">															
 														</listbox>	

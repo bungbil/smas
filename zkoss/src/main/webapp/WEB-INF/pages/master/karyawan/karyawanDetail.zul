@@ -78,12 +78,19 @@
 																<label value="*" style="color:red;font-size:10px" />
 															</hbox>
 															
-																<textbox id="txtb_Ktp"
-																	value="@{controller.karyawan.ktp}" readonly="true" constraint="no empty" maxlength="100"
-																	hflex="1" />
-																
+															<textbox id="txtb_Ktp"
+																value="@{controller.karyawan.ktp}" readonly="true" constraint="no empty" maxlength="100"
+																hflex="1" />
 															
-														</row>													
+														</row>	
+														<row>
+															<label value="Jenis Kelamin"/>									            													      		
+															<combobox id="cmb_JenisKelamin" width="150px" disabled="true">										                    
+											                        <comboitem label="Pria" value="Pria"/>
+											                        <comboitem label="Wanita" value="Wanita"/>
+											                        <comboitem label="Lain-Lain" value="Lain-Lain"/>											                        										                   
+											                </combobox>
+														</row>												
 														<row>
 															<hbox>
 																<label

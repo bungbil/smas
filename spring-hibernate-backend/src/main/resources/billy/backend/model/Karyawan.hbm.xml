@@ -45,6 +45,9 @@
 		<property name="catatan" type="string">
 			<column name="catatan" length="1000" />
 		</property>	
+		<property name="jenisKelamin" type="string">
+			<column name="jenis_kelamin" length="20" />
+		</property>
 		<property name="profileImage" type="binary">
             <column name="profile_image" />
         </property>

@@ -49,6 +49,7 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
   protected Decimalbox txb_NilaiTagihan;
   protected Listbox lbox_Status;
   protected Listbox lbox_Kolektor;
+  protected Textbox txtb_KodeKolektor;
   protected Datebox txtb_tglPembayaran; // autowired
   protected Decimalbox txtb_Pembayaran;
   protected Textbox txtb_Keterangan; // autowired
@@ -136,7 +137,7 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
     txtb_tglPembayaran.setDisabled(b);
     txtb_Pembayaran.setReadonly(b);
     txtb_Keterangan.setReadonly(b);
-
+    txtb_KodeKolektor.setReadonly(b);
   }
 
   public void doRefresh() {
@@ -171,25 +172,25 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
 
   }
 
+  public AnnotateDataBinder getBinder() {
+    return this.binder;
+  }
+
   // +++++++++++++++++++++++++++++++++++++++++++++++++ //
   // ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
   // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
 
-  public AnnotateDataBinder getBinder() {
-    return this.binder;
-  }
-
   public KaryawanService getKaryawanService() {
     return karyawanService;
   }
-
 
   /* Master BEANS */
   public Piutang getPiutang() {
     // STORED IN THE module's MainController
     return getPiutangMainCtrl().getSelectedPiutang();
   }
+
 
   public PiutangMainCtrl getPiutangMainCtrl() {
     return this.piutangMainCtrl;
@@ -211,6 +212,19 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
 
   public StatusService getStatusService() {
     return statusService;
+  }
+
+  public void onChange$txtb_KodeKolektor(Event event) throws InterruptedException {
+    if (txtb_KodeKolektor.getValue() != null) {
+      ListModelList lml = (ListModelList) lbox_Kolektor.getModel();
+      Karyawan karyawan =
+          getKaryawanService().getKaryawanByKodeKaryawan(txtb_KodeKolektor.getValue().trim());
+      if (karyawan != null) {
+        lbox_Kolektor.setSelectedIndex(lml.indexOf(karyawan));
+      } else {
+        lbox_Kolektor.setSelectedIndex(-1);
+      }
+    }
   }
 
 

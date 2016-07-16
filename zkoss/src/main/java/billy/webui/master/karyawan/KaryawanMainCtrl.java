@@ -480,6 +480,11 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
         getKaryawanDetailCtrl().getKaryawan().setSupervisorDivisi(karyawan);
       }
 
+      if (getKaryawanDetailCtrl().cmb_JenisKelamin.getValue() != null) {
+        String jenisKelamin = getKaryawanDetailCtrl().cmb_JenisKelamin.getValue();
+        getKaryawanDetailCtrl().getKaryawan().setJenisKelamin(jenisKelamin);
+      }
+
       // save image to database
       Image profileImage = getKaryawanDetailCtrl().profileImage.getContent();
       if (profileImage != null) {

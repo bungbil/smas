@@ -13,6 +13,7 @@ import org.zkoss.zkplus.databind.AnnotateDataBinder;
 import org.zkoss.zkplus.databind.BindingListModelList;
 import org.zkoss.zul.Borderlayout;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Filedownload;
 import org.zkoss.zul.Image;
@@ -66,6 +67,7 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
   protected Radio radioStatusPusat;
   protected Radio radioStatusDaerah;
 
+  protected Combobox cmb_JenisKelamin;
   protected Button uploadProfile;
   protected Button uploadKtp;
   protected Button downloadProfile;
@@ -162,6 +164,7 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
     uploadKtp.setDisabled(b);
     downloadProfile.setDisabled(b);
     downloadKtp.setDisabled(b);
+    cmb_JenisKelamin.setDisabled(b);
   }
 
   public void doRefresh() {
@@ -174,6 +177,12 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
       JobType jobType =
           getJobTypeService().getJobTypeByID(getSelectedKaryawan().getJobType().getId());
       lbox_JobType.setSelectedIndex(lml.indexOf(jobType));
+    }
+
+    if (getSelectedKaryawan().getJenisKelamin() != null) {
+      cmb_JenisKelamin.setValue(getSelectedKaryawan().getJenisKelamin());
+    } else {
+      cmb_JenisKelamin.setValue("Pria");
     }
 
     loadListBox();

@@ -65,17 +65,7 @@
 							                    		<label />	
 									                	<label value="Status"/>
 									                    <listbox id="lbox_Status" mold="select" disabled="true"
-																multiple="false" rows="1" hflex="1" width="100px" xmlns:w="client">
-																<attribute w:name="doBlur_"><![CDATA[
-														            function(evt) {
-														                this.$doBlur_(evt);
-														                if (this.$n().value == '') {
-														                    zAu.wrongValue_(this, 'Please select.....');
-														                } else {
-														                    zAu.cmd0.clearWrongValue(this.uuid);
-														                }
-														            }
-														        ]]></attribute>															
+																multiple="false" rows="1" hflex="1" width="100px" xmlns:w="client">																									
 														</listbox>										                    						                    				                    									                    									                    											                     
 									                </row>
 													<row>
@@ -87,19 +77,13 @@
 													</row>
 													<row>
 														<label id="label_Kolektor" value="Kolektor" />
-														<listbox id="lbox_Kolektor" mold="select" disabled="true"
-																multiple="false" rows="1" width="300px" xmlns:w="client">
-																<attribute w:name="doBlur_"><![CDATA[
-														            function(evt) {
-														                this.$doBlur_(evt);
-														                if (this.$n().value == '') {
-														                    zAu.wrongValue_(this, 'Please select.....');
-														                } else {
-														                    zAu.cmd0.clearWrongValue(this.uuid);
-														                }
-														            }
-														        ]]></attribute>															
-														</listbox>		
+														<hbox>
+															<textbox id="txtb_KodeKolektor" value="@{controller.piutang.kolektor.kodeKaryawan}"
+																	readonly="true"  maxlength="50" width="100px" />
+															<listbox id="lbox_Kolektor" mold="select" disabled="true"
+																	multiple="false" rows="1" width="300px" xmlns:w="client">																											
+															</listbox>
+														</hbox>		
 														<label />
 														<label />
 														<label />

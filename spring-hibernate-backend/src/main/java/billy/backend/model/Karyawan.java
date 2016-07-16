@@ -1,8 +1,7 @@
 package billy.backend.model;
 
+import java.util.Arrays;
 import java.util.Date;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class Karyawan implements java.io.Serializable, Entity {
 
@@ -14,6 +13,7 @@ public class Karyawan implements java.io.Serializable, Entity {
   private String namaPanggilan;
   private String namaKtp;
   private String ktp;
+  private String jenisKelamin;
   private Date tanggalLahir;
   private String telepon;
   private String handphone;
@@ -83,10 +83,14 @@ public class Karyawan implements java.io.Serializable, Entity {
     return id;
   }
 
-
   public String getInisialDivisi() {
     return inisialDivisi;
   }
+
+  public String getJenisKelamin() {
+    return jenisKelamin;
+  }
+
 
   public JobType getJobType() {
     return jobType;
@@ -187,6 +191,10 @@ public class Karyawan implements java.io.Serializable, Entity {
     this.inisialDivisi = inisialDivisi;
   }
 
+  public void setJenisKelamin(String jenisKelamin) {
+    this.jenisKelamin = jenisKelamin;
+  }
+
   public void setJobType(JobType jobType) {
     this.jobType = jobType;
   }
@@ -253,7 +261,13 @@ public class Karyawan implements java.io.Serializable, Entity {
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this).append("id", getId()).toString();
+    return String
+        .format(
+            "Karyawan [id=%s, version=%s, kodeKaryawan=%s, namaPanggilan=%s, namaKtp=%s, ktp=%s, jenisKelamin=%s, tanggalLahir=%s, telepon=%s, handphone=%s, email=%s, alamat=%s, jobType=%s, inisialDivisi=%s, statusDivisi=%s, supervisorDivisi=%s, lastUpdate=%s, updatedBy=%s, catatan=%s, profileImage=%s, ktpImage=%s, tanggalMulaiKerja=%s, tanggalBerhentiKerja=%s]",
+            id, version, kodeKaryawan, namaPanggilan, namaKtp, ktp, jenisKelamin, tanggalLahir,
+            telepon, handphone, email, alamat, jobType, inisialDivisi, statusDivisi,
+            supervisorDivisi, lastUpdate, updatedBy, catatan, Arrays.toString(profileImage),
+            Arrays.toString(ktpImage), tanggalMulaiKerja, tanggalBerhentiKerja);
   }
 
 }
