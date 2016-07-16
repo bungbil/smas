@@ -148,7 +148,7 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
       if (getSelectedPenjualan().getTotal() != null) {
         BigDecimal total = getSelectedPenjualan().getTotal();
         for (PenjualanDetail pd : listPenjualanDetail) {
-          BigDecimal pddp = (pd.getTotal().divide(total)).multiply(dp);
+          BigDecimal pddp = (pd.getTotal().divide(total, 2, RoundingMode.HALF_UP)).multiply(dp);
           pd.setDownPayment(pddp);
         }
       }
