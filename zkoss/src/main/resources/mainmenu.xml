@@ -110,37 +110,49 @@
 	</menu>
 	<!-- Transaction MenuTree -->	
 	<menu id="menu_Category_Transaction" rightName="menuCat_Transaction" >
-		<menuItem id="menu_Item_Penjualan" zulNavigation="/WEB-INF/pages/transaction/penjualan/penjualanMain.zul"
-			iconName="/images/icons/view.gif" rightName="menuItem_Transaction_Penjualan"  /> 
-		<menuItem id="menu_Item_ApprovalPenjualan" zulNavigation="/WEB-INF/pages/transaction/approvalpenjualan/approvalPenjualanMain.zul"
-			iconName="/images/icons/view.gif" rightName="menuItem_Transaction_ApprovalPenjualan"/>	
-		<menuItem id="menu_Item_CetakPenjualan" zulNavigation="/WEB-INF/pages/transaction/cetakpenjualan/cetakPenjualanMain.zul"
+		<menu id="menu_Category_Penjualan" >
+			<menuItem id="menu_Item_Penjualan" zulNavigation="/WEB-INF/pages/transaction/penjualan/penjualanMain.zul"
+				iconName="/images/icons/view.gif" rightName="menuItem_Transaction_Penjualan"  /> 
+			<menuItem id="menu_Item_ApprovalPenjualan" zulNavigation="/WEB-INF/pages/transaction/penjualan/approval/approvalPenjualanMain.zul"
+				iconName="/images/icons/view.gif" rightName="menuItem_Transaction_ApprovalPenjualan"/>	
+			<menuItem id="menu_Item_CetakPenjualan" zulNavigation="/WEB-INF/pages/transaction/penjualan/cetak/cetakPenjualanMain.zul"
 			iconName="/images/icons/view.gif" rightName="menuItem_Transaction_CetakPenjualan" />	
-			
-	 	<menuItem id="menu_Item_Piutang" zulNavigation="/WEB-INF/pages/transaction/piutang/piutangMain.zul"
-			iconName="/images/icons/view.gif" rightName="menuItem_Transaction_Piutang" />
-	
-		<menuItem id="menu_Item_ApprovalPiutang" zulNavigation="/WEB-INF/pages/transaction/approvalpiutang/approvalPiutangMain.zul"
-			iconName="/images/icons/view.gif"  rightName="menuItem_Transaction_ApprovalPiutang" />
-		<menuItem id="menu_Item_CetakPiutang" zulNavigation="/WEB-INF/pages/transaction/cetakpiutang/cetakPiutangMain.zul"
-			iconName="/images/icons/view.gif" rightName="menuItem_Transaction_CetakPiutang" />	
-			
-			
-		<!--<menuItem id="menu_Item_Kolektor" zulNavigation="/WEB-INF/pages/transaction/kolektor/kolektorList.zul"
-			iconName="/images/icons/view.gif" />
+		</menu>	
+		<menu id="menu_Category_Piutang" >
+		 	<menuItem id="menu_Item_Piutang" zulNavigation="/WEB-INF/pages/transaction/piutang/piutangMain.zul"
+				iconName="/images/icons/view.gif" rightName="menuItem_Transaction_Piutang" />	
+			<menuItem id="menu_Item_ApprovalPiutang" zulNavigation="/WEB-INF/pages/transaction/piutang/approval/approvalPiutangMain.zul"
+				iconName="/images/icons/view.gif"  rightName="menuItem_Transaction_ApprovalPiutang" />
+			<menuItem id="menu_Item_CetakPiutang" zulNavigation="/WEB-INF/pages/transaction/piutang/cetak/cetakPiutangMain.zul"
+				iconName="/images/icons/view.gif" rightName="menuItem_Transaction_CetakPiutang" />	
+		</menu>	
+		<menu id="menu_Category_Kolektor" >
+			<menuItem id="menu_Item_PenerimaanPembayaranKolektor" zulNavigation="/WEB-INF/pages/transaction/kolektor/penerimaanpembayaran/penerimaanPembayaranMain.zul"
+				iconName="/images/icons/view.gif" rightName="menuItem_Transaction_PenerimaanPembayaran" />
+			<menuItem id="menu_Item_InputTglBawaKolektor" zulNavigation="/WEB-INF/pages/transaction/kolektor/inputtglbawa/inputTglBawaMain.zul"
+				iconName="/images/icons/view.gif" rightName="menuItem_Transaction_InputTglBawa" />			
+			<menuItem id="menu_Item_CetakTandaTerimaKwitansi" zulNavigation="/WEB-INF/pages/transaction/kolektor/cetak/tandaTerimaKwitansiMain.zul"
+				iconName="/images/icons/view.gif" rightName="menuItem_Transaction_CetakTandaTerimaKwitansi" />
+			<menuItem id="menu_Item_CetakPembayaranKwitansi" zulNavigation="/WEB-INF/pages/transaction/kolektor/cetak/pembayaranKwitansiMain.zul"
+				iconName="/images/icons/view.gif" rightName="menuItem_Transaction_CetakPembayaranKwitansi" />
+			<menuItem id="menu_Item_CetakSisaKwitansi" zulNavigation="/WEB-INF/pages/transaction/kolektor/cetak/sisaKwitansiMain.zul"
+				iconName="/images/icons/view.gif" rightName="menuItem_Transaction_CetakSisaKwitansi" />
+		</menu>	
+		<!--
 		<menuItem id="menu_Item_TabunganSales" zulNavigation="/WEB-INF/pages/transaction/tabungansales/tabungansalesList.zul"
 			iconName="/images/icons/view.gif" />-->
 	</menu>
 	<!-- Report MenuTree -->
 	<menu id="menu_Category_Report" >
-		<menuItem id="menu_Item_SummaryPenjualan" zulNavigation="/WEB-INF/pages/report/summarypenjualan/summaryPenjualanMain.zul"
-			iconName="/images/icons/view.gif" rightName="menuItem_Report_SummaryPenjualan"/>
-		<menuItem id="menu_Item_PerhitunganKomisi" zulNavigation="/WEB-INF/pages/report/perhitungankomisi/perhitunganKomisiMain.zul"
-			iconName="/images/icons/view.gif" rightName="menuItem_Report_PerhitunganKomisi"/>
-		<menuItem id="menu_Item_Komisi" zulNavigation="/WEB-INF/pages/report/komisi/komisiMain.zul"
-			iconName="/images/icons/view.gif" rightName="menuItem_Report_Komisi"/>
-		<menuItem id="menu_Item_Tabungan" zulNavigation="/WEB-INF/pages/report/tabungan/summaryTabunganMain.zul"
-			iconName="/images/icons/view.gif"  rightName="menuItem_Report_Tabungan"/>
+		
+			<menuItem id="menu_Item_SummaryPenjualan" zulNavigation="/WEB-INF/pages/report/summarypenjualan/summaryPenjualanMain.zul"
+				iconName="/images/icons/view.gif" rightName="menuItem_Report_SummaryPenjualan"/>
+			<menuItem id="menu_Item_PerhitunganKomisi" zulNavigation="/WEB-INF/pages/report/perhitungankomisi/perhitunganKomisiMain.zul"
+				iconName="/images/icons/view.gif" rightName="menuItem_Report_PerhitunganKomisi"/>
+			<menuItem id="menu_Item_Komisi" zulNavigation="/WEB-INF/pages/report/komisi/komisiMain.zul"
+				iconName="/images/icons/view.gif" rightName="menuItem_Report_Komisi"/>
+			<menuItem id="menu_Item_Tabungan" zulNavigation="/WEB-INF/pages/report/tabungan/summaryTabunganMain.zul"
+				iconName="/images/icons/view.gif"  rightName="menuItem_Report_Tabungan"/>
 		
 		
 		<menuItem id="menu_Item_ReportPenerimaanPembayaran" zulNavigation="/WEB-INF/pages/report/penerimaanpembayaran/penerimaanPembayaranMain.zul"

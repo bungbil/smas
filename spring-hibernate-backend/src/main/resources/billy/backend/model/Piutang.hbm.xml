@@ -60,6 +60,25 @@
 		<property name="approvedBy" type="string">
 			<column name="approved_by" length="50" />
 		</property>			
+		<property name="fullPayment" type="boolean">
+			<column name="full_payment"  />
+		</property>
+		<property name="tglBawaKolektor" type="date">
+			<column name="tgl_bawa"/>
+		</property>
+		<property name="diskon" type="big_decimal">
+			<column name="diskon" precision="12" />
+		</property>
+		<property name="kekuranganBayar" type="big_decimal">
+			<column name="kekurangan_bayar" precision="12" />
+		</property>
+		<many-to-one name="statusFinal" class="billy.backend.model.Status"
+			fetch="select" lazy="false">
+			<column name="status_final_id" not-null="false" />
+		</many-to-one>
+		<property name="aktif" type="boolean">
+			<column name="aktif"  />
+		</property>
 		<property name="lastUpdate" type="timestamp">
 			<column name="last_update" length="29" />
 		</property>	

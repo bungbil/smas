@@ -37,6 +37,11 @@ public class PiutangServiceImpl implements PiutangService {
       cal.setTime(tglJatuhTempo);
       Piutang piutang = getNewPiutang();
 
+      if (i == 2) {
+        piutang.setAktif(true);
+      } else {
+        piutang.setAktif(false);
+      }
       if (i > 2) {
         cal.add(Calendar.MONTH, i - 2);
         tglJatuhTempo = cal.getTime();
@@ -118,6 +123,11 @@ public class PiutangServiceImpl implements PiutangService {
   @Override
   public Piutang getNewPiutang() {
     return getPiutangDAO().getNewPiutang();
+  }
+
+  @Override
+  public Piutang getPiutangByNoKuitansi(String data) {
+    return getPiutangDAO().getPiutangByNoKuitansi(data);
   }
 
   public PiutangDAO getPiutangDAO() {

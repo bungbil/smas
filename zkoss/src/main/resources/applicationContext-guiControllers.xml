@@ -537,7 +537,7 @@
 		<property name="statusService" ref="statusService" />
 	</bean>
 	
-	<!-- Piutang -->
+	<!-- Approval Piutang -->
 	<bean id="approvalPiutangMainCtrl" class="billy.webui.transaction.piutang.approval.ApprovalPiutangMainCtrl" parent="basisCtrl" scope="prototype">		
 		<property name="piutangService" ref="piutangService" />
 		<property name="approvalPiutangListCtrl" ref="approvalPiutangListCtrl" />
@@ -568,6 +568,21 @@
 	<bean id="reportPiutangMainCtrl" class="billy.webui.report.piutang.ReportPiutangMainCtrl" parent="basisCtrl" scope="prototype">
 		<property name="piutangService" ref="piutangService" />		
 		<property name="karyawanService" ref="karyawanService" />		
+	</bean>
+	
+	
+	<!-- Kolektor InputTglBawa -->
+	<bean id="inputTglBawaMainCtrl" class="billy.webui.transaction.kolektor.inputtglbawa.InputTglBawaMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="piutangService" ref="piutangService" />		
+		<property name="karyawanService" ref="karyawanService" />
+		<property name="statusService" ref="statusService" />
+	</bean>
+	
+	<!-- Kolektor PenerimaanPembayaran -->
+	<bean id="penerimaanPembayaranMainCtrl" class="billy.webui.transaction.kolektor.penerimaanpembayaran.PenerimaanPembayaranMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="piutangService" ref="piutangService" />		
+		<property name="karyawanService" ref="karyawanService" />
+		<property name="statusService" ref="statusService" />
 	</bean>
 </beans>
 

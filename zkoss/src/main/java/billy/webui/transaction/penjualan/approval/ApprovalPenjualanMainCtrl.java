@@ -888,7 +888,7 @@ public class ApprovalPenjualanMainCtrl extends GFCBaseCtrl implements Serializab
     if (tabPanelApprovalPenjualanList != null) {
       ZksampleCommonUtils.createTabPanelContent(this.tabPanelApprovalPenjualanList, this,
           "ModuleMainController",
-          "/WEB-INF/pages/transaction/approvalpenjualan/approvalPenjualanList.zul");
+          "/WEB-INF/pages/transaction/penjualan/approval/approvalPenjualanList.zul");
     }
 
     // init the buttons for editMode
@@ -919,7 +919,7 @@ public class ApprovalPenjualanMainCtrl extends GFCBaseCtrl implements Serializab
     if (tabPanelApprovalPenjualanDetail != null) {
       ZksampleCommonUtils.createTabPanelContent(this.tabPanelApprovalPenjualanDetail, this,
           "ModuleMainController",
-          "/WEB-INF/pages/transaction/approvalpenjualan/approvalPenjualanDetail.zul");
+          "/WEB-INF/pages/transaction/penjualan/approval/approvalPenjualanDetail.zul");
     }
   }
 
@@ -943,7 +943,7 @@ public class ApprovalPenjualanMainCtrl extends GFCBaseCtrl implements Serializab
     if (tabPanelApprovalPenjualanList != null) {
       ZksampleCommonUtils.createTabPanelContent(this.tabPanelApprovalPenjualanList, this,
           "ModuleMainController",
-          "/WEB-INF/pages/transaction/approvalpenjualan/approvalPenjualanList.zul");
+          "/WEB-INF/pages/transaction/penjualan/approval/approvalPenjualanList.zul");
     }
 
   }

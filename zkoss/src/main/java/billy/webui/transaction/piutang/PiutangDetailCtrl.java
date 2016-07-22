@@ -13,6 +13,7 @@ import org.zkoss.zkplus.databind.AnnotateDataBinder;
 import org.zkoss.zkplus.databind.BindingListModelList;
 import org.zkoss.zul.Borderlayout;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Decimalbox;
 import org.zkoss.zul.Intbox;
@@ -53,6 +54,11 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
   protected Datebox txtb_tglPembayaran; // autowired
   protected Decimalbox txtb_Pembayaran;
   protected Textbox txtb_Keterangan; // autowired
+
+  protected Datebox txtb_tglBawaKolektor;
+  protected Decimalbox txtb_Diskon;
+  protected Combobox cmb_StatusFinal;
+
 
   protected Label label_butuhApproval;
   protected Textbox txtb_ReasonApproval;

@@ -36,6 +36,8 @@ public interface PiutangDAO {
 
   public Piutang getPiutangById(long id);
 
+  public Piutang getPiutangByNoKuitansi(String data);
+
   public List<Piutang> getPiutangsByPenjualan(Penjualan obj);
 
   public void save(Piutang entity);

@@ -27,6 +27,8 @@ public interface PiutangService {
 
   public Piutang getNewPiutang();
 
+  public Piutang getPiutangByNoKuitansi(String data);
+
   public List<Piutang> getPiutangsByPenjualan(Penjualan penjualan);
 
   public void saveOrUpdate(Piutang piutang);

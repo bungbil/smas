@@ -114,6 +114,23 @@ public class PiutangDAOImpl extends BillyBasisDAO<Piutang> implements PiutangDAO
 
   @SuppressWarnings("unchecked")
   @Override
+  public Piutang getPiutangByNoKuitansi(String data) {
+    List<Piutang> result;
+
+    DetachedCriteria criteria = DetachedCriteria.forClass(Piutang.class);
+    criteria.add(Restrictions.eq("noKuitansi", data));
+
+    result = getHibernateTemplate().findByCriteria(criteria);
+    if (result.size() > 0) {
+      Piutang piutang = result.get(0);
+      return piutang;
+    }
+
+    return null;
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
   public List<Piutang> getPiutangsByPenjualan(Penjualan entity) {
     List<Piutang> result;
 

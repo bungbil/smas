@@ -907,7 +907,7 @@ public class ApprovalPiutangMainCtrl extends GFCBaseCtrl implements Serializable
     if (tabPanelApprovalPiutangList != null) {
       ZksampleCommonUtils.createTabPanelContent(this.tabPanelApprovalPiutangList, this,
           "ModuleMainController",
-          "/WEB-INF/pages/transaction/approvalpiutang/approvalPiutangList.zul");
+          "/WEB-INF/pages/transaction/piutang/approval/approvalPiutangList.zul");
     }
 
     // init the buttons for editMode
@@ -938,7 +938,7 @@ public class ApprovalPiutangMainCtrl extends GFCBaseCtrl implements Serializable
     if (tabPanelApprovalPiutangDetail != null) {
       ZksampleCommonUtils.createTabPanelContent(this.tabPanelApprovalPiutangDetail, this,
           "ModuleMainController",
-          "/WEB-INF/pages/transaction/approvalpiutang/approvalPiutangDetail.zul");
+          "/WEB-INF/pages/transaction/piutang/approval/approvalPiutangDetail.zul");
     }
   }
 
@@ -962,7 +962,7 @@ public class ApprovalPiutangMainCtrl extends GFCBaseCtrl implements Serializable
     if (tabPanelApprovalPiutangList != null) {
       ZksampleCommonUtils.createTabPanelContent(this.tabPanelApprovalPiutangList, this,
           "ModuleMainController",
-          "/WEB-INF/pages/transaction/approvalpiutang/approvalPiutangList.zul");
+          "/WEB-INF/pages/transaction/piutang/approval/approvalPiutangList.zul");
     }
 
   }

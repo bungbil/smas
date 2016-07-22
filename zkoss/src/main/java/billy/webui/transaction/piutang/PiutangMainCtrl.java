@@ -615,6 +615,7 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
         Karyawan supervisor = karyawan.getSupervisorDivisi();
         soPiutang.addFilter(new Filter("divisi.supervisorDivisi.id", supervisor.getId(),
             Filter.OP_EQUAL));
+        soPiutang.addFilter(new Filter("aktif", true, Filter.OP_EQUAL));
       }
     }
 
@@ -858,6 +859,7 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
           Karyawan supervisor = karyawan.getSupervisorDivisi();
           soPiutang.addFilter(new Filter("penjualan.divisi.supervisorDivisi.id",
               supervisor.getId(), Filter.OP_EQUAL));
+          soPiutang.addFilter(new Filter("aktif", true, Filter.OP_EQUAL));
         }
       }
 

@@ -168,6 +168,7 @@ public class PiutangListCtrl extends GFCBaseListCtrl<Piutang> implements Seriali
         Karyawan supervisor = karyawan.getSupervisorDivisi();
         searchObj.addFilter(new Filter("penjualan.divisi.supervisorDivisi.id", supervisor.getId(),
             Filter.OP_EQUAL));
+        searchObj.addFilter(new Filter("aktif", true, Filter.OP_EQUAL));
       }
     }
 
