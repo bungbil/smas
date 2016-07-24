@@ -584,6 +584,21 @@
 		<property name="karyawanService" ref="karyawanService" />
 		<property name="statusService" ref="statusService" />
 	</bean>
+	
+	<!-- Cetak Kolektor -->
+	<bean id="pembayaranKwitansiMainCtrl" class="billy.webui.transaction.kolektor.cetak.PembayaranKwitansiMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="piutangService" ref="piutangService" />		
+		<property name="karyawanService" ref="karyawanService" />
+	</bean>
+	<bean id="tandaTerimaKwitansiMainCtrl" class="billy.webui.transaction.kolektor.cetak.TandaTerimaKwitansiMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="piutangService" ref="piutangService" />		
+		<property name="karyawanService" ref="karyawanService" />
+	</bean>
+	<bean id="sisaKwitansiMainCtrl" class="billy.webui.transaction.kolektor.cetak.SisaKwitansiMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="piutangService" ref="piutangService" />		
+		<property name="karyawanService" ref="karyawanService" />
+	</bean>
+	
 </beans>
 
 	

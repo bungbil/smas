@@ -80,6 +80,29 @@ public class PiutangDAOImpl extends BillyBasisDAO<Piutang> implements PiutangDAO
 
   @SuppressWarnings("unchecked")
   @Override
+  public List<Piutang> getAllPiutangsByKolektorAndRangeDateTglBawa(Karyawan obj, Date startDate,
+      Date endDate) {
+    DetachedCriteria criteria = DetachedCriteria.forClass(Piutang.class);
+    criteria.add(Restrictions.ge("tglBawa", startDate));
+    criteria.add(Restrictions.le("tglBawa", endDate));
+    criteria.add(Restrictions.eq("kolektor.id", obj.getId()));
+    return getHibernateTemplate().findByCriteria(criteria);
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Piutang> getAllPiutangsByKolektorAndRangeDateTglBawaBelumBayar(Karyawan obj,
+      Date startDate, Date endDate) {
+    DetachedCriteria criteria = DetachedCriteria.forClass(Piutang.class);
+    criteria.add(Restrictions.ge("tglBawa", startDate));
+    criteria.add(Restrictions.le("tglBawa", endDate));
+    criteria.add(Restrictions.isNull("tglPembayaran"));
+    criteria.add(Restrictions.eq("kolektor.id", obj.getId()));
+    return getHibernateTemplate().findByCriteria(criteria);
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
   public List<Piutang> getAllPiutangsByKolektorAndRangeDateTglPembayaran(Karyawan obj,
       Date startDate, Date endDate) {
     DetachedCriteria criteria = DetachedCriteria.forClass(Piutang.class);

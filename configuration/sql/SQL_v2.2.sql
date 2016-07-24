@@ -36,46 +36,22 @@ alter table karyawan
    add column jenis_kelamin			varchar(20)		 null ;
    
 
-   
 
-/* Penerimaan Pembayaran Kolektor*/
-/* --> Page Penerimaan Pembayaran */
+
 INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
-(266, 2, 'menuItem_Transaction_PenerimaanPembayaran', 0),
-(267, 0, 'windowPenerimaanPembayaranList', 0),
-(268, 0, 'windowPenerimaanPembayaranDetail', 0),
-/* window_PenerimaanPembayaranList Buttons*/
-(269, 6, 'button_PenerimaanPembayaranList_Search', 0),
-/* window_PenerimaanPembayaranDialog BUTTONS */
-(270, 6, 'button_PenerimaanPembayaranMain_btnNew', 0),
-(271, 6, 'button_PenerimaanPembayaranMain_btnEdit', 0),
-(272, 6, 'button_PenerimaanPembayaranMain_btnDelete', 0),
-(273, 6, 'button_PenerimaanPembayaranMain_btnSave', 0),
-(274, 6, 'button_PenerimaanPembayaranMain_btnClose', 0),
-/* PenerimaanPembayaran navigation buttons */
-(275, 6, 'button_PenerimaanPembayaranMain_btnCancel', 0),
-(276, 6, 'button_PenerimaanPembayaranMain_btnFirst', 0),
-(277, 6, 'button_PenerimaanPembayaranMain_btnPrevious', 0),
-(278, 6, 'button_PenerimaanPembayaranMain_btnNext', 0),
-(279, 6, 'button_PenerimaanPembayaranMain_btnLast', 0);
-
+(266, 2, 'menuItem_Transaction_CetakTandaTerimaKwitansi', 0),
+(267, 6, 'button_CetakTandaTerimaKwitansiMain_btnCetak', 0),
+(268, 2, 'menuItem_Transaction_CetakPembayaranKwitansi', 0),
+(269, 6, 'button_CetakPembayaranKwitansiMain_btnCetak', 0),
+(270, 2, 'menuItem_Transaction_CetakSisaKwitansi', 0),
+(271, 6, 'button_CetakSisaKwitansiMain_btnCetak', 0);
 INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
 (266, 1, 266, 0),
 (267, 1, 267, 0),
 (268, 1, 268, 0),
 (269, 1, 269, 0),
 (270, 1, 270, 0),
-(271, 1, 271, 0),
-(272, 1, 272, 0),
-(273, 1, 273, 0),
-(274, 1, 274, 0),
-(275, 1, 275, 0),
-(276, 1, 276, 0),
-(277, 1, 277, 0),
-(278, 1, 278, 0),
-(279, 1, 279, 0);         
-
-
+(271, 1, 271, 0);
 
 INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
 (280, 2, 'menuItem_Transaction_InputTglBawa', 0),
@@ -97,5 +73,15 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 
 INSERT INTO STATUS (STATUS_ID,DESKRIPSI_STATUS,VERSION) values
 (8,'FINAL',1);
-   
+
+/*BELUM DIPAKE*/
+INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
+(272, 1, 272, 0),
+(273, 1, 273, 0),
+(274, 1, 274, 0),
+(275, 1, 275, 0),
+(276, 1, 276, 0),
+(277, 1, 277, 0),
+(278, 1, 278, 0),
+(279, 1, 279, 0);         
    

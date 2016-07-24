@@ -25,6 +25,12 @@ public interface PiutangDAO {
   public List<Piutang> getAllPiutangsByKaryawanAndRangeDateTglPembayaran(Karyawan obj,
       Date startDate, Date endDate);
 
+  public List<Piutang> getAllPiutangsByKolektorAndRangeDateTglBawa(Karyawan obj, Date startDate,
+      Date endDate);
+
+  public List<Piutang> getAllPiutangsByKolektorAndRangeDateTglBawaBelumBayar(Karyawan obj,
+      Date startDate, Date endDate);
+
   public List<Piutang> getAllPiutangsByKolektorAndRangeDateTglPembayaran(Karyawan obj,
       Date startDate, Date endDate);
 

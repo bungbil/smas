@@ -108,6 +108,19 @@ public class PiutangServiceImpl implements PiutangService {
   }
 
   @Override
+  public List<Piutang> getAllPiutangsByKolektorAndRangeDateTglBawa(Karyawan obj, Date startDate,
+      Date endDate) {
+    return getPiutangDAO().getAllPiutangsByKolektorAndRangeDateTglBawa(obj, startDate, endDate);
+  }
+
+  @Override
+  public List<Piutang> getAllPiutangsByKolektorAndRangeDateTglBawaBelumBayar(Karyawan obj,
+      Date startDate, Date endDate) {
+    return getPiutangDAO().getAllPiutangsByKolektorAndRangeDateTglBawaBelumBayar(obj, startDate,
+        endDate);
+  }
+
+  @Override
   public List<Piutang> getAllPiutangsByKolektorAndRangeDateTglPembayaran(Karyawan obj,
       Date startDate, Date endDate) {
     return getPiutangDAO().getAllPiutangsByKolektorAndRangeDateTglPembayaran(obj, startDate,

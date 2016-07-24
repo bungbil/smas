@@ -8,7 +8,7 @@
 	xmlns:w="http://www.zkoss.org/2005/zk/client"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
-	<window id="windowCetakPenjualanMain" apply="${cetakPenjualanMainCtrl}"
+	<window id="windowSisaKwitansiMain" apply="${sisaKwitansiMainCtrl}"
 		border="none" width="100%">
 
 		<div sclass="z-toolbar" style="padding:0">
@@ -20,7 +20,7 @@
 							<panel border="none">
 								<panelchildren>
 									<groupbox mold="3d" closable="false">
-										<caption image="/images/icons/view.gif" label="Cetak Penjualan" />
+										<caption image="/images/icons/view.gif" label="Sisa Kwitansi Kolektor" />
 				
 										<grid sclass="GridLayoutNoBorder" fixedLayout="true"
 											style="border:0px; padding-left:5px; padding-right:5px;">
@@ -30,57 +30,42 @@
 											</columns>
 											<rows>
 												<row>
-													<label value="Divisi" />
-													<hbox>
-														
-														<textbox id="txtb_KodeDivisi" 
-															  maxlength="50" width="100px" />
-														
-														<listbox id="lbox_Divisi" mold="select"
+													<label value="Kolektor" />
+													<hbox>														
+														<textbox id="txtb_KodeKolektor" 
+															  maxlength="50" width="100px" />														
+														<listbox id="lbox_Kolektor" mold="select"
 															multiple="false" rows="1" width="250px">															
 														</listbox>	
-														<button id="btnReset" label="Reset"  width="100px" 	/>
-												
-													</hbox>
-													
-													
+														<button id="btnReset" label="Reset"  width="100px" 	/>												
+													</hbox>																										
 												</row>
 												<row>
-													<label value="No Faktur Awal (Full No Faktur)" />
-													<textbox id="txtb_NoFakturAwal"
-															width="150px" constraint="no empty" maxlength="10"/>
+													<label value="Tanggal Bawa Awal" />
+													<datebox id="txtb_tanggalAwal"
+															format="dd/MM/yyyy" width="150px"/>
 												</row>
 												<row>
-													<label value="No Faktur Akhir (Full No Faktur)" />
-													<textbox id="txtb_NoFakturAkhir" 
-															width="150px" constraint="no empty" maxlength="10"/>
+													<label value="Tanggal Bawa Akhir" />
+													<datebox id="txtb_tanggalAkhir" 
+															format="dd/MM/yyyy" width="150px"/>
 												</row>
 												<row>
 													<label value="Pilih Printer Dot Matrix" />
-													<hbox>
-														
+													<hbox>														
 														<listbox id="lbox_Printer" mold="select"
 															multiple="false" rows="1" width="250px">															
 														</listbox>	
-														<button id="btnRefeshPrinter" label="Cari Printer"  width="100px" 	/>
-												
+														<button id="btnRefeshPrinter" label="Cari Printer"  width="100px" 	/>												
 													</hbox>
 												</row>
 												<row>
 													<label />
-													<button id="btnCetakFaktur" label="Cetak Faktur"  	/>
-												</row>
-												<row>
-													<label />
-													<button id="btnCetakKuitansiA2" label="Cetak Kwitansi A2"  	/>
-												</row>
-												
+													<button id="btnCetak" label="Cetak Laporan"  	/>
+												</row>																							
 											</rows>
-										</grid>
-										
-									</groupbox>
-									
-									
+										</grid>										
+									</groupbox>																		
 								</panelchildren>
 							</panel>
 						</div>
