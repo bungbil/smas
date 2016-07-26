@@ -44,7 +44,7 @@ public class CetakPembayaranKwitansiTextPrinter extends Window implements Serial
   }
 
   private final int pageLength = 50;
-  private final int pageWidth = 100;
+  private final int pageWidth = 80;
   private BigDecimal totalTagih = BigDecimal.ZERO;
   private BigDecimal totalPembayaran = BigDecimal.ZERO;
   private BigDecimal totalAkhirTagih = BigDecimal.ZERO;
@@ -177,16 +177,16 @@ public class CetakPembayaranKwitansiTextPrinter extends Window implements Serial
     for (int i = startIndex; i < maxIndex; i++) {
       ReportKwitansi item = listItem.get(i);
 
-      int maxLengthNomor = 4;
+      int maxLengthNomor = 5;
       addWhiteSpace(sb, maxLengthNomor - item.getNo().length());
       sb.append(item.getNo());
-      addWhiteSpace(sb, 3);
+      addWhiteSpace(sb, 1);
 
-      int maxLengthNomorFaktur = 16;
+      int maxLengthNomorFaktur = 13;
       sb.append(item.getNoFaktur());
       addWhiteSpace(sb, maxLengthNomorFaktur - item.getNoFaktur().length());
 
-      int maxLengthNamaCustomer = 23;
+      int maxLengthNamaCustomer = 21;
       sb.append(item.getNamaCustomer());
       addWhiteSpace(sb, maxLengthNamaCustomer - item.getNamaCustomer().length());
 
@@ -198,7 +198,7 @@ public class CetakPembayaranKwitansiTextPrinter extends Window implements Serial
       // addWhiteSpace(sb, 16);
 
       String nilaiPembayaranStr = df.format(item.getNilaiPembayaran());
-      int maxLengthNilaiPembayaran = 16;
+      int maxLengthNilaiPembayaran = 18;
       addWhiteSpace(sb, maxLengthNilaiPembayaran - nilaiPembayaranStr.length());
       sb.append(nilaiPembayaranStr);
 
@@ -209,7 +209,7 @@ public class CetakPembayaranKwitansiTextPrinter extends Window implements Serial
       addWhiteSpace(sb, 3);
       String tglBayarStr = formatDate.format(item.getTglBayar());
       sb.append(tglBayarStr);
-
+      addNewLine(sb, 1);
 
       totalTagih = totalTagih.add(item.getNilaiTagih());
       totalAkhirTagih = totalAkhirTagih.add(item.getNilaiTagih());
@@ -226,15 +226,15 @@ public class CetakPembayaranKwitansiTextPrinter extends Window implements Serial
     addSingleBorder(sb, pageWidth);
     addNewLine(sb, 1);
 
-    addWhiteSpace(sb, 20);
+    addWhiteSpace(sb, 16);
     sb.append("Total per halaman");
-    int maxLengthTotalPerHal = 20;
+    int maxLengthTotalPerHal = 18;
     String totalTagihStr = df.format(totalTagih);
     addWhiteSpace(sb, maxLengthTotalPerHal - totalTagihStr.length());
     sb.append(totalTagihStr);
 
 
-    int maxLengthTotalBayarPerHal = 16;
+    int maxLengthTotalBayarPerHal = 18;
     String totalBayarStr = df.format(totalPembayaran);
     addWhiteSpace(sb, maxLengthTotalBayarPerHal - totalBayarStr.length());
     sb.append(totalBayarStr);
@@ -244,14 +244,14 @@ public class CetakPembayaranKwitansiTextPrinter extends Window implements Serial
     addSingleBorder(sb, pageWidth);
     addNewLine(sb, 1);
 
-    addWhiteSpace(sb, 20);
+    addWhiteSpace(sb, 16);
     sb.append("Total Akhir");
-    int maxLengthTotalAkhir = 30;
+    int maxLengthTotalAkhir = 24;
     String totalAkhirTagihStr = df.format(totalAkhirTagih);
     addWhiteSpace(sb, maxLengthTotalAkhir - totalAkhirTagihStr.length());
     sb.append(totalAkhirTagihStr);
 
-    int maxLengthTotalAkhirBayar = 16;
+    int maxLengthTotalAkhirBayar = 18;
     String totalAkhirBayarStr = df.format(totalAkhirPembayaran);
     addWhiteSpace(sb, maxLengthTotalAkhirBayar - totalAkhirBayarStr.length());
     sb.append(totalAkhirBayarStr);
@@ -277,7 +277,7 @@ public class CetakPembayaranKwitansiTextPrinter extends Window implements Serial
     String endDateStr = formatDate.format(endDate);
 
     sb.append(companyName);
-    int maxLengthTglPrint = 67;
+    int maxLengthTglPrint = 65;
     addWhiteSpace(sb, maxLengthTglPrint - companyName.length());
     sb.append(printDateStr);
     addNewLine(sb, 1);
@@ -285,9 +285,9 @@ public class CetakPembayaranKwitansiTextPrinter extends Window implements Serial
     addWhiteSpace(sb, maxLengthTglPrint - companyAddress.length());
     sb.append(printHourStr);
     addNewLine(sb, 1);
-    addWhiteSpace(sb, 15);
+    addWhiteSpace(sb, 20);
     sb.append(titleReport);
-    addWhiteSpace(sb, maxLengthTglPrint - titleReport.length() - 15);
+    addWhiteSpace(sb, maxLengthTglPrint - titleReport.length() - 20);
     sb.append(halStr);
     addNewLine(sb, 2);
 
@@ -302,15 +302,15 @@ public class CetakPembayaranKwitansiTextPrinter extends Window implements Serial
     addNewLine(sb, 1);
 
     sb.append("Nomor");
-    addWhiteSpace(sb, 2);
+    addWhiteSpace(sb, 1);
     sb.append("Nomor Faktur");
-    addWhiteSpace(sb, 5);
+    addWhiteSpace(sb, 1);
     sb.append("Nama Customer");
-    addWhiteSpace(sb, 10);
+    addWhiteSpace(sb, 8);
     sb.append("Nilai Tagih");
-    addWhiteSpace(sb, 3);
+    addWhiteSpace(sb, 2);
     sb.append("Nilai Pembayaran");
-    addWhiteSpace(sb, 3);
+    addWhiteSpace(sb, 2);
     // sb.append("Keterangan");
     sb.append("Tgl Bayar");
 
@@ -323,7 +323,7 @@ public class CetakPembayaranKwitansiTextPrinter extends Window implements Serial
     addNewLine(sb, 1);
     addWhiteSpace(sb, 6);
     sb.append("Yang Menerima");
-    addWhiteSpace(sb, 50);
+    addWhiteSpace(sb, 35);
     sb.append("Yang Memberi");
   }
 }
