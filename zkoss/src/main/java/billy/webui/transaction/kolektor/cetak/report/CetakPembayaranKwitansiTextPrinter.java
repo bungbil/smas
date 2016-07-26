@@ -49,7 +49,20 @@ public class CetakPembayaranKwitansiTextPrinter extends Window implements Serial
   private BigDecimal totalPembayaran = BigDecimal.ZERO;
   private BigDecimal totalAkhirTagih = BigDecimal.ZERO;
   private BigDecimal totalAkhirPembayaran = BigDecimal.ZERO;
+  private final int WIDTH_COLUMN_SEPERATE = 1;
+  private final int WIDTH_COLUMN_A = 5;
+  private final int WIDTH_COLUMN_B = 12;
+  private final int WIDTH_COLUMN_C = 20;
+  private final int WIDTH_COLUMN_D = 11;
+  private final int WIDTH_COLUMN_E = 16;
+  private final int WIDTH_COLUMN_F = 9;
 
+  private final int WIDTH_FOOTER_COLUMN_A = 16;
+  private final int WIDTH_FOOTER_COLUMN_B = 18;
+  private final int WIDTH_FOOTER_COLUMN_C = 18;
+  private final int WIDTH_FOOTER_COLUMN_D = 17;
+
+  DecimalFormat df = new DecimalFormat("#,###");
 
   public CetakPembayaranKwitansiTextPrinter(Component parent, Karyawan karyawan, Date startDate,
       Date endDate, List<Piutang> listPiutang, PrintService selectedPrinter)
@@ -165,7 +178,7 @@ public class CetakPembayaranKwitansiTextPrinter extends Window implements Serial
 
   private void generateDataReport(StringBuffer sb, List<ReportKwitansi> listItem, int itemPerPage,
       int pageNo) {
-    DecimalFormat df = new DecimalFormat("#,###");
+
     SimpleDateFormat formatDate = new SimpleDateFormat();
     formatDate = new SimpleDateFormat("dd-MM-yy", Locale.getDefault());
     int startIndex = itemPerPage * (pageNo - 1);
@@ -177,38 +190,27 @@ public class CetakPembayaranKwitansiTextPrinter extends Window implements Serial
     for (int i = startIndex; i < maxIndex; i++) {
       ReportKwitansi item = listItem.get(i);
 
-      int maxLengthNomor = 5;
-      addWhiteSpace(sb, maxLengthNomor - item.getNo().length());
-      sb.append(item.getNo());
-      addWhiteSpace(sb, 1);
+      addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
+      setAlignRight(sb, WIDTH_COLUMN_A, item.getNo());
+      addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-      int maxLengthNomorFaktur = 13;
-      sb.append(item.getNoFaktur());
-      addWhiteSpace(sb, maxLengthNomorFaktur - item.getNoFaktur().length());
+      setAlignLeft(sb, WIDTH_COLUMN_B, item.getNoFaktur());
+      addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-      int maxLengthNamaCustomer = 21;
-      sb.append(item.getNamaCustomer());
-      addWhiteSpace(sb, maxLengthNamaCustomer - item.getNamaCustomer().length());
+      setAlignLeft(sb, WIDTH_COLUMN_C, item.getNamaCustomer());
+      addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
       String nilaiTagihStr = df.format(item.getNilaiTagih());
-      int maxLengthNilaiTagih = 11;
-      addWhiteSpace(sb, maxLengthNilaiTagih - nilaiTagihStr.length());
-      sb.append(nilaiTagihStr);
-
-      // addWhiteSpace(sb, 16);
+      setAlignRight(sb, WIDTH_COLUMN_D, nilaiTagihStr);
+      addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
       String nilaiPembayaranStr = df.format(item.getNilaiPembayaran());
-      int maxLengthNilaiPembayaran = 18;
-      addWhiteSpace(sb, maxLengthNilaiPembayaran - nilaiPembayaranStr.length());
-      sb.append(nilaiPembayaranStr);
+      setAlignRight(sb, WIDTH_COLUMN_E, nilaiPembayaranStr);
+      addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-
-      // addWhiteSpace(sb, 3);
-      // sb.append(item.getKeterangan());
-
-      addWhiteSpace(sb, 3);
       String tglBayarStr = formatDate.format(item.getTglBayar());
-      sb.append(tglBayarStr);
+      setAlignLeft(sb, WIDTH_COLUMN_F, tglBayarStr);
+      addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
       addNewLine(sb, 1);
 
       totalTagih = totalTagih.add(item.getNilaiTagih());
@@ -220,42 +222,31 @@ public class CetakPembayaranKwitansiTextPrinter extends Window implements Serial
   }
 
   private void generateFooterReport(StringBuffer sb) {
-    DecimalFormat df = new DecimalFormat("#,###");
 
-    addNewLine(sb, 1);
     addSingleBorder(sb, pageWidth);
     addNewLine(sb, 1);
 
-    addWhiteSpace(sb, 16);
-    sb.append("Total per halaman");
-    int maxLengthTotalPerHal = 18;
+    addWhiteSpace(sb, WIDTH_FOOTER_COLUMN_A);
+    setAlignLeft(sb, WIDTH_FOOTER_COLUMN_B, "Total per halaman");
+
     String totalTagihStr = df.format(totalTagih);
-    addWhiteSpace(sb, maxLengthTotalPerHal - totalTagihStr.length());
-    sb.append(totalTagihStr);
+    setAlignRight(sb, WIDTH_FOOTER_COLUMN_C, totalTagihStr);
 
-
-    int maxLengthTotalBayarPerHal = 18;
     String totalBayarStr = df.format(totalPembayaran);
-    addWhiteSpace(sb, maxLengthTotalBayarPerHal - totalBayarStr.length());
-    sb.append(totalBayarStr);
-
+    setAlignRight(sb, WIDTH_FOOTER_COLUMN_D, totalBayarStr);
 
     addNewLine(sb, 1);
     addSingleBorder(sb, pageWidth);
     addNewLine(sb, 1);
 
-    addWhiteSpace(sb, 16);
-    sb.append("Total Akhir");
-    int maxLengthTotalAkhir = 24;
+    addWhiteSpace(sb, WIDTH_FOOTER_COLUMN_A);
+    setAlignLeft(sb, WIDTH_FOOTER_COLUMN_B, "Total Akhir");
+
     String totalAkhirTagihStr = df.format(totalAkhirTagih);
-    addWhiteSpace(sb, maxLengthTotalAkhir - totalAkhirTagihStr.length());
-    sb.append(totalAkhirTagihStr);
+    setAlignRight(sb, WIDTH_FOOTER_COLUMN_C, totalAkhirTagihStr);
 
-    int maxLengthTotalAkhirBayar = 18;
     String totalAkhirBayarStr = df.format(totalAkhirPembayaran);
-    addWhiteSpace(sb, maxLengthTotalAkhirBayar - totalAkhirBayarStr.length());
-    sb.append(totalAkhirBayarStr);
-
+    setAlignRight(sb, WIDTH_FOOTER_COLUMN_D, totalAkhirBayarStr);
 
     addNewLine(sb, 1);
     addDoubleBorder(sb, pageWidth);
@@ -276,13 +267,12 @@ public class CetakPembayaranKwitansiTextPrinter extends Window implements Serial
     String startDateStr = formatDate.format(startDate);
     String endDateStr = formatDate.format(endDate);
 
-    sb.append(companyName);
+
     int maxLengthTglPrint = 65;
-    addWhiteSpace(sb, maxLengthTglPrint - companyName.length());
+    setAlignLeft(sb, maxLengthTglPrint, companyName);
     sb.append(printDateStr);
     addNewLine(sb, 1);
-    sb.append(companyAddress);
-    addWhiteSpace(sb, maxLengthTglPrint - companyAddress.length());
+    setAlignLeft(sb, maxLengthTglPrint, companyAddress);
     sb.append(printHourStr);
     addNewLine(sb, 1);
     addWhiteSpace(sb, 20);
@@ -301,18 +291,24 @@ public class CetakPembayaranKwitansiTextPrinter extends Window implements Serial
     addDoubleBorder(sb, pageWidth);
     addNewLine(sb, 1);
 
-    sb.append("Nomor");
-    addWhiteSpace(sb, 1);
-    sb.append("Nomor Faktur");
-    addWhiteSpace(sb, 1);
-    sb.append("Nama Customer");
-    addWhiteSpace(sb, 8);
-    sb.append("Nilai Tagih");
-    addWhiteSpace(sb, 2);
-    sb.append("Nilai Pembayaran");
-    addWhiteSpace(sb, 2);
-    // sb.append("Keterangan");
-    sb.append("Tgl Bayar");
+    addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
+    setAlignLeft(sb, WIDTH_COLUMN_A, "Nomor");
+    addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
+
+    setAlignLeft(sb, WIDTH_COLUMN_B, "Nomor Faktur");
+    addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
+
+    setAlignLeft(sb, WIDTH_COLUMN_C, "Nama Customer");
+    addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
+
+    setAlignRight(sb, WIDTH_COLUMN_D, "Nilai Tagih");
+    addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
+
+    setAlignRight(sb, WIDTH_COLUMN_E, "Nilai Pembayaran");
+    addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
+
+    setAlignLeft(sb, WIDTH_COLUMN_F, "Tgl Bayar");
+    addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
     addNewLine(sb, 1);
     addDoubleBorder(sb, pageWidth);
@@ -325,5 +321,15 @@ public class CetakPembayaranKwitansiTextPrinter extends Window implements Serial
     sb.append("Yang Menerima");
     addWhiteSpace(sb, 35);
     sb.append("Yang Memberi");
+  }
+
+  private void setAlignLeft(StringBuffer sb, int width, String value) {
+    sb.append(value);
+    addWhiteSpace(sb, width - value.length());
+  }
+
+  private void setAlignRight(StringBuffer sb, int width, String value) {
+    addWhiteSpace(sb, width - value.length());
+    sb.append(value);
   }
 }
