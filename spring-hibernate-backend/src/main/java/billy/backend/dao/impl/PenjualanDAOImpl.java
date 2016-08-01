@@ -20,6 +20,7 @@ import billy.backend.model.PenjualanDetail;
 @Repository
 public class PenjualanDAOImpl extends BillyBasisDAO<Penjualan> implements PenjualanDAO {
 
+
   @Override
   public List<Penjualan> getAllPenjualans() {
     return getHibernateTemplate().loadAll(Penjualan.class);
@@ -119,4 +120,6 @@ public class PenjualanDAOImpl extends BillyBasisDAO<Penjualan> implements Penjua
   public void initialize(Penjualan obj) {
     super.initialize(obj);
   }
+
+
 }

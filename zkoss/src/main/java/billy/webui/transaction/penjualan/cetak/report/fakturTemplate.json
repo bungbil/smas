@@ -1,0 +1,41 @@
+{
+	 "pageFormat": {
+	 	 "autoFormFeed":true,
+	 	 "autoLineFeed":false,
+	     "pageLength": 28,
+	     "pageWidth": 90,
+	     "usePageLengthFromPrinter": false
+	 },
+	 "template": {
+	     "detail": [	         	         
+	         "                                                                    ${nomorFaktur:15}",
+	         "",
+	         "              ${namaPelanggan:20}                      ${kodeSales1:5}  ${kodeSales2:5}",
+	         "                          ${telepon:15}           ${namaSales1:12} ${namaSales2:12}",
+	         "   ${alamat:35}",	         
+	         "   ${alamat2:35}",
+	         "   ${alamat3:35}                      ${intervalKredit:10}",
+	         "",
+	         {
+	            "table": "listItemFaktur",
+	            "border": false,
+	            "columns": [
+	                { "caption": "", "source": "qty::center", "width":7 },	                
+	                { "caption": "", "source": "namaBarang", "width": 20, "wrap": true },
+	                { "caption": "", "source": "harga::right", "width": 10 },
+	                { "caption": "", "source": "jumlah::right", "width": 10 }
+	            ]
+	         },	         
+	         "                                  TOTAL ${total:10}",
+	         "   DPAY Rp.  ${dp:10}",
+	         "",
+	         "",
+	         "        ${tglPenjualan:20}",
+	         "",
+	         "",
+	         "",
+	         "",
+ 			 "      ${namaSupervisor:10}     ${namaPengirim:10}"
+	     ]
+	 }
+ }

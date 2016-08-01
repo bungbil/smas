@@ -11,6 +11,7 @@ public interface PenjualanDAO {
 
   public void delete(Penjualan entity);
 
+
   public List<Penjualan> getAllPenjualans();
 
   public List<Penjualan> getAllPenjualansByDivisiAndRangeDate(Karyawan obj, Date startDate,
@@ -21,17 +22,23 @@ public interface PenjualanDAO {
 
   public List<Penjualan> getAllPenjualansByListNoFaktur(List<String> listNoFaktur);
 
+
   public int getCountAllPenjualans();
 
+
   public int getCountAllPenjualansByDivisi(Karyawan obj, Date startDate, Date endDate);
+
 
   public List<Penjualan> getListNeedApprovalPenjualansByListNoFaktur(List<String> listNoFaktur);
 
   public Penjualan getNewPenjualan();
 
+
   public Penjualan getPenjualanById(long id);
 
+
   public Penjualan getPenjualanByNoFaktur(String string);
+
 
   public BigDecimal getPenjualanSum(Penjualan obj);
 

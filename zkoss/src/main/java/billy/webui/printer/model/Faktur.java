@@ -3,6 +3,7 @@ package billy.webui.printer.model;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Faktur {
 
   private String nomorFaktur;
@@ -193,4 +194,5 @@ public class Faktur {
   public void tambahItemFaktur(ItemFaktur itemFaktur) {
     this.listItemFaktur.add(itemFaktur);
   }
+
 }

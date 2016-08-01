@@ -53,6 +53,7 @@ import de.forsthaus.webui.util.ZksampleMessageUtils;
 
 public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
 
+
   private static final long serialVersionUID = 1L;
   private static final Logger logger = Logger.getLogger(PenjualanMainCtrl.class);
 
@@ -1081,4 +1082,5 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
   }
 
   /* COMPONENTS and OTHERS */
+
 }

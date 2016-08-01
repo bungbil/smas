@@ -13,6 +13,7 @@ import billy.backend.service.KaryawanService;
 import de.forsthaus.backend.model.SecUser;
 
 public class KaryawanServiceImpl implements KaryawanService {
+
   private static final Logger logger = Logger.getLogger(KaryawanServiceImpl.class);
   private KaryawanDAO karyawanDAO;
 

@@ -44,7 +44,7 @@
 													<label value="Tanggal Akhir Penjualan" />
 													<datebox id="txtb_tanggalAkhirPenjualan" 
 															format="dd/MM/yyyy" width="150px" constraint="no empty"/>
-												</row>												
+												</row>																																	
 												<row>
 													<label />
 													<button id="btnView" label="Lihat Laporan"  	/>

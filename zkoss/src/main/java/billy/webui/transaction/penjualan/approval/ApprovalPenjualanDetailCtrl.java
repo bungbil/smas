@@ -55,6 +55,7 @@ import de.forsthaus.policy.model.UserImpl;
 import de.forsthaus.webui.util.GFCBaseCtrl;
 import de.forsthaus.webui.util.MultiLineMessageBox;
 
+
 public class ApprovalPenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 
   private static final long serialVersionUID = -8352659530536077973L;
@@ -758,5 +759,6 @@ public class ApprovalPenjualanDetailCtrl extends GFCBaseCtrl implements Serializ
    */
 
   /* COMPONENTS and OTHERS */
+
 
 }

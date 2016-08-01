@@ -12,6 +12,7 @@ import org.zkoss.zul.ListitemRenderer;
 
 public class PrinterListModelItemRenderer implements ListitemRenderer, Serializable {
 
+
   private static final long serialVersionUID = 1L;
   private static final Logger logger = Logger.getLogger(PrinterListModelItemRenderer.class);
 

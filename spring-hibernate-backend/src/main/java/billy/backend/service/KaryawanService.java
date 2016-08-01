@@ -33,6 +33,7 @@ public interface KaryawanService {
 
   public List<Karyawan> getKaryawansLikeNamaKtp(String string);
 
+
   public List<Karyawan> getKaryawansLikeNamaPanggilan(String string);
 
   public Karyawan getNewKaryawan();

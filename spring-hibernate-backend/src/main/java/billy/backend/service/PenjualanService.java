@@ -10,7 +10,9 @@ import billy.backend.model.PenjualanDetail;
 
 public interface PenjualanService {
 
+
   public void delete(Penjualan penjualan);
+
 
   public void delete(PenjualanDetail penjualanDetail);
 

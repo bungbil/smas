@@ -60,9 +60,6 @@ INSERT INTO STATUS (STATUS_ID,DESKRIPSI_STATUS,VERSION) values
 (7,'MASALAH',1);
 
 
-
-
-
 /*==============================================================*/
 /* Table: piutang                                             */
 /*==============================================================*/
@@ -74,6 +71,7 @@ CREATE TABLE piutang (
    penjualan_id         INT8                 not null,
    no_kuitansi			varchar(50)          not null, 
    pembayaran_ke		INT4                 not null,
+
    tgl_pembayaran		date				 null,
    status_id			INT8		         not null,
    nilai_tagihan		numeric(12,0)		 not null default 0,
@@ -109,8 +107,6 @@ alter table piutang
       references penjualan (penjualan_id)
       on delete cascade on update cascade;
 
-      
-      
 
 /* Piutang */
 /* --> Page Piutang */
@@ -197,5 +193,3 @@ INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
 INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
 (264, 1, 264, 0),
 (265, 1, 265, 0);
-
-

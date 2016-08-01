@@ -37,6 +37,7 @@ import de.forsthaus.webui.util.ZksampleMessageUtils;
 
 public class CetakPenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
 
+
   private static final long serialVersionUID = 1L;
   private static final Logger logger = Logger.getLogger(CetakPenjualanMainCtrl.class);
 

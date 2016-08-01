@@ -35,6 +35,7 @@ import de.forsthaus.webui.util.GFCBaseListCtrl;
 
 public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Serializable {
 
+
   private static final long serialVersionUID = -2170565288232491362L;
   private static final Logger logger = Logger.getLogger(PenjualanListCtrl.class);
 
@@ -404,5 +405,4 @@ public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Ser
     // STORED IN THE module's MainController
     getPenjualanMainCtrl().setSelectedPenjualan(selectedPenjualan);
   }
-
 }

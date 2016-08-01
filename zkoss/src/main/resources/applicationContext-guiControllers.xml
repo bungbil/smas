@@ -503,6 +503,7 @@
 		<property name="karyawanService" ref="karyawanService" />		
 	</bean>
 	
+
 	<!-- ReportPerhitunganKomisi -->
 	<bean id="reportPerhitunganKomisiMainCtrl" class="billy.webui.report.perhitungankomisi.ReportPerhitunganKomisiMainCtrl" parent="basisCtrl" scope="prototype">
 		<property name="penjualanService" ref="penjualanService" />		

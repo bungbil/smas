@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 public class PenjualanDetail implements java.io.Serializable, Entity {
 
+
   private static final long serialVersionUID = 1L;
 
   private long id = Long.MIN_VALUE + 1;

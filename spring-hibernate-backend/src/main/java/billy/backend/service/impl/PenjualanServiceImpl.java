@@ -15,6 +15,7 @@ import billy.backend.model.Penjualan;
 import billy.backend.model.PenjualanDetail;
 import billy.backend.service.PenjualanService;
 
+
 public class PenjualanServiceImpl implements PenjualanService {
 
   private PenjualanDAO penjualanDAO;
@@ -177,4 +178,5 @@ public class PenjualanServiceImpl implements PenjualanService {
   public void setPenjualanDetailDAO(PenjualanDetailDAO penjualanDetailDAO) {
     this.penjualanDetailDAO = penjualanDetailDAO;
   }
+
 }
