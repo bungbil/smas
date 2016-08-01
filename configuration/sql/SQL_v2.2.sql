@@ -25,12 +25,14 @@ alter table penjualan
   */ 
 
 alter table piutang   
+   add column no_faktur			varchar(50)          not null, 
    add column full_payment		boolean				 default false,
    add column aktif				boolean				 default false,
    add column tgl_bawa     		date				 null,   
    add column diskon			numeric(12,0)		 null default 0,
    add column status_final_id			INT8,
    add column kekurangan_bayar			numeric(12,0)		 null default 0;
+   
    
 alter table karyawan   
    add column jenis_kelamin			varchar(20)		 null ;

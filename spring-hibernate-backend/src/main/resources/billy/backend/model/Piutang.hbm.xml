@@ -22,6 +22,9 @@
 		<property name="noKuitansi" type="string">
 			<column name="no_kuitansi" length="50" not-null="true" />
 		</property>
+		<property name="noFaktur" type="string">
+			<column name="no_faktur" length="50" not-null="true" />
+		</property>
 		<property name="pembayaranKe" type="integer">
 			<column name="pembayaran_ke" />
 		</property>

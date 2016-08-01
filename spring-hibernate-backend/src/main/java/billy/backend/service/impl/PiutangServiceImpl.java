@@ -64,6 +64,7 @@ public class PiutangServiceImpl implements PiutangService {
       piutang.setNilaiTagihan(penjualan.getKreditPerBulan());
       piutang.setPembayaranKe(i);
       piutang.setPenjualan(penjualan);
+      piutang.setNoFaktur(penjualan.getNoFaktur());
       piutang.setStatus(status);
       piutang.setLastUpdate(new Date());
       piutang.setUpdatedBy("SYSTEM");
@@ -136,6 +137,11 @@ public class PiutangServiceImpl implements PiutangService {
   @Override
   public Piutang getNewPiutang() {
     return getPiutangDAO().getNewPiutang();
+  }
+
+  @Override
+  public Piutang getPiutangByNoFaktur(String data) {
+    return getPiutangDAO().getPiutangByNoFaktur(data);
   }
 
   @Override

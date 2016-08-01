@@ -30,7 +30,7 @@
 											</columns>
 											<rows>
 												<row>
-													<label value="No Kwitansi" />
+													<label value="No Faktur" />
 													<textbox id="txtb_SearchNoKwitansi" 
 															width="150px"/>
 												</row>

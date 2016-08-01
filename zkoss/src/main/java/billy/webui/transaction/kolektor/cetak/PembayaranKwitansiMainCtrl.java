@@ -218,7 +218,7 @@ public class PembayaranKwitansiMainCtrl extends GFCBaseCtrl implements Serializa
       ListModelList lml1 = (ListModelList) lbox_Printer.getListModel();
       printer = (PrintService) lml1.get(itemPrinter.getIndex());
       selectedPrinter = printer;
-      logger.info("Printer : " + printer.getName());
+      // logger.info("Printer : " + printer.getName());
     }
     if (karyawan != null && printer != null && txtb_tanggalAwal.getValue() != null
         && txtb_tanggalAkhir.getValue() != null) {

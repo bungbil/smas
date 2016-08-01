@@ -34,10 +34,10 @@ import billy.webui.printer.PrintJobWatcher;
 import billy.webui.transaction.kolektor.cetak.model.ReportKwitansi;
 import de.forsthaus.webui.util.ZksampleMessageUtils;
 
-public class CetakPembayaranKwitansiTextPrinter extends Window implements Serializable {
+public class CetakSisaKwitansiTextPrinter extends Window implements Serializable {
 
   private static final long serialVersionUID = 1L;
-  private static final Logger logger = Logger.getLogger(CetakPembayaranKwitansiTextPrinter.class);
+  private static final Logger logger = Logger.getLogger(CetakSisaKwitansiTextPrinter.class);
 
   public static int roundUp(int dividend, int divisor) {
     return (dividend + divisor - 1) / divisor;
@@ -64,7 +64,7 @@ public class CetakPembayaranKwitansiTextPrinter extends Window implements Serial
 
   DecimalFormat df = new DecimalFormat("#,###");
 
-  public CetakPembayaranKwitansiTextPrinter(Component parent, Karyawan karyawan, Date startDate,
+  public CetakSisaKwitansiTextPrinter(Component parent, Karyawan karyawan, Date startDate,
       Date endDate, List<Piutang> listPiutang, PrintService selectedPrinter)
       throws InterruptedException {
     super();
@@ -204,19 +204,30 @@ public class CetakPembayaranKwitansiTextPrinter extends Window implements Serial
       setAlignRight(sb, WIDTH_COLUMN_D, nilaiTagihStr);
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-      String nilaiPembayaranStr = df.format(item.getNilaiPembayaran());
+      String nilaiPembayaranStr = "";
+      if (item.getNilaiPembayaran() != null) {
+        nilaiPembayaranStr = df.format(item.getNilaiPembayaran());
+      }
       setAlignRight(sb, WIDTH_COLUMN_E, nilaiPembayaranStr);
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-      String tglBayarStr = formatDate.format(item.getTglBayar());
-      setAlignLeft(sb, WIDTH_COLUMN_F, tglBayarStr);
+      // String tglBayarStr = formatDate.format(item.getTglBayar());
+      // setAlignLeft(sb, WIDTH_COLUMN_F, tglBayarStr);
+      // addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
+      // addNewLine(sb, 1);
+
+      String keteranganStr = "";
+      if (item.getKeterangan() != null) {
+        keteranganStr = item.getKeterangan();
+      }
+      setAlignLeft(sb, WIDTH_COLUMN_F, keteranganStr);
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
       addNewLine(sb, 1);
 
       totalTagih = totalTagih.add(item.getNilaiTagih());
       totalAkhirTagih = totalAkhirTagih.add(item.getNilaiTagih());
-      totalPembayaran = totalPembayaran.add(item.getNilaiPembayaran());
-      totalAkhirPembayaran = totalAkhirPembayaran.add(item.getNilaiPembayaran());
+      // totalPembayaran = totalPembayaran.add(item.getNilaiPembayaran());
+      // totalAkhirPembayaran = totalAkhirPembayaran.add(item.getNilaiPembayaran());
     }
 
   }
@@ -232,8 +243,8 @@ public class CetakPembayaranKwitansiTextPrinter extends Window implements Serial
     String totalTagihStr = df.format(totalTagih);
     setAlignRight(sb, WIDTH_FOOTER_COLUMN_C, totalTagihStr);
 
-    String totalBayarStr = df.format(totalPembayaran);
-    setAlignRight(sb, WIDTH_FOOTER_COLUMN_D, totalBayarStr);
+    // String totalBayarStr = df.format(totalPembayaran);
+    // setAlignRight(sb, WIDTH_FOOTER_COLUMN_D, totalBayarStr);
 
     addNewLine(sb, 1);
     addSingleBorder(sb, pageWidth);
@@ -245,8 +256,8 @@ public class CetakPembayaranKwitansiTextPrinter extends Window implements Serial
     String totalAkhirTagihStr = df.format(totalAkhirTagih);
     setAlignRight(sb, WIDTH_FOOTER_COLUMN_C, totalAkhirTagihStr);
 
-    String totalAkhirBayarStr = df.format(totalAkhirPembayaran);
-    setAlignRight(sb, WIDTH_FOOTER_COLUMN_D, totalAkhirBayarStr);
+    // String totalAkhirBayarStr = df.format(totalAkhirPembayaran);
+    // setAlignRight(sb, WIDTH_FOOTER_COLUMN_D, totalAkhirBayarStr);
 
     addNewLine(sb, 1);
     addDoubleBorder(sb, pageWidth);
@@ -263,7 +274,7 @@ public class CetakPembayaranKwitansiTextPrinter extends Window implements Serial
     String printDateStr = "TGL : " + formatDate.format(printDate);
     String printHourStr = "JAM : " + formatHour.format(printDate);
     String halStr = "HAL : " + pageNo;
-    String titleReport = "LAPORAN PEMBAYARAN KWITANSI";
+    String titleReport = "LAPORAN SISA KWITANSI KOLEKTOR";
     String startDateStr = formatDate.format(startDate);
     String endDateStr = formatDate.format(endDate);
 
@@ -281,11 +292,11 @@ public class CetakPembayaranKwitansiTextPrinter extends Window implements Serial
     sb.append(halStr);
     addNewLine(sb, 2);
 
-    sb.append("Tanggal Bayar : " + startDateStr + " s/d " + endDateStr);
+    sb.append("Tanggal Bawa : " + startDateStr + " s/d " + endDateStr);
     addNewLine(sb, 1);
     sb.append("Kolektor : " + karyawan.getKodeKaryawan() + " - " + karyawan.getNamaPanggilan());
     addWhiteSpace(sb, 10);
-    sb.append("Status : Sudah dilunasi !");
+    sb.append("Status : Belum dilunasi !");
 
     addNewLine(sb, 1);
     addDoubleBorder(sb, pageWidth);
@@ -307,7 +318,7 @@ public class CetakPembayaranKwitansiTextPrinter extends Window implements Serial
     setAlignRight(sb, WIDTH_COLUMN_E, "Nilai Pembayaran");
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-    setAlignLeft(sb, WIDTH_COLUMN_F, "Tgl Bayar");
+    setAlignLeft(sb, WIDTH_COLUMN_F, "Keterangan");
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
     addNewLine(sb, 1);

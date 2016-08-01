@@ -10,6 +10,7 @@ public class Piutang implements java.io.Serializable, Entity {
   private long id = Long.MIN_VALUE + 1;
   private int version;
   private Penjualan penjualan;
+  private String noFaktur;
   private String noKuitansi;
   private int pembayaranKe;
   private Date tglPembayaran;
@@ -132,8 +133,14 @@ public class Piutang implements java.io.Serializable, Entity {
     return lastUpdate;
   }
 
+
   public BigDecimal getNilaiTagihan() {
     return nilaiTagihan;
+  }
+
+
+  public String getNoFaktur() {
+    return noFaktur;
   }
 
   public String getNoKuitansi() {
@@ -184,11 +191,11 @@ public class Piutang implements java.io.Serializable, Entity {
     return this.version;
   }
 
-
   @Override
   public int hashCode() {
     return Long.valueOf(getId()).hashCode();
   }
+
 
   public boolean isAktif() {
     return aktif;
@@ -202,11 +209,11 @@ public class Piutang implements java.io.Serializable, Entity {
     return needApproval;
   }
 
-
   @Override
   public boolean isNew() {
     return (getId() == Long.MIN_VALUE + 1);
   }
+
 
   public void setAktif(boolean aktif) {
     this.aktif = aktif;
@@ -255,6 +262,10 @@ public class Piutang implements java.io.Serializable, Entity {
 
   public void setNilaiTagihan(BigDecimal nilaiTagihan) {
     this.nilaiTagihan = nilaiTagihan;
+  }
+
+  public void setNoFaktur(String noFaktur) {
+    this.noFaktur = noFaktur;
   }
 
   public void setNoKuitansi(String noKuitansi) {

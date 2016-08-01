@@ -33,6 +33,8 @@ public interface PiutangService {
 
   public Piutang getNewPiutang();
 
+  public Piutang getPiutangByNoFaktur(String data);
+
   public Piutang getPiutangByNoKuitansi(String data);
 
   public List<Piutang> getPiutangsByPenjualan(Penjualan penjualan);

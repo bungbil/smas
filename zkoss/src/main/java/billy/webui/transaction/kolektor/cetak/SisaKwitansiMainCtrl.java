@@ -27,6 +27,7 @@ import billy.backend.service.KaryawanService;
 import billy.backend.service.PiutangService;
 import billy.webui.master.karyawan.model.KaryawanListModelItemRenderer;
 import billy.webui.printer.model.PrinterListModelItemRenderer;
+import billy.webui.transaction.kolektor.cetak.report.CetakSisaKwitansiTextPrinter;
 import de.forsthaus.UserWorkspace;
 import de.forsthaus.webui.util.GFCBaseCtrl;
 import de.forsthaus.webui.util.ZksampleMessageUtils;
@@ -52,7 +53,7 @@ public class SisaKwitansiMainCtrl extends GFCBaseCtrl implements Serializable {
 
   private PrintService selectedPrinter;
   List<Piutang> listPiutang = new ArrayList<Piutang>();
-
+  Karyawan karyawan = null;
   DecimalFormat df = new DecimalFormat("#,###");
 
   /**
@@ -134,7 +135,8 @@ public class SisaKwitansiMainCtrl extends GFCBaseCtrl implements Serializable {
   public void onClick$btnCetak(Event event) throws Exception {
     if (validToPrint()) {
       final Window win = (Window) Path.getComponent("/outerIndexWindow");
-      // new CetakKuitansiTextPrinter(win, listPiutang, selectedPrinter);
+      new CetakSisaKwitansiTextPrinter(win, karyawan, txtb_tanggalAwal.getValue(),
+          txtb_tanggalAkhir.getValue(), listPiutang, selectedPrinter);
     } else {
       showErrorCetak();
     }
@@ -205,7 +207,6 @@ public class SisaKwitansiMainCtrl extends GFCBaseCtrl implements Serializable {
 
   public boolean validToPrint() throws Exception {
 
-    Karyawan karyawan = null;
     Listitem itemKolektor = lbox_Kolektor.getSelectedItem();
     if (itemKolektor != null) {
       ListModelList lml1 = (ListModelList) lbox_Kolektor.getListModel();
@@ -217,7 +218,7 @@ public class SisaKwitansiMainCtrl extends GFCBaseCtrl implements Serializable {
       ListModelList lml1 = (ListModelList) lbox_Printer.getListModel();
       printer = (PrintService) lml1.get(itemPrinter.getIndex());
       selectedPrinter = printer;
-      logger.info("Printer : " + printer.getName());
+      // logger.info("Printer : " + printer.getName());
     }
     if (karyawan != null && printer != null && txtb_tanggalAwal.getValue() != null
         && txtb_tanggalAkhir.getValue() != null) {

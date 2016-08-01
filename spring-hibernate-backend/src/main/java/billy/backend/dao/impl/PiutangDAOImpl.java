@@ -83,8 +83,8 @@ public class PiutangDAOImpl extends BillyBasisDAO<Piutang> implements PiutangDAO
   public List<Piutang> getAllPiutangsByKolektorAndRangeDateTglBawa(Karyawan obj, Date startDate,
       Date endDate) {
     DetachedCriteria criteria = DetachedCriteria.forClass(Piutang.class);
-    criteria.add(Restrictions.ge("tglBawa", startDate));
-    criteria.add(Restrictions.le("tglBawa", endDate));
+    criteria.add(Restrictions.ge("tglBawaKolektor", startDate));
+    criteria.add(Restrictions.le("tglBawaKolektor", endDate));
     criteria.add(Restrictions.eq("kolektor.id", obj.getId()));
     return getHibernateTemplate().findByCriteria(criteria);
   }
@@ -94,8 +94,8 @@ public class PiutangDAOImpl extends BillyBasisDAO<Piutang> implements PiutangDAO
   public List<Piutang> getAllPiutangsByKolektorAndRangeDateTglBawaBelumBayar(Karyawan obj,
       Date startDate, Date endDate) {
     DetachedCriteria criteria = DetachedCriteria.forClass(Piutang.class);
-    criteria.add(Restrictions.ge("tglBawa", startDate));
-    criteria.add(Restrictions.le("tglBawa", endDate));
+    criteria.add(Restrictions.ge("tglBawaKolektor", startDate));
+    criteria.add(Restrictions.le("tglBawaKolektor", endDate));
     criteria.add(Restrictions.isNull("tglPembayaran"));
     criteria.add(Restrictions.eq("kolektor.id", obj.getId()));
     return getHibernateTemplate().findByCriteria(criteria);
@@ -137,6 +137,24 @@ public class PiutangDAOImpl extends BillyBasisDAO<Piutang> implements PiutangDAO
 
   @SuppressWarnings("unchecked")
   @Override
+  public Piutang getPiutangByNoFaktur(String data) {
+    List<Piutang> result;
+
+    DetachedCriteria criteria = DetachedCriteria.forClass(Piutang.class);
+    criteria.add(Restrictions.eq("noFaktur", data));
+    criteria.add(Restrictions.eq("aktif", true));
+
+    result = getHibernateTemplate().findByCriteria(criteria);
+    if (result.size() > 0) {
+      Piutang piutang = result.get(0);
+      return piutang;
+    }
+
+    return null;
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
   public Piutang getPiutangByNoKuitansi(String data) {
     List<Piutang> result;
 
@@ -151,6 +169,7 @@ public class PiutangDAOImpl extends BillyBasisDAO<Piutang> implements PiutangDAO
 
     return null;
   }
+
 
   @SuppressWarnings("unchecked")
   @Override

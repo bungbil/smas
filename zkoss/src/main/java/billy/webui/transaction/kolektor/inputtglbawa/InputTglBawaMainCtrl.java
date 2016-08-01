@@ -205,7 +205,7 @@ public class InputTglBawaMainCtrl extends GFCBaseCtrl implements Serializable {
   public void onClick$btnSearch(Event event) throws Exception {
 
     if (txtb_SearchNoKwitansi.getValue() != null) {
-      piutang = piutangService.getPiutangByNoKuitansi(txtb_SearchNoKwitansi.getValue());
+      piutang = piutangService.getPiutangByNoFaktur(txtb_SearchNoKwitansi.getValue());
       if (piutang != null) {
 
         txtb_NoFaktur.setValue(piutang.getPenjualan().getNoFaktur());
