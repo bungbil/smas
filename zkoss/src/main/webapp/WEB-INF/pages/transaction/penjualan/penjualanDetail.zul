@@ -225,6 +225,7 @@
 									                <column />
 									                <column />
 									                <column />
+									                <column />
 									            </columns>
 									           
 									            <rows>
@@ -233,7 +234,8 @@
 														<label value ="Pilih Barang" />
 										            	<label value ="Nama Barang" />
 										            	<label value ="qty" />
-														<label value ="Harga" />														
+														<label value ="Harga" />
+														<label/>														
 									            	</row>	
 									            	<row>									            	
 														<textbox id="txtb_KodeBarang" readonly="true"  maxlength="50" width="100px" hflex="1" />

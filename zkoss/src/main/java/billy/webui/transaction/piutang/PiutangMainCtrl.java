@@ -604,7 +604,7 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
     // ++ create the searchObject and init sorting ++//
     HibernateSearchObject<Piutang> soPiutang =
         new HibernateSearchObject<Piutang>(Piutang.class, getPiutangListCtrl().getCountRows());
-    soPiutang.addSort("penjualan.noFaktur", false);
+    soPiutang.addSort("tglJatuhTempo", false);
 
     SecUser secUser =
         ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())

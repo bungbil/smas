@@ -42,7 +42,7 @@ public class KaryawanDAOImpl extends BillyBasisDAO<Karyawan> implements Karyawan
   @SuppressWarnings("unchecked")
   public Karyawan getKaryawanByKodeKaryawan(String string) {
     DetachedCriteria criteria = DetachedCriteria.forClass(Karyawan.class);
-    criteria.add(Restrictions.eq("kodeKaryawan", string));
+    criteria.add(Restrictions.eq("kodeKaryawan", string.toUpperCase()));
 
     return (Karyawan) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(criteria));
   }

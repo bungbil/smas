@@ -157,7 +157,7 @@ public class PiutangListCtrl extends GFCBaseListCtrl<Piutang> implements Seriali
     // ++ create the searchObject and init sorting ++//
     // ++ create the searchObject and init sorting ++//
     searchObj = new HibernateSearchObject<Piutang>(Piutang.class, getCountRows());
-    searchObj.addSort("penjualan.noFaktur", false);
+    searchObj.addSort("tglJatuhTempo", false);
 
     SecUser secUser =
         ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())

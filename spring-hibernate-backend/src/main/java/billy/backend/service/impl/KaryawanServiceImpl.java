@@ -77,11 +77,12 @@ public class KaryawanServiceImpl implements KaryawanService {
             listSales.add(karyawan); // divisi = sales
           }
         }
+
+      } else {
+        listSales = getKaryawansByJobTypeId(new Long(4));
+        List<Karyawan> listDivisi = getKaryawansByJobTypeId(new Long(2));// all divisi
+        listSales.addAll(listDivisi);
       }
-    } else {
-      listSales = getKaryawansByJobTypeId(new Long(4));
-      List<Karyawan> listDivisi = getKaryawansByJobTypeId(new Long(2));// all divisi
-      listSales.addAll(listDivisi);
     }
     Collections.sort(listSales, new Comparator<Karyawan>() {
       @Override

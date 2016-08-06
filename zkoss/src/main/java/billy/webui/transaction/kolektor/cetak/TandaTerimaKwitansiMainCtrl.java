@@ -224,7 +224,7 @@ public class TandaTerimaKwitansiMainCtrl extends GFCBaseCtrl implements Serializ
         && txtb_tanggalAkhir.getValue() != null) {
 
       listPiutang =
-          getPiutangService().getAllPiutangsByKolektorAndRangeDateTglBawa(karyawan,
+          getPiutangService().getAllPiutangsByKolektorAndRangeDateTglBawaBelumBayar(karyawan,
               txtb_tanggalAwal.getValue(), txtb_tanggalAkhir.getValue());
       if (listPiutang.size() > 0) {
         return true;
