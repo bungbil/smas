@@ -47,13 +47,7 @@
 		</property>	
 		<property name="jenisKelamin" type="string">
 			<column name="jenis_kelamin" length="20" />
-		</property>
-		<property name="profileImage" type="binary">
-            <column name="profile_image" />
-        </property>
-        <property name="ktpImage" type="binary">
-            <column name="ktp_image" />
-        </property>
+		</property>		
         <many-to-one name="jobType" class="billy.backend.model.JobType"
 			fetch="select" lazy="false">
 			<column name="job_type_id" not-null="true" />

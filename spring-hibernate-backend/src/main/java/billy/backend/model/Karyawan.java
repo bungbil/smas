@@ -1,6 +1,5 @@
 package billy.backend.model;
 
-import java.util.Arrays;
 import java.util.Date;
 
 public class Karyawan implements java.io.Serializable, Entity {
@@ -26,8 +25,6 @@ public class Karyawan implements java.io.Serializable, Entity {
   private Date lastUpdate;
   private String updatedBy;
   private String catatan;
-  private byte[] profileImage;
-  private byte[] ktpImage;
   private Date tanggalMulaiKerja;
   private Date tanggalBerhentiKerja;
 
@@ -104,10 +101,6 @@ public class Karyawan implements java.io.Serializable, Entity {
     return ktp;
   }
 
-  public byte[] getKtpImage() {
-    return ktpImage;
-  }
-
   public Date getLastUpdate() {
     return lastUpdate;
   }
@@ -118,10 +111,6 @@ public class Karyawan implements java.io.Serializable, Entity {
 
   public String getNamaPanggilan() {
     return namaPanggilan;
-  }
-
-  public byte[] getProfileImage() {
-    return profileImage;
   }
 
   public String getStatusDivisi() {
@@ -207,10 +196,6 @@ public class Karyawan implements java.io.Serializable, Entity {
     this.ktp = ktp;
   }
 
-  public void setKtpImage(byte[] ktpImage) {
-    this.ktpImage = ktpImage;
-  }
-
   public void setLastUpdate(Date lastUpdate) {
     this.lastUpdate = lastUpdate;
   }
@@ -221,10 +206,6 @@ public class Karyawan implements java.io.Serializable, Entity {
 
   public void setNamaPanggilan(String namaPanggilan) {
     this.namaPanggilan = namaPanggilan;
-  }
-
-  public void setProfileImage(byte[] profileImage) {
-    this.profileImage = profileImage;
   }
 
   public void setStatusDivisi(String statusDivisi) {
@@ -263,11 +244,11 @@ public class Karyawan implements java.io.Serializable, Entity {
   public String toString() {
     return String
         .format(
-            "Karyawan [id=%s, version=%s, kodeKaryawan=%s, namaPanggilan=%s, namaKtp=%s, ktp=%s, jenisKelamin=%s, tanggalLahir=%s, telepon=%s, handphone=%s, email=%s, alamat=%s, jobType=%s, inisialDivisi=%s, statusDivisi=%s, supervisorDivisi=%s, lastUpdate=%s, updatedBy=%s, catatan=%s, profileImage=%s, ktpImage=%s, tanggalMulaiKerja=%s, tanggalBerhentiKerja=%s]",
+            "Karyawan [id=%s, version=%s, kodeKaryawan=%s, namaPanggilan=%s, namaKtp=%s, ktp=%s, jenisKelamin=%s, tanggalLahir=%s, telepon=%s, handphone=%s, email=%s, alamat=%s, jobType=%s, inisialDivisi=%s, statusDivisi=%s, supervisorDivisi=%s, lastUpdate=%s, updatedBy=%s, catatan=%s, tanggalMulaiKerja=%s, tanggalBerhentiKerja=%s]",
             id, version, kodeKaryawan, namaPanggilan, namaKtp, ktp, jenisKelamin, tanggalLahir,
             telepon, handphone, email, alamat, jobType, inisialDivisi, statusDivisi,
-            supervisorDivisi, lastUpdate, updatedBy, catatan, Arrays.toString(profileImage),
-            Arrays.toString(ktpImage), tanggalMulaiKerja, tanggalBerhentiKerja);
+            supervisorDivisi, lastUpdate, updatedBy, catatan, tanggalMulaiKerja,
+            tanggalBerhentiKerja);
   }
 
 }

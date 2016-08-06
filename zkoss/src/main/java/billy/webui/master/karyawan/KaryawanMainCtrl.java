@@ -30,6 +30,8 @@ import org.zkoss.zul.Window;
 
 import billy.backend.model.JobType;
 import billy.backend.model.Karyawan;
+import billy.backend.model.KaryawanImages;
+import billy.backend.service.KaryawanImagesService;
 import billy.backend.service.KaryawanService;
 
 import com.googlecode.genericdao.search.Filter;
@@ -92,9 +94,11 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
   // Databinding
   private Karyawan selectedKaryawan;
   private BindingListModelList karyawans;
+  private KaryawanImages karyawanImages;
 
   // ServiceDAOs / Domain Classes
   private KaryawanService karyawanService;
+  private KaryawanImagesService karyawanImagesService;
 
   // always a copy from the bean before modifying. Used for reseting
   private Karyawan originalKaryawan;
@@ -118,10 +122,6 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
      */
     this.self.setAttribute("controller", this, false);
   }
-
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // +++++++++++++++ Component Events ++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   /**
    * 1. Cancel the current action.<br>
@@ -176,6 +176,10 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
     btnLast.setVisible(workspace.isAllowed("button_KaryawanMain_btnLast"));
   }
 
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++ Component Events ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+
   /**
    * Deletes the selected Bean from the DB.
    * 
@@ -196,6 +200,7 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
     }
 
     final Karyawan anKaryawan = getSelectedKaryawan();
+    final KaryawanImages anKaryawanImages = getKaryawanImages();
     if (anKaryawan != null) {
 
       // Show a confirm box
@@ -209,6 +214,7 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
           true, new EventListener() {
             private void deleteBean() throws InterruptedException {
               try {
+                getKaryawanImagesService().delete(anKaryawanImages);
                 getKaryawanService().delete(anKaryawan);
               } catch (DataAccessException e) {
                 ZksampleMessageUtils.showErrorMessage(e.getMostSpecificCause().toString());
@@ -248,7 +254,6 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
     getKaryawanDetailCtrl().doRefresh();
 
   }
-
 
   /**
    * Sets all UI-components to writable-mode. Sets the buttons to edit-Mode. Checks first, if the
@@ -294,7 +299,6 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
     getKaryawanDetailCtrl().txtb_KodeKaryawan.focus();
   }
 
-
   /**
    * Opens the help screen for the current module.
    * 
@@ -306,6 +310,7 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
     ZksampleMessageUtils.doShowNotImplementedMessage();
     event.stopPropagation();
   }
+
 
   /**
    * Sets all UI-components to writable-mode. Stores the current Beans as originBeans and get new
@@ -371,6 +376,7 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
     getKaryawanDetailCtrl().txtb_KodeKaryawan.focus();
 
   }
+
 
   /**
    * Reset the selected object to its origin property values.
@@ -488,13 +494,13 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
       // save image to database
       Image profileImage = getKaryawanDetailCtrl().profileImage.getContent();
       if (profileImage != null) {
-        getKaryawanDetailCtrl().getKaryawan().setProfileImage(profileImage.getByteData());
+        getKaryawanDetailCtrl().getKaryawanImages().setProfileImage(profileImage.getByteData());
       }
       // save image to database
 
       Image ktpImage = getKaryawanDetailCtrl().ktpImage.getContent();
       if (ktpImage != null) {
-        getKaryawanDetailCtrl().getKaryawan().setKtpImage(ktpImage.getByteData());
+        getKaryawanDetailCtrl().getKaryawanImages().setKtpImage(ktpImage.getByteData());
       }
 
       String userName =
@@ -503,6 +509,7 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
       getKaryawanDetailCtrl().getKaryawan().setLastUpdate(new Date());
       getKaryawanDetailCtrl().getKaryawan().setUpdatedBy(userName);
       // save it to database
+      getKaryawanImagesService().saveOrUpdate(getKaryawanDetailCtrl().getKaryawanImages());
       getKaryawanService().saveOrUpdate(getKaryawanDetailCtrl().getKaryawan());
       // if saving is successfully than actualize the beans as
       // origins.
@@ -629,6 +636,14 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
     return this.karyawanDetailCtrl;
   }
 
+  public KaryawanImages getKaryawanImages() {
+    return karyawanImages;
+  }
+
+  public KaryawanImagesService getKaryawanImagesService() {
+    return karyawanImagesService;
+  }
+
   public KaryawanListCtrl getKaryawanListCtrl() {
     return this.karyawanListCtrl;
   }
@@ -649,10 +664,6 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
   public Karyawan getSelectedKaryawan() {
     return this.selectedKaryawan;
   }
-
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // +++++++++++++++++ Business Logic ++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   /**
    * when the checkBox 'Show All' for filtering is checked. <br>
@@ -698,6 +709,10 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
     doCancel(event);
   }
 
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++++ Business Logic ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+
   /**
    * When the "delete" button is clicked.
    * 
@@ -738,10 +753,6 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
     doHelp(event);
   }
 
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-
   /**
    * when the "go last record" button is clicked.
    * 
@@ -761,6 +772,10 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
   public void onClick$btnNew(Event event) throws InterruptedException {
     doNew(event);
   }
+
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   /**
    * when the "go next record" button is clicked.
@@ -792,10 +807,6 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
   public void onClick$btnRefresh(Event event) throws InterruptedException {
     doResizeSelectedTab(event);
   }
-
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   /**
    * When the "save" button is clicked.
@@ -841,6 +852,10 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
       }
     }
   }
+
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   /**
    * Filter the karyawan list with 'like karyawan name'. <br>
@@ -963,6 +978,14 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
 
   public void setKaryawanDetailCtrl(KaryawanDetailCtrl karyawanDetailCtrl) {
     this.karyawanDetailCtrl = karyawanDetailCtrl;
+  }
+
+  public void setKaryawanImages(KaryawanImages karyawanImages) {
+    this.karyawanImages = karyawanImages;
+  }
+
+  public void setKaryawanImagesService(KaryawanImagesService karyawanImagesService) {
+    this.karyawanImagesService = karyawanImagesService;
   }
 
   /* CONTROLLERS */

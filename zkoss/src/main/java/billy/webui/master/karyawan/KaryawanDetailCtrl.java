@@ -29,7 +29,9 @@ import org.zkoss.zul.Window;
 
 import billy.backend.model.JobType;
 import billy.backend.model.Karyawan;
+import billy.backend.model.KaryawanImages;
 import billy.backend.service.JobTypeService;
+import billy.backend.service.KaryawanImagesService;
 import billy.backend.service.KaryawanService;
 import billy.webui.master.jobtype.model.JobTypeListModelItemRenderer;
 import billy.webui.master.karyawan.model.KaryawanListModelItemRenderer;
@@ -82,6 +84,7 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 
   // ServiceDAOs / Domain Classes
   private transient KaryawanService karyawanService;
+  private transient KaryawanImagesService karyawanImagesService;
   private JobTypeService jobTypeService;
 
   /**
@@ -196,16 +199,24 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
       }
     }
     try {
-      if (getSelectedKaryawan().getProfileImage() != null) {
-        profileImage
-            .setContent(new AImage("profileImage", getSelectedKaryawan().getProfileImage()));
-      } else {
-        profileImage.setSrc("/images/icon-no-image.png");
+      KaryawanImages karyawanImages =
+          getKaryawanImagesService().getKaryawanImagesByKaryawan(getSelectedKaryawan());
+      if (karyawanImages == null) {
+        karyawanImages = getKaryawanImagesService().getNewKaryawanImages();
+        karyawanImages.setKaryawan(getSelectedKaryawan());
       }
-      if (getSelectedKaryawan().getKtpImage() != null) {
-        ktpImage.setContent(new AImage("ktpImage", getSelectedKaryawan().getKtpImage()));
-      } else {
-        ktpImage.setSrc("/images/icon-no-image.png");
+      if (karyawanImages != null) {
+        setKaryawanImages(karyawanImages);
+        if (karyawanImages.getProfileImage() != null) {
+          profileImage.setContent(new AImage("profileImage", karyawanImages.getProfileImage()));
+        } else {
+          profileImage.setSrc("/images/icon-no-image.png");
+        }
+        if (karyawanImages.getKtpImage() != null) {
+          ktpImage.setContent(new AImage("ktpImage", karyawanImages.getKtpImage()));
+        } else {
+          ktpImage.setSrc("/images/icon-no-image.png");
+        }
       }
     } catch (IOException e) {
       // TODO Auto-generated catch block
@@ -229,6 +240,15 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
   public Karyawan getKaryawan() {
     // STORED IN THE module's MainController
     return getKaryawanMainCtrl().getSelectedKaryawan();
+  }
+
+  public KaryawanImages getKaryawanImages() {
+    // STORED IN THE module's MainController
+    return getKaryawanMainCtrl().getKaryawanImages();
+  }
+
+  public KaryawanImagesService getKaryawanImagesService() {
+    return karyawanImagesService;
   }
 
   public KaryawanMainCtrl getKaryawanMainCtrl() {
@@ -373,6 +393,7 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
 
   }
 
+
   /**
    * Automatically called method from zk.
    * 
@@ -389,7 +410,6 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
     doCheckRights();
   }
 
-
   public void onOK$txtb_Email(Event event) throws InterruptedException {
     txtb_Alamat.focus();
   }
@@ -402,15 +422,15 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
     txtb_NamaPanggilan.focus();
   }
 
-  public void onOK$txtb_Ktp(Event event) throws InterruptedException {
-    txtb_TanggalLahir.focus();
-  }
-
   // +++++++++++++++++++++++++++++++++++++++++++++++++ //
   // ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
   // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   /* Master BEANS */
+
+  public void onOK$txtb_Ktp(Event event) throws InterruptedException {
+    txtb_TanggalLahir.focus();
+  }
 
   public void onOK$txtb_NamaKtp(Event event) throws InterruptedException {
     txtb_Ktp.focus();
@@ -452,6 +472,15 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
   public void setKaryawan(Karyawan anKaryawan) {
     // STORED IN THE module's MainController
     getKaryawanMainCtrl().setSelectedKaryawan(anKaryawan);
+  }
+
+  public void setKaryawanImages(KaryawanImages anKaryawanImages) {
+    // STORED IN THE module's MainController
+    getKaryawanMainCtrl().setKaryawanImages(anKaryawanImages);
+  }
+
+  public void setKaryawanImagesService(KaryawanImagesService karyawanImagesService) {
+    this.karyawanImagesService = karyawanImagesService;
   }
 
   /* CONTROLLERS */

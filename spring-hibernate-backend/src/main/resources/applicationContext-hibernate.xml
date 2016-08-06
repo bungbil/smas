@@ -68,6 +68,7 @@
 				<value>billy/backend/model/JobType.hbm.xml</value>
 				<value>billy/backend/model/BonusTransport.hbm.xml</value>				
 				<value>billy/backend/model/Karyawan.hbm.xml</value>
+				<value>billy/backend/model/KaryawanImages.hbm.xml</value>
 				<value>billy/backend/model/Barang.hbm.xml</value>
 				<value>billy/backend/model/Penjualan.hbm.xml</value>
 				<value>billy/backend/model/PenjualanDetail.hbm.xml</value>
@@ -291,7 +292,8 @@
 	<bean id="barangDAO" class="billy.backend.dao.impl.BarangDAOImpl" parent="billyBasisDAO" />	
 	<bean id="jobTypeDAO" class="billy.backend.dao.impl.JobTypeDAOImpl" parent="billyBasisDAO" />
 	<bean id="bonusTransportDAO" class="billy.backend.dao.impl.BonusTransportDAOImpl" parent="billyBasisDAO" />
-	<bean id="karyawanDAO" class="billy.backend.dao.impl.KaryawanDAOImpl" parent="billyBasisDAO" />	
+	<bean id="karyawanDAO" class="billy.backend.dao.impl.KaryawanDAOImpl" parent="billyBasisDAO" />
+	<bean id="karyawanImagesDAO" class="billy.backend.dao.impl.KaryawanImagesDAOImpl" parent="billyBasisDAO" />	
 	
 	<bean id="penjualanDAO" class="billy.backend.dao.impl.PenjualanDAOImpl" parent="billyBasisDAO" />
 	<bean id="penjualanDetailDAO" class="billy.backend.dao.impl.PenjualanDetailDAOImpl" parent="billyBasisDAO" />
@@ -324,6 +326,9 @@
 	</bean>
 	<bean name="karyawanService" class="billy.backend.service.impl.KaryawanServiceImpl">
 		<property name="karyawanDAO" ref="karyawanDAO" />
+	</bean>
+	<bean name="karyawanImagesService" class="billy.backend.service.impl.KaryawanImagesServiceImpl">
+		<property name="karyawanImagesDAO" ref="karyawanImagesDAO" />
 	</bean>
 	<bean name="statusService" class="billy.backend.service.impl.StatusServiceImpl">
 		<property name="statusDAO" ref="statusDAO" />
