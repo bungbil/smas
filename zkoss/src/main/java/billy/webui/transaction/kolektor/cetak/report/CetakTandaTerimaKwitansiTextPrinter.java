@@ -155,7 +155,7 @@ public class CetakTandaTerimaKwitansiTextPrinter extends Window implements Seria
         (CompanyProfileService) SpringUtil.getBean("companyProfileService");
     String companyName = companyService.getAllCompanyProfiles().get(0).getCompanyName();
     String companyAddress = companyService.getAllCompanyProfiles().get(0).getAddress();
-    int itemPerPage = 40;
+    int itemPerPage = 80;
     int totalPage = roundUp(listItem.size(), itemPerPage);
     totalTagih = BigDecimal.ZERO;
     totalPembayaran = BigDecimal.ZERO;
