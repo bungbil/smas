@@ -161,7 +161,7 @@ public class CetakTandaTerimaKwitansiTextPrinter extends Window implements Seria
     totalPembayaran = BigDecimal.ZERO;
     totalAkhirTagih = BigDecimal.ZERO;
     totalAkhirPembayaran = BigDecimal.ZERO;
-    logger.info("5");
+
     for (int pageNo = 1; pageNo <= totalPage; pageNo++) {
       totalTagih = BigDecimal.ZERO;
       totalPembayaran = BigDecimal.ZERO;

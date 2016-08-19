@@ -118,7 +118,6 @@ public class CetakPembayaranDiskonTextPrinter extends Window implements Serializ
       data.setNilaiTagih(piutang.getNilaiTagihan());
       data.setKeterangan(piutang.getKeterangan());
       data.setDiskon(piutang.getDiskon());
-      System.out.println(data.toString());
       listData.add(data);
       i++;
     }
