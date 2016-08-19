@@ -1,5 +1,6 @@
 package billy.backend.dao.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -108,6 +109,18 @@ public class PiutangDAOImpl extends BillyBasisDAO<Piutang> implements PiutangDAO
     DetachedCriteria criteria = DetachedCriteria.forClass(Piutang.class);
     criteria.add(Restrictions.ge("tglPembayaran", startDate));
     criteria.add(Restrictions.le("tglPembayaran", endDate));
+    criteria.add(Restrictions.eq("kolektor.id", obj.getId()));
+    return getHibernateTemplate().findByCriteria(criteria);
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Piutang> getAllPiutangsByKolektorAndRangeDateTglPembayaranAndDiskon(Karyawan obj,
+      Date startDate, Date endDate) {
+    DetachedCriteria criteria = DetachedCriteria.forClass(Piutang.class);
+    criteria.add(Restrictions.ge("tglPembayaran", startDate));
+    criteria.add(Restrictions.le("tglPembayaran", endDate));
+    criteria.add(Restrictions.ne("diskon", BigDecimal.ZERO));
     criteria.add(Restrictions.eq("kolektor.id", obj.getId()));
     return getHibernateTemplate().findByCriteria(criteria);
   }

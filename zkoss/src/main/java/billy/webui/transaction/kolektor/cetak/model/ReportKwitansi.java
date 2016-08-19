@@ -9,6 +9,7 @@ public class ReportKwitansi {
   private String namaCustomer;
   private BigDecimal nilaiTagih;
   private BigDecimal nilaiPembayaran;
+  private BigDecimal diskon;
   private Date tglBayar;
   private Date tglBawa;
   private Date tglKuitansi;
@@ -17,6 +18,11 @@ public class ReportKwitansi {
 
   public ReportKwitansi() {
 
+  }
+
+
+  public BigDecimal getDiskon() {
+    return diskon;
   }
 
 
@@ -62,6 +68,11 @@ public class ReportKwitansi {
 
   public Date getTglKuitansi() {
     return tglKuitansi;
+  }
+
+
+  public void setDiskon(BigDecimal diskon) {
+    this.diskon = diskon;
   }
 
 
@@ -114,8 +125,8 @@ public class ReportKwitansi {
   public String toString() {
     return String
         .format(
-            "ReportKwitansi [no=%s, noFaktur=%s, namaCustomer=%s, nilaiTagih=%s, nilaiPembayaran=%s, tglBayar=%s, tglBawa=%s, tglKuitansi=%s, keterangan=%s]",
-            no, noFaktur, namaCustomer, nilaiTagih, nilaiPembayaran, tglBayar, tglBawa,
+            "ReportKwitansi [no=%s, noFaktur=%s, namaCustomer=%s, nilaiTagih=%s, nilaiPembayaran=%s, diskon=%s, tglBayar=%s, tglBawa=%s, tglKuitansi=%s, keterangan=%s]",
+            no, noFaktur, namaCustomer, nilaiTagih, nilaiPembayaran, diskon, tglBayar, tglBawa,
             tglKuitansi, keterangan);
   }
 

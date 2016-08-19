@@ -129,6 +129,13 @@ public class PiutangServiceImpl implements PiutangService {
   }
 
   @Override
+  public List<Piutang> getAllPiutangsByKolektorAndRangeDateTglPembayaranAndDiskon(Karyawan obj,
+      Date startDate, Date endDate) {
+    return getPiutangDAO().getAllPiutangsByKolektorAndRangeDateTglPembayaranAndDiskon(obj,
+        startDate, endDate);
+  }
+
+  @Override
   public int getCountPiutangsByPenjualan(Penjualan penjualan) {
     int result = getPiutangDAO().getCountPiutangsByPenjualan(penjualan);
     return result;

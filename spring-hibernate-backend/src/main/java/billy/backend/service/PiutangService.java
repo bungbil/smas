@@ -29,6 +29,9 @@ public interface PiutangService {
   public List<Piutang> getAllPiutangsByKolektorAndRangeDateTglPembayaran(Karyawan obj,
       Date startDate, Date endDate);
 
+  public List<Piutang> getAllPiutangsByKolektorAndRangeDateTglPembayaranAndDiskon(Karyawan obj,
+      Date startDate, Date endDate);
+
   public int getCountPiutangsByPenjualan(Penjualan penjualan);
 
   public Piutang getNewPiutang();

@@ -39,11 +39,17 @@ alter table karyawan
    drop column profile_image,
    drop column ktp_image;
 
+INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
+(272, 2, 'menuItem_Transaction_CetakPembayaranDiskon', 0),
+(273, 6, 'button_CetakPembayaranDiskonMain_btnCetak', 0);
+INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
+(272, 1, 272, 0),
+(273, 1, 273, 0);
+
+
 
 /*BELUM DIPAKE*/
 INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
-(272, 1, 272, 0),
-(273, 1, 273, 0),
 (274, 1, 274, 0),
 (275, 1, 275, 0),
 (276, 1, 276, 0),

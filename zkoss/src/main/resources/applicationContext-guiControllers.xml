@@ -601,7 +601,10 @@
 		<property name="piutangService" ref="piutangService" />		
 		<property name="karyawanService" ref="karyawanService" />
 	</bean>
-	
+	<bean id="pembayaranDiskonMainCtrl" class="billy.webui.transaction.kolektor.cetak.PembayaranDiskonMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="piutangService" ref="piutangService" />		
+		<property name="karyawanService" ref="karyawanService" />
+	</bean>
 </beans>
 
 	

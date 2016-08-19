@@ -34,6 +34,9 @@ public interface PiutangDAO {
   public List<Piutang> getAllPiutangsByKolektorAndRangeDateTglPembayaran(Karyawan obj,
       Date startDate, Date endDate);
 
+  public List<Piutang> getAllPiutangsByKolektorAndRangeDateTglPembayaranAndDiskon(Karyawan obj,
+      Date startDate, Date endDate);
+
   public int getCountAllPiutangs();
 
   public int getCountPiutangsByPenjualan(Penjualan obj);

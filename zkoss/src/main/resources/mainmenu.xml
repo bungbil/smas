@@ -139,6 +139,8 @@
 				iconName="/images/icons/view.gif" rightName="menuItem_Transaction_CetakPembayaranKwitansi" />
 			<menuItem id="menu_Item_CetakSisaKwitansi" zulNavigation="/WEB-INF/pages/transaction/kolektor/cetak/sisaKwitansiMain.zul"
 				iconName="/images/icons/view.gif" rightName="menuItem_Transaction_CetakSisaKwitansi" />
+			<menuItem id="menu_Item_CetakPembayaranDiskon" zulNavigation="/WEB-INF/pages/transaction/kolektor/cetak/pembayaranDiskonMain.zul"
+				iconName="/images/icons/view.gif" rightName="menuItem_Transaction_CetakPembayaranDiskon" />
 		</menu>	
 		<!--
 
