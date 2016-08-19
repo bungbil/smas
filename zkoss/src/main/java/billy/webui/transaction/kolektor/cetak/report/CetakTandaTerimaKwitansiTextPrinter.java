@@ -50,12 +50,12 @@ public class CetakTandaTerimaKwitansiTextPrinter extends Window implements Seria
   private BigDecimal totalAkhirTagih = BigDecimal.ZERO;
   private BigDecimal totalAkhirPembayaran = BigDecimal.ZERO;
   private final int WIDTH_COLUMN_SEPERATE = 1;
-  private final int WIDTH_COLUMN_A = 5;
-  private final int WIDTH_COLUMN_B = 12;
-  private final int WIDTH_COLUMN_C = 19;
-  private final int WIDTH_COLUMN_D = 11;
-  private final int WIDTH_COLUMN_E = 16;
-  private final int WIDTH_COLUMN_F = 9;
+  private final int WIDTH_COLUMN_A = 4;
+  private final int WIDTH_COLUMN_B = 10;
+  private final int WIDTH_COLUMN_C = 13;
+  private final int WIDTH_COLUMN_D = 9;
+  // private final int WIDTH_COLUMN_E = 16;
+  // private final int WIDTH_COLUMN_F = 9;
 
   private final int WIDTH_FOOTER_COLUMN_A = 16;
   private final int WIDTH_FOOTER_COLUMN_B = 17;
@@ -108,7 +108,7 @@ public class CetakTandaTerimaKwitansiTextPrinter extends Window implements Seria
     int i = 1;
     for (Piutang piutang : listPiutang) {
       ReportKwitansi data = new ReportKwitansi();
-      data.setNo(i + ".");
+      data.setNo(i + "");
       data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
       data.setTglBawa(piutang.getTglBawaKolektor());
       data.setTglBayar(piutang.getTglPembayaran());
@@ -190,7 +190,7 @@ public class CetakTandaTerimaKwitansiTextPrinter extends Window implements Seria
     for (int i = startIndex; i < maxIndex; i++) {
       ReportKwitansi item = listItem.get(i);
 
-      addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
+
       setAlignRight(sb, WIDTH_COLUMN_A, item.getNo());
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
@@ -204,31 +204,37 @@ public class CetakTandaTerimaKwitansiTextPrinter extends Window implements Seria
       String nilaiTagihStr = df.format(item.getNilaiTagih());
       setAlignRight(sb, WIDTH_COLUMN_D, nilaiTagihStr);
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
-
-      String nilaiPembayaranStr = "";
-      if (item.getNilaiPembayaran() != null) {
-        nilaiPembayaranStr = df.format(item.getNilaiPembayaran());
-      }
-      setAlignRight(sb, WIDTH_COLUMN_E, nilaiPembayaranStr);
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
-
-      // String tglBayarStr = formatDate.format(item.getTglBayar());
-      // setAlignLeft(sb, WIDTH_COLUMN_F, tglBayarStr);
-      // addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
-      // addNewLine(sb, 1);
-
-      String keteranganStr = "";
-      if (item.getKeterangan() != null) {
-        keteranganStr = item.getKeterangan();
-      }
-      setAlignLeft(sb, WIDTH_COLUMN_F, keteranganStr);
-      addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
-      addNewLine(sb, 1);
 
       totalTagih = totalTagih.add(item.getNilaiTagih());
       totalAkhirTagih = totalAkhirTagih.add(item.getNilaiTagih());
+
       // totalPembayaran = totalPembayaran.add(item.getNilaiPembayaran());
       // totalAkhirPembayaran = totalAkhirPembayaran.add(item.getNilaiPembayaran());
+
+      i++;
+      if (i < maxIndex) {
+        ReportKwitansi item2 = listItem.get(i);
+
+        setAlignRight(sb, WIDTH_COLUMN_A, item2.getNo());
+        addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
+
+
+        setAlignLeft(sb, WIDTH_COLUMN_B, item2.getNoFaktur());
+        addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
+
+        setAlignLeft(sb, WIDTH_COLUMN_C, item2.getNamaCustomer());
+        addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
+
+        String nilaiTagihStr2 = df.format(item2.getNilaiTagih());
+        setAlignRight(sb, WIDTH_COLUMN_D, nilaiTagihStr2);
+
+        totalTagih = totalTagih.add(item2.getNilaiTagih());
+        totalAkhirTagih = totalAkhirTagih.add(item2.getNilaiTagih());
+      }
+      addNewLine(sb, 1);
+
+
     }
 
   }
@@ -304,24 +310,32 @@ public class CetakTandaTerimaKwitansiTextPrinter extends Window implements Seria
     addDoubleBorder(sb, pageWidth);
     addNewLine(sb, 1);
 
-    addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
-    setAlignLeft(sb, WIDTH_COLUMN_A, "Nomor");
+
+    setAlignLeft(sb, WIDTH_COLUMN_A, "No.");
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-    setAlignLeft(sb, WIDTH_COLUMN_B, "Nomor Faktur");
+    setAlignLeft(sb, WIDTH_COLUMN_B, "No Faktur");
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
     setAlignLeft(sb, WIDTH_COLUMN_C, "Nama Customer");
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-    setAlignRight(sb, WIDTH_COLUMN_D, "Nilai Tagih");
+    setAlignRight(sb, WIDTH_COLUMN_D, "Tagihan");
+
+    addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-    setAlignRight(sb, WIDTH_COLUMN_E, "Nilai Pembayaran");
+    setAlignLeft(sb, WIDTH_COLUMN_A, "No.");
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-    setAlignLeft(sb, WIDTH_COLUMN_F, "Keterangan");
+    setAlignLeft(sb, WIDTH_COLUMN_B, "No Faktur");
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
+
+    setAlignLeft(sb, WIDTH_COLUMN_C, "Nama Customer");
+    addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
+
+    setAlignRight(sb, WIDTH_COLUMN_D, "Tagihan");
+    // addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
     addNewLine(sb, 1);
     addDoubleBorder(sb, pageWidth);
