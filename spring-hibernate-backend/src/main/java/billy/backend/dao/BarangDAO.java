@@ -18,6 +18,8 @@ public interface BarangDAO {
 
   public Barang getBarangByKodeBarang(String string);
 
+  public Barang getBarangByKodeBarangAndWilayah(String string, Long id);
+
   public List<Barang> getBarangsLikeKodeBarang(String string);
 
   public List<Barang> getBarangsLikeNamaBarang(String string);

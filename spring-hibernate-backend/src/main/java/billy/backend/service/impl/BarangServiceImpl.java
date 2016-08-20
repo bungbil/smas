@@ -60,6 +60,11 @@ public class BarangServiceImpl implements BarangService {
     return getBarangDAO().getBarangByKodeBarang(string);
   }
 
+  @Override
+  public Barang getBarangByKodeBarangAndWilayah(String string, Wilayah obj) {
+    return getBarangDAO().getBarangByKodeBarangAndWilayah(string, obj.getId());
+  }
+
   public BarangDAO getBarangDAO() {
     return barangDAO;
   }

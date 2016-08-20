@@ -18,6 +18,8 @@ public interface BarangService {
 
   public Barang getBarangByKodeBarang(String string);
 
+  public Barang getBarangByKodeBarangAndWilayah(String string, Wilayah obj);
+
   public List<Barang> getBarangsLikeKodeBarang(String string);
 
   public List<Barang> getBarangsLikeNamaBarang(String string);

@@ -3,23 +3,30 @@ package billy.webui.transaction.piutang;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
+
 import org.apache.log4j.Logger;
+import org.springframework.dao.DataAccessException;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zkplus.databind.AnnotateDataBinder;
 import org.zkoss.zkplus.databind.BindingListModelList;
 import org.zkoss.zul.Borderlayout;
 import org.zkoss.zul.Button;
-import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Decimalbox;
 import org.zkoss.zul.Intbox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listitem;
+import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
@@ -31,8 +38,12 @@ import billy.backend.service.PiutangService;
 import billy.backend.service.StatusService;
 import billy.webui.master.karyawan.model.KaryawanListModelItemRenderer;
 import billy.webui.master.status.model.StatusListModelItemRenderer;
+import billy.webui.printer.model.PrinterListModelItemRenderer;
+import billy.webui.transaction.piutang.cetak.report.CetakKuitansiTextPrinter;
 import de.forsthaus.UserWorkspace;
 import de.forsthaus.webui.util.GFCBaseCtrl;
+import de.forsthaus.webui.util.MultiLineMessageBox;
+import de.forsthaus.webui.util.ZksampleMessageUtils;
 
 public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
 
@@ -57,8 +68,9 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
 
   protected Datebox txtb_tglBawaKolektor;
   protected Decimalbox txtb_Diskon;
-  protected Combobox cmb_StatusFinal;
-
+  protected Listbox lbox_StatusFinal;
+  protected Button btnCetak;
+  protected Listbox lbox_Printer;
 
   protected Label label_butuhApproval;
   protected Textbox txtb_ReasonApproval;
@@ -75,7 +87,7 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
   private transient PiutangService piutangService;
   private transient KaryawanService karyawanService;
   private transient StatusService statusService;
-
+  private PrintService selectedPrinter;
   DecimalFormat df = new DecimalFormat("#,###");
 
   /**
@@ -115,6 +127,12 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
       setSelectedPiutang(null);
     }
 
+    PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+    lbox_Printer.setModel(new ListModelList(printServices));
+    lbox_Printer.setItemRenderer(new PrinterListModelItemRenderer());
+    PrintService service = PrintServiceLookup.lookupDefaultPrintService();
+    ListModelList lml = (ListModelList) lbox_Printer.getModel();
+    lbox_Printer.setSelectedIndex(lml.indexOf(service));
   }
 
   public void doApprovalMode() {
@@ -144,6 +162,9 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
     txtb_Pembayaran.setReadonly(b);
     txtb_Keterangan.setReadonly(b);
     txtb_KodeKolektor.setReadonly(b);
+    txtb_tglBawaKolektor.setDisabled(b);
+    txtb_Diskon.setReadonly(b);
+    lbox_StatusFinal.setDisabled(b);
   }
 
   public void doRefresh() {
@@ -155,6 +176,16 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
       Status status = getStatusService().getStatusByID(getSelectedPiutang().getStatus().getId());
       lbox_Status.setSelectedIndex(lml.indexOf(status));
     }
+
+    lbox_StatusFinal.setModel(new ListModelList(listStatus));
+    lbox_StatusFinal.setItemRenderer(new StatusListModelItemRenderer());
+    if (getSelectedPiutang().getStatusFinal() != null) {
+      ListModelList lml = (ListModelList) lbox_StatusFinal.getModel();
+      Status status =
+          getStatusService().getStatusByID(getSelectedPiutang().getStatusFinal().getId());
+      lbox_StatusFinal.setSelectedIndex(lml.indexOf(status));
+    }
+
 
     List<Karyawan> listKaryawan = getKaryawanService().getKaryawansByJobTypeId(new Long(6));// Kolektor
 
@@ -171,11 +202,14 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
   }
 
   public void emptyAllValue() {
+    txtb_tglBawaKolektor.setValue(null);
     txtb_tglPembayaran.setValue(null);
     txtb_Pembayaran.setValue(BigDecimal.ZERO);
+    txtb_Diskon.setValue(BigDecimal.ZERO);
     txtb_Keterangan.setValue(null);
     lbox_Kolektor.setSelectedIndex(-1);
-
+    lbox_StatusFinal.setSelectedIndex(-1);
+    selectedPrinter = null;
   }
 
   public AnnotateDataBinder getBinder() {
@@ -234,6 +268,83 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
   }
 
 
+  public void onClick$btnCetak(Event event) throws Exception {
+
+    PrintService printer = null;
+    Listitem itemPrinter = lbox_Printer.getSelectedItem();
+    if (itemPrinter != null) {
+      ListModelList lml1 = (ListModelList) lbox_Printer.getListModel();
+      printer = (PrintService) lml1.get(itemPrinter.getIndex());
+      selectedPrinter = printer;
+      logger.info("Printer : " + printer.getName());
+    }
+
+    final Piutang anPiutang = getSelectedPiutang();
+    if (anPiutang != null) {
+
+      // Show a confirm box
+      final String msg = "Apakah anda yakin akan melanjutkan mencetak kwitansi berikutnya?? \n\n ";
+      final String title = "";
+
+      MultiLineMessageBox.doSetTemplate();
+      if (MultiLineMessageBox.show(msg, title, Messagebox.YES | Messagebox.NO, Messagebox.QUESTION,
+          true, new EventListener() {
+            private void cetakBean() throws InterruptedException {
+              try {
+                // tutup piutang, set aktif = false
+                Piutang piutang = getSelectedPiutang();
+                Status statusLunas = getStatusService().getStatusByID(new Long(2)); // LUNAS
+                piutang.setStatus(statusLunas);
+                piutang.setAktif(false);
+                piutangService.saveOrUpdate(piutang);
+
+                BigDecimal kekuranganBayar =
+                    piutang.getNilaiTagihan().subtract(piutang.getPembayaran())
+                        .subtract(piutang.getDiskon());
+                // get next piutang, set aktif = true, kekurangan dari piutang sebelumnya
+                Piutang nextPiutang = piutangService.getNextPiutang(piutang);
+                nextPiutang.setAktif(true);
+                nextPiutang.setKekuranganBayar(kekuranganBayar);
+                getPiutangService().saveOrUpdate(nextPiutang);
+
+                if (nextPiutang != null) {
+                  final Window win = (Window) Path.getComponent("/outerIndexWindow");
+                  List<Piutang> listPiutang = new ArrayList<Piutang>();
+                  listPiutang.add(nextPiutang);
+                  new CetakKuitansiTextPrinter(win, listPiutang, selectedPrinter);
+                }
+              } catch (DataAccessException e) {
+                ZksampleMessageUtils.showErrorMessage(e.getMostSpecificCause().toString());
+              }
+            }
+
+            @Override
+            public void onEvent(Event evt) {
+              switch (((Integer) evt.getData()).intValue()) {
+                case MultiLineMessageBox.YES:
+                  try {
+                    cetakBean();
+                  } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                  }
+                  break; //
+                case MultiLineMessageBox.NO:
+                  break; //
+              }
+            }
+          }
+
+      ) == MultiLineMessageBox.YES) {
+      }
+
+    }
+
+  }
+
+  /* COMPONENTS and OTHERS */
+
+
   /**
    * Automatically called method from zk.
    * 
@@ -247,7 +358,6 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
 
     doFitSize(event);
   }
-
 
   public void setBinder(AnnotateDataBinder binder) {
     this.binder = binder;
@@ -285,8 +395,5 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
   public void setStatusService(StatusService statusService) {
     this.statusService = statusService;
   }
-
-
-  /* COMPONENTS and OTHERS */
 
 }

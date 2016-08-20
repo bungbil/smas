@@ -170,18 +170,18 @@
 															<label	value="Alamat Pelanggan" />															
 														</hbox>
 														<textbox id="txtb_Alamat" value="@{controller.penjualan.alamat}" 
-															readonly="true" constraint="no empty" maxlength="500"	hflex="1" rows="4" />
+															readonly="true" constraint="no empty" maxlength="500"	hflex="1" rows="1" />
 													</row>	
 													<row>
 														<hbox>
 															<label value="Remark" />															
 														</hbox>
 														<textbox id="txtb_Remark" value="@{controller.penjualan.remark}"
-															readonly="true" maxlength="500" hflex="1" rows="2"  />
+															readonly="true" maxlength="500" hflex="1" rows="1"  />
 													</row>
 													
 													
-													<row>
+													<row visible="false">
 														<label value="Metode Pembayaran"/>
 									            		<radiogroup id="radiogroup_MetodePembayaran" >
 															<grid>

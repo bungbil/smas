@@ -154,10 +154,11 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
           kuitansi.setAlamat3(alamat[2]);
         }
       }
+
+      BigDecimal tagihan = piutang.getNilaiTagihan().add(piutang.getKekuranganBayar());
       kuitansi.setTelepon(piutang.getPenjualan().getTelepon());
-      kuitansi.setJumlahInWord("# " + angkaToTerbilang(piutang.getNilaiTagihan().longValue())
-          + " #");
-      kuitansi.setJumlah(df.format(piutang.getNilaiTagihan()));
+      kuitansi.setJumlahInWord("# " + angkaToTerbilang(tagihan.longValue()) + " #");
+      kuitansi.setJumlah(df.format(tagihan));
       int sisaBulan = piutang.getPenjualan().getIntervalKredit() - piutang.getPembayaranKe();
       BigDecimal sisaPiutang =
           piutang.getPenjualan().getPiutang().subtract(piutang.getNilaiTagihan());
@@ -314,7 +315,7 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
       addNewLine(sb, 3);
 
     }
-
+    System.out.println(sb.toString());
     return sb.toString();
   }
 }

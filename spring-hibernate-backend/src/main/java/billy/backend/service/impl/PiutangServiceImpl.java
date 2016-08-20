@@ -29,6 +29,17 @@ public class PiutangServiceImpl implements PiutangService {
   }
 
   @Override
+  public void deleteNextPiutang(Piutang data) {
+
+    int totalPiutang = data.getPenjualan().getIntervalKredit();
+    int startDelete = data.getPembayaranKe() + 1;
+    for (int i = startDelete; i < totalPiutang; i++) {
+      Piutang piutang = getPiutangDAO().getPiutangByNoFakturAndPembayaranKe(data.getNoFaktur(), i);
+      getPiutangDAO().delete(piutang);
+    }
+  }
+
+  @Override
   public void generatePiutangByIntervalKredit(Penjualan penjualan, int intervalKredit, Status status) {
 
     Calendar cal = Calendar.getInstance();
@@ -78,7 +89,6 @@ public class PiutangServiceImpl implements PiutangService {
     }
 
   }
-
 
   @Override
   public List<Piutang> getAllPiutangsByDivisiAndRangeDateTglJatuhTempo(Karyawan obj,
@@ -144,6 +154,12 @@ public class PiutangServiceImpl implements PiutangService {
   @Override
   public Piutang getNewPiutang() {
     return getPiutangDAO().getNewPiutang();
+  }
+
+  @Override
+  public Piutang getNextPiutang(Piutang data) {
+    return getPiutangDAO().getPiutangByNoFakturAndPembayaranKe(data.getNoFaktur(),
+        data.getPembayaranKe() + 1);
   }
 
   @Override

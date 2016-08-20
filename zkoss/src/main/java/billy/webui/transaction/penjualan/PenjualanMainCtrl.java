@@ -418,6 +418,7 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
    * @throws InterruptedException
    */
   private void doSave(Event event) throws InterruptedException {
+    getPenjualanDetailCtrl().generateNewNoFaktur();
     // logger.debug(event.toString());
     // save all components data in the several tabs to the bean
     getPenjualanDetailCtrl().getBinder().saveAll();
@@ -444,7 +445,13 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
         ListModelList lml1 = (ListModelList) getPenjualanDetailCtrl().lbox_Sales1.getListModel();
         Karyawan karyawan = (Karyawan) lml1.get(itemSales1.getIndex());
         getPenjualanDetailCtrl().getPenjualan().setSales1(karyawan);
-        getPenjualanDetailCtrl().getPenjualan().setDivisi(karyawan.getSupervisorDivisi());
+
+        if (new Long(4).compareTo(karyawan.getJobType().getId()) == 0) {
+          getPenjualanDetailCtrl().getPenjualan().setDivisi(karyawan.getSupervisorDivisi());
+        } else if (new Long(2).compareTo(karyawan.getJobType().getId()) == 0) {
+          getPenjualanDetailCtrl().getPenjualan().setDivisi(karyawan);
+        }
+
       }
 
       Listitem itemSales2 = getPenjualanDetailCtrl().lbox_Sales2.getSelectedItem();
@@ -480,6 +487,7 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
 
       getPenjualanDetailCtrl().getPenjualan().setPiutang(
           getPenjualanDetailCtrl().getPenjualan().getGrandTotal());
+
 
       String userName =
           ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())

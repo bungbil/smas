@@ -12,6 +12,8 @@ public interface PiutangService {
 
   public void delete(Piutang piutang);
 
+  public void deleteNextPiutang(Piutang data);
+
   public void generatePiutangByIntervalKredit(Penjualan penjualan, int intervalKredit, Status status);
 
   public List<Piutang> getAllPiutangsByDivisiAndRangeDateTglJatuhTempo(Karyawan obj,
@@ -35,6 +37,8 @@ public interface PiutangService {
   public int getCountPiutangsByPenjualan(Penjualan penjualan);
 
   public Piutang getNewPiutang();
+
+  public Piutang getNextPiutang(Piutang data);
 
   public Piutang getPiutangByNoFaktur(String data);
 

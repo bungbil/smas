@@ -441,9 +441,9 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
         ListModelList lml1 = (ListModelList) lbox_Sales1.getListModel();
         Karyawan karyawan = (Karyawan) lml1.get(itemSales1.getIndex());
 
-        if (karyawan.getJobType().getId() == new Long(4)) {
+        if (new Long(4).compareTo(karyawan.getJobType().getId()) == 0) {
           divisi = getKaryawanService().getKaryawanByID(karyawan.getSupervisorDivisi().getId());
-        } else if (karyawan.getJobType().getId() == new Long(2)) {
+        } else if (new Long(2).compareTo(karyawan.getJobType().getId()) == 0) {
           divisi = karyawan;
         }
         if (txtb_TglPenjualan.getValue() != null && divisi != null) {
@@ -475,7 +475,8 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
           String substringYear = temp.length() > 2 ? temp.substring(temp.length() - 2) : temp;
           noFaktur.append(substringYear);
 
-          // getSelectedPenjualan().setNoFaktur(noFaktur.toString());
+          getSelectedPenjualan().setNoFaktur(noFaktur.toString());
+          getPenjualan().setNoFaktur(noFaktur.toString());
           txtb_NoFaktur.setValue(noFaktur.toString());
         }
       }
@@ -544,7 +545,7 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
       ListModelList lml1 = (ListModelList) lbox_Sales1.getListModel();
       Karyawan karyawan = (Karyawan) lml1.get(itemSales1.getIndex());
       getSelectedPenjualan().setSales1(karyawan);
-      generateNewNoFaktur();
+      // generateNewNoFaktur();
     }
   }
 
@@ -563,7 +564,7 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
           getKaryawanService().getKaryawanByKodeKaryawan(txtb_KodeSales1.getValue().trim());
       if (karyawan != null) {
         lbox_Sales1.setSelectedIndex(lml.indexOf(karyawan));
-        generateNewNoFaktur();
+        // generateNewNoFaktur();
       } else {
         lbox_Sales1.setSelectedIndex(-1);
         getSelectedPenjualan().setSales1(null);
@@ -621,14 +622,28 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
       ListModelList lml1 = (ListModelList) lbox_Sales1.getListModel();
       Karyawan karyawan = (Karyawan) lml1.get(itemSales1.getIndex());
       getSelectedPenjualan().setSales1(karyawan);
-      generateNewNoFaktur();
+      // generateNewNoFaktur();
     }
   }
 
   public void onChange$txtb_KodeBarang(Event event) throws InterruptedException {
     if (txtb_KodeBarang.getValue() != null) {
+      Listitem item = lbox_Wilayah.getSelectedItem();
+      Wilayah wilayah = null;
+      if (item != null) {
+        ListModelList lml1 = (ListModelList) lbox_Wilayah.getListModel();
+        wilayah = (Wilayah) lml1.get(item.getIndex());
+      }
       ListModelList lml = (ListModelList) lbox_Barang.getModel();
-      Barang barang = getBarangService().getBarangByKodeBarang(txtb_KodeBarang.getValue().trim());
+      Barang barang = null;
+      if (wilayah == null) {
+        barang = getBarangService().getBarangByKodeBarang(txtb_KodeBarang.getValue().trim());
+      } else {
+        barang =
+            getBarangService().getBarangByKodeBarangAndWilayah(txtb_KodeBarang.getValue().trim(),
+                wilayah);
+      }
+
       if (barang != null) {
         lbox_Barang.setSelectedIndex(lml.indexOf(barang));
         btnNewBarang.setDisabled(false);
@@ -640,8 +655,13 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
         }
 
       } else {
+
         lbox_Barang.setSelectedIndex(-1);
         clearBarang();
+
+        MultiLineMessageBox.doSetTemplate();
+        MultiLineMessageBox.show("Kode Barang tidak ditemukan", "Information",
+            MultiLineMessageBox.OK, "Information", true);
       }
     }
   }
@@ -668,7 +688,7 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
           getKaryawanService().getKaryawanByKodeKaryawan(txtb_KodeSales1.getValue().trim());
       if (karyawan != null) {
         lbox_Sales1.setSelectedIndex(lml.indexOf(karyawan));
-        generateNewNoFaktur();
+        // generateNewNoFaktur();
       } else {
         lbox_Sales1.setSelectedIndex(-1);
         getSelectedPenjualan().setSales1(null);
@@ -713,7 +733,7 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
   }
 
   public void onChange$txtb_TglPenjualan(Event event) throws InterruptedException {
-    generateNewNoFaktur();
+    // generateNewNoFaktur();
   }
 
   public void onCheck$radioStatusCash(Event event) throws InterruptedException {
@@ -873,7 +893,7 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
       ListModelList lml1 = (ListModelList) lbox_Sales1.getListModel();
       Karyawan karyawan = (Karyawan) lml1.get(itemSales1.getIndex());
       getSelectedPenjualan().setSales1(karyawan);
-      generateNewNoFaktur();
+      // generateNewNoFaktur();
     }
   }
 

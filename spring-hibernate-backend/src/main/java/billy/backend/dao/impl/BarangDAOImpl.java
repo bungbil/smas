@@ -51,6 +51,16 @@ public class BarangDAOImpl extends BillyBasisDAO<Barang> implements BarangDAO {
     return (Barang) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(criteria));
   }
 
+  @Override
+  @SuppressWarnings("unchecked")
+  public Barang getBarangByKodeBarangAndWilayah(String string, Long id) {
+    DetachedCriteria criteria = DetachedCriteria.forClass(Barang.class);
+    criteria.add(Restrictions.eq("kodeBarang", string));
+    criteria.add(Restrictions.eq("wilayah.id", id));
+
+    return (Barang) DataAccessUtils.uniqueResult(getHibernateTemplate().findByCriteria(criteria));
+  }
+
   @SuppressWarnings("unchecked")
   @Override
   public List<Barang> getBarangsLikeKodeBarang(String string) {

@@ -86,10 +86,16 @@
 														</hbox>		
 														<label />
 														<label />
-														<label />
-															
-																						
+														<label />																																					
 													</row>	
+													<row>
+														<label 	value="Tanggal Bawa Kolektor" />															
+														<datebox id="txtb_tglBawaKolektor"	value="@{controller.piutang.tglBawaKolektor}" 
+															format="dd/MM/yyyy"  width="150px" disabled="true" />				
+														<label />
+														<label />
+														<label />													
+													</row>
 													<row>
 														<label 	value="Tanggal Pembayaran" />															
 														<datebox id="txtb_tglPembayaran"	value="@{controller.piutang.tglPembayaran}" 
@@ -106,9 +112,41 @@
 														<label />													
 													</row>
 													<row>
+														<label value="Diskon"/>
+							                    		<decimalbox id="txtb_Diskon" value="@{controller.piutang.diskon}" format=",###.#" hflex="1" />										                
+							                    		<label />	
+														<label />
+														<label />													
+													</row>
+													<row>
 														<label value="Keterangan" />															
 														<textbox id="txtb_Keterangan" value="@{controller.piutang.keterangan}"
 															readonly="true" maxlength="300" hflex="1" rows="2"  />
+														<label />	
+														<label />
+														<label />	
+													</row>
+													<row>
+														<label value="Status Final"/>									            													      																
+									                    <listbox id="lbox_StatusFinal" mold="select" disabled="true"
+																multiple="false" rows="1" hflex="1" width="100px" xmlns:w="client">																									
+														</listbox>	
+										                <label />	
+														<label />
+														<label />	
+													</row>
+													<row>
+														<label value="Pilih Printer Dot Matrix" />
+														<hbox>														
+															<listbox id="lbox_Printer" mold="select"
+																multiple="false" rows="1" width="250px">															
+															</listbox>	
+															<button id="btnRefeshPrinter" label="Cari Printer"  width="100px" 	/>												
+														</hbox>
+													</row>
+													<row>
+														<label />		
+														<button id="btnCetak" label="Cetak Kwitansi"  	/>
 														<label />	
 														<label />
 														<label />	
