@@ -17,6 +17,7 @@ import org.zkoss.zul.Datebox;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
+import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 import billy.backend.model.Karyawan;
@@ -39,6 +40,7 @@ public class ReportSummaryPenjualanMainCtrl extends GFCBaseCtrl implements Seria
 
 
   protected Window windowReportSummaryPenjualanMain; // autowired
+  protected Textbox txtb_KodeDivisi;
   protected Listbox lbox_Divisi;
   protected Datebox txtb_tanggalAwalPenjualan;
   protected Datebox txtb_tanggalAkhirPenjualan;
@@ -66,10 +68,6 @@ public class ReportSummaryPenjualanMainCtrl extends GFCBaseCtrl implements Seria
     this.self.setAttribute("controller", this, false);
   }
 
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // +++++++++++++++ Component Events ++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-
   /**
    * User rights check. <br>
    * Only components are set visible=true if the logged-in <br>
@@ -82,6 +80,10 @@ public class ReportSummaryPenjualanMainCtrl extends GFCBaseCtrl implements Seria
     final UserWorkspace workspace = getUserWorkspace();
     btnView.setDisabled(!workspace.isAllowed("button_ReportSummaryPenjualanMain_btnView"));
   }
+
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++ Component Events ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   public void doReset() {
     SecUser userLogin =
@@ -112,6 +114,19 @@ public class ReportSummaryPenjualanMainCtrl extends GFCBaseCtrl implements Seria
   /* SERVICES */
   public PenjualanService getPenjualanService() {
     return this.penjualanService;
+  }
+
+  public void onChange$txtb_KodeDivisi(Event event) throws InterruptedException {
+    if (txtb_KodeDivisi.getValue() != null) {
+      ListModelList lml = (ListModelList) lbox_Divisi.getModel();
+      Karyawan karyawan =
+          getKaryawanService().getKaryawanByKodeKaryawan(txtb_KodeDivisi.getValue().trim());
+      if (karyawan != null) {
+        lbox_Divisi.setSelectedIndex(lml.indexOf(karyawan));
+      } else {
+        lbox_Divisi.setSelectedIndex(-1);
+      }
+    }
   }
 
   public void onClick$btnView(Event event) throws Exception {

@@ -154,23 +154,33 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
           kuitansi.setAlamat3(alamat[2]);
         }
       }
+      String kekurangan = "";
+      BigDecimal tagihan = BigDecimal.ZERO;
+      if (piutang.getKekuranganBayar().compareTo(BigDecimal.ZERO) == 1) {
+        kekurangan = "& kekurangannya";
+        tagihan = piutang.getNilaiTagihan().add(piutang.getKekuranganBayar());
+      }
+      kuitansi.setAngsuranKe(piutang.getPembayaranKe() + " " + kekurangan);
 
-      BigDecimal tagihan = piutang.getNilaiTagihan().add(piutang.getKekuranganBayar());
-      kuitansi.setTelepon(piutang.getPenjualan().getTelepon());
       kuitansi.setJumlahInWord("# " + angkaToTerbilang(tagihan.longValue()) + " #");
       kuitansi.setJumlah(df.format(tagihan));
       int sisaBulan = piutang.getPenjualan().getIntervalKredit() - piutang.getPembayaranKe();
       BigDecimal sisaPiutang =
           piutang.getPenjualan().getPiutang().subtract(piutang.getNilaiTagihan());
-      kuitansi.setSisaPembayaran(df.format(piutang.getNilaiTagihan()) + " : SELAMA " + sisaBulan
-          + " BULAN , Total Rp. " + df.format(sisaPiutang));
-      kuitansi.setAngsuranKe("2");
+      if (piutang.getPembayaranKe() == piutang.getPenjualan().getIntervalKredit()) {
+        kuitansi.setSisaPembayaran("Pelunasan");
+      } else {
+        kuitansi.setSisaPembayaran(df.format(piutang.getNilaiTagihan()) + " : SELAMA " + sisaBulan
+            + " BULAN , Total Rp. " + df.format(sisaPiutang));
+      }
+      kuitansi.setTelepon(piutang.getPenjualan().getTelepon());
       kuitansi.setTglAngsuran(formatDate.format(piutang.getTglJatuhTempo()));
       kuitansi.setNamaSupervisor(piutang.getPenjualan().getDivisi().getSupervisorDivisi()
           .getNamaPanggilan());
       kuitansi.setNamaKolektor("");
       if (piutang.getPenjualan().getKolektor() != null) {
-        kuitansi.setNamaKolektor(piutang.getPenjualan().getKolektor().getNamaPanggilan());
+        kuitansi.setNamaKolektor(piutang.getPenjualan().getKolektor().getNamaPanggilan() + "("
+            + piutang.getPenjualan().getKolektor().getKodeKaryawan() + ")");
       }
       List<PenjualanDetail> listPenjualanDetail =
           as.getPenjualanDetailsByPenjualan(piutang.getPenjualan());

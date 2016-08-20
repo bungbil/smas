@@ -31,9 +31,15 @@
 											<rows>
 												<row>
 													<label value="Sales" />
-													<listbox id="lbox_Sales" mold="select"
+													<hbox>														
+														<textbox id="txtb_KodeSales" 
+															  maxlength="50" width="100px" />														
+														<listbox id="lbox_Sales" mold="select"
 															multiple="false" rows="1" width="250px">															
-													</listbox>	
+														</listbox>	
+																								
+													</hbox>	
+													
 												</row>
 												<row>
 													<label value="Tanggal Awal Penjualan" />

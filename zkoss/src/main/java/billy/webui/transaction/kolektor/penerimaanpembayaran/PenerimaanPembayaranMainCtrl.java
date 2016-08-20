@@ -121,6 +121,9 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
         message += "- Kwitansi akan di Finalkan dengan status FINAL \n";
         Status statusFinal = getStatusService().getStatusByID(new Long(8)); // FINAL
         piutang.setStatusFinal(statusFinal);
+      } else if (cmb_StatusFinal.getValue() == "0") {
+        message = "";
+        piutang.setStatusFinal(null);
       }
     }
 

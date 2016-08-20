@@ -175,6 +175,8 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
               RoundingMode.HALF_UP);
       label_KreditPerBulan.setValue(kreditPerBulan);
       getSelectedPenjualan().setKreditPerBulan(kreditPerBulan);
+    } else {
+      txtb_DownPayment.setValue(getSelectedPenjualan().getTotal());
     }
 
 
@@ -583,9 +585,12 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
       txtb_TglAngsuran2.setValue(null);
       label_KreditPerBulan.setValue(BigDecimal.ZERO);
       getSelectedPenjualan().setKreditPerBulan(BigDecimal.ZERO);
+      txtb_DownPayment.setValue(getSelectedPenjualan().getTotal());
+
     } else {
       radioStatusKredit.setSelected(true);
       txtb_TglAngsuran2.setDisabled(false);
+      txtb_DownPayment.setValue(BigDecimal.ZERO);
     }
 
     for (PenjualanDetail ld : listPenjualanDetail) {
@@ -742,6 +747,9 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
     txtb_TglAngsuran2.setValue(null);
     label_KreditPerBulan.setValue(BigDecimal.ZERO);
     getSelectedPenjualan().setKreditPerBulan(BigDecimal.ZERO);
+
+    txtb_DownPayment.setValue(getSelectedPenjualan().getTotal());
+
   }
 
   public void onCheck$radioStatusKredit(Event event) throws InterruptedException {

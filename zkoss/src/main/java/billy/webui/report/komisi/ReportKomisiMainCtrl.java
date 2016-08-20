@@ -16,6 +16,7 @@ import org.zkoss.zul.Datebox;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
+import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 import billy.backend.model.Karyawan;
@@ -38,6 +39,7 @@ public class ReportKomisiMainCtrl extends GFCBaseCtrl implements Serializable {
 
 
   protected Window windowReportKomisiMain; // autowired
+  protected Textbox txtb_KodeDivisi;
   protected Listbox lbox_Divisi;
   protected Datebox txtb_tanggalAwalPenjualan;
   protected Datebox txtb_tanggalAkhirPenjualan;
@@ -86,10 +88,10 @@ public class ReportKomisiMainCtrl extends GFCBaseCtrl implements Serializable {
     SecUser userLogin =
         ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
             .getSecUser();
-    List<Karyawan> listDivisi = getKaryawanService().getAllDivisiKaryawansByUserLogin(userLogin);
+    // List<Karyawan> listDivisi = getKaryawanService().getAllDivisiKaryawansByUserLogin(userLogin);
     List<Karyawan> listSales = getKaryawanService().getAllSalesKaryawansByUserLogin(userLogin);
-    listDivisi.addAll(listSales);
-    lbox_Divisi.setModel(new ListModelList(listDivisi));
+    // listDivisi.addAll(listSales);
+    lbox_Divisi.setModel(new ListModelList(listSales));
     lbox_Divisi.setItemRenderer(new KaryawanListModelItemRenderer());
 
     Date date = new Date(); // your date
@@ -112,6 +114,19 @@ public class ReportKomisiMainCtrl extends GFCBaseCtrl implements Serializable {
   /* SERVICES */
   public PenjualanService getPenjualanService() {
     return this.penjualanService;
+  }
+
+  public void onChange$txtb_KodeDivisi(Event event) throws InterruptedException {
+    if (txtb_KodeDivisi.getValue() != null) {
+      ListModelList lml = (ListModelList) lbox_Divisi.getModel();
+      Karyawan karyawan =
+          getKaryawanService().getKaryawanByKodeKaryawan(txtb_KodeDivisi.getValue().trim());
+      if (karyawan != null) {
+        lbox_Divisi.setSelectedIndex(lml.indexOf(karyawan));
+      } else {
+        lbox_Divisi.setSelectedIndex(-1);
+      }
+    }
   }
 
   public void onClick$btnView(Event event) throws Exception {

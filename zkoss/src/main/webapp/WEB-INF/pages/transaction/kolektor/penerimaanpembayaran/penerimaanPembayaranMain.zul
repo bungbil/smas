@@ -148,12 +148,13 @@
 												<row>
 													<label value="Status Final"/>									            													      		
 													<combobox id="cmb_StatusFinal" width="150px">										                    
+									                        <comboitem label="" value="0"/>
 									                        <comboitem label="DISKON" value="1"/>
 									                        <comboitem label="TARIK BARANG" value="2"/>
 									                        <comboitem label="MASALAH" value="3"/>
 									                        <comboitem label="FINAL" value="4"/>
 									                </combobox>
-									                <label />	
+									                <label />			
 													<label />
 													<label />	
 												</row>

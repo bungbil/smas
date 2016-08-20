@@ -17,6 +17,7 @@ import org.zkoss.zul.Datebox;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
+import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 import billy.backend.model.Karyawan;
@@ -38,6 +39,7 @@ public class ReportPerhitunganKomisiMainCtrl extends GFCBaseCtrl implements Seri
 
 
   protected Window windowReportPerhitunganKomisiMain; // autowired
+  protected Textbox txtb_KodeSales;
   protected Listbox lbox_Sales;
   protected Datebox txtb_tanggalAwalPenjualan;
   protected Datebox txtb_tanggalAkhirPenjualan;
@@ -105,14 +107,27 @@ public class ReportPerhitunganKomisiMainCtrl extends GFCBaseCtrl implements Seri
 
   }
 
-
   public KaryawanService getKaryawanService() {
     return this.karyawanService;
   }
 
+
   /* SERVICES */
   public PenjualanService getPenjualanService() {
     return this.penjualanService;
+  }
+
+  public void onChange$txtb_KodeSales(Event event) throws InterruptedException {
+    if (txtb_KodeSales.getValue() != null) {
+      ListModelList lml = (ListModelList) lbox_Sales.getModel();
+      Karyawan karyawan =
+          getKaryawanService().getKaryawanByKodeKaryawan(txtb_KodeSales.getValue().trim());
+      if (karyawan != null) {
+        lbox_Sales.setSelectedIndex(lml.indexOf(karyawan));
+      } else {
+        lbox_Sales.setSelectedIndex(-1);
+      }
+    }
   }
 
   public void onClick$btnView(Event event) throws Exception {
