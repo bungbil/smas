@@ -37,6 +37,8 @@ public class KaryawanServiceImpl implements KaryawanService {
             listDivisi.add(karyawan);
           }
         }
+      } else {
+        listDivisi = getKaryawansByJobTypeId(new Long(2));
       }
     } else {
       listDivisi = getKaryawansByJobTypeId(new Long(2));
