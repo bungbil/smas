@@ -58,7 +58,12 @@
 														<textbox id="txtb_NamaBarang"
 															value="@{controller.barang.namaBarang}" readonly="true" constraint="no empty" maxlength="254"
 															hflex="1" />
-													</row>													
+													</row>		
+													<row>										                
+										                <label value="Barang Bonus :" />
+										                <checkbox id="bonusCheckbox" label="Ya" disabled="true"
+										                        checked="@{controller.barang.bonus}" />										                
+										            </row>											
 													<row>
 														<hbox>
 															<label

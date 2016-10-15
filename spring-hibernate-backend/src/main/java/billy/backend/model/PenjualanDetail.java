@@ -19,6 +19,7 @@ public class PenjualanDetail implements java.io.Serializable, Entity {
   private BigDecimal tabunganSales;
   private BigDecimal oprDivisi;
   private BigDecimal orDivisi;
+  private boolean bonus;
 
   public PenjualanDetail() {}
 
@@ -39,7 +40,6 @@ public class PenjualanDetail implements java.io.Serializable, Entity {
     this.oprDivisi = oprDivisi;
     this.orDivisi = orDivisi;
   }
-
 
   @Override
   public boolean equals(Object obj) {
@@ -82,6 +82,7 @@ public class PenjualanDetail implements java.io.Serializable, Entity {
   public boolean equals(PenjualanDetail obj) {
     return getId() == obj.getId();
   }
+
 
   public Barang getBarang() {
     return barang;
@@ -146,6 +147,10 @@ public class PenjualanDetail implements java.io.Serializable, Entity {
     return result;
   }
 
+  public boolean isBonus() {
+    return bonus;
+  }
+
   @Override
   public boolean isNew() {
     return (getId() == Long.MIN_VALUE + 1);
@@ -153,6 +158,10 @@ public class PenjualanDetail implements java.io.Serializable, Entity {
 
   public void setBarang(Barang barang) {
     this.barang = barang;
+  }
+
+  public void setBonus(boolean bonus) {
+    this.bonus = bonus;
   }
 
   public void setDownPayment(BigDecimal downPayment) {
@@ -204,8 +213,8 @@ public class PenjualanDetail implements java.io.Serializable, Entity {
   public String toString() {
     return String
         .format(
-            "PenjualanDetail [id=%s, version=%s, penjualan=%s, barang=%s, qty=%s, harga=%s, downPayment=%s, total=%s, komisiSales=%s, tabunganSales=%s, oprDivisi=%s, orDivisi=%s]",
+            "PenjualanDetail [id=%s, version=%s, penjualan=%s, barang=%s, qty=%s, harga=%s, downPayment=%s, total=%s, komisiSales=%s, tabunganSales=%s, oprDivisi=%s, orDivisi=%s, bonus=%s]",
             id, version, penjualan, barang, qty, harga, downPayment, total, komisiSales,
-            tabunganSales, oprDivisi, orDivisi);
+            tabunganSales, oprDivisi, orDivisi, bonus);
   }
 }

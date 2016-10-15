@@ -29,7 +29,6 @@ import billy.backend.model.Karyawan;
 import billy.backend.model.Piutang;
 import billy.backend.model.Status;
 import billy.backend.service.KaryawanService;
-import billy.backend.service.PenjualanService;
 import billy.backend.service.PiutangService;
 import billy.backend.service.StatusService;
 import billy.webui.master.karyawan.model.KaryawanListModelItemRenderer;
@@ -78,7 +77,6 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
   public Textbox txtb_ApprovedRemark;
 
   // ServiceDAOs / Domain Classes
-  private PenjualanService penjualanService;
   private PiutangService piutangService;
   private KaryawanService karyawanService;
   private StatusService statusService;
@@ -159,13 +157,14 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
         message += "- Pembayaran KURANG untuk kwitansi ini \n";
         // Status status = getStatusService().getStatusByID(new Long(2)); // LUNAS
         // piutang.setStatus(status);
+
       } else if (piutang.getNilaiTagihan().compareTo(totalBayar) == -1) {
         message += "- Pembayaran LEBIH untuk kwitansi ini \n";
         Status status = getStatusService().getStatusByID(new Long(2)); // LUNAS
         piutang.setStatus(status);
-        piutang.setFullPayment(true);
+        // piutang.setFullPayment(true);
       } else if (piutang.getNilaiTagihan().compareTo(totalBayar) == 0) {
-        piutang.setFullPayment(true);
+        // piutang.setFullPayment(true);
       }
     }
 
@@ -197,7 +196,9 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
     piutang.setPembayaran(txtb_Pembayaran.getValue());
     piutang.setDiskon(txtb_Diskon.getValue());
     piutang.setKeterangan(txtb_Keterangan.getValue());
-
+    if (txtb_NilaiTagihan.getValue().compareTo(txtb_Pembayaran.getValue()) == 0) {
+      piutang.setFullPayment(true);
+    }
 
     String userName =
         ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
@@ -221,11 +222,6 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
   // +++++++++++++++++++++++++++++++++++++++++++++++++ //
   // +++++++++++++++ Component Events ++++++++++++++++ //
   // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-
-  public PenjualanService getPenjualanService() {
-    return penjualanService;
-  }
-
 
   /* SERVICES */
   public PiutangService getPiutangService() {
@@ -336,6 +332,9 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
         panelResult.setVisible(true);
         txtb_Pembayaran.setValue(piutang.getPembayaran());
         txtb_Diskon.setValue(piutang.getDiskon());
+        if (piutang.getDiskon() == null) {
+          txtb_Diskon.setValue(BigDecimal.ZERO);
+        }
         txtb_Keterangan.setValue(piutang.getKeterangan());
         panelApproval.setVisible(piutang.isNeedApproval());
 
@@ -402,10 +401,6 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
   }
 
   /* COMPONENTS and OTHERS */
-
-  public void setPenjualanService(PenjualanService penjualanService) {
-    this.penjualanService = penjualanService;
-  }
 
   public void setPiutangService(PiutangService piutangService) {
     this.piutangService = piutangService;

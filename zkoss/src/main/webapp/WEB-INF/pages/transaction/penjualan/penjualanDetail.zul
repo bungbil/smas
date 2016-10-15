@@ -163,7 +163,7 @@
 															<label value="Telepon Pelanggan" />															
 														</hbox>
 														<textbox id="txtb_Telepon" value="@{controller.penjualan.telepon}"
-															readonly="true" constraint="no empty" maxlength="100" width="300px" />
+															readonly="true" maxlength="100" width="300px" />
 													</row>
 													<row>
 														<hbox>

@@ -10,6 +10,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zkplus.databind.AnnotateDataBinder;
 import org.zkoss.zkplus.databind.BindingListModelList;
 import org.zkoss.zul.Borderlayout;
+import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Decimalbox;
 import org.zkoss.zul.Intbox;
 import org.zkoss.zul.ListModelList;
@@ -40,7 +41,7 @@ public class BarangDetailCtrl extends GFCBaseCtrl implements Serializable {
   protected Decimalbox txtb_DivisiOpr; // autowired
   protected Decimalbox txtb_DivisiOr; // autowired
   protected Listbox lbox_Wilayah;
-
+  protected Checkbox bonusCheckbox;
   protected Decimalbox txtb_HargaBarang1x; // autowired
   protected Decimalbox txtb_CicilanPerBulan1x; // autowired
   protected Decimalbox txtb_KomisiSales1x; // autowired
@@ -159,7 +160,7 @@ public class BarangDetailCtrl extends GFCBaseCtrl implements Serializable {
     txtb_DivisiOpr.setReadonly(b);
     txtb_DivisiOr.setReadonly(b);
     lbox_Wilayah.setDisabled(b);
-
+    bonusCheckbox.setDisabled(b);
     txtb_HargaBarang1x.setReadonly(b);
     txtb_CicilanPerBulan1x.setReadonly(b);
     txtb_KomisiSales1x.setReadonly(b);
@@ -429,7 +430,7 @@ public class BarangDetailCtrl extends GFCBaseCtrl implements Serializable {
   }
 
   public void onOK$txtb_NamaBarang(Event event) throws InterruptedException {
-    lbox_Wilayah.focus();
+    bonusCheckbox.focus();
   }
 
   public void onOK$txtb_TabunganSales10x(Event event) throws InterruptedException {

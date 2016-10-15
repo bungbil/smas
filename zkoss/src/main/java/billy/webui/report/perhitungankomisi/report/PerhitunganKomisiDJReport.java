@@ -85,7 +85,7 @@ public class PerhitunganKomisiDJReport extends Window implements Serializable {
   private AMedia amedia;
   private static final Logger logger = Logger.getLogger(PerhitunganKomisiDJReport.class);
   DecimalFormat df = new DecimalFormat("#,###");
-  private static final String title = "LAPORAN PERHITUNGAN KOMISI";
+  private static final String title = "SLIP PENDAPATAN MARKETING";
   private static final SimpleDateFormat DATE_FORMATER = new SimpleDateFormat("ddMMyyyy");
 
   public PerhitunganKomisiDJReport(Component parent, Karyawan karyawan, Date startDate,
@@ -464,6 +464,13 @@ public class PerhitunganKomisiDJReport extends Window implements Serializable {
         Double qtyKirim = Double.parseDouble(String.valueOf(penjualanDetail.getQty()));
         BigDecimal komisi = BigDecimal.ZERO;
         BigDecimal tabungan = BigDecimal.ZERO;
+        if (penjualanDetail.getTabunganSales() == null) {
+          penjualanDetail.setTabunganSales(BigDecimal.ZERO);
+        }
+        if (penjualanDetail.getKomisiSales() == null) {
+          penjualanDetail.setKomisiSales(BigDecimal.ZERO);
+        }
+
         tabungan =
             penjualanDetail.getTabunganSales().multiply(new BigDecimal(penjualanDetail.getQty()));
         komisi =

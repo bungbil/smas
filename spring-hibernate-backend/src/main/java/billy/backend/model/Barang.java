@@ -3,8 +3,6 @@ package billy.backend.model;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 public class Barang implements java.io.Serializable, Entity {
 
   private static final long serialVersionUID = 1L;
@@ -60,7 +58,7 @@ public class Barang implements java.io.Serializable, Entity {
 
   private Date lastUpdate;
   private String updatedBy;
-
+  private boolean bonus;
 
   public Barang() {}
 
@@ -137,7 +135,6 @@ public class Barang implements java.io.Serializable, Entity {
     this.kodeBarang = kodeBarang;
   }
 
-
   public boolean equals(Barang barang) {
     return getId() == barang.getId();
   }
@@ -155,6 +152,7 @@ public class Barang implements java.io.Serializable, Entity {
 
     return false;
   }
+
 
   public BigDecimal getCicilanPerBulan10x() {
     return cicilanPerBulan10x;
@@ -184,7 +182,6 @@ public class Barang implements java.io.Serializable, Entity {
     return cicilanPerBulan6x;
   }
 
-
   public BigDecimal getCicilanPerBulan7x() {
     return cicilanPerBulan7x;
   }
@@ -192,6 +189,7 @@ public class Barang implements java.io.Serializable, Entity {
   public BigDecimal getCicilanPerBulan8x() {
     return cicilanPerBulan8x;
   }
+
 
   public BigDecimal getCicilanPerBulan9x() {
     return cicilanPerBulan9x;
@@ -209,7 +207,6 @@ public class Barang implements java.io.Serializable, Entity {
     return hargaBarang10x;
   }
 
-
   public BigDecimal getHargaBarang1x() {
     return hargaBarang1x;
   }
@@ -217,6 +214,7 @@ public class Barang implements java.io.Serializable, Entity {
   public BigDecimal getHargaBarang2x() {
     return hargaBarang2x;
   }
+
 
   public BigDecimal getHargaBarang3x() {
     return hargaBarang3x;
@@ -360,9 +358,17 @@ public class Barang implements java.io.Serializable, Entity {
     return Long.valueOf(getId()).hashCode();
   }
 
+  public boolean isBonus() {
+    return bonus;
+  }
+
   @Override
   public boolean isNew() {
     return (getId() == Long.MIN_VALUE + 1);
+  }
+
+  public void setBonus(boolean bonus) {
+    this.bonus = bonus;
   }
 
   public void setCicilanPerBulan10x(BigDecimal cicilanPerBulan10x) {
@@ -564,7 +570,19 @@ public class Barang implements java.io.Serializable, Entity {
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this).append("id", getId()).toString();
+    return String
+        .format(
+            "Barang [id=%s, version=%s, kodeBarang=%s, namaBarang=%s, wilayah=%s, divisiOr=%s, divisiOpr=%s, hargaBarang1x=%s, cicilanPerBulan1x=%s, komisiSales1x=%s, tabunganSales1x=%s, hargaBarang2x=%s, cicilanPerBulan2x=%s, komisiSales2x=%s, tabunganSales2x=%s, hargaBarang3x=%s, cicilanPerBulan3x=%s, komisiSales3x=%s, tabunganSales3x=%s, hargaBarang4x=%s, cicilanPerBulan4x=%s, komisiSales4x=%s, tabunganSales4x=%s, hargaBarang5x=%s, cicilanPerBulan5x=%s, komisiSales5x=%s, tabunganSales5x=%s, hargaBarang6x=%s, cicilanPerBulan6x=%s, komisiSales6x=%s, tabunganSales6x=%s, hargaBarang7x=%s, cicilanPerBulan7x=%s, komisiSales7x=%s, tabunganSales7x=%s, hargaBarang8x=%s, cicilanPerBulan8x=%s, komisiSales8x=%s, tabunganSales8x=%s, hargaBarang9x=%s, cicilanPerBulan9x=%s, komisiSales9x=%s, tabunganSales9x=%s, hargaBarang10x=%s, cicilanPerBulan10x=%s, komisiSales10x=%s, tabunganSales10x=%s, lastUpdate=%s, updatedBy=%s, bonus=%s]",
+            id, version, kodeBarang, namaBarang, wilayah, divisiOr, divisiOpr, hargaBarang1x,
+            cicilanPerBulan1x, komisiSales1x, tabunganSales1x, hargaBarang2x, cicilanPerBulan2x,
+            komisiSales2x, tabunganSales2x, hargaBarang3x, cicilanPerBulan3x, komisiSales3x,
+            tabunganSales3x, hargaBarang4x, cicilanPerBulan4x, komisiSales4x, tabunganSales4x,
+            hargaBarang5x, cicilanPerBulan5x, komisiSales5x, tabunganSales5x, hargaBarang6x,
+            cicilanPerBulan6x, komisiSales6x, tabunganSales6x, hargaBarang7x, cicilanPerBulan7x,
+            komisiSales7x, tabunganSales7x, hargaBarang8x, cicilanPerBulan8x, komisiSales8x,
+            tabunganSales8x, hargaBarang9x, cicilanPerBulan9x, komisiSales9x, tabunganSales9x,
+            hargaBarang10x, cicilanPerBulan10x, komisiSales10x, tabunganSales10x, lastUpdate,
+            updatedBy, bonus);
   }
 
 }

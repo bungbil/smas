@@ -113,7 +113,7 @@
 													</row>
 													<row>
 														<label value="Diskon"/>
-							                    		<decimalbox id="txtb_Diskon" value="@{controller.piutang.diskon}" format=",###.#" hflex="1" />										                
+							                    		<decimalbox id="txtb_Diskon" value="@{controller.piutang.diskon}" format=",###.#" hflex="1" readonly="true"/>										                
 							                    		<label />	
 														<label />
 														<label />													

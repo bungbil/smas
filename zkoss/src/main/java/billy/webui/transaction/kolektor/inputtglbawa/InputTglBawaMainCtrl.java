@@ -24,9 +24,11 @@ import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 import billy.backend.model.Karyawan;
+import billy.backend.model.Penjualan;
 import billy.backend.model.Piutang;
 import billy.backend.model.Status;
 import billy.backend.service.KaryawanService;
+import billy.backend.service.PenjualanService;
 import billy.backend.service.PiutangService;
 import billy.backend.service.StatusService;
 import billy.webui.master.karyawan.model.KaryawanListModelItemRenderer;
@@ -68,6 +70,7 @@ public class InputTglBawaMainCtrl extends GFCBaseCtrl implements Serializable {
 
   // ServiceDAOs / Domain Classes
   private PiutangService piutangService;
+  private PenjualanService penjualanService;
   private KaryawanService karyawanService;
   private StatusService statusService;
   DecimalFormat df = new DecimalFormat("#,###");
@@ -110,13 +113,15 @@ public class InputTglBawaMainCtrl extends GFCBaseCtrl implements Serializable {
     }
 
     Listitem itemKolektor = lbox_Kolektor.getSelectedItem();
+    Penjualan penjualan = piutang.getPenjualan();
     if (itemKolektor != null) {
       ListModelList lml1 = (ListModelList) lbox_Kolektor.getListModel();
       Karyawan karyawan = (Karyawan) lml1.get(itemKolektor.getIndex());
       piutang.setKolektor(karyawan);
-      piutang.getPenjualan().setKolektor(karyawan);
+      penjualan.setKolektor(karyawan);
     } else {
       piutang.setKolektor(null);
+      penjualan.setKolektor(null);
     }
 
     String userName =
@@ -124,8 +129,10 @@ public class InputTglBawaMainCtrl extends GFCBaseCtrl implements Serializable {
             .getUsername();
     piutang.setLastUpdate(new Date());
     piutang.setUpdatedBy(userName);
-
+    penjualan.setLastUpdate(new Date());
+    penjualan.setUpdatedBy(userName);
     // save it to database
+    getPenjualanService().saveOrUpdate(penjualan);
     getPiutangService().saveOrUpdate(piutang);
 
     panelResult.setVisible(false);
@@ -137,19 +144,23 @@ public class InputTglBawaMainCtrl extends GFCBaseCtrl implements Serializable {
     return this.karyawanService;
   }
 
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // +++++++++++++++ Component Events ++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  public PenjualanService getPenjualanService() {
+    return penjualanService;
+  }
 
   /* SERVICES */
   public PiutangService getPiutangService() {
     return this.piutangService;
   }
 
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++ Component Events ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   public StatusService getStatusService() {
     return statusService;
   }
+
 
   public void onChange$txtb_KodeKolektor(Event event) throws InterruptedException {
     if (txtb_KodeKolektor.getValue() != null) {
@@ -200,7 +211,6 @@ public class InputTglBawaMainCtrl extends GFCBaseCtrl implements Serializable {
 
     }
   }
-
 
   public void onClick$btnSearch(Event event) throws Exception {
 
@@ -260,6 +270,7 @@ public class InputTglBawaMainCtrl extends GFCBaseCtrl implements Serializable {
 
   }
 
+
   /**
    * Automatically called method from zk.
    * 
@@ -288,6 +299,10 @@ public class InputTglBawaMainCtrl extends GFCBaseCtrl implements Serializable {
 
   public void setKaryawanService(KaryawanService karyawanService) {
     this.karyawanService = karyawanService;
+  }
+
+  public void setPenjualanService(PenjualanService penjualanService) {
+    this.penjualanService = penjualanService;
   }
 
   // +++++++++++++++++++++++++++++++++++++++++++++++++ //

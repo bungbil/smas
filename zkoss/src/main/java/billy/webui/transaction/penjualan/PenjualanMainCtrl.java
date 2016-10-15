@@ -859,7 +859,7 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
       if (hargaBarang.compareTo(hargaBarangDiList) != 0) {
         message +=
             "- Harga Barang " + penjualanDetail.getBarang().getNamaBarang() + " berubah dari "
-                + df.format(hargaBarang) + " ke " + df.format(hargaBarangDiList) + " \n";
+                + df.format(hargaBarangDiList) + " ke " + df.format(hargaBarang) + " \n";
       }
     }
 

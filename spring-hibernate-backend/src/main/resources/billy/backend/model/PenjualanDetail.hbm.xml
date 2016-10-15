@@ -47,6 +47,8 @@
 		<property name="orDivisi" type="big_decimal">
 			<column name="or_divisi" precision="12" />
 		</property>				
-		
+		<property name="bonus" type="boolean">
+			<column name="bonus"  />
+		</property>
 	</class>
 </hibernate-mapping>

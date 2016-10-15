@@ -526,6 +526,8 @@ public class SummaryTabunganDJReport extends Window implements Serializable {
     Map<String, SummaryTabungan> mapTabungan = new HashMap<String, SummaryTabungan>();
     PenjualanService penjualanService = (PenjualanService) SpringUtil.getBean("penjualanService");
     BigDecimal tabungan = BigDecimal.ZERO;
+    totalTabungan = BigDecimal.ZERO;
+
     for (Penjualan penjualan : listPenjualan) {
       List<PenjualanDetail> penjualanDetails =
           penjualanService.getPenjualanDetailsByPenjualan(penjualan);

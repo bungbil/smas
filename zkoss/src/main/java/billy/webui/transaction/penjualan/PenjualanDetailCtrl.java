@@ -149,11 +149,19 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
       if (getSelectedPenjualan().getTotal() != null) {
         BigDecimal total = getSelectedPenjualan().getTotal();
         for (PenjualanDetail pd : listPenjualanDetail) {
-          BigDecimal pddp = (pd.getTotal().divide(total, 2, RoundingMode.HALF_UP)).multiply(dp);
-          pd.setDownPayment(pddp);
+          if (pd.isBonus()) {
+            total = total.subtract(pd.getTotal());
+            dp = dp.subtract(pd.getTotal());
+            pd.setDownPayment(pd.getTotal());
+          }
+        }
+        for (PenjualanDetail pd : listPenjualanDetail) {
+          if (!pd.isBonus()) {
+            BigDecimal pddp = (pd.getTotal().divide(total, 2, RoundingMode.HALF_UP)).multiply(dp);
+            pd.setDownPayment(pddp);
+          }
         }
       }
-
     }
     if (getSelectedPenjualan().getTotal() != null) {
       grandTotal = grandTotal.add(getSelectedPenjualan().getTotal());
@@ -178,10 +186,7 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
     } else {
       txtb_DownPayment.setValue(getSelectedPenjualan().getTotal());
     }
-
-
   }
-
 
   public BigDecimal calculateSubTotal(int itemQuantity, BigDecimal itemPrice) {
     BigDecimal itemCost = BigDecimal.ZERO;
@@ -600,7 +605,6 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
       ld.setKomisiSales(getBarangService().getKomisiSalesByIntervalKredit(ld.getBarang(), interval));
       ld.setTabunganSales(getBarangService().getTabunganSalesByIntervalKredit(ld.getBarang(),
           interval));
-
       /*
        * BigDecimal cicilanPerBulan = calculateSubTotal(ld.getQty(),
        * getBarangService().getCicilanPerBulanByIntervalKredit(ld.getBarang(), interval));
@@ -767,6 +771,8 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
       item.setBarang(barang);
       item.setHarga(txtb_HargaBarang.getValue());
       item.setQty(txtb_JumlahBarang.getValue());
+      // BigDecimal dpPersen = new BigDecimal(1 / interval);
+      // item.setDownPayment(item.getHarga().divide(dpPersen, RoundingMode.HALF_UP));
       item.setDownPayment(getBarangService().getCicilanPerBulanByIntervalKredit(barang, interval));
       BigDecimal total =
           calculateSubTotal(txtb_JumlahBarang.getValue(), txtb_HargaBarang.getValue());
@@ -775,6 +781,7 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
       item.setTabunganSales(getBarangService().getTabunganSalesByIntervalKredit(barang, interval));
       item.setOprDivisi(barang.getDivisiOpr());
       item.setOrDivisi(barang.getDivisiOr());
+      item.setBonus(barang.isBonus());
       item.setPenjualan(getSelectedPenjualan());
       listPenjualanDetail.add(item);
       doFillListboxPenjualanDetail();

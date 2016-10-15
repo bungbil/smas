@@ -407,12 +407,17 @@ public class KomisiDivisiDJReport extends Window implements Serializable {
       for (PenjualanDetail penjualanDetail : penjualanDetails) {
         String kodeBarang = penjualanDetail.getBarang().getKodeBarang();
         KomisiDivisi data = mapBarang.get(kodeBarang);
+        if (penjualanDetail.getOprDivisi() == null) {
+          penjualanDetail.setOprDivisi(BigDecimal.ZERO);
+        }
+        if (penjualanDetail.getOrDivisi() == null) {
+          penjualanDetail.setOrDivisi(BigDecimal.ZERO);
+        }
         if (data == null) {
           data = new KomisiDivisi();
           data.setNamaBarang(penjualanDetail.getBarang().getNamaBarang());
           data.setQty(penjualanDetail.getQty());
-          data.setOprDivisi(penjualanDetail.getOprDivisi());
-          data.setOrDivisi(penjualanDetail.getOrDivisi());
+
           BigDecimal jumlah =
               (penjualanDetail.getOprDivisi().add(penjualanDetail.getOrDivisi()))
                   .multiply(new BigDecimal(penjualanDetail.getQty()));

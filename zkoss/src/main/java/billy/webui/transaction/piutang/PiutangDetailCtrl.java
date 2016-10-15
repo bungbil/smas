@@ -295,15 +295,18 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
                   Piutang piutang = getSelectedPiutang();
                   Status statusLunas = getStatusService().getStatusByID(new Long(2)); // LUNAS
                   BigDecimal lastPiutang = piutang.getPenjualan().getPiutang();
-                  BigDecimal totalPembayaran = piutang.getPembayaran().add(piutang.getDiskon());
+                  BigDecimal diskon = piutang.getDiskon();
+                  if (diskon == null) {
+                    diskon = BigDecimal.ZERO;
+                  }
+                  BigDecimal totalPembayaran = piutang.getPembayaran().add(diskon);
                   piutang.getPenjualan().setPiutang(lastPiutang.subtract(totalPembayaran));
                   piutang.setStatus(statusLunas);
                   piutang.setAktif(false);
                   piutangService.saveOrUpdate(piutang);
 
                   BigDecimal kekuranganBayar =
-                      piutang.getNilaiTagihan().subtract(piutang.getPembayaran())
-                          .subtract(piutang.getDiskon());
+                      piutang.getNilaiTagihan().subtract(piutang.getPembayaran()).subtract(diskon);
                   // get next piutang, set aktif = true, kekurangan dari piutang sebelumnya
                   Piutang nextPiutang = piutangService.getNextPiutang(piutang);
                   nextPiutang.setAktif(true);
