@@ -26,9 +26,11 @@ import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 import billy.backend.model.Karyawan;
+import billy.backend.model.Penjualan;
 import billy.backend.model.Piutang;
 import billy.backend.model.Status;
 import billy.backend.service.KaryawanService;
+import billy.backend.service.PenjualanService;
 import billy.backend.service.PiutangService;
 import billy.backend.service.StatusService;
 import billy.webui.master.karyawan.model.KaryawanListModelItemRenderer;
@@ -77,8 +79,11 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
   public Textbox txtb_ApprovedRemark;
 
   // ServiceDAOs / Domain Classes
+  private PenjualanService penjualanService;
   private PiutangService piutangService;
+
   private KaryawanService karyawanService;
+
   private StatusService statusService;
   DecimalFormat df = new DecimalFormat("#,###");
   Piutang piutang = new Piutang();
@@ -210,6 +215,19 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
     // save it to database
     getPiutangService().saveOrUpdate(piutang);
 
+    // recalculate piutang at penjualan
+    List<Piutang> piutangList = getPiutangService().getPiutangsByPenjualan(piutang.getPenjualan());
+    BigDecimal totalPaid = BigDecimal.ZERO;
+    Penjualan penjualan = piutang.getPenjualan();
+    totalPaid = totalPaid.add(penjualan.getDownPayment());
+    for (Piutang pp : piutangList) {
+      if (null != pp.getPembayaran()) {
+        totalPaid = totalPaid.add(pp.getPembayaran());
+      }
+    }
+    penjualan.setPiutang(penjualan.getTotal().subtract(totalPaid));
+    getPenjualanService().saveOrUpdate(penjualan);
+
     panelResult.setVisible(false);
     piutang = null;
     txtb_SearchNoKwitansi.focus();
@@ -219,14 +237,18 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
     return this.karyawanService;
   }
 
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // +++++++++++++++ Component Events ++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  public PenjualanService getPenjualanService() {
+    return penjualanService;
+  }
 
   /* SERVICES */
   public PiutangService getPiutangService() {
     return this.piutangService;
   }
+
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++ Component Events ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   public StatusService getStatusService() {
     return statusService;
@@ -244,7 +266,6 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
       }
     }
   }
-
 
   public void onClick$btnSave(Event event) throws Exception {
     String message = "";
@@ -287,6 +308,7 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
 
     }
   }
+
 
   public void onClick$btnSearch(Event event) throws Exception {
 
@@ -384,9 +406,13 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
     btnSearch.focus();
   }
 
-
   public void onOK$txtb_tglPembayaran(Event event) throws InterruptedException {
     txtb_Pembayaran.focus();
+  }
+
+
+  public void setKaryawanService(KaryawanService karyawanService) {
+    this.karyawanService = karyawanService;
   }
 
   // +++++++++++++++++++++++++++++++++++++++++++++++++ //
@@ -396,8 +422,8 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
   /* Master BEANS */
 
 
-  public void setKaryawanService(KaryawanService karyawanService) {
-    this.karyawanService = karyawanService;
+  public void setPenjualanService(PenjualanService penjualanService) {
+    this.penjualanService = penjualanService;
   }
 
   /* COMPONENTS and OTHERS */

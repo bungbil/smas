@@ -584,6 +584,7 @@
 	
 	<!-- Kolektor PenerimaanPembayaran -->
 	<bean id="penerimaanPembayaranMainCtrl" class="billy.webui.transaction.kolektor.penerimaanpembayaran.PenerimaanPembayaranMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="penjualanService" ref="penjualanService" />	
 		<property name="piutangService" ref="piutangService" />		
 		<property name="karyawanService" ref="karyawanService" />
 		<property name="statusService" ref="statusService" />
