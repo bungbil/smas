@@ -233,85 +233,7 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
     txtb_SearchNoKwitansi.focus();
   }
 
-  public KaryawanService getKaryawanService() {
-    return this.karyawanService;
-  }
-
-  public PenjualanService getPenjualanService() {
-    return penjualanService;
-  }
-
-  /* SERVICES */
-  public PiutangService getPiutangService() {
-    return this.piutangService;
-  }
-
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // +++++++++++++++ Component Events ++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-
-  public StatusService getStatusService() {
-    return statusService;
-  }
-
-  public void onChange$txtb_KodeKolektor(Event event) throws InterruptedException {
-    if (txtb_KodeKolektor.getValue() != null) {
-      ListModelList lml = (ListModelList) lbox_Kolektor.getModel();
-      Karyawan karyawan =
-          getKaryawanService().getKaryawanByKodeKaryawan(txtb_KodeKolektor.getValue().trim());
-      if (karyawan != null) {
-        lbox_Kolektor.setSelectedIndex(lml.indexOf(karyawan));
-      } else {
-        lbox_Kolektor.setSelectedIndex(-1);
-      }
-    }
-  }
-
-  public void onClick$btnSave(Event event) throws Exception {
-    String message = "";
-
-    message += doCheckPembayaran();
-    message += doCheckApproval();
-    if (piutang != null) {
-
-      if (message.equals("")) {
-        // Show a confirm box
-        message =
-            Labels.getLabel("message_Data_Modified_Save_Data_YesNo") + "\n\n --> "
-                + piutang.getNoKuitansi();
-      }
-      final String title = Labels.getLabel("message_Saving_Data");
-
-      MultiLineMessageBox.doSetTemplate();
-      if (MultiLineMessageBox.show(message, title, Messagebox.YES | Messagebox.NO,
-          Messagebox.QUESTION, true, new EventListener() {
-
-            @Override
-            public void onEvent(Event evt) throws Exception {
-              switch (((Integer) evt.getData()).intValue()) {
-                case MultiLineMessageBox.YES:
-                  try {
-                    doSave(evt);
-                  } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                  }
-                  break; //
-                case MultiLineMessageBox.NO:
-                  break; //
-              }
-            }
-          }
-
-      ) == MultiLineMessageBox.YES) {
-      }
-
-    }
-  }
-
-
-  public void onClick$btnSearch(Event event) throws Exception {
-
+  public void doSearchNoFaktur() throws Exception {
     if (txtb_SearchNoKwitansi.getValue() != null) {
       piutang = piutangService.getPiutangByNoFaktur(txtb_SearchNoKwitansi.getValue());
 
@@ -372,6 +294,87 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
       ZksampleMessageUtils.showErrorMessage("Harap masukkan No Kwitansi");
       return;
     }
+  }
+
+  public KaryawanService getKaryawanService() {
+    return this.karyawanService;
+  }
+
+  public PenjualanService getPenjualanService() {
+    return penjualanService;
+  }
+
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++ Component Events ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+
+  /* SERVICES */
+  public PiutangService getPiutangService() {
+    return this.piutangService;
+  }
+
+  public StatusService getStatusService() {
+    return statusService;
+  }
+
+  public void onChange$txtb_KodeKolektor(Event event) throws InterruptedException {
+    if (txtb_KodeKolektor.getValue() != null) {
+      ListModelList lml = (ListModelList) lbox_Kolektor.getModel();
+      Karyawan karyawan =
+          getKaryawanService().getKaryawanByKodeKaryawan(txtb_KodeKolektor.getValue().trim());
+      if (karyawan != null) {
+        lbox_Kolektor.setSelectedIndex(lml.indexOf(karyawan));
+      } else {
+        lbox_Kolektor.setSelectedIndex(-1);
+      }
+    }
+  }
+
+  public void onClick$btnSave(Event event) throws Exception {
+    String message = "";
+
+    message += doCheckPembayaran();
+    message += doCheckApproval();
+    if (piutang != null) {
+
+      if (message.equals("")) {
+        // Show a confirm box
+        message =
+            Labels.getLabel("message_Data_Modified_Save_Data_YesNo") + "\n\n --> "
+                + piutang.getNoKuitansi();
+      }
+      final String title = Labels.getLabel("message_Saving_Data");
+
+      MultiLineMessageBox.doSetTemplate();
+      if (MultiLineMessageBox.show(message, title, Messagebox.YES | Messagebox.NO,
+          Messagebox.QUESTION, true, new EventListener() {
+
+            @Override
+            public void onEvent(Event evt) throws Exception {
+              switch (((Integer) evt.getData()).intValue()) {
+                case MultiLineMessageBox.YES:
+                  try {
+                    doSave(evt);
+                  } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                  }
+                  break; //
+                case MultiLineMessageBox.NO:
+                  break; //
+              }
+            }
+          }
+
+      ) == MultiLineMessageBox.YES) {
+      }
+
+    }
+  }
+
+  public void onClick$btnSearch(Event event) throws Exception {
+
+    doSearchNoFaktur();
 
   }
 
@@ -403,7 +406,13 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
   }
 
   public void onOK$txtb_SearchNoKwitansi(Event event) throws InterruptedException {
-    btnSearch.focus();
+    // btnSearch.focus();
+    try {
+      doSearchNoFaktur();
+    } catch (Exception e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
 
   public void onOK$txtb_tglPembayaran(Event event) throws InterruptedException {

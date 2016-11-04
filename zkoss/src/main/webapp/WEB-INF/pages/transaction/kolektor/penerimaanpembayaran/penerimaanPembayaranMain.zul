@@ -87,6 +87,13 @@
 															multiple="false" rows="1" hflex="1" width="100px" xmlns:w="client">																									
 													</listbox>										                    						                    				                    									                    									                    											                     
 								                </row>
+								                <row>
+								                	<label value="Kekurangan Bayar"/>
+						                    		<decimalbox id="txb_KekuranganBayar" value="@{controller.piutang.kekuranganBayar}" readonly="true" format=",###.#" hflex="1" />										                
+						                    		<label />	
+								                	<label />
+								                	<label />								                    						                    				                    									                    									                    											                     
+								                </row>
 												<row>
 													<separator bar="true"></separator>
 													<separator bar="true"></separator>

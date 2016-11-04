@@ -36,7 +36,7 @@
 														<textbox id="txtb_KodeDivisi" 
 															  maxlength="50" width="100px" />														
 														<listbox id="lbox_Divisi" mold="select"
-															multiple="false" rows="1" width="250px">
+															multiple="false" rows="1" width="250px" disabled="true">
 														</listbox>									
 													</hbox>																																						
 												</row>

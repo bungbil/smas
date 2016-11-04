@@ -276,12 +276,12 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
     // txtb_NoFaktur.setReadonly(b);
     txtb_NoOrderSheet.setReadonly(b);
     txtb_Mandiri.setReadonly(b);
-    lbox_Wilayah.setDisabled(b);
+    // lbox_Wilayah.setDisabled(b);
     txtb_TglPenjualan.setDisabled(b);
     txtb_RencanaKirim.setDisabled(b);
-    lbox_Sales1.setDisabled(b);
-    lbox_Sales2.setDisabled(b);
-    lbox_Pengirim.setDisabled(b);
+    // lbox_Sales1.setDisabled(b);
+    // lbox_Sales2.setDisabled(b);
+    // lbox_Pengirim.setDisabled(b);
     txtb_NamaPelanggan.setReadonly(b);
     txtb_Telepon.setReadonly(b);
     txtb_Alamat.setReadonly(b);

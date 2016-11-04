@@ -92,6 +92,13 @@
 															multiple="false" rows="1" hflex="1" width="100px" xmlns:w="client">																									
 													</listbox>										                    						                    				                    									                    									                    											                     
 								                </row>
+								                <row>
+								                	<label value="Kekurangan Bayar"/>
+						                    		<decimalbox id="txb_KekuranganBayar" value="@{controller.piutang.kekuranganBayar}" readonly="true" format=",###.#" hflex="1" />										                
+						                    		<label />	
+								                	<label />
+								                	<label />								                    						                    				                    									                    									                    											                     
+								                </row>
 												<row>
 													<separator bar="true"></separator>
 													<separator bar="true"></separator>
@@ -105,7 +112,7 @@
 														<textbox id="txtb_KodeKolektor" value="@{controller.piutang.kolektor.kodeKaryawan}"
 																maxlength="50"/>
 														<listbox id="lbox_Kolektor" mold="select"
-																multiple="false" rows="1" xmlns:w="client">																											
+																multiple="false" rows="1" xmlns:w="client"  disabled="true">																											
 														</listbox>
 													</hbox>		
 													<label />

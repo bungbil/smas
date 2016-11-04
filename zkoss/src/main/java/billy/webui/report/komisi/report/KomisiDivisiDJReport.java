@@ -405,30 +405,32 @@ public class KomisiDivisiDJReport extends Window implements Serializable {
       List<PenjualanDetail> penjualanDetails =
           penjualanService.getPenjualanDetailsByPenjualan(penjualan);
       for (PenjualanDetail penjualanDetail : penjualanDetails) {
-        String kodeBarang = penjualanDetail.getBarang().getKodeBarang();
-        KomisiDivisi data = mapBarang.get(kodeBarang);
-        if (penjualanDetail.getOprDivisi() == null) {
-          penjualanDetail.setOprDivisi(BigDecimal.ZERO);
-        }
-        if (penjualanDetail.getOrDivisi() == null) {
-          penjualanDetail.setOrDivisi(BigDecimal.ZERO);
-        }
-        if (data == null) {
-          data = new KomisiDivisi();
-          data.setNamaBarang(penjualanDetail.getBarang().getNamaBarang());
-          data.setQty(penjualanDetail.getQty());
+        if (!penjualanDetail.getBarang().isBonus()) {
+          String kodeBarang = penjualanDetail.getBarang().getKodeBarang();
+          KomisiDivisi data = mapBarang.get(kodeBarang);
+          if (penjualanDetail.getOprDivisi() == null) {
+            penjualanDetail.setOprDivisi(BigDecimal.ZERO);
+          }
+          if (penjualanDetail.getOrDivisi() == null) {
+            penjualanDetail.setOrDivisi(BigDecimal.ZERO);
+          }
+          if (data == null) {
+            data = new KomisiDivisi();
+            data.setNamaBarang(penjualanDetail.getBarang().getNamaBarang());
+            data.setQty(penjualanDetail.getQty());
 
-          BigDecimal jumlah =
-              (penjualanDetail.getOprDivisi().add(penjualanDetail.getOrDivisi()))
-                  .multiply(new BigDecimal(penjualanDetail.getQty()));
-          data.setJumlah(jumlah);
-          mapBarang.put(kodeBarang, data);
-        } else {
-          data.setQty(data.getQty() + penjualanDetail.getQty());
-          BigDecimal jumlah =
-              (penjualanDetail.getOprDivisi().add(penjualanDetail.getOrDivisi()))
-                  .multiply(new BigDecimal(penjualanDetail.getQty()));
-          data.setJumlah(data.getJumlah().add(jumlah));
+            BigDecimal jumlah =
+                (penjualanDetail.getOprDivisi().add(penjualanDetail.getOrDivisi()))
+                    .multiply(new BigDecimal(penjualanDetail.getQty()));
+            data.setJumlah(jumlah);
+            mapBarang.put(kodeBarang, data);
+          } else {
+            data.setQty(data.getQty() + penjualanDetail.getQty());
+            BigDecimal jumlah =
+                (penjualanDetail.getOprDivisi().add(penjualanDetail.getOrDivisi()))
+                    .multiply(new BigDecimal(penjualanDetail.getQty()));
+            data.setJumlah(data.getJumlah().add(jumlah));
+          }
         }
       }
     }

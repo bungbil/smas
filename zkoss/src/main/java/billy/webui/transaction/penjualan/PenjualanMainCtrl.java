@@ -839,6 +839,19 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
 
   public void onClick$btnSave(Event event) throws InterruptedException {
 
+
+    if (getPenjualanDetailCtrl().getPenjualan().getSales1() != null) {
+      getPenjualanDetailCtrl().getPenjualan().setPengirim(
+          getPenjualanDetailCtrl().getPenjualan().getSales1());
+    }
+
+    if (getPenjualanDetailCtrl().getPenjualan().getIntervalKredit() != 1
+        && getPenjualanDetailCtrl().getPenjualan().getTglAngsuran2() == null) {
+      ZksampleMessageUtils
+          .showErrorMessage("Tanggal Angsuran ke 2 wajib di isi jika transaksi kredit");
+      return;
+    }
+
     /*
      * validasi butuh approval - tgl angsuran ke 2 > 45 hari tgl penjualan - harga barang berubah
      */

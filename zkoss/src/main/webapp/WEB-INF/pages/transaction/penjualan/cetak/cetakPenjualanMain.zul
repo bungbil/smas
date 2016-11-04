@@ -37,7 +37,7 @@
 															  maxlength="50" width="100px" />
 														
 														<listbox id="lbox_Divisi" mold="select"
-															multiple="false" rows="1" width="250px">															
+															multiple="false" rows="1" width="250px" disabled="true">															
 														</listbox>	
 														<button id="btnReset" label="Reset"  width="100px" 	/>
 												
@@ -48,12 +48,12 @@
 												<row>
 													<label value="No Faktur Awal (Full No Faktur)" />
 													<textbox id="txtb_NoFakturAwal"
-															width="150px" constraint="no empty" maxlength="10"/>
+															width="150px" constraint="no empty" maxlength="50"/>
 												</row>
 												<row>
 													<label value="No Faktur Akhir (Full No Faktur)" />
 													<textbox id="txtb_NoFakturAkhir" 
-															width="150px" constraint="no empty" maxlength="10"/>
+															width="150px" constraint="no empty" maxlength="50"/>
 												</row>
 												<row>
 													<label value="Pilih Printer Dot Matrix" />
