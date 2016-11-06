@@ -504,9 +504,6 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
       soPiutang.addFilter(new Filter("aktif", true));
     }
 
-    // if (checkbox_PiutangList_Warning.isChecked()) {
-    // soPiutang.addFilter(new Filter("warning", true));
-    // }
 
     SecUser secUser =
         ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
@@ -523,6 +520,21 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
     // Change the BindingListModel.
     if (getPiutangListCtrl().getBinder() != null) {
       getPiutangListCtrl().getPagedBindingListWrapper().setSearchObject(soPiutang);
+
+      if (checkbox_PiutangList_Warning.isChecked()) {
+        List<Piutang> listPiutangNonWarning = new ArrayList<Piutang>();
+        ListModelList lml1 =
+            (ListModelList) getPiutangListCtrl().getListBoxPiutang().getListModel();
+
+        for (int i = 0; i < lml1.getSize(); i++) {
+          Piutang piutang = (Piutang) lml1.get(i);
+          if (!piutang.isWarning()) {
+            listPiutangNonWarning.add(piutang);
+          }
+        }
+        getPiutangListCtrl().getPagedBindingListWrapper().removeAll(listPiutangNonWarning);
+
+      }
 
       // get the current Tab for later checking if we must change it
       Tab currentTab = tabbox_PiutangMain.getSelectedTab();
@@ -680,7 +692,7 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
     tb_Search_Kode_Kolektor.setValue(""); // clear
     tb_Search_Awal_Tgl_Jatuh_Tempo.setValue(null); // clear
     tb_Search_Akhir_Tgl_Jatuh_Tempo.setValue(null); // clear
-    // checkbox_PiutangList_Warning.setChecked(false);
+    checkbox_PiutangList_Warning.setChecked(false);
     checkbox_PiutangList_Aktif.setChecked(false);
 
     doSearch(event);
@@ -795,7 +807,6 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
    */
   public void onClick$btnPrint(Event event) throws InterruptedException {
     final Window win = (Window) Path.getComponent("/outerIndexWindow");
-
 
     List<Piutang> listPiutang = new ArrayList<Piutang>();
     ListModelList lml1 = (ListModelList) getPiutangListCtrl().getListBoxPiutang().getListModel();

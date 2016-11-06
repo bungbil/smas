@@ -36,10 +36,10 @@
 							checked="true"
 							label="aktif" />
 						<space />
-						<!-- <checkbox id="checkbox_PiutangList_Warning"
+						<checkbox id="checkbox_PiutangList_Warning"
 							checked="false"
 							image="/images/icons/warning_obj.gif" />
-						<space /> -->
+						<space /> 
 
 						<label value="No Faktur" style="padding-right: 1px"/>
 						<textbox id="tb_Search_No_Faktur" width="80px" />
