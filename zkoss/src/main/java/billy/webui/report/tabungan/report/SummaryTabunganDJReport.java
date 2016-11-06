@@ -84,7 +84,7 @@ public class SummaryTabunganDJReport extends Window implements Serializable {
   private Iframe iFrame;
   private ByteArrayOutputStream output;
   private InputStream mediais;
-  private BigDecimal totalTabungan = BigDecimal.ZERO;
+
   private final Double totalQty = 0.0;
   private AMedia amedia;
   private static final Logger logger = Logger.getLogger(SummaryTabunganDJReport.class);
@@ -526,7 +526,7 @@ public class SummaryTabunganDJReport extends Window implements Serializable {
     Map<String, SummaryTabungan> mapTabungan = new HashMap<String, SummaryTabungan>();
     PenjualanService penjualanService = (PenjualanService) SpringUtil.getBean("penjualanService");
     BigDecimal tabungan = BigDecimal.ZERO;
-    totalTabungan = BigDecimal.ZERO;
+    logger.info("awal generateData mapTabungan = " + mapTabungan.size());
 
     for (Penjualan penjualan : listPenjualan) {
       List<PenjualanDetail> penjualanDetails =
@@ -590,6 +590,7 @@ public class SummaryTabunganDJReport extends Window implements Serializable {
       }
     }
     List<SummaryTabungan> tabunganList = new ArrayList<SummaryTabungan>();
+    BigDecimal totalTabungan = BigDecimal.ZERO;
     for (Map.Entry<String, SummaryTabungan> kodeDivisiSalesMap : mapTabungan.entrySet()) {
       SummaryTabungan data = kodeDivisiSalesMap.getValue();
       tabunganList.add(data);

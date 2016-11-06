@@ -31,13 +31,14 @@
 					tooltiptext="${c:l('listbox.tooltiptext')}" width="100%"
 					height="100%" multiple="false">
 					<listhead sizable="true">
+						
 						<listheader id="listheader_PiutangList_NoFaktur"
 							sclass="FDListBoxHeader1" 
 							sort="auto" width="10%"
 							label="No Faktur" />
 						<listheader id="listheader_PiutangList_NoKuitansi"
 							sclass="FDListBoxHeader1" 
-							sort="auto" width="10%"
+							sort="auto" width="15%"
 							label="No Kwitansi" />
 						<listheader id="listheader_PiutangList_PembayaranKe"
 							sclass="FDListBoxHeader1" 
@@ -61,25 +62,30 @@
 							label="Pembayaran" />
 						<listheader id="listheader_PiutangList_TglJatuhTempo"
 							sclass="FDListBoxHeader1" 
-							sort="auto" width="10%"
+							sort="auto" width="15%"
 							label="Tgl Jatuh Tempo" />
 						<listheader id="listheader_PiutangList_Kolektor"
 							sclass="FDListBoxHeader1" 
-							sort="auto" width="10%"
+							sort="auto" width="15%"
 							label="Kolektor" />						
-						<listheader id="listheader_PiutangList_LastUpdate"
+						<!-- <listheader id="listheader_PiutangList_LastUpdate"
 							sclass="FDListBoxHeader1" 
 							sort="auto" width="10%"
 							label="${c:l('common.lastUpdate')}" />
 						<listheader id="listheader_PiutangList_UpdatedBy"
 							sclass="FDListBoxHeader1" 
 							sort="auto" width="5%"
-							label="${c:l('common.updatedBy')}" />												
+							label="${c:l('common.updatedBy')}" /> -->												
 					</listhead>
 
 					<listitem self="@{each='piutang'}" value="@{piutang}"
 						forward="onDoubleClick=onDoubleClickedPiutangItem">
-
+						<attribute name="onCreate">							
+								<![CDATA[ 
+									if(self.getValue().isWarning()) self.setStyle("color: red");									
+								]]>							
+						</attribute>
+						
 						<listcell label="@{piutang.penjualan.noFaktur}"
 							style="padding-left: 5px" />
 						<listcell label="@{piutang.noKuitansi}"
@@ -98,10 +104,10 @@
 							style="padding-left: 5px" />
 						<listcell label="@{piutang.kolektor.namaPanggilan}"
 							style="padding-left: 5px" />																		
-						<listcell label="@{piutang.lastUpdate}"
+						<!-- <listcell label="@{piutang.lastUpdate}"
 							style="padding-left: 5px" />	
 						<listcell label="@{piutang.updatedBy}"
-							style="padding-left: 5px" />							
+							style="padding-left: 5px" /> -->							
 					</listitem>
 				</listbox>
 			</center>

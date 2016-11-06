@@ -5,7 +5,9 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -13,6 +15,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.EventQueues;
@@ -21,6 +24,7 @@ import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zkplus.databind.BindingListModelList;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Checkbox;
+import org.zkoss.zul.Datebox;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Messagebox;
@@ -34,6 +38,7 @@ import billy.backend.model.Karyawan;
 import billy.backend.model.Piutang;
 import billy.backend.model.Status;
 import billy.backend.service.PiutangService;
+import billy.webui.transaction.piutang.report.PiutangListDJReport;
 
 import com.googlecode.genericdao.search.Filter;
 
@@ -66,9 +71,13 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
   // filter components
   protected Checkbox checkbox_PiutangList_ShowAll; // autowired
   protected Textbox tb_Search_No_Faktur; // aurowired
-  protected Textbox tb_Search_Nama_Pelanggan; // aurowired
-  protected Textbox tb_Search_Alamat; // aurowired
   protected Button button_PiutangList_Search; // aurowired
+
+  protected Checkbox checkbox_PiutangList_Warning; // autowired
+  protected Checkbox checkbox_PiutangList_Aktif; // autowired
+  protected Textbox tb_Search_Kode_Kolektor; // aurowired
+  protected Datebox tb_Search_Awal_Tgl_Jatuh_Tempo; // aurowired
+  protected Datebox tb_Search_Akhir_Tgl_Jatuh_Tempo; // aurowired
 
 
   // Button controller for the CRUD buttons
@@ -172,11 +181,11 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
     button_PiutangList_Search.setVisible(workspace.isAllowed("button_PiutangList_Search"));
     tabPiutangList.setVisible(workspace.isAllowed("windowPiutangList"));
     tabPiutangDetail.setVisible(workspace.isAllowed("windowPiutangDetail"));
-    btnEdit.setVisible(workspace.isAllowed("button_PiutangMain_btnEdit"));
-    btnNew.setVisible(workspace.isAllowed("button_PiutangMain_btnNew"));
-    btnDelete.setVisible(workspace.isAllowed("button_PiutangMain_btnDelete"));
-    btnSave.setVisible(workspace.isAllowed("button_PiutangMain_btnSave"));
-    btnCancel.setVisible(workspace.isAllowed("button_PiutangMain_btnCancel"));
+    // btnEdit.setVisible(workspace.isAllowed("button_PiutangMain_btnEdit"));
+    // btnNew.setVisible(workspace.isAllowed("button_PiutangMain_btnNew"));
+    // btnDelete.setVisible(workspace.isAllowed("button_PiutangMain_btnDelete"));
+    // btnSave.setVisible(workspace.isAllowed("button_PiutangMain_btnSave"));
+    // btnCancel.setVisible(workspace.isAllowed("button_PiutangMain_btnCancel"));
     btnFirst.setVisible(workspace.isAllowed("button_PiutangMain_btnFirst"));
     btnPrevious.setVisible(workspace.isAllowed("button_PiutangMain_btnPrevious"));
     btnNext.setVisible(workspace.isAllowed("button_PiutangMain_btnNext"));
@@ -465,6 +474,70 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
     }
   }
 
+  public void doSearch(Event event) throws Exception {
+    // ++ create the searchObject and init sorting ++//
+    HibernateSearchObject<Piutang> soPiutang =
+        new HibernateSearchObject<Piutang>(Piutang.class, getPiutangListCtrl().getCountRows());
+    soPiutang.addSort("tglJatuhTempo", false);
+
+    // check which field have input
+    if (StringUtils.isNotEmpty(tb_Search_No_Faktur.getValue())) {
+      soPiutang.addFilter(new Filter("penjualan.noFaktur", tb_Search_No_Faktur.getValue(),
+          Filter.OP_EQUAL));
+    }
+
+    if (StringUtils.isNotEmpty(tb_Search_Kode_Kolektor.getValue())) {
+      soPiutang.addFilter(new Filter("kolektor.kodeKaryawan", tb_Search_Kode_Kolektor.getValue(),
+          Filter.OP_EQUAL));
+    }
+
+    if (tb_Search_Awal_Tgl_Jatuh_Tempo.getValue() != null) {
+      soPiutang.addFilter(new Filter("tglJatuhTempo", tb_Search_Awal_Tgl_Jatuh_Tempo.getValue(),
+          Filter.OP_GREATER_OR_EQUAL));
+    }
+    if (tb_Search_Akhir_Tgl_Jatuh_Tempo.getValue() != null) {
+      soPiutang.addFilter(new Filter("tglJatuhTempo", tb_Search_Akhir_Tgl_Jatuh_Tempo.getValue(),
+          Filter.OP_LESS_OR_EQUAL));
+    }
+
+    if (checkbox_PiutangList_Aktif.isChecked()) {
+      soPiutang.addFilter(new Filter("aktif", true));
+    }
+
+    // if (checkbox_PiutangList_Warning.isChecked()) {
+    // soPiutang.addFilter(new Filter("warning", true));
+    // }
+
+    SecUser secUser =
+        ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+            .getSecUser();
+    if (secUser.getKaryawan() != null) {
+      Karyawan karyawan = secUser.getKaryawan();
+      if (karyawan.getSupervisorDivisi() != null) {
+        Karyawan supervisor = karyawan.getSupervisorDivisi();
+        soPiutang.addFilter(new Filter("penjualan.divisi.supervisorDivisi.id", supervisor.getId(),
+            Filter.OP_EQUAL));
+      }
+    }
+
+    // Change the BindingListModel.
+    if (getPiutangListCtrl().getBinder() != null) {
+      getPiutangListCtrl().getPagedBindingListWrapper().setSearchObject(soPiutang);
+
+      // get the current Tab for later checking if we must change it
+      Tab currentTab = tabbox_PiutangMain.getSelectedTab();
+
+      // check if the tab is one of the Detail tabs. If so do not
+      // change the selection of it
+      if (!currentTab.equals(tabPiutangList)) {
+        tabPiutangList.setSelected(true);
+      } else {
+        currentTab.setSelected(true);
+      }
+    }
+
+  }
+
   /**
    * Skip/Leaf through the models data according the navigation buttons and selected the according
    * row in the listbox.
@@ -571,10 +644,10 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
     return this.piutangDetailCtrl;
   }
 
+
   public PiutangListCtrl getPiutangListCtrl() {
     return this.piutangListCtrl;
   }
-
 
   public BindingListModelList getPiutangs() {
     return this.piutangs;
@@ -588,52 +661,35 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
     return this.selectedPiutang;
   }
 
+  public void onCheck$checkbox_PiutangList_Aktif(Event event) throws Exception {
+
+    doSearch(event);
+
+  }
+
   /**
    * when the checkBox 'Show All' for filtering is checked. <br>
    * 
    * @param event
    */
-  public void onCheck$checkbox_PiutangList_ShowAll(Event event) {
+  public void onCheck$checkbox_PiutangList_ShowAll(Event event) throws Exception {
     // logger.debug(event.toString());
 
     // empty the text search boxes
     tb_Search_No_Faktur.setValue(""); // clear
-    tb_Search_Nama_Pelanggan.setValue(""); // clear
-    tb_Search_Alamat.setValue(""); // clear
+    tb_Search_Kode_Kolektor.setValue(""); // clear
+    tb_Search_Awal_Tgl_Jatuh_Tempo.setValue(null); // clear
+    tb_Search_Akhir_Tgl_Jatuh_Tempo.setValue(null); // clear
+    // checkbox_PiutangList_Warning.setChecked(false);
+    checkbox_PiutangList_Aktif.setChecked(false);
 
-    // ++ create the searchObject and init sorting ++//
-    HibernateSearchObject<Piutang> soPiutang =
-        new HibernateSearchObject<Piutang>(Piutang.class, getPiutangListCtrl().getCountRows());
-    soPiutang.addSort("tglJatuhTempo", false);
+    doSearch(event);
 
-    SecUser secUser =
-        ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-            .getSecUser();
-    if (secUser.getKaryawan() != null) {
-      Karyawan karyawan = secUser.getKaryawan();
-      if (karyawan.getSupervisorDivisi() != null) {
-        Karyawan supervisor = karyawan.getSupervisorDivisi();
-        soPiutang.addFilter(new Filter("divisi.supervisorDivisi.id", supervisor.getId(),
-            Filter.OP_EQUAL));
-        soPiutang.addFilter(new Filter("aktif", true, Filter.OP_EQUAL));
-      }
-    }
+  }
 
-    // Change the BindingListModel.
-    if (getPiutangListCtrl().getBinder() != null) {
-      getPiutangListCtrl().getPagedBindingListWrapper().setSearchObject(soPiutang);
+  public void onCheck$checkbox_PiutangList_Warning(Event event) throws Exception {
 
-      // get the current Tab for later checking if we must change it
-      Tab currentTab = tabbox_PiutangMain.getSelectedTab();
-
-      // check if the tab is one of the Detail tabs. If so do not
-      // change the selection of it
-      if (!currentTab.equals(tabPiutangList)) {
-        tabPiutangList.setSelected(true);
-      } else {
-        currentTab.setSelected(true);
-      }
-    }
+    doSearch(event);
 
   }
 
@@ -667,6 +723,10 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
     doEdit(event);
   }
 
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+
   /**
    * when the "go first record" button is clicked.
    * 
@@ -676,10 +736,6 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
   public void onClick$btnFirst(Event event) throws InterruptedException {
     doSkip(event);
   }
-
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   /**
    * When the "help" button is clicked.
@@ -729,6 +785,32 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
    */
   public void onClick$btnPrevious(Event event) throws InterruptedException {
     doSkip(event);
+  }
+
+  /**
+   * When the "print" button is clicked.<br>
+   * 
+   * @param event
+   * @throws InterruptedException
+   */
+  public void onClick$btnPrint(Event event) throws InterruptedException {
+    final Window win = (Window) Path.getComponent("/outerIndexWindow");
+
+
+    List<Piutang> listPiutang = new ArrayList<Piutang>();
+    ListModelList lml1 = (ListModelList) getPiutangListCtrl().getListBoxPiutang().getListModel();
+    int size = lml1.getSize();
+    for (int i = 0; i < size; i++) {
+      Piutang piutang = (Piutang) lml1.get(i);
+      listPiutang.add(piutang);
+    }
+
+    if (listPiutang.size() > 0) {
+      new PiutangListDJReport(win, tb_Search_Kode_Kolektor.getValue(),
+          tb_Search_Awal_Tgl_Jatuh_Tempo.getValue(), tb_Search_Akhir_Tgl_Jatuh_Tempo.getValue(),
+          listPiutang);
+    }
+
   }
 
   // +++++++++++++++++++++++++++++++++++++++++++++++++ //
@@ -828,56 +910,11 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
 
     // if not empty
     if (StringUtils.isNotEmpty(tb_Search_No_Faktur.getValue())
-        || StringUtils.isNotEmpty(tb_Search_Nama_Pelanggan.getValue())
-        || StringUtils.isNotEmpty(tb_Search_Alamat.getValue())) {
+        || StringUtils.isNotEmpty(tb_Search_Kode_Kolektor.getValue())
+        || tb_Search_Awal_Tgl_Jatuh_Tempo.getValue() != null
+        || tb_Search_Akhir_Tgl_Jatuh_Tempo.getValue() != null) {
       checkbox_PiutangList_ShowAll.setChecked(false); // unCheck
-
-      // ++ create the searchObject and init sorting ++//
-      HibernateSearchObject<Piutang> soPiutang =
-          new HibernateSearchObject<Piutang>(Piutang.class, getPiutangListCtrl().getCountRows());
-      // check which field have input
-      if (StringUtils.isNotEmpty(tb_Search_No_Faktur.getValue())) {
-        soPiutang.addFilter(new Filter("penjualan.noFaktur", tb_Search_No_Faktur.getValue(),
-            Filter.OP_EQUAL));
-      }
-
-      if (StringUtils.isNotEmpty(tb_Search_Nama_Pelanggan.getValue())) {
-        soPiutang.addFilter(new Filter("penjualan.namaPelanggan", "%"
-            + tb_Search_Nama_Pelanggan.getValue().toUpperCase() + "%", Filter.OP_ILIKE));
-      }
-
-      if (StringUtils.isNotEmpty(tb_Search_Alamat.getValue())) {
-        soPiutang.addFilter(new Filter("penjualan.alamat", "%" + tb_Search_Alamat.getValue() + "%",
-            Filter.OP_ILIKE));
-      }
-      SecUser secUser =
-          ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-              .getSecUser();
-      if (secUser.getKaryawan() != null) {
-        Karyawan karyawan = secUser.getKaryawan();
-        if (karyawan.getSupervisorDivisi() != null) {
-          Karyawan supervisor = karyawan.getSupervisorDivisi();
-          soPiutang.addFilter(new Filter("penjualan.divisi.supervisorDivisi.id",
-              supervisor.getId(), Filter.OP_EQUAL));
-          soPiutang.addFilter(new Filter("aktif", true, Filter.OP_EQUAL));
-        }
-      }
-
-      // Change the BindingListModel.
-      if (getPiutangListCtrl().getBinder() != null) {
-        getPiutangListCtrl().getPagedBindingListWrapper().setSearchObject(soPiutang);
-
-        // get the current Tab for later checking if we must change it
-        Tab currentTab = tabbox_PiutangMain.getSelectedTab();
-
-        // check if the tab is one of the Detail tabs. If so do not
-        // change the selection of it
-        if (!currentTab.equals(tabPiutangList)) {
-          tabPiutangList.setSelected(true);
-        } else {
-          currentTab.setSelected(true);
-        }
-      }
+      doSearch(event);
     }
   }
 

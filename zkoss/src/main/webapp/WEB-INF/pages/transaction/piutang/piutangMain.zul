@@ -26,25 +26,34 @@
 				<!-- SEARCH AREA -->
 				<toolbar align="center"
 					style="float:left; border-style: none;">
-					<hbox align="center" style="padding: 2px">
+					<hbox align="center" style="padding: 1px">
 						<space />
 						<checkbox id="checkbox_PiutangList_ShowAll"
-							checked="true"
+							checked="false"
 							label="${c:l('common.showAll')}" />
 						<space />
+						<checkbox id="checkbox_PiutangList_Aktif"
+							checked="true"
+							label="aktif" />
+						<space />
+						<!-- <checkbox id="checkbox_PiutangList_Warning"
+							checked="false"
+							image="/images/icons/warning_obj.gif" />
+						<space /> -->
 
-						<label value="No Faktur" style="padding-right: 3px"/>
-						<textbox id="tb_Search_No_Faktur" width="120px" />
+						<label value="No Faktur" style="padding-right: 1px"/>
+						<textbox id="tb_Search_No_Faktur" width="80px" />
 						
 						<separator bar="true" orient="vertical" />
 
-						<label value="Nama Pelanggan" style="padding-right: 3px"/>
-						<textbox id="tb_Search_Nama_Pelanggan" width="120px" />
+						<label value="Kode Kolektor" style="padding-right: 1px"/>
+						<textbox id="tb_Search_Kode_Kolektor" width="80px" />
 						
 						<separator bar="true" orient="vertical" />
 						
-						<label value="Alamat" style="padding-right: 3px"/>
-						<textbox id="tb_Search_Alamat" width="120px" />
+						<label value="Jatuh Tempo" style="padding-right: 1px"/>
+						<datebox id="tb_Search_Awal_Tgl_Jatuh_Tempo" width="90px" format="dd/MM/yyyy" /> s/d
+						<datebox id="tb_Search_Akhir_Tgl_Jatuh_Tempo" width="90px" format="dd/MM/yyyy"  />
 						
 						<button id="button_PiutangList_Search"
 							sclass="oT_ButtonWithIcon" image="/images/icons/search.gif"
@@ -54,7 +63,10 @@
 				
 				<!-- CRUD BUTTONS -->
 				<toolbar align="end"
-					style="float:right; border-style: none;">					
+					style="float:right; border-style: none;">		
+					<button id="btnPrint" sclass="oT_ButtonWithIcon"
+						tooltiptext="${c:l('btnPrint.tooltiptext')}" />
+					<separator bar="true" orient="vertical" />			
 					<button id="btnFirst" sclass="oT_ButtonWithIcon"
 						tooltiptext="${c:l('btnFirst.tooltiptext')}" />
 					<button id="btnPrevious" sclass="oT_ButtonWithIcon"
@@ -64,7 +76,7 @@
 					<button id="btnLast" sclass="oT_ButtonWithIcon"
 						tooltiptext="${c:l('btnLast.tooltiptext')}" />
 					<separator bar="true" orient="vertical" />
-					<button id="btnNew" sclass="oT_ButtonWithIcon"
+					<!-- <button id="btnNew" sclass="oT_ButtonWithIcon"
 						tooltiptext="${c:l('btnNew.tooltiptext')}" />
 					<button id="btnEdit" sclass="oT_ButtonWithIcon"
 						tooltiptext="${c:l('btnEdit.tooltiptext')}" />
@@ -73,7 +85,7 @@
 					<button id="btnSave" sclass="oT_ButtonWithIcon"
 						tooltiptext="${c:l('btnSave.tooltiptext')}" />
 					<button id="btnCancel" sclass="oT_ButtonWithIcon"
-						tooltiptext="${c:l('btnCancel.tooltiptext')}" />					
+						tooltiptext="${c:l('btnCancel.tooltiptext')}" /> -->					
 				</toolbar>
 			</hbox>
 		</div>

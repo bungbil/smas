@@ -44,6 +44,7 @@ public class PiutangListCtrl extends GFCBaseListCtrl<Piutang> implements Seriali
   protected Borderlayout borderLayout_piutangList; // autowired
   protected Paging paging_PiutangList; // autowired
   protected Listbox listBoxPiutang; // autowired
+  protected Listheader listheader_PiutangList_Warning; // autowired
   protected Listheader listheader_PiutangList_NoFaktur; // autowired
   protected Listheader listheader_PiutangList_NoKuitansi; // autowired
   protected Listheader listheader_PiutangList_PembayaranKe; // autowired
@@ -108,6 +109,9 @@ public class PiutangListCtrl extends GFCBaseListCtrl<Piutang> implements Seriali
 
     // not used listheaders must be declared like ->
     // lh.setSortAscending(""); lh.setSortDescending("")
+//    listheader_PiutangList_Warning.setSortAscending(new FieldComparator("warning", true));
+//    listheader_PiutangList_Warning.setSortDescending(new FieldComparator("warning", false));
+
     listheader_PiutangList_NoFaktur
         .setSortAscending(new FieldComparator("penjualan.noFaktur", true));
     listheader_PiutangList_NoFaktur.setSortDescending(new FieldComparator("penjualan.noFaktur",
@@ -147,18 +151,19 @@ public class PiutangListCtrl extends GFCBaseListCtrl<Piutang> implements Seriali
     listheader_PiutangList_Kolektor.setSortDescending(new FieldComparator("kolektor.namaPanggilan",
         false));
 
-    listheader_PiutangList_LastUpdate.setSortAscending(new FieldComparator("lastUpdate", true));
-    listheader_PiutangList_LastUpdate.setSortDescending(new FieldComparator("lastUpdate", false));
-
-    listheader_PiutangList_UpdatedBy.setSortAscending(new FieldComparator("updatedBy", true));
-    listheader_PiutangList_UpdatedBy.setSortDescending(new FieldComparator("updatedBy", false));
+    // listheader_PiutangList_LastUpdate.setSortAscending(new FieldComparator("lastUpdate", true));
+    // listheader_PiutangList_LastUpdate.setSortDescending(new FieldComparator("lastUpdate",
+    // false));
+    //
+    // listheader_PiutangList_UpdatedBy.setSortAscending(new FieldComparator("updatedBy", true));
+    // listheader_PiutangList_UpdatedBy.setSortDescending(new FieldComparator("updatedBy", false));
 
 
     // ++ create the searchObject and init sorting ++//
     // ++ create the searchObject and init sorting ++//
     searchObj = new HibernateSearchObject<Piutang>(Piutang.class, getCountRows());
     searchObj.addSort("tglJatuhTempo", false);
-
+    searchObj.addFilter(new Filter("aktif", true));
     SecUser secUser =
         ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
             .getSecUser();
@@ -168,7 +173,7 @@ public class PiutangListCtrl extends GFCBaseListCtrl<Piutang> implements Seriali
         Karyawan supervisor = karyawan.getSupervisorDivisi();
         searchObj.addFilter(new Filter("penjualan.divisi.supervisorDivisi.id", supervisor.getId(),
             Filter.OP_EQUAL));
-        searchObj.addFilter(new Filter("aktif", true, Filter.OP_EQUAL));
+
       }
     }
 

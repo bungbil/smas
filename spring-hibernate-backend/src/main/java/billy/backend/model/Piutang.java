@@ -36,6 +36,8 @@ public class Piutang implements java.io.Serializable, Entity {
   private Date lastUpdate;
   private String updatedBy;
 
+  private boolean warning;
+
   public Piutang() {}
 
 
@@ -70,6 +72,11 @@ public class Piutang implements java.io.Serializable, Entity {
     this.aktif = aktif;
     this.lastUpdate = lastUpdate;
     this.updatedBy = updatedBy;
+  }
+
+
+  private int daysBetween(long t1, long t2) {
+    return (int) ((t2 - t1) / (1000 * 60 * 60 * 24));
   }
 
 
@@ -138,7 +145,6 @@ public class Piutang implements java.io.Serializable, Entity {
     return nilaiTagihan;
   }
 
-
   public String getNoFaktur() {
     return noFaktur;
   }
@@ -191,11 +197,11 @@ public class Piutang implements java.io.Serializable, Entity {
     return this.version;
   }
 
+
   @Override
   public int hashCode() {
     return Long.valueOf(getId()).hashCode();
   }
-
 
   public boolean isAktif() {
     return aktif;
@@ -209,11 +215,21 @@ public class Piutang implements java.io.Serializable, Entity {
     return needApproval;
   }
 
+
   @Override
   public boolean isNew() {
     return (getId() == Long.MIN_VALUE + 1);
   }
 
+  public boolean isWarning() {
+    boolean isWarning = false;
+
+    if (isAktif() && daysBetween(getTglJatuhTempo().getTime(), new Date().getTime()) > 90) {
+      isWarning = true;
+    }
+
+    return isWarning;
+  }
 
   public void setAktif(boolean aktif) {
     this.aktif = aktif;
@@ -300,6 +316,7 @@ public class Piutang implements java.io.Serializable, Entity {
     this.tglBawaKolektor = tglBawaKolektor;
   }
 
+
   public void setTglJatuhTempo(Date tglJatuhTempo) {
     this.tglJatuhTempo = tglJatuhTempo;
   }
@@ -317,6 +334,11 @@ public class Piutang implements java.io.Serializable, Entity {
 
   public void setVersion(int version) {
     this.version = version;
+  }
+
+
+  public void setWarning(boolean warning) {
+    this.warning = warning;
   }
 
 

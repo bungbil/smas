@@ -148,17 +148,23 @@
 															<listbox id="lbox_Printer" mold="select"
 																multiple="false" rows="1" width="250px">															
 															</listbox>	
-															<button id="btnRefeshPrinter" label="Cari Printer"  width="100px" 	/>												
+															<button id="btnRefeshPrinter" label="Cari Printer"  width="90px" />												
 														</hbox>
 													</row>
 													<row>
 														<label />		
-														<button id="btnCetak" label="Cetak Kwitansi"  	/>
-														<label />	
+														<button id="btnCetakKwitansiSekarang" label="Cetak Ulang Kwitansi Saat Ini" />
+														<label />															
 														<label />
-														<label />	
+														<label />															
 													</row>
-													
+													<row>
+														<label />		
+														<button id="btnCetak" label="Cetak Kwitansi Berikutnya" />
+														<label />															
+														<label />
+														<label />															
+													</row>
 													<row>
 														<separator bar="true"></separator>
 														<separator bar="true"></separator>

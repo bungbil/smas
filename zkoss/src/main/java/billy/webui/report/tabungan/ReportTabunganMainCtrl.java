@@ -162,7 +162,7 @@ public class ReportTabunganMainCtrl extends GFCBaseCtrl implements Serializable 
               .getSecUser();
 
       listDivisi = getKaryawanService().getAllDivisiKaryawansByUserLogin(userLogin);
-
+      listPenjualan = new ArrayList<Penjualan>();
       for (Karyawan divisi : listDivisi) {
         List<Penjualan> penjualans =
             getPenjualanService().getAllPenjualansByDivisiAndRangeDate(divisi,

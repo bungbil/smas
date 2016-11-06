@@ -70,6 +70,7 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
   protected Decimalbox txtb_Diskon;
   protected Listbox lbox_StatusFinal;
   protected Button btnCetak;
+  protected Button btnCetakKwitansiSekarang;
   protected Listbox lbox_Printer;
 
   protected Label label_butuhApproval;
@@ -275,7 +276,6 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
         ListModelList lml1 = (ListModelList) lbox_Printer.getListModel();
         printer = (PrintService) lml1.get(itemPrinter.getIndex());
         selectedPrinter = printer;
-        logger.info("Printer : " + printer.getName());
       }
 
       final Piutang anPiutang = getSelectedPiutang();
@@ -317,6 +317,66 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
                     final Window win = (Window) Path.getComponent("/outerIndexWindow");
                     List<Piutang> listPiutang = new ArrayList<Piutang>();
                     listPiutang.add(nextPiutang);
+                    new CetakKuitansiTextPrinter(win, listPiutang, selectedPrinter);
+                  }
+                } catch (DataAccessException e) {
+                  ZksampleMessageUtils.showErrorMessage(e.getMostSpecificCause().toString());
+                }
+              }
+
+              @Override
+              public void onEvent(Event evt) {
+                switch (((Integer) evt.getData()).intValue()) {
+                  case MultiLineMessageBox.YES:
+                    try {
+                      cetakBean();
+                    } catch (InterruptedException e) {
+                      // TODO Auto-generated catch block
+                      e.printStackTrace();
+                    }
+                    break; //
+                  case MultiLineMessageBox.NO:
+                    break; //
+                }
+              }
+            }
+
+        ) == MultiLineMessageBox.YES) {
+        }
+
+      }
+    }
+  }
+
+  public void onClick$btnCetakKwitansiSekarang(Event event) throws Exception {
+    if (validToCetak()) {
+      PrintService printer = null;
+      Listitem itemPrinter = lbox_Printer.getSelectedItem();
+      if (itemPrinter != null) {
+        ListModelList lml1 = (ListModelList) lbox_Printer.getListModel();
+        printer = (PrintService) lml1.get(itemPrinter.getIndex());
+        selectedPrinter = printer;
+      }
+
+      final Piutang anPiutang = getSelectedPiutang();
+      if (anPiutang != null) {
+
+        // Show a confirm box
+        final String msg = "Apakah anda yakin akan mencetak ulang kwitansi ini?? \n\n ";
+        final String title = "";
+
+        MultiLineMessageBox.doSetTemplate();
+        if (MultiLineMessageBox.show(msg, title, Messagebox.YES | Messagebox.NO,
+            Messagebox.QUESTION, true, new EventListener() {
+              private void cetakBean() throws InterruptedException {
+                try {
+                  // tutup piutang, set aktif = false
+                  Piutang piutang = getSelectedPiutang();
+
+                  if (piutang != null) {
+                    final Window win = (Window) Path.getComponent("/outerIndexWindow");
+                    List<Piutang> listPiutang = new ArrayList<Piutang>();
+                    listPiutang.add(piutang);
                     new CetakKuitansiTextPrinter(win, listPiutang, selectedPrinter);
                   }
                 } catch (DataAccessException e) {
