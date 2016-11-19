@@ -58,7 +58,7 @@
 		</property>
 		<many-to-one name="pengirim" class="billy.backend.model.Karyawan"
 			fetch="select" lazy="false">
-			<column name="pengirim_id" not-null="true" />
+			<column name="pengirim_id"/>
 		</many-to-one>
 		<property name="downPayment" type="big_decimal">
 			<column name="down_payment" precision="12" />

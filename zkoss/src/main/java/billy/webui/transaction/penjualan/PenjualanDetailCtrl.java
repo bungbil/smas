@@ -69,7 +69,7 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
   protected Borderlayout borderlayout_PenjualanDetail; // autowired
 
   protected Textbox txtb_NoFaktur; // autowired
-  protected Textbox txtb_NoOrderSheet; // autowired
+  // protected Textbox txtb_NoOrderSheet; // autowired
   protected Textbox txtb_Mandiri; // autowired
   protected Datebox txtb_TglPenjualan; // autowired
   protected Datebox txtb_RencanaKirim; // autowired
@@ -274,7 +274,7 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 
   public void doReadOnlyMode(boolean b) {
     // txtb_NoFaktur.setReadonly(b);
-    txtb_NoOrderSheet.setReadonly(b);
+    // .txtb_NoOrderSheet.setReadonly(b);
     txtb_Mandiri.setReadonly(b);
     // lbox_Wilayah.setDisabled(b);
     txtb_TglPenjualan.setDisabled(b);
@@ -411,7 +411,7 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 
   public void emptyAllValue() {
     txtb_NoFaktur.setValue(null);
-    txtb_NoOrderSheet.setValue(null);
+    // txtb_NoOrderSheet.setValue(null);
     txtb_Mandiri.setValue(null);
     txtb_TglPenjualan.setValue(null);
     txtb_RencanaKirim.setValue(null);
@@ -789,7 +789,7 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
       calculateTotal();
       calculateGrandTotal();
     }
-
+    txtb_KodeBarang.focus();
   }
 
   /**

@@ -300,7 +300,7 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
     getPenjualanDetailCtrl().getBinder().loadAll();
     getPenjualanDetailCtrl().doRefresh();
     // set focus
-    getPenjualanDetailCtrl().txtb_NoOrderSheet.focus();
+    getPenjualanDetailCtrl().txtb_Mandiri.focus();
   }
 
 
@@ -365,7 +365,7 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
 
     tabPenjualanDetail.setSelected(true);
     // set focus
-    getPenjualanDetailCtrl().txtb_NoOrderSheet.focus();
+    getPenjualanDetailCtrl().txtb_Mandiri.focus();
 
   }
 

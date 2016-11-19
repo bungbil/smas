@@ -47,9 +47,9 @@
 														<label />
 														<label />
 														<label />
-														<label value="No Order Sheet" visible="false"/>															
-														<textbox id="txtb_NoOrderSheet" value="@{controller.penjualan.noOrderSheet}"
-															readonly="true" constraint="no empty" maxlength="50" width="250px" visible="false"/>
+														<label />
+														<label />
+														
 															 
 													</row>
 													<row>
