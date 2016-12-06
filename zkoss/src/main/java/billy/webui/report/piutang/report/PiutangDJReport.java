@@ -170,7 +170,7 @@ public class PiutangDJReport extends Window implements Serializable {
     final Style columnHeaderStyleText = new Style();
     columnHeaderStyleText.setFont(Font.VERDANA_SMALL_BOLD);
     columnHeaderStyleText.setHorizontalAlign(HorizontalAlign.LEFT);
-    // columnHeaderStyleText.setBorderBottom(Border.PEN_1_POINT());
+    columnHeaderStyleText.setBorderBottom(Border.PEN_1_POINT());
 
     // ColumnHeader Style Text (right-align)
     Style columnHeaderStyleNumber = new Style();
@@ -216,7 +216,7 @@ public class PiutangDJReport extends Window implements Serializable {
     drb.setMargins(20, 20, 30, 15);
 
     drb.setDefaultStyles(titleStyle, subtitleStyle, columnHeaderStyleText, columnDetailStyleText);
-    drb.setPrintBackgroundOnOddRows(true);
+    drb.setPrintBackgroundOnOddRows(false);
 
     /**
      * Adding many autotexts in the same position (header/footer and aligment) makes them to be one

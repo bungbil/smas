@@ -211,7 +211,7 @@ public class ParameterSimpleDJReport extends Window implements Serializable {
     drb.setSubtitle("List of Offices: "
         + ZksampleDateFormat.getDateTimeFormater().format(new Date()));
     drb.setSubtitleStyle(subtitleStyle);
-    drb.setPrintBackgroundOnOddRows(true);
+    drb.setPrintBackgroundOnOddRows(false);
     drb.setUseFullPageWidth(true);
     dr = drb.build();
 
