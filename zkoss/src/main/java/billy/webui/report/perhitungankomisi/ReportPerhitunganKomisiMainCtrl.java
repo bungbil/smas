@@ -7,6 +7,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
+
 import org.apache.log4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.zkoss.zk.ui.Component;
@@ -25,7 +28,9 @@ import billy.backend.model.Penjualan;
 import billy.backend.service.KaryawanService;
 import billy.backend.service.PenjualanService;
 import billy.webui.master.karyawan.model.KaryawanListModelItemRenderer;
+import billy.webui.printer.model.PrinterListModelItemRenderer;
 import billy.webui.report.perhitungankomisi.report.PerhitunganKomisiDJReport;
+import billy.webui.report.perhitungankomisi.report.PerhitunganKomisiTextPrinter;
 import de.forsthaus.UserWorkspace;
 import de.forsthaus.backend.model.SecUser;
 import de.forsthaus.policy.model.UserImpl;
@@ -44,11 +49,14 @@ public class ReportPerhitunganKomisiMainCtrl extends GFCBaseCtrl implements Seri
   protected Datebox txtb_tanggalAwalPenjualan;
   protected Datebox txtb_tanggalAkhirPenjualan;
   protected Button btnView;
+  protected Listbox lbox_Printer;
+  protected Button btnCetak;
 
   // ServiceDAOs / Domain Classes
   private PenjualanService penjualanService;
   private KaryawanService karyawanService;
 
+  private PrintService selectedPrinter;
   List<Penjualan> listPenjualan = new ArrayList<Penjualan>();
   Karyawan karyawan = null;
 
@@ -63,12 +71,15 @@ public class ReportPerhitunganKomisiMainCtrl extends GFCBaseCtrl implements Seri
   public void doAfterCompose(Component window) throws Exception {
     super.doAfterCompose(window);
 
+    PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+    lbox_Printer.setModel(new ListModelList(printServices));
+    lbox_Printer.setItemRenderer(new PrinterListModelItemRenderer());
+    PrintService service = PrintServiceLookup.lookupDefaultPrintService();
+    ListModelList lml = (ListModelList) lbox_Printer.getModel();
+    lbox_Printer.setSelectedIndex(lml.indexOf(service));
+
     this.self.setAttribute("controller", this, false);
   }
-
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // +++++++++++++++ Component Events ++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   /**
    * User rights check. <br>
@@ -111,7 +122,6 @@ public class ReportPerhitunganKomisiMainCtrl extends GFCBaseCtrl implements Seri
     return this.karyawanService;
   }
 
-
   /* SERVICES */
   public PenjualanService getPenjualanService() {
     return this.penjualanService;
@@ -129,6 +139,28 @@ public class ReportPerhitunganKomisiMainCtrl extends GFCBaseCtrl implements Seri
       }
     }
   }
+
+
+  public void onClick$btnCetak(Event event) throws Exception {
+    if (validToPrint()) {
+
+      final Window win = (Window) Path.getComponent("/outerIndexWindow");
+      new PerhitunganKomisiTextPrinter(win, karyawan, txtb_tanggalAwalPenjualan.getValue(),
+          txtb_tanggalAkhirPenjualan.getValue(), listPenjualan, selectedPrinter);
+    } else {
+      showErrorCetak();
+    }
+  }
+
+  public void onClick$btnRefeshPrinter(Event event) throws Exception {
+    PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+    lbox_Printer.setModel(new ListModelList(printServices));
+    lbox_Printer.setItemRenderer(new PrinterListModelItemRenderer());
+  }
+
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++ Component Events ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   public void onClick$btnView(Event event) throws Exception {
     if (validToPrint()) {
@@ -187,7 +219,14 @@ public class ReportPerhitunganKomisiMainCtrl extends GFCBaseCtrl implements Seri
       ListModelList lml1 = (ListModelList) lbox_Sales.getListModel();
       karyawan = (Karyawan) lml1.get(itemSales.getIndex());
     }
-
+    PrintService printer = null;
+    Listitem itemPrinter = lbox_Printer.getSelectedItem();
+    if (itemPrinter != null) {
+      ListModelList lml1 = (ListModelList) lbox_Printer.getListModel();
+      printer = (PrintService) lml1.get(itemPrinter.getIndex());
+      selectedPrinter = printer;
+      logger.info("Printer : " + printer.getName());
+    }
     if (karyawan != null && txtb_tanggalAwalPenjualan.getValue() != null
         && txtb_tanggalAkhirPenjualan.getValue() != null) {
       listPenjualan =
