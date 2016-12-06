@@ -362,8 +362,10 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 
     if (getSelectedPenjualan().getIntervalKredit() != 0) {
       cmb_IntervalKredit.setValue(String.valueOf(getSelectedPenjualan().getIntervalKredit()));
+      txtb_TglAngsuran2.setDisabled(false);
     } else {
       cmb_IntervalKredit.setValue("1");
+      txtb_TglAngsuran2.setDisabled(true);
     }
 
     if (getSelectedPenjualan().getMetodePembayaran() != null) {

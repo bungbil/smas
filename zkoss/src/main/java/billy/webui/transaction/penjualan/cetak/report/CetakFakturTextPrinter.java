@@ -107,12 +107,20 @@ public class CetakFakturTextPrinter extends Window implements Serializable {
           faktur.setAlamat3(alamat[2]);
         }
       }
-      faktur.setTelepon(penjualan.getTelepon());
+      if (penjualan.getTelepon() != null) {
+        faktur.setTelepon(penjualan.getTelepon());
+      } else {
+        faktur.setTelepon("-");
+      }
       faktur.setDp(df.format(penjualan.getDownPayment()));
       faktur.setTotal(df.format(penjualan.getTotal()));
       faktur.setTglPenjualan(formatDate.format(penjualan.getTglPenjualan()));
       faktur.setNamaSupervisor(penjualan.getDivisi().getSupervisorDivisi().getNamaPanggilan());
-      faktur.setNamaPengirim(penjualan.getPengirim().getNamaPanggilan());
+      if (penjualan.getPengirim() != null) {
+        faktur.setNamaPengirim(penjualan.getPengirim().getNamaPanggilan());
+      } else {
+        faktur.setNamaPengirim("-");
+      }
 
       List<PenjualanDetail> listPenjualanDetail = as.getPenjualanDetailsByPenjualan(penjualan);
       for (PenjualanDetail detail : listPenjualanDetail) {

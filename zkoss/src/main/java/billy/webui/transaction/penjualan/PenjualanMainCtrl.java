@@ -839,14 +839,13 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
 
   public void onClick$btnSave(Event event) throws InterruptedException {
 
-
+    int interval = Integer.parseInt(getPenjualanDetailCtrl().cmb_IntervalKredit.getValue());
     if (getPenjualanDetailCtrl().getPenjualan().getSales1() != null) {
       getPenjualanDetailCtrl().getPenjualan().setPengirim(
           getPenjualanDetailCtrl().getPenjualan().getSales1());
     }
 
-    if (getPenjualanDetailCtrl().getPenjualan().getIntervalKredit() != 1
-        && getPenjualanDetailCtrl().getPenjualan().getTglAngsuran2() == null) {
+    if (interval != 1 && getPenjualanDetailCtrl().getPenjualan().getTglAngsuran2() == null) {
       ZksampleMessageUtils
           .showErrorMessage("Tanggal Angsuran ke 2 wajib di isi jika transaksi kredit");
       return;
@@ -862,7 +861,7 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
         message += "- Tanggal Angsuran ke 2 melebihi 45 hari \n";
       }
     }
-    int interval = Integer.parseInt(getPenjualanDetailCtrl().cmb_IntervalKredit.getValue());
+
     for (PenjualanDetail penjualanDetail : getPenjualanDetailCtrl().getListPenjualanDetail()) {
       BigDecimal hargaBarang =
           getPenjualanDetailCtrl().getBarangService().getHargaBarangByIntervalKredit(
