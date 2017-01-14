@@ -200,7 +200,7 @@ public class CetakFakturTextPrinter extends Window implements Serializable {
         addWhiteSpace(sb, maxLengthQty - item.getQty().length());
         sb.append(item.getQty());
         // addWhiteSpace(sb, 2);
-        sb.append(item.getNamaBarang());
+        sb.append(item.getNamaBarang().subSequence(0, 20).toString());
         int maxLengthNamaBarang = 20;
         addWhiteSpace(sb, maxLengthNamaBarang - item.getNamaBarang().length());
         int maxLengthHarga = 10;

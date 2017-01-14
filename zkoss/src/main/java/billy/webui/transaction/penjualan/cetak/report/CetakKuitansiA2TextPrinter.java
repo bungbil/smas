@@ -251,7 +251,7 @@ public class CetakKuitansiA2TextPrinter extends Window implements Serializable {
         ItemFaktur item = kuitansi.getListItemFaktur().get(1);
         sb.append("2.");
         addWhiteSpace(sb, 1);
-        sb.append(item.getNamaBarang());
+        sb.append(item.getNamaBarang().subSequence(0, 20).toString());
         int maxLengthBarang = 20;
         addWhiteSpace(sb, maxLengthBarang - item.getNamaBarang().length());
         sb.append(item.getQty());
@@ -265,7 +265,7 @@ public class CetakKuitansiA2TextPrinter extends Window implements Serializable {
         ItemFaktur item = kuitansi.getListItemFaktur().get(2);
         sb.append("3.");
         addWhiteSpace(sb, 1);
-        sb.append(item.getNamaBarang());
+        sb.append(item.getNamaBarang().subSequence(0, 20).toString());
         int maxLengthBarang = 20;
         addWhiteSpace(sb, maxLengthBarang - item.getNamaBarang().length());
         sb.append(item.getQty());
@@ -279,7 +279,7 @@ public class CetakKuitansiA2TextPrinter extends Window implements Serializable {
         ItemFaktur item = kuitansi.getListItemFaktur().get(3);
         sb.append("4.");
         addWhiteSpace(sb, 1);
-        sb.append(item.getNamaBarang());
+        sb.append(item.getNamaBarang().subSequence(0, 20).toString());
         int maxLengthBarang = 20;
         addWhiteSpace(sb, maxLengthBarang - item.getNamaBarang().length());
         sb.append(item.getQty());
