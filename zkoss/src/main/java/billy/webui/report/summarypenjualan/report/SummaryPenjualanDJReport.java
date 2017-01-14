@@ -154,6 +154,7 @@ public class SummaryPenjualanDJReport extends Window implements Serializable {
   public void doPrint(Karyawan karyawan, Date startDate, Date endDate, List<Penjualan> listPenjualan)
       throws JRException, ColumnBuilderException, ClassNotFoundException, IOException {
     List<SummaryPenjualan> resultList = generateData(karyawan, listPenjualan);
+    logger.info("resultList summary penjualan size : " + resultList.size());
     /**
      * STYLES
      */
@@ -256,8 +257,9 @@ public class SummaryPenjualanDJReport extends Window implements Serializable {
     address.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
     address.setWidth(new Integer(700));
     AutoText divisi =
-        new AutoText("Divisi : " + karyawan.getNamaPanggilan(), AutoText.POSITION_HEADER,
-            HorizontalBandAlignment.LEFT);
+        new AutoText(
+            "Divisi : " + karyawan.getKodeKaryawan() + " - " + karyawan.getNamaPanggilan(),
+            AutoText.POSITION_HEADER, HorizontalBandAlignment.LEFT);
     divisi.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
     divisi.setWidth(new Integer(700));
     AutoText tanggal =
@@ -419,7 +421,7 @@ public class SummaryPenjualanDJReport extends Window implements Serializable {
       SummaryPenjualan sp = kodeBarangMap.getValue();
       summaryPenjualanList.add(sp);
     }
-
+    logger.info("list summaryPenjualanList size : " + summaryPenjualanList.size());
     return summaryPenjualanList;
   }
 

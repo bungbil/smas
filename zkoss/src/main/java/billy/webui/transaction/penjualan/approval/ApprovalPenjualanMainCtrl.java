@@ -820,7 +820,7 @@ public class ApprovalPenjualanMainCtrl extends GFCBaseCtrl implements Serializab
       // check which field have input
       soPenjualan.addFilter(new Filter("needApproval", true, Filter.OP_EQUAL));
       if (StringUtils.isNotEmpty(tb_Search_No_Faktur.getValue())) {
-        soPenjualan.addFilter(new Filter("noFaktur", tb_Search_No_Faktur.getValue(),
+        soPenjualan.addFilter(new Filter("noFaktur", tb_Search_No_Faktur.getValue().toUpperCase(),
             Filter.OP_EQUAL));
       }
 

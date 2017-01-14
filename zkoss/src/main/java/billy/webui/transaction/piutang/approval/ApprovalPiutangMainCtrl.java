@@ -842,8 +842,8 @@ public class ApprovalPiutangMainCtrl extends GFCBaseCtrl implements Serializable
       // check which field have input
       soPiutang.addFilter(new Filter("needApproval", true, Filter.OP_EQUAL));
       if (StringUtils.isNotEmpty(tb_Search_No_Faktur.getValue())) {
-        soPiutang.addFilter(new Filter("penjualan.noFaktur", tb_Search_No_Faktur.getValue(),
-            Filter.OP_EQUAL));
+        soPiutang.addFilter(new Filter("penjualan.noFaktur", tb_Search_No_Faktur.getValue()
+            .toUpperCase(), Filter.OP_EQUAL));
       }
 
       if (StringUtils.isNotEmpty(tb_Search_Nama_Pelanggan.getValue())) {

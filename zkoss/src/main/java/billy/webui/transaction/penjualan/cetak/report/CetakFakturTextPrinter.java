@@ -161,16 +161,17 @@ public class CetakFakturTextPrinter extends Window implements Serializable {
 
     for (Faktur faktur : listFaktur) {
 
-      addWhiteSpace(sb, 67);
+      addWhiteSpace(sb, 65);
       sb.append(faktur.getNomorFaktur());
       addNewLine(sb, 3);
       addWhiteSpace(sb, 13);
-      int maxLengthNama = 43;
+      int maxLengthNama = 41;
       sb.append(faktur.getNamaPelanggan());
       addWhiteSpace(sb, maxLengthNama - faktur.getNamaPelanggan().length());
       sb.append(faktur.getKodeSales1());
       addWhiteSpace(sb, 8);
       sb.append(faktur.getKodeSales2());
+
       addNewLine(sb, 1);
       int maxLengthTelepon = 36;
       addWhiteSpace(sb, maxLengthTelepon - faktur.getTelepon().length());
@@ -179,14 +180,15 @@ public class CetakFakturTextPrinter extends Window implements Serializable {
       sb.append(faktur.getNamaSales1());
       addWhiteSpace(sb, 3);
       sb.append(faktur.getNamaSales2());
+
       addNewLine(sb, 1);
-      addWhiteSpace(sb, 5);
+      addWhiteSpace(sb, 2);
       sb.append(faktur.getAlamat());
       addNewLine(sb, 1);
-      addWhiteSpace(sb, 5);
+      addWhiteSpace(sb, 2);
       sb.append(faktur.getAlamat2());
       addNewLine(sb, 1);
-      addWhiteSpace(sb, 5);
+      addWhiteSpace(sb, 2);
       int maxLengthAlamat3 = 54;
       sb.append(faktur.getAlamat3());
       addWhiteSpace(sb, maxLengthAlamat3 - faktur.getAlamat3().length());
@@ -197,7 +199,7 @@ public class CetakFakturTextPrinter extends Window implements Serializable {
         int maxLengthQty = 3;
         addWhiteSpace(sb, maxLengthQty - item.getQty().length());
         sb.append(item.getQty());
-        addWhiteSpace(sb, 2);
+        // addWhiteSpace(sb, 2);
         sb.append(item.getNamaBarang());
         int maxLengthNamaBarang = 20;
         addWhiteSpace(sb, maxLengthNamaBarang - item.getNamaBarang().length());
@@ -218,12 +220,12 @@ public class CetakFakturTextPrinter extends Window implements Serializable {
       addNewLine(sb, 2);
       sb.append(" DPAY  Rp. " + faktur.getDp());
       addNewLine(sb, 3);
-      addWhiteSpace(sb, 6);
+      addWhiteSpace(sb, 4);
       sb.append(faktur.getTglPenjualan());
       addNewLine(sb, 5);
       addWhiteSpace(sb, 6);
       sb.append(faktur.getNamaSupervisor());
-      int maxLengthSupervisor = 17;
+      int maxLengthSupervisor = 14;
       addWhiteSpace(sb, maxLengthSupervisor - faktur.getNamaSupervisor().length());
       sb.append(faktur.getNamaPengirim());
       addNewLine(sb, 5);

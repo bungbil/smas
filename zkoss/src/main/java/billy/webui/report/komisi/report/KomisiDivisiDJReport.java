@@ -259,8 +259,9 @@ public class KomisiDivisiDJReport extends Window implements Serializable {
     address.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
     address.setWidth(new Integer(700));
     AutoText divisi =
-        new AutoText("Divisi : " + karyawan.getNamaPanggilan(), AutoText.POSITION_HEADER,
-            HorizontalBandAlignment.LEFT);
+        new AutoText(
+            "Divisi : " + karyawan.getKodeKaryawan() + " - " + karyawan.getNamaPanggilan(),
+            AutoText.POSITION_HEADER, HorizontalBandAlignment.LEFT);
     divisi.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
     divisi.setWidth(new Integer(700));
     AutoText tanggal =
