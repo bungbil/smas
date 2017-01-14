@@ -63,22 +63,22 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
   private final int pageWidth = 80;
 
   private final int WIDTH_COLUMN_SEPERATE = 1;
-  private final int WIDTH_COLUMN_A = 13;
-  private final int WIDTH_COLUMN_B = 16;
-  private final int WIDTH_COLUMN_C = 7;
-  private final int WIDTH_COLUMN_D = 8;
-  private final int WIDTH_COLUMN_E = 15;
-  private final int WIDTH_COLUMN_F = 4;
+  private final int WIDTH_COLUMN_A = 10;
+  private final int WIDTH_COLUMN_B = 10;
+  private final int WIDTH_COLUMN_C = 5;
+  private final int WIDTH_COLUMN_D = 3;
+  private final int WIDTH_COLUMN_E = 12;
+  private final int WIDTH_COLUMN_F = 3;
   private final int WIDTH_COLUMN_G = 10;
   private final int WIDTH_COLUMN_H = 10;
   private final int WIDTH_COLUMN_I = 9;
 
-  private final int WIDTH_FOOTER_COLUMN_A = 20;
-  private final int WIDTH_FOOTER_COLUMN_B = 22;
-  private final int WIDTH_FOOTER_COLUMN_C = 4;
-  private final int WIDTH_FOOTER_COLUMN_D = 10;
-  private final int WIDTH_FOOTER_COLUMN_E = 10;
-  private final int WIDTH_FOOTER_COLUMN_F = 9;
+  private final int WIDTH_FOOTER_COLUMN_A = 14;
+  private final int WIDTH_FOOTER_COLUMN_B = 21;
+  private final int WIDTH_FOOTER_COLUMN_C = 5;
+  private final int WIDTH_FOOTER_COLUMN_D = 13;
+  private final int WIDTH_FOOTER_COLUMN_E = 11;
+  private final int WIDTH_FOOTER_COLUMN_F = 11;
 
   DecimalFormat df = new DecimalFormat("#,###");
 
@@ -201,7 +201,7 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
       setAlignLeft(sb, WIDTH_COLUMN_A, item.getNomorFaktur());
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-      setAlignLeft(sb, WIDTH_COLUMN_B, item.getNamaPelanggan());
+      setAlignLeft(sb, WIDTH_COLUMN_B, item.getNamaPelanggan().subSequence(0, 10).toString());
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
       setAlignLeft(sb, WIDTH_COLUMN_C, item.getKodePartner());
@@ -210,7 +210,7 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
       setAlignLeft(sb, WIDTH_COLUMN_D, item.getIntervalKredit());
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-      setAlignLeft(sb, WIDTH_COLUMN_E, item.getNamaBarang());
+      setAlignLeft(sb, WIDTH_COLUMN_E, item.getNamaBarang().subSequence(0, 12).toString());
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
       setAlignRight(sb, WIDTH_COLUMN_F, item.getQtyKirim().toString());
@@ -315,13 +315,13 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
     setAlignLeft(sb, WIDTH_COLUMN_A, "No Faktur");
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-    setAlignLeft(sb, WIDTH_COLUMN_B, "Nama Pelanggan");
+    setAlignLeft(sb, WIDTH_COLUMN_B, "Pelanggan");
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-    setAlignLeft(sb, WIDTH_COLUMN_C, "Partner");
+    setAlignLeft(sb, WIDTH_COLUMN_C, "Part");
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-    setAlignLeft(sb, WIDTH_COLUMN_D, "Interval");
+    setAlignLeft(sb, WIDTH_COLUMN_D, "Int");
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
     setAlignLeft(sb, WIDTH_COLUMN_E, "Nama Barang");
@@ -378,7 +378,7 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
         PerhitunganKomisi data = new PerhitunganKomisi();
         data.setNomorFaktur(penjualan.getNoFaktur());
         data.setNamaPelanggan(penjualan.getNamaPelanggan());
-        data.setIntervalKredit(penjualan.getIntervalKredit() + " Bulan");
+        data.setIntervalKredit(penjualan.getIntervalKredit() + "");
         String kodePartner = "0000";
         Double qtyKirim = Double.parseDouble(String.valueOf(penjualanDetail.getQty()));
         BigDecimal komisi = BigDecimal.ZERO;
