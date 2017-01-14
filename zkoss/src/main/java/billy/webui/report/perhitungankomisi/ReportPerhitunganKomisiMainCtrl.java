@@ -131,7 +131,8 @@ public class ReportPerhitunganKomisiMainCtrl extends GFCBaseCtrl implements Seri
     if (txtb_KodeSales.getValue() != null) {
       ListModelList lml = (ListModelList) lbox_Sales.getModel();
       Karyawan karyawan =
-          getKaryawanService().getKaryawanByKodeKaryawan(txtb_KodeSales.getValue().trim());
+          getKaryawanService().getKaryawanByKodeKaryawan(
+              txtb_KodeSales.getValue().trim().toUpperCase());
       if (karyawan != null) {
         lbox_Sales.setSelectedIndex(lml.indexOf(karyawan));
       } else {

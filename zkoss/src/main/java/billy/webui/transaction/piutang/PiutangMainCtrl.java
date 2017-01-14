@@ -482,13 +482,13 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
 
     // check which field have input
     if (StringUtils.isNotEmpty(tb_Search_No_Faktur.getValue())) {
-      soPiutang.addFilter(new Filter("penjualan.noFaktur", tb_Search_No_Faktur.getValue(),
-          Filter.OP_EQUAL));
+      soPiutang.addFilter(new Filter("penjualan.noFaktur", tb_Search_No_Faktur.getValue()
+          .toUpperCase(), Filter.OP_EQUAL));
     }
 
     if (StringUtils.isNotEmpty(tb_Search_Kode_Kolektor.getValue())) {
-      soPiutang.addFilter(new Filter("kolektor.kodeKaryawan", tb_Search_Kode_Kolektor.getValue(),
-          Filter.OP_EQUAL));
+      soPiutang.addFilter(new Filter("kolektor.kodeKaryawan", tb_Search_Kode_Kolektor.getValue()
+          .toUpperCase(), Filter.OP_EQUAL));
     }
 
     if (tb_Search_Awal_Tgl_Jatuh_Tempo.getValue() != null) {

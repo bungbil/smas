@@ -124,11 +124,11 @@ public class CetakPenjualanMainCtrl extends GFCBaseCtrl implements Serializable 
   public List<String> generateSequenceNoFaktur() {
     List<String> list = new ArrayList<String>();
 
-    String startNoFaktur = txtb_NoFakturAwal.getValue();
-    String endNoFaktur = txtb_NoFakturAkhir.getValue();
+    String startNoFaktur = txtb_NoFakturAwal.getValue().toUpperCase();
+    String endNoFaktur = txtb_NoFakturAkhir.getValue().toUpperCase();
     list.add(startNoFaktur);
     String twoFirstDigitNoFaktur = startNoFaktur.substring(0, 2);
-    String fourLastDigitNoFaktur = startNoFaktur.substring(6, 10);
+    String fourLastDigitNoFaktur = startNoFaktur.substring(6, startNoFaktur.length());
     int start = Integer.parseInt(startNoFaktur.substring(2, 6));
     int end = Integer.parseInt(endNoFaktur.substring(2, 6));
     logger.info("start : " + start + ", end : " + end + ", fourLastDigitNoFaktur : "
@@ -171,19 +171,17 @@ public class CetakPenjualanMainCtrl extends GFCBaseCtrl implements Serializable 
   }
 
   public void onBlur$txtb_NoFakturAkhir(Event event) throws Exception {
-    if (txtb_NoFakturAkhir.getValue().length() != 10) {
-      ZksampleMessageUtils
-          .showErrorMessage("No Faktur Akhir tidak valid, harap memasukkan 10 digit");
-      return;
-    }
+    /*
+     * if (txtb_NoFakturAkhir.getValue().length() != 10) { ZksampleMessageUtils
+     * .showErrorMessage("No Faktur Akhir tidak valid, harap memasukkan 10 digit"); return; }
+     */
   }
 
   public void onBlur$txtb_NoFakturAwal(Event event) throws Exception {
-    if (txtb_NoFakturAwal.getValue().length() != 10) {
-      ZksampleMessageUtils
-          .showErrorMessage("No Faktur Awal tidak valid, harap memasukkan 10 digit");
-      return;
-    }
+    /*
+     * if (txtb_NoFakturAwal.getValue().length() != 10) { ZksampleMessageUtils
+     * .showErrorMessage("No Faktur Awal tidak valid, harap memasukkan 10 digit"); return; }
+     */
   }
 
   public void onChange$txtb_KodeDivisi(Event event) throws InterruptedException {

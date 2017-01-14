@@ -344,10 +344,10 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
   }
 
   public void onBlur$txtb_KodeKaryawan(Event event) throws InterruptedException {
-
+    txtb_KodeKaryawan.setValue(txtb_KodeKaryawan.getValue().toUpperCase());
     Karyawan karyawanCheckKode = null;
     karyawanCheckKode =
-        getKaryawanService().getKaryawanByKodeKaryawan(getKaryawan().getKodeKaryawan());
+        getKaryawanService().getKaryawanByKodeKaryawan(txtb_KodeKaryawan.getValue());
 
     if (karyawanCheckKode != null) {
       if (karyawanCheckKode.getId() != getKaryawan().getId()) {

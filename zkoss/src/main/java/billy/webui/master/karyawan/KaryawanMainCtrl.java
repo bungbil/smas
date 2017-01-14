@@ -62,6 +62,9 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
 
   // filter components
   protected Checkbox checkbox_KaryawanList_ShowAll; // autowired
+  protected Textbox txtb_Karyawan_Kode; // aurowired
+  protected Button button_KaryawanList_SearchKode; // aurowired
+
   protected Textbox txtb_Karyawan_Name; // aurowired
   protected Button button_KaryawanList_SearchName; // aurowired
 
@@ -679,7 +682,7 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
     // ++ create the searchObject and init sorting ++//
     HibernateSearchObject<Karyawan> soKaryawan =
         new HibernateSearchObject<Karyawan>(Karyawan.class, getKaryawanListCtrl().getCountRows());
-    soKaryawan.addSort("namaKaryawan", false);
+    soKaryawan.addSort("namaKtp", false);
 
     // Change the BindingListModel.
     if (getKaryawanListCtrl().getBinder() != null) {
@@ -819,6 +822,46 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
   }
 
   /**
+   * Filter the karyawan list with 'like karyawan kode'. <br>
+   */
+  public void onClick$button_KaryawanList_SearchKode(Event event) throws Exception {
+    // logger.debug(event.toString());
+
+    // if not empty
+    if (!txtb_Karyawan_Kode.getValue().isEmpty()) {
+      checkbox_KaryawanList_ShowAll.setChecked(false); // unCheck
+      txtb_Karyawan_Ktp.setValue("");
+      txtb_Karyawan_Name.setValue("");
+      // ++ create the searchObject and init sorting ++//
+      HibernateSearchObject<Karyawan> soKaryawan =
+          new HibernateSearchObject<Karyawan>(Karyawan.class, getKaryawanListCtrl().getCountRows());
+      soKaryawan.addFilter(new Filter("kodeKaryawan", "%"
+          + txtb_Karyawan_Kode.getValue().toUpperCase() + "%", Filter.OP_ILIKE));
+      soKaryawan.addSort("kodeKaryawan", false);
+
+      // Change the BindingListModel.
+      if (getKaryawanListCtrl().getBinder() != null) {
+        getKaryawanListCtrl().getPagedBindingListWrapper().setSearchObject(soKaryawan);
+
+        // get the current Tab for later checking if we must change it
+        Tab currentTab = tabbox_KaryawanMain.getSelectedTab();
+
+        // check if the tab is one of the Detail tabs. If so do not
+        // change the selection of it
+        if (!currentTab.equals(tabKaryawanList)) {
+          tabKaryawanList.setSelected(true);
+        } else {
+          currentTab.setSelected(true);
+        }
+      }
+    }
+  }
+
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+
+  /**
    * Filter the karyawan list with 'like karyawan ktp'. <br>
    */
   public void onClick$button_KaryawanList_SearchKtp(Event event) throws Exception {
@@ -828,6 +871,7 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
     if (!txtb_Karyawan_Ktp.getValue().isEmpty()) {
       checkbox_KaryawanList_ShowAll.setChecked(false); // unCheck
       txtb_Karyawan_Name.setValue("");
+      txtb_Karyawan_Kode.setValue("");
       // ++ create the searchObject and init sorting ++//
       HibernateSearchObject<Karyawan> soKaryawan =
           new HibernateSearchObject<Karyawan>(Karyawan.class, getKaryawanListCtrl().getCountRows());
@@ -853,10 +897,6 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
     }
   }
 
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-
   /**
    * Filter the karyawan list with 'like karyawan name'. <br>
    */
@@ -867,6 +907,7 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
     if (!txtb_Karyawan_Name.getValue().isEmpty()) {
       checkbox_KaryawanList_ShowAll.setChecked(false); // unCheck
       txtb_Karyawan_Ktp.setValue("");
+      txtb_Karyawan_Kode.setValue("");
       // ++ create the searchObject and init sorting ++//
       HibernateSearchObject<Karyawan> soKaryawan =
           new HibernateSearchObject<Karyawan>(Karyawan.class, getKaryawanListCtrl().getCountRows());

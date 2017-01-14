@@ -235,7 +235,7 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
 
   public void doSearchNoFaktur() throws Exception {
     if (txtb_SearchNoKwitansi.getValue() != null) {
-      piutang = piutangService.getPiutangByNoFaktur(txtb_SearchNoKwitansi.getValue());
+      piutang = piutangService.getPiutangByNoFaktur(txtb_SearchNoKwitansi.getValue().toUpperCase());
 
       if (piutang != null) {
 

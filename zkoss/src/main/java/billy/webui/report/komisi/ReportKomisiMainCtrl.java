@@ -120,7 +120,8 @@ public class ReportKomisiMainCtrl extends GFCBaseCtrl implements Serializable {
     if (txtb_KodeDivisi.getValue() != null) {
       ListModelList lml = (ListModelList) lbox_Divisi.getModel();
       Karyawan karyawan =
-          getKaryawanService().getKaryawanByKodeKaryawan(txtb_KodeDivisi.getValue().trim());
+          getKaryawanService().getKaryawanByKodeKaryawan(
+              txtb_KodeDivisi.getValue().trim().toUpperCase());
       if (karyawan != null) {
         lbox_Divisi.setSelectedIndex(lml.indexOf(karyawan));
       } else {

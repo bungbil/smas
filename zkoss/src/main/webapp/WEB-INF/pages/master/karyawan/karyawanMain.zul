@@ -32,10 +32,18 @@
 							checked="true"
 							label="${c:l('common.showAll')}" />
 						<space />
-
+						<label value="Kode Karyawan"
+							style="padding-right: 3px" />
+						<textbox id="txtb_Karyawan_Kode" width="100px" />
+						
+						<button id="button_KaryawanList_SearchKode"
+							sclass="oT_ButtonWithIcon" image="/images/icons/search.gif" />	
+						
+						
 						<label value="${c:l('label_KaryawanList_Name')}"
 							style="padding-right: 3px" />
 						<textbox id="txtb_Karyawan_Name" width="100px" />
+						
 						<button id="button_KaryawanList_SearchName"
 							sclass="oT_ButtonWithIcon" image="/images/icons/search.gif"
 							tooltiptext="${c:l('button_KaryawanList_SearchName.tooltiptext')}" />	

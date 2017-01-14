@@ -123,7 +123,8 @@ public class TandaTerimaKwitansiMainCtrl extends GFCBaseCtrl implements Serializ
     if (txtb_KodeKolektor.getValue() != null) {
       ListModelList lml = (ListModelList) lbox_Kolektor.getModel();
       Karyawan karyawan =
-          getKaryawanService().getKaryawanByKodeKaryawan(txtb_KodeKolektor.getValue().trim());
+          getKaryawanService().getKaryawanByKodeKaryawan(
+              txtb_KodeKolektor.getValue().trim().toUpperCase());
       if (karyawan != null) {
         lbox_Kolektor.setSelectedIndex(lml.indexOf(karyawan));
       } else {
