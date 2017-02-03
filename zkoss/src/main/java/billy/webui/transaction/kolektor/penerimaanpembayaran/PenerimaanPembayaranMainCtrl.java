@@ -1,16 +1,23 @@
 package billy.webui.transaction.kolektor.penerimaanpembayaran;
 
 
+import java.awt.print.PrinterJob;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
+
 import org.apache.log4j.Logger;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zul.Button;
@@ -20,6 +27,7 @@ import org.zkoss.zul.Decimalbox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Panel;
 import org.zkoss.zul.Textbox;
@@ -35,6 +43,8 @@ import billy.backend.service.PiutangService;
 import billy.backend.service.StatusService;
 import billy.webui.master.karyawan.model.KaryawanListModelItemRenderer;
 import billy.webui.master.status.model.StatusListModelItemRenderer;
+import billy.webui.printer.model.PrinterListModelItemRenderer;
+import billy.webui.transaction.piutang.cetak.report.CetakKuitansiTextPrinter;
 import de.forsthaus.UserWorkspace;
 import de.forsthaus.policy.model.UserImpl;
 import de.forsthaus.webui.util.GFCBaseCtrl;
@@ -52,7 +62,6 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
   protected Textbox txtb_SearchNoKwitansi;
   protected Button btnSave;
   protected Button btnSearch;
-  protected Button btnResetStatus;
   protected Panel panelResult;
   protected Panel panelApproval;
 
@@ -79,12 +88,16 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
   public Textbox txtb_ApprovedBy;
   public Textbox txtb_ApprovedRemark;
 
+  protected Button btnCetak;
+  protected Button btnCetakKwitansiSekarang;
+  protected Listbox lbox_Printer;
+
   // ServiceDAOs / Domain Classes
   private PenjualanService penjualanService;
   private PiutangService piutangService;
 
   private KaryawanService karyawanService;
-
+  private PrintService selectedPrinter;
   private StatusService statusService;
   DecimalFormat df = new DecimalFormat("#,###");
   Piutang piutang = new Piutang();
@@ -99,6 +112,14 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
   @Override
   public void doAfterCompose(Component window) throws Exception {
     super.doAfterCompose(window);
+
+    // PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+    PrintService[] printServices = PrinterJob.lookupPrintServices();
+    lbox_Printer.setModel(new ListModelList(printServices));
+    lbox_Printer.setItemRenderer(new PrinterListModelItemRenderer());
+    PrintService service = PrintServiceLookup.lookupDefaultPrintService();
+    ListModelList lml = (ListModelList) lbox_Printer.getModel();
+    lbox_Printer.setSelectedIndex(lml.indexOf(service));
 
     this.self.setAttribute("controller", this, false);
   }
@@ -128,6 +149,12 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
       } else if (cmb_StatusFinal.getValue() == "0") {
         message = "";
         piutang.setStatusFinal(null);
+
+        piutang.setStatus(null);
+        piutang.setNeedApproval(false);
+        piutang.setReasonApproval("");
+        txtb_ReasonApproval.setValue("");
+        label_butuhApproval.setValue("Tidak");
       }
     }
 
@@ -214,7 +241,7 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
 
 
     // save it to database
-    getPiutangService().saveOrUpdate(piutang);
+    // getPiutangService().saveOrUpdate(piutang);
 
     // recalculate piutang at penjualan
     List<Piutang> piutangList = getPiutangService().getPiutangsByPenjualan(piutang.getPenjualan());
@@ -228,6 +255,8 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
     }
     penjualan.setPiutang(penjualan.getTotal().subtract(totalPaid));
     getPenjualanService().saveOrUpdate(penjualan);
+
+    printNextKuitansi();
 
     panelResult.setVisible(false);
     piutang = null;
@@ -310,9 +339,10 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
     return this.piutangService;
   }
 
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // +++++++++++++++ Component Events ++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  public Piutang getSelectedPiutang() {
+    // STORED IN THE module's MainController
+    return this.piutang;
+  }
 
   public StatusService getStatusService() {
     return statusService;
@@ -331,15 +361,69 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
     }
   }
 
-  public void onClick$btnResetStatus(Event event) throws Exception {
+  public void onClick$btnCetakKwitansiSekarang(Event event) throws Exception {
+    if (validToCetak()) {
+      PrintService printer = null;
+      Listitem itemPrinter = lbox_Printer.getSelectedItem();
+      if (itemPrinter != null) {
+        ListModelList lml1 = (ListModelList) lbox_Printer.getListModel();
+        printer = (PrintService) lml1.get(itemPrinter.getIndex());
+        selectedPrinter = printer;
+      }
 
-    lbox_Status.setSelectedIndex(-1);
-    piutang.setStatus(null);
-    piutang.setNeedApproval(false);
-    piutang.setReasonApproval("");
-    txtb_ReasonApproval.setValue("");
-    label_butuhApproval.setValue("Tidak");
+      final Piutang anPiutang = getSelectedPiutang();
+      if (anPiutang != null) {
+
+        // Show a confirm box
+        final String msg = "Apakah anda yakin akan mencetak ulang kwitansi ini?? \n\n ";
+        final String title = "";
+
+        MultiLineMessageBox.doSetTemplate();
+        if (MultiLineMessageBox.show(msg, title, Messagebox.YES | Messagebox.NO,
+            Messagebox.QUESTION, true, new EventListener() {
+              private void cetakBean() throws InterruptedException {
+                try {
+                  // tutup piutang, set aktif = false
+                  Piutang piutang = getSelectedPiutang();
+
+                  if (piutang != null) {
+                    final Window win = (Window) Path.getComponent("/outerIndexWindow");
+                    List<Piutang> listPiutang = new ArrayList<Piutang>();
+                    listPiutang.add(piutang);
+                    new CetakKuitansiTextPrinter(win, listPiutang, selectedPrinter);
+                  }
+                } catch (DataAccessException e) {
+                  ZksampleMessageUtils.showErrorMessage(e.getMostSpecificCause().toString());
+                }
+              }
+
+              @Override
+              public void onEvent(Event evt) {
+                switch (((Integer) evt.getData()).intValue()) {
+                  case MultiLineMessageBox.YES:
+                    try {
+                      cetakBean();
+                    } catch (InterruptedException e) {
+                      // TODO Auto-generated catch block
+                      e.printStackTrace();
+                    }
+                    break; //
+                  case MultiLineMessageBox.NO:
+                    break; //
+                }
+              }
+            }
+
+        ) == MultiLineMessageBox.YES) {
+        }
+
+      }
+    }
   }
+
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++ Component Events ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   public void onClick$btnSave(Event event) throws Exception {
     String message = "";
@@ -352,7 +436,8 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
         // Show a confirm box
         message =
             Labels.getLabel("message_Data_Modified_Save_Data_YesNo") + "\n\n --> "
-                + piutang.getNoKuitansi();
+                + piutang.getNoKuitansi()
+                + "\n\n dan akan melanjutkan mencetak kwitansi berikutnya??";
       }
       final String title = Labels.getLabel("message_Saving_Data");
 
@@ -430,9 +515,76 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
     txtb_Pembayaran.focus();
   }
 
+  public void printNextKuitansi() throws Exception {
+    if (validToCetak()) {
+      PrintService printer = null;
+      Listitem itemPrinter = lbox_Printer.getSelectedItem();
+      if (itemPrinter != null) {
+        ListModelList lml1 = (ListModelList) lbox_Printer.getListModel();
+        printer = (PrintService) lml1.get(itemPrinter.getIndex());
+        selectedPrinter = printer;
+      }
+
+      try {
+        // tutup piutang, set aktif = false
+        Piutang piutang = getSelectedPiutang();
+        Status statusLunas = getStatusService().getStatusByID(new Long(2)); // LUNAS
+        BigDecimal lastPiutang = piutang.getPenjualan().getPiutang();
+        BigDecimal diskon = piutang.getDiskon();
+        if (diskon == null) {
+          diskon = BigDecimal.ZERO;
+        }
+
+        if (null == piutang.getPembayaran()) {
+          piutang.setPembayaran(BigDecimal.ZERO);
+        }
+        BigDecimal totalPembayaran = piutang.getPembayaran().add(diskon);
+        piutang.getPenjualan().setPiutang(lastPiutang.subtract(totalPembayaran));
+        piutang.setStatus(statusLunas);
+        piutang.setAktif(false);
+        if (piutang.getPenjualan().getPiutang().compareTo(BigDecimal.ZERO) == 0) {
+          // sudah lunas semua
+          piutang.setAktif(true);
+          // delete semua piutang karena sudah lunas
+          piutangService.deleteNextPiutang(piutang);
+          // pop up message faktur sudah lunas
+          ZksampleMessageUtils.showErrorMessage("No Faktur " + piutang.getNoFaktur()
+              + " sudah LUNAS!!");
+
+        }
+        piutangService.saveOrUpdate(piutang);
+
+        if (piutang.getPenjualan().getPiutang().compareTo(BigDecimal.ZERO) == 1) {
+          // get next piutang, set aktif = true, kekurangan dari piutang sebelumnya
+          Piutang nextPiutang = piutangService.getNextPiutang(piutang);
+
+          if (nextPiutang != null) {
+            BigDecimal kekuranganBayar =
+                piutang.getNilaiTagihan().add(piutang.getKekuranganBayar())
+                    .subtract(piutang.getPembayaran()).subtract(diskon);
+            nextPiutang.setAktif(true);
+            nextPiutang.setKekuranganBayar(kekuranganBayar);
+            getPiutangService().saveOrUpdate(nextPiutang);
+
+            final Window win = (Window) Path.getComponent("/outerIndexWindow");
+            List<Piutang> listPiutang = new ArrayList<Piutang>();
+            listPiutang.add(nextPiutang);
+            new CetakKuitansiTextPrinter(win, listPiutang, selectedPrinter);
+          }
+        }
+      } catch (DataAccessException e) {
+        ZksampleMessageUtils.showErrorMessage(e.getMostSpecificCause().toString());
+      }
+    }
+  }
 
   public void setKaryawanService(KaryawanService karyawanService) {
     this.karyawanService = karyawanService;
+  }
+
+
+  public void setPenjualanService(PenjualanService penjualanService) {
+    this.penjualanService = penjualanService;
   }
 
   // +++++++++++++++++++++++++++++++++++++++++++++++++ //
@@ -442,18 +594,29 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
   /* Master BEANS */
 
 
-  public void setPenjualanService(PenjualanService penjualanService) {
-    this.penjualanService = penjualanService;
-  }
-
-  /* COMPONENTS and OTHERS */
-
   public void setPiutangService(PiutangService piutangService) {
     this.piutangService = piutangService;
   }
 
+  /* COMPONENTS and OTHERS */
+
   public void setStatusService(StatusService statusService) {
     this.statusService = statusService;
+  }
+
+  public boolean validToCetak() {
+    if (getSelectedPiutang().getStatus() != null) {
+      if (getSelectedPiutang().getStatus().getId() == new Long(5)) {
+        return false;
+      } else if (getSelectedPiutang().getStatus().getId() == new Long(6)) {
+        return false;
+      } else if (getSelectedPiutang().getStatus().getId() == new Long(7)) {
+        return false;
+      } else if (getSelectedPiutang().getStatus().getId() == new Long(8)) {
+        return false;
+      }
+    }
+    return true;
   }
 
 

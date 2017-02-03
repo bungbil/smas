@@ -1,5 +1,6 @@
 package billy.webui.transaction.piutang;
 
+import java.awt.print.PrinterJob;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -128,7 +129,8 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
       setSelectedPiutang(null);
     }
 
-    PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+    // PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+    PrintService[] printServices = PrinterJob.lookupPrintServices();
     lbox_Printer.setModel(new ListModelList(printServices));
     lbox_Printer.setItemRenderer(new PrinterListModelItemRenderer());
     PrintService service = PrintServiceLookup.lookupDefaultPrintService();
@@ -468,16 +470,17 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
   }
 
   public boolean validToCetak() {
-    if (getSelectedPiutang().getStatus().getId() == new Long(5)) {
-      return false;
-    } else if (getSelectedPiutang().getStatus().getId() == new Long(6)) {
-      return false;
-    } else if (getSelectedPiutang().getStatus().getId() == new Long(7)) {
-      return false;
-    } else if (getSelectedPiutang().getStatus().getId() == new Long(8)) {
-      return false;
+    if (getSelectedPiutang().getStatus() != null) {
+      if (getSelectedPiutang().getStatus().getId() == new Long(5)) {
+        return false;
+      } else if (getSelectedPiutang().getStatus().getId() == new Long(6)) {
+        return false;
+      } else if (getSelectedPiutang().getStatus().getId() == new Long(7)) {
+        return false;
+      } else if (getSelectedPiutang().getStatus().getId() == new Long(8)) {
+        return false;
+      }
     }
-
     return true;
   }
 }

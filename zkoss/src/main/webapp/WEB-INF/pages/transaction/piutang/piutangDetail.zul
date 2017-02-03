@@ -142,7 +142,7 @@
 														<label />
 														<label />	
 													</row>
-													<row>
+													<!-- <row>
 														<label value="Pilih Printer Dot Matrix" />
 														<hbox>														
 															<listbox id="lbox_Printer" mold="select"
@@ -164,7 +164,7 @@
 														<label />															
 														<label />
 														<label />															
-													</row>
+													</row>  -->
 													<row>
 														<separator bar="true"></separator>
 														<separator bar="true"></separator>
