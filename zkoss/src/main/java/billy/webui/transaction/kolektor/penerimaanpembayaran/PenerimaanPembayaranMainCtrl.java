@@ -52,6 +52,7 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
   protected Textbox txtb_SearchNoKwitansi;
   protected Button btnSave;
   protected Button btnSearch;
+  protected Button btnResetStatus;
   protected Panel panelResult;
   protected Panel panelApproval;
 
@@ -201,7 +202,7 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
     piutang.setPembayaran(txtb_Pembayaran.getValue());
     piutang.setDiskon(txtb_Diskon.getValue());
     piutang.setKeterangan(txtb_Keterangan.getValue());
-    if (txtb_NilaiTagihan.getValue().compareTo(txtb_Pembayaran.getValue()) == 0) {
+    if (txtb_NilaiTagihan.getValue().compareTo(txtb_Pembayaran.getValue()) == -1) {
       piutang.setFullPayment(true);
     }
 
@@ -304,14 +305,14 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
     return penjualanService;
   }
 
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // +++++++++++++++ Component Events ++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-
   /* SERVICES */
   public PiutangService getPiutangService() {
     return this.piutangService;
   }
+
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++ Component Events ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   public StatusService getStatusService() {
     return statusService;
@@ -328,6 +329,16 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
         lbox_Kolektor.setSelectedIndex(-1);
       }
     }
+  }
+
+  public void onClick$btnResetStatus(Event event) throws Exception {
+
+    lbox_Status.setSelectedIndex(-1);
+    piutang.setStatus(null);
+    piutang.setNeedApproval(false);
+    piutang.setReasonApproval("");
+    txtb_ReasonApproval.setValue("");
+    label_butuhApproval.setValue("Tidak");
   }
 
   public void onClick$btnSave(Event event) throws Exception {

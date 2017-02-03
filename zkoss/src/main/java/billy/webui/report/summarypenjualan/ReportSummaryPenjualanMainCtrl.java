@@ -189,6 +189,7 @@ public class ReportSummaryPenjualanMainCtrl extends GFCBaseCtrl implements Seria
       listPenjualan =
           getPenjualanService().getAllPenjualansByDivisiAndRangeDate(karyawan,
               txtb_tanggalAwalPenjualan.getValue(), txtb_tanggalAkhirPenjualan.getValue());
+      logger.info("list penjualan size : " + listPenjualan.size());
       if (listPenjualan.size() > 0) {
         return true;
       }

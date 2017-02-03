@@ -247,11 +247,11 @@ public class PiutangDJReport extends Window implements Serializable {
             HorizontalBandAlignment.LEFT);
     atCompanyHeader.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
     atCompanyHeader.setWidth(new Integer(700));
-    AutoText address =
-        new AutoText(company.get(0).getAddress(), AutoText.POSITION_HEADER,
-            HorizontalBandAlignment.LEFT);
-    address.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
-    address.setWidth(new Integer(700));
+    // AutoText address =
+    // new AutoText(company.get(0).getAddress(), AutoText.POSITION_HEADER,
+    // HorizontalBandAlignment.LEFT);
+    // address.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
+    // address.setWidth(new Integer(700));
     AutoText divisi =
         new AutoText("Kolektor : " + karyawan.getKodeKaryawan() + " - "
             + karyawan.getNamaPanggilan(), AutoText.POSITION_HEADER, HorizontalBandAlignment.LEFT);
@@ -266,8 +266,8 @@ public class PiutangDJReport extends Window implements Serializable {
     tanggal.setWidth(new Integer(700));
     AutoText emptyLine = new AutoText("", AutoText.POSITION_HEADER, HorizontalBandAlignment.LEFT);
     emptyLine.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
-    drb.addAutoText(atCompanyHeader).addAutoText(address).addAutoText(emptyLine)
-        .addAutoText(divisi).addAutoText(tanggal);
+    drb.addAutoText(atCompanyHeader).addAutoText(emptyLine).addAutoText(divisi)
+        .addAutoText(tanggal);
     //
     // // Footer
     // AutoText footerText = new

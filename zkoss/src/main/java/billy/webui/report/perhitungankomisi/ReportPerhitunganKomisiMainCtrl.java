@@ -1,6 +1,7 @@
 package billy.webui.report.perhitungankomisi;
 
 
+import java.awt.print.PrinterJob;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -71,7 +72,8 @@ public class ReportPerhitunganKomisiMainCtrl extends GFCBaseCtrl implements Seri
   public void doAfterCompose(Component window) throws Exception {
     super.doAfterCompose(window);
 
-    PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+    // PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+    PrintService[] printServices = PrinterJob.lookupPrintServices();
     lbox_Printer.setModel(new ListModelList(printServices));
     lbox_Printer.setItemRenderer(new PrinterListModelItemRenderer());
     PrintService service = PrintServiceLookup.lookupDefaultPrintService();

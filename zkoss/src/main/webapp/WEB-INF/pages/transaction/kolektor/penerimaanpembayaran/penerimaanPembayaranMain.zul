@@ -161,7 +161,7 @@
 									                        <comboitem label="MASALAH" value="3"/>
 									                        <comboitem label="FINAL" value="4"/>
 									                </combobox>
-									                <label />			
+									                <button id="btnResetStatus" label="Reset"  width="100px" 	/>			
 													<label />
 													<label />	
 												</row>

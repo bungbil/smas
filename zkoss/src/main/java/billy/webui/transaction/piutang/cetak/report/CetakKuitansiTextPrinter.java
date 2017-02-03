@@ -158,8 +158,8 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
       BigDecimal tagihan = piutang.getNilaiTagihan();
       if (piutang.getKekuranganBayar().compareTo(BigDecimal.ZERO) == 1) {
         kekurangan = "& kekurangannya";
-        tagihan = tagihan.add(piutang.getKekuranganBayar());
       }
+      tagihan = tagihan.add(piutang.getKekuranganBayar());
       kuitansi.setAngsuranKe(piutang.getPembayaranKe() + " " + kekurangan);
 
       kuitansi.setJumlahInWord("# " + angkaToTerbilang(tagihan.longValue()) + " #");
@@ -167,6 +167,10 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
       int sisaBulan = piutang.getPenjualan().getIntervalKredit() - piutang.getPembayaranKe();
       BigDecimal sisaPiutang =
           piutang.getPenjualan().getPiutang().subtract(piutang.getNilaiTagihan());
+
+      if (piutang.getKekuranganBayar() != null) {
+        sisaPiutang = sisaPiutang.subtract(piutang.getKekuranganBayar());
+      }
       if (piutang.getPembayaranKe() == piutang.getPenjualan().getIntervalKredit()) {
         kuitansi.setSisaPembayaran("Pelunasan");
       } else {
@@ -215,12 +219,11 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
     is.close();
 
     // send FF to eject the page
-    InputStream ff = new ByteArrayInputStream("\f".getBytes());
-    Doc docff = new SimpleDoc(ff, flavor, null);
-    DocPrintJob jobff = selectedPrinter.createPrintJob();
-    pjw = new PrintJobWatcher(jobff);
-    jobff.print(docff, null);
-    pjw.waitForDone();
+    /*
+     * InputStream ff = new ByteArrayInputStream("\f".getBytes()); Doc docff = new SimpleDoc(ff,
+     * flavor, null); DocPrintJob jobff = selectedPrinter.createPrintJob(); pjw = new
+     * PrintJobWatcher(jobff); jobff.print(docff, null); pjw.waitForDone();
+     */
 
   }
 
@@ -254,7 +257,11 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
         ItemFaktur item = kuitansi.getListItemFaktur().get(0);
         sb.append("1.");
         addWhiteSpace(sb, 1);
-        sb.append(item.getNamaBarang().subSequence(0, 20).toString());
+        String namaBarang = item.getNamaBarang();
+        if (namaBarang.length() > 20) {
+          namaBarang.subSequence(0, 20).toString();
+        }
+        sb.append(namaBarang);
         int maxLengthBarang = 20;
         addWhiteSpace(sb, maxLengthBarang - item.getNamaBarang().length());
         sb.append(item.getQty());
@@ -268,7 +275,11 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
         ItemFaktur item = kuitansi.getListItemFaktur().get(1);
         sb.append("2.");
         addWhiteSpace(sb, 1);
-        sb.append(item.getNamaBarang().subSequence(0, 20).toString());
+        String namaBarang = item.getNamaBarang();
+        if (namaBarang.length() > 20) {
+          namaBarang.subSequence(0, 20).toString();
+        }
+        sb.append(namaBarang);
         int maxLengthBarang = 20;
         addWhiteSpace(sb, maxLengthBarang - item.getNamaBarang().length());
         sb.append(item.getQty());
@@ -282,7 +293,11 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
         ItemFaktur item = kuitansi.getListItemFaktur().get(2);
         sb.append("3.");
         addWhiteSpace(sb, 1);
-        sb.append(item.getNamaBarang().subSequence(0, 20).toString());
+        String namaBarang = item.getNamaBarang();
+        if (namaBarang.length() > 20) {
+          namaBarang.subSequence(0, 20).toString();
+        }
+        sb.append(namaBarang);
         int maxLengthBarang = 20;
         addWhiteSpace(sb, maxLengthBarang - item.getNamaBarang().length());
         sb.append(item.getQty());
@@ -296,7 +311,11 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
         ItemFaktur item = kuitansi.getListItemFaktur().get(3);
         sb.append("4.");
         addWhiteSpace(sb, 1);
-        sb.append(item.getNamaBarang().subSequence(0, 20).toString());
+        String namaBarang = item.getNamaBarang();
+        if (namaBarang.length() > 20) {
+          namaBarang.subSequence(0, 20).toString();
+        }
+        sb.append(namaBarang);
         int maxLengthBarang = 20;
         addWhiteSpace(sb, maxLengthBarang - item.getNamaBarang().length());
         sb.append(item.getQty());

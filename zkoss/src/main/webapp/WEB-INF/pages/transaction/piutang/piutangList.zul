@@ -36,10 +36,10 @@
 							sclass="FDListBoxHeader1" 
 							sort="auto" width="10%"
 							label="No Faktur" />
-						<listheader id="listheader_PiutangList_NoKuitansi"
+						<!-- <listheader id="listheader_PiutangList_NoKuitansi"
 							sclass="FDListBoxHeader1" 
 							sort="auto" width="15%"
-							label="No Kwitansi" />
+							label="No Kwitansi" /> -->
 						<listheader id="listheader_PiutangList_PembayaranKe"
 							sclass="FDListBoxHeader1" 
 							sort="auto" width="5%"
@@ -68,14 +68,14 @@
 							sclass="FDListBoxHeader1" 
 							sort="auto" width="15%"
 							label="Kolektor" />						
-						<!-- <listheader id="listheader_PiutangList_LastUpdate"
+						<listheader id="listheader_PiutangList_LastUpdate"
 							sclass="FDListBoxHeader1" 
 							sort="auto" width="10%"
 							label="${c:l('common.lastUpdate')}" />
 						<listheader id="listheader_PiutangList_UpdatedBy"
 							sclass="FDListBoxHeader1" 
 							sort="auto" width="5%"
-							label="${c:l('common.updatedBy')}" /> -->												
+							label="${c:l('common.updatedBy')}" /> 												
 					</listhead>
 
 					<listitem self="@{each='piutang'}" value="@{piutang}"
@@ -88,8 +88,8 @@
 						
 						<listcell label="@{piutang.penjualan.noFaktur}"
 							style="padding-left: 5px" />
-						<listcell label="@{piutang.noKuitansi}"
-							style="padding-left: 5px" />
+						<!-- <listcell label="@{piutang.noKuitansi}"
+							style="padding-left: 5px" /> -->
 						<listcell label="@{piutang.pembayaranKe}"
 							style="padding-left: 5px" />
 						<listcell label="@{piutang.tglPembayaran, converter='org.zkoss.zkplus.databind.DateFormatConverter'}" self="@{format(dd/MM/yyyy)}"
@@ -104,10 +104,10 @@
 							style="padding-left: 5px" />
 						<listcell label="@{piutang.kolektor.namaPanggilan}"
 							style="padding-left: 5px" />																		
-						<!-- <listcell label="@{piutang.lastUpdate}"
+						<listcell label="@{piutang.lastUpdate}"
 							style="padding-left: 5px" />	
 						<listcell label="@{piutang.updatedBy}"
-							style="padding-left: 5px" /> -->							
+							style="padding-left: 5px" />						
 					</listitem>
 				</listbox>
 			</center>

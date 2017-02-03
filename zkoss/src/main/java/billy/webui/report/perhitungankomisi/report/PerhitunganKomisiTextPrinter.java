@@ -201,7 +201,11 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
       setAlignLeft(sb, WIDTH_COLUMN_A, item.getNomorFaktur());
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-      setAlignLeft(sb, WIDTH_COLUMN_B, item.getNamaPelanggan().subSequence(0, 10).toString());
+      String namaPelanggan = item.getNamaPelanggan();
+      if (namaPelanggan.length() > 10) {
+        namaPelanggan = namaPelanggan.subSequence(0, 10).toString();
+      }
+      setAlignLeft(sb, WIDTH_COLUMN_B, namaPelanggan);
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
       setAlignLeft(sb, WIDTH_COLUMN_C, item.getKodePartner());
@@ -210,7 +214,11 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
       setAlignLeft(sb, WIDTH_COLUMN_D, item.getIntervalKredit());
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-      setAlignLeft(sb, WIDTH_COLUMN_E, item.getNamaBarang().subSequence(0, 12).toString());
+      String namaBarang = item.getNamaBarang();
+      if (namaBarang.length() > 12) {
+        namaBarang = namaBarang.subSequence(0, 12).toString();
+      }
+      setAlignLeft(sb, WIDTH_COLUMN_E, namaBarang);
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
       setAlignRight(sb, WIDTH_COLUMN_F, item.getQtyKirim().toString());
@@ -293,7 +301,7 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
     setAlignLeft(sb, maxLengthTglPrint, companyName);
     sb.append(printDateStr);
     addNewLine(sb, 1);
-    setAlignLeft(sb, maxLengthTglPrint, companyAddress);
+    setAlignLeft(sb, maxLengthTglPrint, "");
     sb.append(printHourStr);
     addNewLine(sb, 1);
     addWhiteSpace(sb, 20);

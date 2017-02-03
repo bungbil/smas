@@ -240,11 +240,11 @@ public class PiutangListDJReport extends Window implements Serializable {
             HorizontalBandAlignment.LEFT);
     atCompanyHeader.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
     atCompanyHeader.setWidth(new Integer(700));
-    AutoText address =
-        new AutoText(company.get(0).getAddress(), AutoText.POSITION_HEADER,
-            HorizontalBandAlignment.LEFT);
-    address.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
-    address.setWidth(new Integer(700));
+    // AutoText address =
+    // new AutoText(company.get(0).getAddress(), AutoText.POSITION_HEADER,
+    // HorizontalBandAlignment.LEFT);
+    // address.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
+    // address.setWidth(new Integer(700));
     String kodeKolektorStr = "";
     if (kodeKolektor != null)
       kodeKolektorStr = kodeKolektor;
@@ -268,8 +268,8 @@ public class PiutangListDJReport extends Window implements Serializable {
 
     AutoText emptyLine = new AutoText("", AutoText.POSITION_HEADER, HorizontalBandAlignment.LEFT);
     emptyLine.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
-    drb.addAutoText(atCompanyHeader).addAutoText(address).addAutoText(emptyLine)
-        .addAutoText(divisi).addAutoText(tanggal);
+    drb.addAutoText(atCompanyHeader).addAutoText(emptyLine).addAutoText(divisi)
+        .addAutoText(tanggal);
     //
     // // Footer
     // AutoText footerText = new

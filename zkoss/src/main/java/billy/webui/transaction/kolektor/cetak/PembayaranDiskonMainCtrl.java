@@ -1,6 +1,7 @@
 package billy.webui.transaction.kolektor.cetak;
 
 
+import java.awt.print.PrinterJob;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -68,7 +69,8 @@ public class PembayaranDiskonMainCtrl extends GFCBaseCtrl implements Serializabl
   public void doAfterCompose(Component window) throws Exception {
     super.doAfterCompose(window);
 
-    PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+    // PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+    PrintService[] printServices = PrinterJob.lookupPrintServices();
     lbox_Printer.setModel(new ListModelList(printServices));
     lbox_Printer.setItemRenderer(new PrinterListModelItemRenderer());
     PrintService service = PrintServiceLookup.lookupDefaultPrintService();

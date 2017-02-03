@@ -272,7 +272,7 @@ public class CetakPembayaranKwitansiTextPrinter extends Window implements Serial
     setAlignLeft(sb, maxLengthTglPrint, companyName);
     sb.append(printDateStr);
     addNewLine(sb, 1);
-    setAlignLeft(sb, maxLengthTglPrint, companyAddress);
+    setAlignLeft(sb, maxLengthTglPrint, "");
     sb.append(printHourStr);
     addNewLine(sb, 1);
     addWhiteSpace(sb, 20);

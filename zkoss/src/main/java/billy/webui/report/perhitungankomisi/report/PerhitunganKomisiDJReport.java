@@ -254,11 +254,11 @@ public class PerhitunganKomisiDJReport extends Window implements Serializable {
             HorizontalBandAlignment.LEFT);
     atCompanyHeader.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
     atCompanyHeader.setWidth(new Integer(700));
-    AutoText address =
-        new AutoText(company.get(0).getAddress(), AutoText.POSITION_HEADER,
-            HorizontalBandAlignment.LEFT);
-    address.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
-    address.setWidth(new Integer(700));
+    // AutoText address =
+    // new AutoText(company.get(0).getAddress(), AutoText.POSITION_HEADER,
+    // HorizontalBandAlignment.LEFT);
+    // address.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
+    // address.setWidth(new Integer(700));
     AutoText sales =
         new AutoText("Sales : " + karyawan.getKodeKaryawan() + "-" + karyawan.getNamaPanggilan()
             + "(" + karyawan.getSupervisorDivisi().getInisialDivisi() + ")",
@@ -274,8 +274,7 @@ public class PerhitunganKomisiDJReport extends Window implements Serializable {
     tanggal.setWidth(new Integer(700));
     AutoText emptyLine = new AutoText("", AutoText.POSITION_HEADER, HorizontalBandAlignment.LEFT);
     emptyLine.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
-    drb.addAutoText(atCompanyHeader).addAutoText(address).addAutoText(emptyLine).addAutoText(sales)
-        .addAutoText(tanggal);
+    drb.addAutoText(atCompanyHeader).addAutoText(emptyLine).addAutoText(sales).addAutoText(tanggal);
 
     // Footer
     BonusTransportService bonusService =

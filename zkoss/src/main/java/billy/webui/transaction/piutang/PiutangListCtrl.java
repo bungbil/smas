@@ -109,16 +109,17 @@ public class PiutangListCtrl extends GFCBaseListCtrl<Piutang> implements Seriali
 
     // not used listheaders must be declared like ->
     // lh.setSortAscending(""); lh.setSortDescending("")
-//    listheader_PiutangList_Warning.setSortAscending(new FieldComparator("warning", true));
-//    listheader_PiutangList_Warning.setSortDescending(new FieldComparator("warning", false));
+    // listheader_PiutangList_Warning.setSortAscending(new FieldComparator("warning", true));
+    // listheader_PiutangList_Warning.setSortDescending(new FieldComparator("warning", false));
 
     listheader_PiutangList_NoFaktur
         .setSortAscending(new FieldComparator("penjualan.noFaktur", true));
     listheader_PiutangList_NoFaktur.setSortDescending(new FieldComparator("penjualan.noFaktur",
         false));
 
-    listheader_PiutangList_NoKuitansi.setSortAscending(new FieldComparator("noKuitansi", true));
-    listheader_PiutangList_NoKuitansi.setSortDescending(new FieldComparator("noKuitansi", false));
+    // listheader_PiutangList_NoKuitansi.setSortAscending(new FieldComparator("noKuitansi", true));
+    // listheader_PiutangList_NoKuitansi.setSortDescending(new FieldComparator("noKuitansi",
+    // false));
 
     listheader_PiutangList_PembayaranKe.setSortAscending(new FieldComparator("pembayaranKe", true));
     listheader_PiutangList_PembayaranKe
@@ -151,12 +152,11 @@ public class PiutangListCtrl extends GFCBaseListCtrl<Piutang> implements Seriali
     listheader_PiutangList_Kolektor.setSortDescending(new FieldComparator("kolektor.namaPanggilan",
         false));
 
-    // listheader_PiutangList_LastUpdate.setSortAscending(new FieldComparator("lastUpdate", true));
-    // listheader_PiutangList_LastUpdate.setSortDescending(new FieldComparator("lastUpdate",
-    // false));
-    //
-    // listheader_PiutangList_UpdatedBy.setSortAscending(new FieldComparator("updatedBy", true));
-    // listheader_PiutangList_UpdatedBy.setSortDescending(new FieldComparator("updatedBy", false));
+    listheader_PiutangList_LastUpdate.setSortAscending(new FieldComparator("lastUpdate", true));
+    listheader_PiutangList_LastUpdate.setSortDescending(new FieldComparator("lastUpdate", false));
+
+    listheader_PiutangList_UpdatedBy.setSortAscending(new FieldComparator("updatedBy", true));
+    listheader_PiutangList_UpdatedBy.setSortDescending(new FieldComparator("updatedBy", false));
 
 
     // ++ create the searchObject and init sorting ++//
