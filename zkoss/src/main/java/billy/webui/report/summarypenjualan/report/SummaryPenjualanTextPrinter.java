@@ -1,4 +1,4 @@
-package billy.webui.transaction.kolektor.cetak.report;
+package billy.webui.report.summarypenjualan.report;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -9,8 +9,10 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.print.Doc;
 import javax.print.DocFlavor;
@@ -28,16 +30,18 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Window;
 
 import billy.backend.model.Karyawan;
-import billy.backend.model.Piutang;
+import billy.backend.model.Penjualan;
+import billy.backend.model.PenjualanDetail;
 import billy.backend.service.CompanyProfileService;
+import billy.backend.service.PenjualanService;
 import billy.webui.printer.PrintJobWatcher;
-import billy.webui.transaction.kolektor.cetak.model.ReportKwitansi;
+import billy.webui.report.summarypenjualan.model.SummaryPenjualan;
 import de.forsthaus.webui.util.ZksampleMessageUtils;
 
-public class CetakPembayaranDiskonTextPrinter extends Window implements Serializable {
+public class SummaryPenjualanTextPrinter extends Window implements Serializable {
 
   private static final long serialVersionUID = 1L;
-  private static final Logger logger = Logger.getLogger(CetakPembayaranDiskonTextPrinter.class);
+  private static final Logger logger = Logger.getLogger(SummaryPenjualanTextPrinter.class);
 
   public static int roundUp(int dividend, int divisor) {
     return (dividend + divisor - 1) / divisor;
@@ -45,34 +49,36 @@ public class CetakPembayaranDiskonTextPrinter extends Window implements Serializ
 
   private final int pageLength = 50;
   private final int pageWidth = 80;
-  private BigDecimal totalTagih = BigDecimal.ZERO;
-  private BigDecimal totalPembayaran = BigDecimal.ZERO;
-  private BigDecimal totalAkhirTagih = BigDecimal.ZERO;
-  private BigDecimal totalAkhirPembayaran = BigDecimal.ZERO;
-  private final int WIDTH_COLUMN_SEPERATE = 1;
-  private final int WIDTH_COLUMN_A = 5;
-  private final int WIDTH_COLUMN_B = 12;
-  private final int WIDTH_COLUMN_C = 19;
-  private final int WIDTH_COLUMN_D = 11;
-  private final int WIDTH_COLUMN_E = 16;
-  private final int WIDTH_COLUMN_F = 9;
+  private int totalUnit = 0;
+  private BigDecimal totalPenjualan = BigDecimal.ZERO;
+  private BigDecimal totalPenerimaan = BigDecimal.ZERO;
+  private BigDecimal totalSisaPiutang = BigDecimal.ZERO;
 
-  private final int WIDTH_FOOTER_COLUMN_A = 16;
-  private final int WIDTH_FOOTER_COLUMN_B = 17;
-  private final int WIDTH_FOOTER_COLUMN_C = 18;
-  private final int WIDTH_FOOTER_COLUMN_D = 17;
+  private final int WIDTH_COLUMN_SEPERATE = 1;
+  private final int WIDTH_COLUMN_A = 20;
+  private final int WIDTH_COLUMN_B = 8;
+  private final int WIDTH_COLUMN_C = 16;
+  private final int WIDTH_COLUMN_D = 16;
+  private final int WIDTH_COLUMN_E = 16;
+
+  private final int WIDTH_FOOTER_COLUMN_A = 20;
+  private final int WIDTH_FOOTER_COLUMN_B = 8;
+  private final int WIDTH_FOOTER_COLUMN_C = 16;
+  private final int WIDTH_FOOTER_COLUMN_D = 16;
+  private final int WIDTH_FOOTER_COLUMN_E = 16;
 
   DecimalFormat df = new DecimalFormat("#,###");
 
-  public CetakPembayaranDiskonTextPrinter(Component parent, Karyawan karyawan, Date startDate,
-      Date endDate, List<Piutang> listPiutang, PrintService selectedPrinter)
+  public SummaryPenjualanTextPrinter(Component parent, Karyawan karyawan, Date startDate,
+      Date endDate, List<Penjualan> listPenjualan, PrintService selectedPrinter)
       throws InterruptedException {
     super();
     this.setParent(parent);
 
     try {
-      doPrint(karyawan, startDate, endDate, listPiutang, selectedPrinter);
+      doPrint(karyawan, startDate, endDate, listPenjualan, selectedPrinter);
     } catch (final Exception e) {
+      e.printStackTrace();
       ZksampleMessageUtils.showErrorMessage(e.toString());
     }
   }
@@ -101,26 +107,10 @@ public class CetakPembayaranDiskonTextPrinter extends Window implements Serializ
     }
   }
 
-  public void doPrint(Karyawan karyawan, Date startDate, Date endDate, List<Piutang> listPiutang,
-      PrintService selectedPrinter) throws PrintException, IOException {
-
-    List<ReportKwitansi> listData = new ArrayList<ReportKwitansi>();
-    int i = 1;
-    for (Piutang piutang : listPiutang) {
-      ReportKwitansi data = new ReportKwitansi();
-      data.setNo(i + ".");
-      data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
-      data.setTglBawa(piutang.getTglBawaKolektor());
-      data.setTglBayar(piutang.getTglPembayaran());
-      data.setTglKuitansi(piutang.getTglJatuhTempo());
-      data.setNamaCustomer(piutang.getPenjualan().getNamaPelanggan());
-      data.setNilaiPembayaran(piutang.getPembayaran());
-      data.setNilaiTagih(piutang.getNilaiTagihan());
-      data.setKeterangan(piutang.getKeterangan());
-      data.setDiskon(piutang.getDiskon());
-      listData.add(data);
-      i++;
-    }
+  public void doPrint(Karyawan karyawan, Date startDate, Date endDate,
+      List<Penjualan> listPenjualan, PrintService selectedPrinter) throws PrintException,
+      IOException {
+    List<SummaryPenjualan> listData = generateDataSummary(karyawan, listPenjualan);
 
     InputStream is =
         new ByteArrayInputStream(generateData(karyawan, startDate, endDate, listData).getBytes(
@@ -148,36 +138,34 @@ public class CetakPembayaranDiskonTextPrinter extends Window implements Serializ
   }
 
   private String generateData(Karyawan karyawan, Date startDate, Date endDate,
-      List<ReportKwitansi> listItem) {
+      List<SummaryPenjualan> listItem) {
     StringBuffer sb = new StringBuffer();
 
     CompanyProfileService companyService =
         (CompanyProfileService) SpringUtil.getBean("companyProfileService");
     String companyName = companyService.getAllCompanyProfiles().get(0).getCompanyName();
     String companyAddress = companyService.getAllCompanyProfiles().get(0).getAddress();
-    int itemPerPage = 40;
+    int itemPerPage = 80;
     int totalPage = roundUp(listItem.size(), itemPerPage);
-    totalTagih = BigDecimal.ZERO;
-    totalPembayaran = BigDecimal.ZERO;
-    totalAkhirTagih = BigDecimal.ZERO;
-    totalAkhirPembayaran = BigDecimal.ZERO;
+    totalUnit = 0;
+    totalPenjualan = BigDecimal.ZERO;
+    totalPenerimaan = BigDecimal.ZERO;
+    totalSisaPiutang = BigDecimal.ZERO;
 
     for (int pageNo = 1; pageNo <= totalPage; pageNo++) {
-      totalTagih = BigDecimal.ZERO;
-      totalPembayaran = BigDecimal.ZERO;
 
       generateHeaderReport(sb, karyawan, startDate, endDate, pageNo, companyName, companyAddress);
       generateDataReport(sb, listItem, itemPerPage, pageNo);
       generateFooterReport(sb);
 
     }
-    generateLastFooterReport(sb);
+    // generateLastFooterReport(sb);
 
     return sb.toString();
   }
 
-  private void generateDataReport(StringBuffer sb, List<ReportKwitansi> listItem, int itemPerPage,
-      int pageNo) {
+  private void generateDataReport(StringBuffer sb, List<SummaryPenjualan> listItem,
+      int itemPerPage, int pageNo) {
 
     SimpleDateFormat formatDate = new SimpleDateFormat();
     formatDate = new SimpleDateFormat("dd-MM-yy", Locale.getDefault());
@@ -188,37 +176,74 @@ public class CetakPembayaranDiskonTextPrinter extends Window implements Serializ
       maxIndex = listItem.size();
     }
     for (int i = startIndex; i < maxIndex; i++) {
-      ReportKwitansi item = listItem.get(i);
+      SummaryPenjualan item = listItem.get(i);
 
-      addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
-      setAlignRight(sb, WIDTH_COLUMN_A, item.getNo());
-      addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
-
-      setAlignLeft(sb, WIDTH_COLUMN_B, item.getNoFaktur());
+      setAlignLeft(sb, WIDTH_COLUMN_A, item.getNamaBarang());
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-      setAlignLeft(sb, WIDTH_COLUMN_C, item.getNamaCustomer());
+      setAlignRight(sb, WIDTH_COLUMN_B, item.getUnitSetTerjual() + "");
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-      String nilaiTagihStr = df.format(item.getNilaiTagih());
-      setAlignRight(sb, WIDTH_COLUMN_D, nilaiTagihStr);
+      String nilaiPenjualanStr = df.format(item.getPenjualanBarang());
+      setAlignRight(sb, WIDTH_COLUMN_C, nilaiPenjualanStr);
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-      String nilaiDiskonStr = df.format(item.getDiskon());
-      setAlignRight(sb, WIDTH_COLUMN_E, nilaiDiskonStr);
+      String nilaiPenerimaanStr = df.format(item.getPenerimaanPenjualan());
+      setAlignRight(sb, WIDTH_COLUMN_D, nilaiPenerimaanStr);
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
+      String nilaiSisaPiutangStr = df.format(item.getSisaPiutang());
+      setAlignRight(sb, WIDTH_COLUMN_E, nilaiSisaPiutangStr);
 
-      setAlignLeft(sb, WIDTH_COLUMN_F, "");
-      addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
+
+      totalUnit += item.getUnitSetTerjual();
+      totalPenjualan = totalPenjualan.add(item.getPenjualanBarang());
+      totalPenerimaan = totalPenerimaan.add(item.getPenerimaanPenjualan());
+      totalSisaPiutang = totalSisaPiutang.add(item.getSisaPiutang());
+
       addNewLine(sb, 1);
 
-      totalTagih = totalTagih.add(item.getNilaiTagih());
-      totalAkhirTagih = totalAkhirTagih.add(item.getNilaiTagih());
-      totalPembayaran = totalPembayaran.add(item.getDiskon());
-      totalAkhirPembayaran = totalAkhirPembayaran.add(item.getDiskon());
     }
 
+  }
+
+  private List<SummaryPenjualan> generateDataSummary(Karyawan karyawan,
+      List<Penjualan> listPenjualan) {
+    Map<String, SummaryPenjualan> mapBarang = new HashMap<String, SummaryPenjualan>();
+    PenjualanService penjualanService = (PenjualanService) SpringUtil.getBean("penjualanService");
+    for (Penjualan penjualan : listPenjualan) {
+      List<PenjualanDetail> penjualanDetails =
+          penjualanService.getPenjualanDetailsByPenjualan(penjualan);
+      for (PenjualanDetail penjualanDetail : penjualanDetails) {
+        String kodeBarang = penjualanDetail.getBarang().getKodeBarang();
+        SummaryPenjualan sp = mapBarang.get(kodeBarang);
+        if (sp == null) {
+          sp = new SummaryPenjualan();
+          sp.setNamaDivisi(karyawan.getNamaPanggilan());
+          sp.setNamaBarang(penjualanDetail.getBarang().getNamaBarang());
+          sp.setUnitSetTerjual(penjualanDetail.getQty());
+          sp.setPenjualanBarang(penjualanDetail.getTotal());
+          sp.setPenerimaanPenjualan(penjualanDetail.getDownPayment());
+          sp.setSisaPiutang(penjualanDetail.getTotal().subtract(penjualanDetail.getDownPayment()));
+          mapBarang.put(kodeBarang, sp);
+        } else {
+          sp.setUnitSetTerjual(sp.getUnitSetTerjual() + penjualanDetail.getQty());
+          sp.setPenjualanBarang(sp.getPenjualanBarang().add(penjualanDetail.getTotal()));
+          sp.setPenerimaanPenjualan(sp.getPenerimaanPenjualan().add(
+              penjualanDetail.getDownPayment()));
+          sp.setSisaPiutang(sp.getSisaPiutang().add(
+              penjualanDetail.getTotal().subtract(penjualanDetail.getDownPayment())));
+        }
+      }
+    }
+
+    List<SummaryPenjualan> summaryPenjualanList = new ArrayList<SummaryPenjualan>();
+    for (Map.Entry<String, SummaryPenjualan> kodeBarangMap : mapBarang.entrySet()) {
+      SummaryPenjualan sp = kodeBarangMap.getValue();
+      summaryPenjualanList.add(sp);
+    }
+    logger.info("list summaryPenjualanList size : " + summaryPenjualanList.size());
+    return summaryPenjualanList;
   }
 
   private void generateFooterReport(StringBuffer sb) {
@@ -226,30 +251,21 @@ public class CetakPembayaranDiskonTextPrinter extends Window implements Serializ
     addSingleBorder(sb, pageWidth);
     addNewLine(sb, 1);
 
-    addWhiteSpace(sb, WIDTH_FOOTER_COLUMN_A);
-    setAlignLeft(sb, WIDTH_FOOTER_COLUMN_B, "Total per halaman");
-
-    String totalTagihStr = df.format(totalTagih);
-    setAlignRight(sb, WIDTH_FOOTER_COLUMN_C, totalTagihStr);
-
-    String totalBayarStr = df.format(totalPembayaran);
-    setAlignRight(sb, WIDTH_FOOTER_COLUMN_D, totalBayarStr);
+    setAlignLeft(sb, WIDTH_FOOTER_COLUMN_A, "Total");
+    addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
+    setAlignRight(sb, WIDTH_FOOTER_COLUMN_B, totalUnit + "");
+    addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
+    String totalPenjualanStr = df.format(totalPenjualan);
+    setAlignRight(sb, WIDTH_FOOTER_COLUMN_C, totalPenjualanStr);
+    addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
+    String totalPenerimaanStr = df.format(totalPenerimaan);
+    setAlignRight(sb, WIDTH_FOOTER_COLUMN_D, totalPenerimaanStr);
+    addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
+    String totalSisaPiutangStr = df.format(totalSisaPiutang);
+    setAlignRight(sb, WIDTH_FOOTER_COLUMN_E, totalSisaPiutangStr);
 
     addNewLine(sb, 1);
     addSingleBorder(sb, pageWidth);
-    addNewLine(sb, 1);
-
-    addWhiteSpace(sb, WIDTH_FOOTER_COLUMN_A);
-    setAlignLeft(sb, WIDTH_FOOTER_COLUMN_B, "Total Akhir");
-
-    String totalAkhirTagihStr = df.format(totalAkhirTagih);
-    setAlignRight(sb, WIDTH_FOOTER_COLUMN_C, totalAkhirTagihStr);
-
-    String totalAkhirBayarStr = df.format(totalAkhirPembayaran);
-    setAlignRight(sb, WIDTH_FOOTER_COLUMN_D, totalAkhirBayarStr);
-
-    addNewLine(sb, 1);
-    addDoubleBorder(sb, pageWidth);
 
   }
 
@@ -263,7 +279,7 @@ public class CetakPembayaranDiskonTextPrinter extends Window implements Serializ
     String printDateStr = "TGL : " + formatDate.format(printDate);
     String printHourStr = "JAM : " + formatHour.format(printDate);
     String halStr = "HAL : " + pageNo;
-    String titleReport = "LAPORAN PEMBAYARAN DISKON";
+    String titleReport = "LAPORAN SUMMARY PENJUALAN";
     String startDateStr = formatDate.format(startDate);
     String endDateStr = formatDate.format(endDate);
 
@@ -278,38 +294,31 @@ public class CetakPembayaranDiskonTextPrinter extends Window implements Serializ
     addWhiteSpace(sb, maxLengthTglPrint - titleReport.length() - 20);
     sb.append(printHourStr);
     addNewLine(sb, 1);
-    String tglBawa = "Tanggal Bayar : " + startDateStr + " s/d " + endDateStr;
-    sb.append(tglBawa);
-    addWhiteSpace(sb, maxLengthTglPrint - tglBawa.length());
+    String divisi = "Divisi : " + karyawan.getKodeKaryawan() + " - " + karyawan.getNamaPanggilan();
+    sb.append(divisi);
+    addWhiteSpace(sb, maxLengthTglPrint - divisi.length());
     sb.append(halStr);
     addNewLine(sb, 1);
-
-    sb.append("Kolektor : " + karyawan.getKodeKaryawan() + " - " + karyawan.getNamaPanggilan());
-    addWhiteSpace(sb, 10);
-    sb.append("Status : Sudah dilunasi !");
+    sb.append("Tanggal Penjualan : " + startDateStr + " s/d " + endDateStr);
 
     addNewLine(sb, 1);
     addDoubleBorder(sb, pageWidth);
     addNewLine(sb, 1);
 
-    addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
-    setAlignLeft(sb, WIDTH_COLUMN_A, "Nomor");
+
+    setAlignLeft(sb, WIDTH_COLUMN_A, "Nama Barang");
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-    setAlignLeft(sb, WIDTH_COLUMN_B, "Nomor Faktur");
+    setAlignRight(sb, WIDTH_COLUMN_B, "Unit");
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-    setAlignLeft(sb, WIDTH_COLUMN_C, "Nama Customer");
+    setAlignRight(sb, WIDTH_COLUMN_C, "Penjualan");
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-    setAlignRight(sb, WIDTH_COLUMN_D, "Nilai Tagih");
-    addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
+    setAlignRight(sb, WIDTH_COLUMN_D, "Penerimaan");
 
-    setAlignRight(sb, WIDTH_COLUMN_E, "Diskon");
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
-
-    setAlignLeft(sb, WIDTH_COLUMN_F, "");
-    addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
+    setAlignRight(sb, WIDTH_COLUMN_E, "Sisa Piutang");
 
     addNewLine(sb, 1);
     addDoubleBorder(sb, pageWidth);

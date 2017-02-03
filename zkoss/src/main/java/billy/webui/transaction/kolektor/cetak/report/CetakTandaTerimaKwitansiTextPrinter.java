@@ -291,17 +291,18 @@ public class CetakTandaTerimaKwitansiTextPrinter extends Window implements Seria
     setAlignLeft(sb, maxLengthTglPrint, companyName);
     sb.append(printDateStr);
     addNewLine(sb, 1);
-    setAlignLeft(sb, maxLengthTglPrint, "");
-    sb.append(printHourStr);
-    addNewLine(sb, 1);
+    // setAlignLeft(sb, maxLengthTglPrint, "");
     addWhiteSpace(sb, 20);
     sb.append(titleReport);
     addWhiteSpace(sb, maxLengthTglPrint - titleReport.length() - 20);
-    sb.append(halStr);
-    addNewLine(sb, 2);
-
-    sb.append("Tanggal Bawa : " + startDateStr + " s/d " + endDateStr);
+    sb.append(printHourStr);
     addNewLine(sb, 1);
+    String tglBawa = "Tanggal Bawa : " + startDateStr + " s/d " + endDateStr;
+    sb.append(tglBawa);
+    addWhiteSpace(sb, maxLengthTglPrint - tglBawa.length());
+    sb.append(halStr);
+    addNewLine(sb, 1);
+
     sb.append("Kolektor : " + karyawan.getKodeKaryawan() + " - " + karyawan.getNamaPanggilan());
     addWhiteSpace(sb, 10);
     sb.append("Status : Belum dilunasi !");

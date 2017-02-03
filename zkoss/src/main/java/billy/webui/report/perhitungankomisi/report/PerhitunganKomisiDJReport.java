@@ -104,7 +104,7 @@ public class PerhitunganKomisiDJReport extends Window implements Serializable {
     boolean modal = true;
 
     setTitle(title);
-    setId("ReportWindow");
+    setId("ReportWindowPerhitunganKomisi");
     setVisible(true);
     setMaximizable(true);
     setMinimizable(true);
@@ -274,7 +274,7 @@ public class PerhitunganKomisiDJReport extends Window implements Serializable {
     tanggal.setWidth(new Integer(700));
     AutoText emptyLine = new AutoText("", AutoText.POSITION_HEADER, HorizontalBandAlignment.LEFT);
     emptyLine.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
-    drb.addAutoText(atCompanyHeader).addAutoText(emptyLine).addAutoText(sales).addAutoText(tanggal);
+    drb.addAutoText(atCompanyHeader).addAutoText(sales).addAutoText(tanggal);
 
     // Footer
     BonusTransportService bonusService =

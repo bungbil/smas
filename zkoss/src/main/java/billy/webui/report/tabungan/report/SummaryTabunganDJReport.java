@@ -152,7 +152,7 @@ public class SummaryTabunganDJReport extends Window implements Serializable {
     boolean modal = true;
 
     setTitle(title);
-    setId("ReportWindow");
+    setId("ReportWindowSummaryTabungan");
     setVisible(true);
     setMaximizable(true);
     setMinimizable(true);
@@ -319,7 +319,7 @@ public class SummaryTabunganDJReport extends Window implements Serializable {
     tanggal.setWidth(new Integer(700));
     AutoText emptyLine = new AutoText("", AutoText.POSITION_HEADER, HorizontalBandAlignment.LEFT);
     emptyLine.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
-    drb.addAutoText(atCompanyHeader).addAutoText(emptyLine).addAutoText(tanggal);
+    drb.addAutoText(atCompanyHeader).addAutoText(tanggal);
 
 
     /**

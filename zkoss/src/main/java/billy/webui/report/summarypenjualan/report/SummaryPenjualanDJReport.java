@@ -102,7 +102,7 @@ public class SummaryPenjualanDJReport extends Window implements Serializable {
     boolean modal = true;
 
     setTitle(this.title);
-    setId("ReportWindow");
+    setId("ReportWindowSummaryPenjualan");
     setVisible(true);
     setMaximizable(true);
     setMinimizable(true);
@@ -271,8 +271,7 @@ public class SummaryPenjualanDJReport extends Window implements Serializable {
     tanggal.setWidth(new Integer(700));
     AutoText emptyLine = new AutoText("", AutoText.POSITION_HEADER, HorizontalBandAlignment.LEFT);
     emptyLine.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
-    drb.addAutoText(atCompanyHeader).addAutoText(emptyLine).addAutoText(divisi)
-        .addAutoText(tanggal);
+    drb.addAutoText(atCompanyHeader).addAutoText(divisi).addAutoText(tanggal);
     //
     // // Footer
     // AutoText footerText = new
