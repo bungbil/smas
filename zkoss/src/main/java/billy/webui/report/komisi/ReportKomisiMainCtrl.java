@@ -1,10 +1,14 @@
 package billy.webui.report.komisi;
 
+import java.awt.print.PrinterJob;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
 
 import org.apache.log4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,8 +28,11 @@ import billy.backend.model.Penjualan;
 import billy.backend.service.KaryawanService;
 import billy.backend.service.PenjualanService;
 import billy.webui.master.karyawan.model.KaryawanListModelItemRenderer;
+import billy.webui.printer.model.PrinterListModelItemRenderer;
 import billy.webui.report.komisi.report.KomisiDivisiDJReport;
+import billy.webui.report.komisi.report.KomisiDivisiTextPrinter;
 import billy.webui.report.komisi.report.KomisiSalesDJReport;
+import billy.webui.report.komisi.report.KomisiSalesTextPrinter;
 import de.forsthaus.UserWorkspace;
 import de.forsthaus.backend.model.SecUser;
 import de.forsthaus.policy.model.UserImpl;
@@ -45,7 +52,10 @@ public class ReportKomisiMainCtrl extends GFCBaseCtrl implements Serializable {
   protected Datebox txtb_tanggalAkhirPenjualan;
   protected Button btnView;
 
+  protected Listbox lbox_Printer;
+  protected Button btnCetak;
 
+  private PrintService selectedPrinter;
   // ServiceDAOs / Domain Classes
   private PenjualanService penjualanService;
   private KaryawanService karyawanService;
@@ -63,6 +73,14 @@ public class ReportKomisiMainCtrl extends GFCBaseCtrl implements Serializable {
   @Override
   public void doAfterCompose(Component window) throws Exception {
     super.doAfterCompose(window);
+
+    // PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+    PrintService[] printServices = PrinterJob.lookupPrintServices();
+    lbox_Printer.setModel(new ListModelList(printServices));
+    lbox_Printer.setItemRenderer(new PrinterListModelItemRenderer());
+    PrintService service = PrintServiceLookup.lookupDefaultPrintService();
+    ListModelList lml = (ListModelList) lbox_Printer.getModel();
+    lbox_Printer.setSelectedIndex(lml.indexOf(service));
 
     this.self.setAttribute("controller", this, false);
   }
@@ -130,6 +148,36 @@ public class ReportKomisiMainCtrl extends GFCBaseCtrl implements Serializable {
     }
   }
 
+  public void onClick$btnCetak(Event event) throws Exception {
+    if (validToPrint()) {
+
+      final Window win = (Window) Path.getComponent("/outerIndexWindow");
+      if (karyawan.getJobType().getId() == 4) {
+        new KomisiSalesTextPrinter(win, karyawan, txtb_tanggalAwalPenjualan.getValue(),
+            txtb_tanggalAkhirPenjualan.getValue(), listPenjualan, selectedPrinter);
+      } else if (karyawan.getJobType().getId() == 2) {
+        new KomisiDivisiTextPrinter(win, karyawan, txtb_tanggalAwalPenjualan.getValue(),
+            txtb_tanggalAkhirPenjualan.getValue(), listPenjualan, selectedPrinter);
+      }
+
+    } else {
+      showErrorCetak();
+    }
+  }
+
+  public void onClick$btnRefeshPrinter(Event event) throws Exception {
+    PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+    lbox_Printer.setModel(new ListModelList(printServices));
+    lbox_Printer.setItemRenderer(new PrinterListModelItemRenderer());
+  }
+
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+
+  /* Master BEANS */
+
+
   public void onClick$btnView(Event event) throws Exception {
     if (validToPrint()) {
       final Window win = (Window) Path.getComponent("/outerIndexWindow");
@@ -146,6 +194,8 @@ public class ReportKomisiMainCtrl extends GFCBaseCtrl implements Serializable {
     }
   }
 
+  /* COMPONENTS and OTHERS */
+
   /**
    * Automatically called method from zk.
    * 
@@ -158,18 +208,9 @@ public class ReportKomisiMainCtrl extends GFCBaseCtrl implements Serializable {
     doReset();
   }
 
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-
-  /* Master BEANS */
-
-
   public void setKaryawanService(KaryawanService karyawanService) {
     this.karyawanService = karyawanService;
   }
-
-  /* COMPONENTS and OTHERS */
 
   public void setPenjualanService(PenjualanService penjualanService) {
     this.penjualanService = penjualanService;
@@ -189,6 +230,14 @@ public class ReportKomisiMainCtrl extends GFCBaseCtrl implements Serializable {
     if (itemDivisi != null) {
       ListModelList lml1 = (ListModelList) lbox_Divisi.getListModel();
       karyawan = (Karyawan) lml1.get(itemDivisi.getIndex());
+    }
+    PrintService printer = null;
+    Listitem itemPrinter = lbox_Printer.getSelectedItem();
+    if (itemPrinter != null) {
+      ListModelList lml1 = (ListModelList) lbox_Printer.getListModel();
+      printer = (PrintService) lml1.get(itemPrinter.getIndex());
+      selectedPrinter = printer;
+      logger.info("Printer : " + printer.getName());
     }
     if (karyawan != null && txtb_tanggalAwalPenjualan.getValue() != null
         && txtb_tanggalAkhirPenjualan.getValue() != null) {

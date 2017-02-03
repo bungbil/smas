@@ -202,8 +202,8 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
       String namaPelanggan = item.getNamaPelanggan();
-      if (namaPelanggan.length() > 10) {
-        namaPelanggan = namaPelanggan.subSequence(0, 10).toString();
+      if (namaPelanggan.length() > WIDTH_COLUMN_B) {
+        namaPelanggan = namaPelanggan.subSequence(0, WIDTH_COLUMN_B).toString();
       }
       setAlignLeft(sb, WIDTH_COLUMN_B, namaPelanggan);
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
@@ -215,8 +215,8 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
       String namaBarang = item.getNamaBarang();
-      if (namaBarang.length() > 12) {
-        namaBarang = namaBarang.subSequence(0, 12).toString();
+      if (namaBarang.length() > WIDTH_COLUMN_E) {
+        namaBarang = namaBarang.subSequence(0, WIDTH_COLUMN_E).toString();
       }
       setAlignLeft(sb, WIDTH_COLUMN_E, namaBarang);
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);

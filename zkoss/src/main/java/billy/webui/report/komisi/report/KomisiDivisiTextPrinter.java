@@ -1,4 +1,4 @@
-package billy.webui.report.summarypenjualan.report;
+package billy.webui.report.komisi.report;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -32,16 +32,17 @@ import org.zkoss.zul.Window;
 import billy.backend.model.Karyawan;
 import billy.backend.model.Penjualan;
 import billy.backend.model.PenjualanDetail;
+import billy.backend.service.BonusTransportService;
 import billy.backend.service.CompanyProfileService;
 import billy.backend.service.PenjualanService;
 import billy.webui.printer.PrintJobWatcher;
-import billy.webui.report.summarypenjualan.model.SummaryPenjualan;
+import billy.webui.report.komisi.model.KomisiDivisi;
 import de.forsthaus.webui.util.ZksampleMessageUtils;
 
-public class SummaryPenjualanTextPrinter extends Window implements Serializable {
+public class KomisiDivisiTextPrinter extends Window implements Serializable {
 
   private static final long serialVersionUID = 1L;
-  private static final Logger logger = Logger.getLogger(SummaryPenjualanTextPrinter.class);
+  private static final Logger logger = Logger.getLogger(KomisiDivisiTextPrinter.class);
 
   public static int roundUp(int dividend, int divisor) {
     return (dividend + divisor - 1) / divisor;
@@ -49,10 +50,8 @@ public class SummaryPenjualanTextPrinter extends Window implements Serializable 
 
   private final int pageLength = 50;
   private final int pageWidth = 80;
-  private int totalUnit = 0;
-  private BigDecimal totalPenjualan = BigDecimal.ZERO;
-  private BigDecimal totalPenerimaan = BigDecimal.ZERO;
-  private BigDecimal totalSisaPiutang = BigDecimal.ZERO;
+  private double totalUnit = 0;
+  private BigDecimal totalKomisi = BigDecimal.ZERO;
 
   private final int WIDTH_COLUMN_SEPERATE = 1;
   private final int WIDTH_COLUMN_A = 32;
@@ -69,9 +68,8 @@ public class SummaryPenjualanTextPrinter extends Window implements Serializable 
 
   DecimalFormat df = new DecimalFormat("#,###");
 
-  public SummaryPenjualanTextPrinter(Component parent, Karyawan karyawan, Date startDate,
-      Date endDate, List<Penjualan> listPenjualan, PrintService selectedPrinter)
-      throws InterruptedException {
+  public KomisiDivisiTextPrinter(Component parent, Karyawan karyawan, Date startDate, Date endDate,
+      List<Penjualan> listPenjualan, PrintService selectedPrinter) throws InterruptedException {
     super();
     this.setParent(parent);
 
@@ -110,8 +108,8 @@ public class SummaryPenjualanTextPrinter extends Window implements Serializable 
   public void doPrint(Karyawan karyawan, Date startDate, Date endDate,
       List<Penjualan> listPenjualan, PrintService selectedPrinter) throws PrintException,
       IOException {
-    List<SummaryPenjualan> listData = generateDataSummary(karyawan, listPenjualan);
 
+    List<KomisiDivisi> listData = generateDataSummary(karyawan, listPenjualan);
     InputStream is =
         new ByteArrayInputStream(generateData(karyawan, startDate, endDate, listData).getBytes(
             "UTF8"));
@@ -138,7 +136,7 @@ public class SummaryPenjualanTextPrinter extends Window implements Serializable 
   }
 
   private String generateData(Karyawan karyawan, Date startDate, Date endDate,
-      List<SummaryPenjualan> listItem) {
+      List<KomisiDivisi> listItem) {
     StringBuffer sb = new StringBuffer();
 
     CompanyProfileService companyService =
@@ -148,9 +146,7 @@ public class SummaryPenjualanTextPrinter extends Window implements Serializable 
     int itemPerPage = 80;
     int totalPage = roundUp(listItem.size(), itemPerPage);
     totalUnit = 0;
-    totalPenjualan = BigDecimal.ZERO;
-    totalPenerimaan = BigDecimal.ZERO;
-    totalSisaPiutang = BigDecimal.ZERO;
+    totalKomisi = BigDecimal.ZERO;
 
     for (int pageNo = 1; pageNo <= totalPage; pageNo++) {
 
@@ -159,13 +155,13 @@ public class SummaryPenjualanTextPrinter extends Window implements Serializable 
       generateFooterReport(sb);
 
     }
-    // generateLastFooterReport(sb);
+    generateLastFooterReport(sb, karyawan);
 
     return sb.toString();
   }
 
-  private void generateDataReport(StringBuffer sb, List<SummaryPenjualan> listItem,
-      int itemPerPage, int pageNo) {
+  private void generateDataReport(StringBuffer sb, List<KomisiDivisi> listItem, int itemPerPage,
+      int pageNo) {
 
     SimpleDateFormat formatDate = new SimpleDateFormat();
     formatDate = new SimpleDateFormat("dd-MM-yy", Locale.getDefault());
@@ -176,7 +172,7 @@ public class SummaryPenjualanTextPrinter extends Window implements Serializable 
       maxIndex = listItem.size();
     }
     for (int i = startIndex; i < maxIndex; i++) {
-      SummaryPenjualan item = listItem.get(i);
+      KomisiDivisi item = listItem.get(i);
 
       String namaBarang = item.getNamaBarang();
       if (namaBarang.length() > WIDTH_COLUMN_A) {
@@ -185,25 +181,24 @@ public class SummaryPenjualanTextPrinter extends Window implements Serializable 
       setAlignLeft(sb, WIDTH_COLUMN_A, namaBarang);
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-      setAlignRight(sb, WIDTH_COLUMN_B, item.getUnitSetTerjual() + "");
+      setAlignRight(sb, WIDTH_COLUMN_B, item.getQty() + "");
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-      String nilaiPenjualanStr = df.format(item.getPenjualanBarang());
+      String nilaiPenjualanStr = df.format(item.getOprDivisi());
       setAlignRight(sb, WIDTH_COLUMN_C, nilaiPenjualanStr);
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-      String nilaiPenerimaanStr = df.format(item.getPenerimaanPenjualan());
+      String nilaiPenerimaanStr = df.format(item.getOrDivisi());
       setAlignRight(sb, WIDTH_COLUMN_D, nilaiPenerimaanStr);
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-      String nilaiSisaPiutangStr = df.format(item.getSisaPiutang());
+      String nilaiSisaPiutangStr = df.format(item.getJumlah());
       setAlignRight(sb, WIDTH_COLUMN_E, nilaiSisaPiutangStr);
 
 
-      totalUnit += item.getUnitSetTerjual();
-      totalPenjualan = totalPenjualan.add(item.getPenjualanBarang());
-      totalPenerimaan = totalPenerimaan.add(item.getPenerimaanPenjualan());
-      totalSisaPiutang = totalSisaPiutang.add(item.getSisaPiutang());
+      totalUnit += item.getQty();
+      totalKomisi = totalKomisi.add(item.getJumlah());
+
 
       addNewLine(sb, 1);
 
@@ -211,43 +206,55 @@ public class SummaryPenjualanTextPrinter extends Window implements Serializable 
 
   }
 
-  private List<SummaryPenjualan> generateDataSummary(Karyawan karyawan,
-      List<Penjualan> listPenjualan) {
-    Map<String, SummaryPenjualan> mapBarang = new HashMap<String, SummaryPenjualan>();
+  private List<KomisiDivisi> generateDataSummary(Karyawan karyawan, List<Penjualan> listPenjualan) {
+    Map<String, KomisiDivisi> mapBarang = new HashMap<String, KomisiDivisi>();
     PenjualanService penjualanService = (PenjualanService) SpringUtil.getBean("penjualanService");
     for (Penjualan penjualan : listPenjualan) {
       List<PenjualanDetail> penjualanDetails =
           penjualanService.getPenjualanDetailsByPenjualan(penjualan);
       for (PenjualanDetail penjualanDetail : penjualanDetails) {
-        String kodeBarang = penjualanDetail.getBarang().getKodeBarang();
-        SummaryPenjualan sp = mapBarang.get(kodeBarang);
-        if (sp == null) {
-          sp = new SummaryPenjualan();
-          sp.setNamaDivisi(karyawan.getNamaPanggilan());
-          sp.setNamaBarang(penjualanDetail.getBarang().getNamaBarang());
-          sp.setUnitSetTerjual(penjualanDetail.getQty());
-          sp.setPenjualanBarang(penjualanDetail.getTotal());
-          sp.setPenerimaanPenjualan(penjualanDetail.getDownPayment());
-          sp.setSisaPiutang(penjualanDetail.getTotal().subtract(penjualanDetail.getDownPayment()));
-          mapBarang.put(kodeBarang, sp);
-        } else {
-          sp.setUnitSetTerjual(sp.getUnitSetTerjual() + penjualanDetail.getQty());
-          sp.setPenjualanBarang(sp.getPenjualanBarang().add(penjualanDetail.getTotal()));
-          sp.setPenerimaanPenjualan(sp.getPenerimaanPenjualan().add(
-              penjualanDetail.getDownPayment()));
-          sp.setSisaPiutang(sp.getSisaPiutang().add(
-              penjualanDetail.getTotal().subtract(penjualanDetail.getDownPayment())));
+        if (!penjualanDetail.getBarang().isBonus()) {
+          String kodeBarang = penjualanDetail.getBarang().getKodeBarang();
+          KomisiDivisi data = mapBarang.get(kodeBarang);
+          if (penjualanDetail.getOprDivisi() == null) {
+            penjualanDetail.setOprDivisi(BigDecimal.ZERO);
+          }
+          if (penjualanDetail.getOrDivisi() == null) {
+            penjualanDetail.setOrDivisi(BigDecimal.ZERO);
+          }
+          if (data == null) {
+            data = new KomisiDivisi();
+            data.setNamaBarang(penjualanDetail.getBarang().getNamaBarang());
+            data.setQty(penjualanDetail.getQty());
+            data.setOprDivisi(penjualanDetail.getOprDivisi());
+            data.setOrDivisi(penjualanDetail.getOrDivisi());
+            BigDecimal jumlah =
+                (penjualanDetail.getOprDivisi().add(penjualanDetail.getOrDivisi()))
+                    .multiply(new BigDecimal(penjualanDetail.getQty()));
+            data.setJumlah(jumlah);
+            mapBarang.put(kodeBarang, data);
+          } else {
+            data.setQty(data.getQty() + penjualanDetail.getQty());
+            BigDecimal jumlah =
+                (penjualanDetail.getOprDivisi().add(penjualanDetail.getOrDivisi()))
+                    .multiply(new BigDecimal(penjualanDetail.getQty()));
+            data.setJumlah(data.getJumlah().add(jumlah));
+            data.setOprDivisi(data.getOprDivisi().add(penjualanDetail.getOprDivisi()));
+            data.setOrDivisi(data.getOrDivisi().add(penjualanDetail.getOrDivisi()));
+          }
         }
       }
     }
 
-    List<SummaryPenjualan> summaryPenjualanList = new ArrayList<SummaryPenjualan>();
-    for (Map.Entry<String, SummaryPenjualan> kodeBarangMap : mapBarang.entrySet()) {
-      SummaryPenjualan sp = kodeBarangMap.getValue();
-      summaryPenjualanList.add(sp);
+    List<KomisiDivisi> komisiDivisiList = new ArrayList<KomisiDivisi>();
+    for (Map.Entry<String, KomisiDivisi> kodeBarangMap : mapBarang.entrySet()) {
+      KomisiDivisi data = kodeBarangMap.getValue();
+      totalKomisi = totalKomisi.add(data.getJumlah());
+      totalUnit = totalUnit + data.getQty();
+      komisiDivisiList.add(data);
     }
-    logger.info("list summaryPenjualanList size : " + summaryPenjualanList.size());
-    return summaryPenjualanList;
+
+    return komisiDivisiList;
   }
 
   private void generateFooterReport(StringBuffer sb) {
@@ -259,14 +266,14 @@ public class SummaryPenjualanTextPrinter extends Window implements Serializable 
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
     setAlignRight(sb, WIDTH_FOOTER_COLUMN_B, totalUnit + "");
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
-    String totalPenjualanStr = df.format(totalPenjualan);
-    setAlignRight(sb, WIDTH_FOOTER_COLUMN_C, totalPenjualanStr);
+
+    setAlignRight(sb, WIDTH_FOOTER_COLUMN_C, "");
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
-    String totalPenerimaanStr = df.format(totalPenerimaan);
-    setAlignRight(sb, WIDTH_FOOTER_COLUMN_D, totalPenerimaanStr);
+
+    setAlignRight(sb, WIDTH_FOOTER_COLUMN_D, "");
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
-    String totalSisaPiutangStr = df.format(totalSisaPiutang);
-    setAlignRight(sb, WIDTH_FOOTER_COLUMN_E, totalSisaPiutangStr);
+    String totalKomisiStr = df.format(totalKomisi);
+    setAlignRight(sb, WIDTH_FOOTER_COLUMN_E, totalKomisiStr);
 
     addNewLine(sb, 1);
     addSingleBorder(sb, pageWidth);
@@ -283,7 +290,7 @@ public class SummaryPenjualanTextPrinter extends Window implements Serializable 
     String printDateStr = "TGL : " + formatDate.format(printDate);
     String printHourStr = "JAM : " + formatHour.format(printDate);
     String halStr = "HAL : " + pageNo;
-    String titleReport = "LAPORAN SUMMARY PENJUALAN";
+    String titleReport = "LAPORAN KOMISI DIVISI";
     String startDateStr = formatDate.format(startDate);
     String endDateStr = formatDate.format(endDate);
 
@@ -313,28 +320,52 @@ public class SummaryPenjualanTextPrinter extends Window implements Serializable 
     setAlignLeft(sb, WIDTH_COLUMN_A, "Nama Barang");
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-    setAlignRight(sb, WIDTH_COLUMN_B, "Unit");
+    setAlignRight(sb, WIDTH_COLUMN_B, "Qty");
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-    setAlignRight(sb, WIDTH_COLUMN_C, "Penjualan");
+    setAlignRight(sb, WIDTH_COLUMN_C, "OPR");
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-    setAlignRight(sb, WIDTH_COLUMN_D, "Penerimaan");
+    setAlignRight(sb, WIDTH_COLUMN_D, "OR");
 
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
-    setAlignRight(sb, WIDTH_COLUMN_E, "Sisa Piutang");
+    setAlignRight(sb, WIDTH_COLUMN_E, "Jumlah");
 
     addNewLine(sb, 1);
     addDoubleBorder(sb, pageWidth);
     addNewLine(sb, 1);
   }
 
-  private void generateLastFooterReport(StringBuffer sb) {
+  private void generateLastFooterReport(StringBuffer sb, Karyawan karyawan) {
+
+
+    BonusTransportService bonusService =
+        (BonusTransportService) SpringUtil.getBean("bonusTransportService");
+    BigDecimal honorDivisi = bonusService.getHonorDivisi(karyawan, totalUnit);
+    BigDecimal total = totalKomisi.add(honorDivisi);
+    int column0 = 50;
+    int column1 = 15;
+    int column2 = 14;
+    String separate = ":";
+
+    addNewLine(sb, 2);
+    addWhiteSpace(sb, column0);
+    setAlignLeft(sb, column1, "Honor");
+    sb.append(separate);
+    String honorDivisiStr = df.format(honorDivisi);
+    setAlignRight(sb, column2, honorDivisiStr);
+
     addNewLine(sb, 1);
-    addWhiteSpace(sb, 6);
-    sb.append("Yang Menerima");
-    addWhiteSpace(sb, 35);
-    sb.append("Yang Memberi");
+    addWhiteSpace(sb, column0);
+    addSingleBorder(sb, 30);
+    addNewLine(sb, 1);
+    addWhiteSpace(sb, column0);
+    setAlignLeft(sb, column1, "Total Komisi");
+    sb.append(separate);
+    String totalStr = df.format(total);
+    setAlignRight(sb, column2, totalStr);
+
+
   }
 
   private void setAlignLeft(StringBuffer sb, int width, String value) {
