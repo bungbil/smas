@@ -145,7 +145,7 @@ public class ReportPerhitunganKomisiMainCtrl extends GFCBaseCtrl implements Seri
 
 
   public void onClick$btnCetak(Event event) throws Exception {
-    if (validToPrint()) {
+    if (validToPrint() && selectedPrinter != null) {
 
       final Window win = (Window) Path.getComponent("/outerIndexWindow");
       new PerhitunganKomisiTextPrinter(win, karyawan, txtb_tanggalAwalPenjualan.getValue(),

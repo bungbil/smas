@@ -105,14 +105,13 @@ public class CetakLaporanSummaryPenjualanDJReport extends Window implements Seri
 
         List<PenjualanDetail> listPenjualanDetail = as.getPenjualanDetailsByPenjualan(penjualan);
         for (PenjualanDetail detail : listPenjualanDetail) {
-          faktur
-              .tambahItemFaktur(new ItemFaktur(detail.getBarang().getNamaBarang(), String
-                  .valueOf(detail.getQty()), df.format(detail.getHarga()), df.format(detail
-                  .getTotal())));
+          faktur.tambahItemFaktur(new ItemFaktur(detail.getBarang().getKodeBarang(), detail
+              .getBarang().getNamaBarang(), String.valueOf(detail.getQty()), df.format(detail
+              .getHarga()), df.format(detail.getTotal())));
         }
         if (listPenjualanDetail.size() < 9) {
           for (int j = 0; j < 9 - listPenjualanDetail.size(); j++) {
-            faktur.tambahItemFaktur(new ItemFaktur("", "", "", ""));
+            faktur.tambahItemFaktur(new ItemFaktur("", "", "", "", ""));
           }
         }
 

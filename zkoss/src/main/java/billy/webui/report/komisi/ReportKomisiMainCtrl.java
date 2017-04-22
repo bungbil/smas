@@ -149,7 +149,7 @@ public class ReportKomisiMainCtrl extends GFCBaseCtrl implements Serializable {
   }
 
   public void onClick$btnCetak(Event event) throws Exception {
-    if (validToPrint()) {
+    if (validToPrint() && selectedPrinter != null) {
 
       final Window win = (Window) Path.getComponent("/outerIndexWindow");
       if (karyawan.getJobType().getId() == 4) {

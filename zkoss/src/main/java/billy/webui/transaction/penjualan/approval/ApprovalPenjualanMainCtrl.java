@@ -288,7 +288,7 @@ public class ApprovalPenjualanMainCtrl extends GFCBaseCtrl implements Serializab
     getApprovalPenjualanDetailCtrl().getBinder().loadAll();
     getApprovalPenjualanDetailCtrl().doRefresh();
     // set focus
-    getApprovalPenjualanDetailCtrl().txtb_NoOrderSheet.focus();
+    // getApprovalPenjualanDetailCtrl().txtb_NoOrderSheet.focus();
   }
 
   /**
@@ -352,7 +352,7 @@ public class ApprovalPenjualanMainCtrl extends GFCBaseCtrl implements Serializab
 
     tabApprovalPenjualanDetail.setSelected(true);
     // set focus
-    getApprovalPenjualanDetailCtrl().txtb_NoOrderSheet.focus();
+    // getApprovalPenjualanDetailCtrl().txtb_NoOrderSheet.focus();
 
   }
 

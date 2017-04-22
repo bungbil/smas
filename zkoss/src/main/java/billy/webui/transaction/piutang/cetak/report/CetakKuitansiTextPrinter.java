@@ -101,7 +101,8 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
       throws PrintException, IOException {
     DecimalFormat df = new DecimalFormat("#,###");
     SimpleDateFormat formatDate = new SimpleDateFormat();
-    formatDate = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+    Locale id = new Locale("in", "ID");
+    formatDate = new SimpleDateFormat("dd MMMM yyyy", id);
     PenjualanService as = (PenjualanService) SpringUtil.getBean("penjualanService");
     CompanyProfileService companyService =
         (CompanyProfileService) SpringUtil.getBean("companyProfileService");
@@ -171,7 +172,7 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
       if (piutang.getKekuranganBayar() != null) {
         sisaPiutang = sisaPiutang.subtract(piutang.getKekuranganBayar());
       }
-      if (piutang.getPembayaranKe() == piutang.getPenjualan().getIntervalKredit()) {
+      if (piutang.getPembayaranKe() >= piutang.getPenjualan().getIntervalKredit()) {
         kuitansi.setSisaPembayaran("Pelunasan");
       } else {
         kuitansi.setSisaPembayaran(df.format(piutang.getNilaiTagihan()) + " : SELAMA " + sisaBulan
@@ -183,11 +184,12 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
           .getNamaPanggilan());
       kuitansi.setNamaKolektor("");
       if (piutang.getPenjualan().getKolektor() != null) {
-        kuitansi.setNamaKolektor(piutang.getPenjualan().getKolektor().getNamaPanggilan() + "("
-            + piutang.getPenjualan().getKolektor().getKodeKaryawan() + ")");
+        kuitansi.setNamaKolektor(piutang.getPenjualan().getKolektor().getNamaPanggilan());
+        kuitansi
+            .setKodeKolektor("(" + piutang.getPenjualan().getKolektor().getKodeKaryawan() + ")");
       } else if (piutang.getKolektor() != null) {
-        kuitansi.setNamaKolektor(piutang.getKolektor().getNamaPanggilan() + "("
-            + piutang.getKolektor().getKodeKaryawan() + ")");
+        kuitansi.setNamaKolektor(piutang.getKolektor().getNamaPanggilan());
+        kuitansi.setKodeKolektor("(" + piutang.getKolektor().getKodeKaryawan() + ")");
       }
       List<PenjualanDetail> listPenjualanDetail =
           as.getPenjualanDetailsByPenjualan(piutang.getPenjualan());
@@ -196,8 +198,9 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
         if (namaBarang.length() > 18) {
           namaBarang = namaBarang.substring(0, 17);
         }
-        kuitansi.tambahItemFaktur(new ItemFaktur(namaBarang, String.valueOf(detail.getQty()), df
-            .format(detail.getHarga()), df.format(detail.getTotal())));
+        kuitansi.tambahItemFaktur(new ItemFaktur(detail.getBarang().getKodeBarang(), namaBarang,
+            String.valueOf(detail.getQty()), df.format(detail.getHarga()), df.format(detail
+                .getTotal())));
       }
 
       listKuitansi.add(kuitansi);
@@ -249,13 +252,13 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
       addNewLine(sb, 4);
 
       int sizeItem = kuitansi.getListItemFaktur().size();
-      addWhiteSpace(sb, 5);
+      addWhiteSpace(sb, 3);
       sb.append(kuitansi.getNamaPelanggan());
-      int maxLengthNama = 43;
+      int maxLengthNama = 40;
       addWhiteSpace(sb, maxLengthNama - kuitansi.getNamaPelanggan().length());
       if (sizeItem >= 1) {
         ItemFaktur item = kuitansi.getListItemFaktur().get(0);
-        sb.append("1.");
+        setAlignRight(sb, 7, item.getKodeBarang());
         addWhiteSpace(sb, 1);
         String namaBarang = item.getNamaBarang();
         if (namaBarang.length() > 20) {
@@ -267,13 +270,13 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
         sb.append(item.getQty());
       }
       addNewLine(sb, 1);
-      addWhiteSpace(sb, 5);
+      addWhiteSpace(sb, 3);
       sb.append(kuitansi.getAlamat());
-      int maxLengthAlamat = 43;
+      int maxLengthAlamat = 40;
       addWhiteSpace(sb, maxLengthAlamat - kuitansi.getAlamat().length());
       if (sizeItem >= 2) {
         ItemFaktur item = kuitansi.getListItemFaktur().get(1);
-        sb.append("2.");
+        setAlignRight(sb, 7, item.getKodeBarang());
         addWhiteSpace(sb, 1);
         String namaBarang = item.getNamaBarang();
         if (namaBarang.length() > 20) {
@@ -285,13 +288,13 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
         sb.append(item.getQty());
       }
       addNewLine(sb, 1);
-      addWhiteSpace(sb, 5);
+      addWhiteSpace(sb, 3);
       sb.append(kuitansi.getAlamat2());
-      int maxLengthAlamat2 = 43;
+      int maxLengthAlamat2 = 40;
       addWhiteSpace(sb, maxLengthAlamat2 - kuitansi.getAlamat2().length());
       if (sizeItem >= 3) {
         ItemFaktur item = kuitansi.getListItemFaktur().get(2);
-        sb.append("3.");
+        setAlignRight(sb, 7, item.getKodeBarang());
         addWhiteSpace(sb, 1);
         String namaBarang = item.getNamaBarang();
         if (namaBarang.length() > 20) {
@@ -303,13 +306,13 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
         sb.append(item.getQty());
       }
       addNewLine(sb, 1);
-      addWhiteSpace(sb, 5);
+      addWhiteSpace(sb, 3);
       sb.append(kuitansi.getAlamat3());
-      int maxLengthAlamat3 = 43;
+      int maxLengthAlamat3 = 40;
       addWhiteSpace(sb, maxLengthAlamat3 - kuitansi.getAlamat3().length());
       if (sizeItem >= 4) {
         ItemFaktur item = kuitansi.getListItemFaktur().get(3);
-        sb.append("4.");
+        setAlignRight(sb, 7, item.getKodeBarang());
         addWhiteSpace(sb, 1);
         String namaBarang = item.getNamaBarang();
         if (namaBarang.length() > 20) {
@@ -341,12 +344,25 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
       addNewLine(sb, 3);
       addWhiteSpace(sb, 6);
       sb.append(kuitansi.getNamaKolektor());
-      int maxLengthKolektor = 17;
+      int maxLengthKolektor = 40;
       addWhiteSpace(sb, maxLengthKolektor - kuitansi.getNamaKolektor().length());
       sb.append(kuitansi.getNamaSupervisor());
-      addNewLine(sb, 5);
+      addNewLine(sb, 1);
+      addWhiteSpace(sb, 9);
+      sb.append(kuitansi.getKodeKolektor());
+      addNewLine(sb, 4);
 
     }
     return sb.toString();
+  }
+
+  private void setAlignLeft(StringBuffer sb, int width, String value) {
+    sb.append(value);
+    addWhiteSpace(sb, width - value.length());
+  }
+
+  private void setAlignRight(StringBuffer sb, int width, String value) {
+    addWhiteSpace(sb, width - value.length());
+    sb.append(value);
   }
 }

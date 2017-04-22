@@ -1,5 +1,6 @@
 package billy.backend.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -77,6 +78,9 @@ public class PiutangServiceImpl implements PiutangService {
       piutang.setPenjualan(penjualan);
       piutang.setNoFaktur(penjualan.getNoFaktur());
       piutang.setStatus(status);
+      piutang.setKekuranganBayar(BigDecimal.ZERO);
+      piutang.setDiskon(BigDecimal.ZERO);
+      piutang.setPembayaran(BigDecimal.ZERO);
       piutang.setLastUpdate(new Date());
       piutang.setUpdatedBy("SYSTEM");
 
@@ -88,6 +92,56 @@ public class PiutangServiceImpl implements PiutangService {
       saveOrUpdate(piutang);
     }
 
+  }
+
+  private Piutang getAdditionalPiutang(Piutang currentData, Status statusProses) {
+    Calendar cal = Calendar.getInstance();
+    Piutang piutang = getNewPiutang();
+    piutang.setAktif(false);
+
+    Date tglJatuhTempo = currentData.getTglJatuhTempo();
+    cal.setTime(tglJatuhTempo);
+
+    cal.add(Calendar.MONTH, 1);
+    tglJatuhTempo = cal.getTime();
+
+
+    int month = cal.get(Calendar.MONTH) + 1;
+    int date = cal.get(Calendar.DATE);
+    piutang.setTglJatuhTempo(tglJatuhTempo);
+
+    String monthString = String.valueOf(month);
+    String dateString = String.valueOf(date);
+    if (dateString.length() == 1) {
+      dateString = "0" + dateString;
+    }
+    if (monthString.length() == 1) {
+      monthString = "0" + monthString;
+    }
+    piutang.setNoKuitansi(dateString + "." + monthString + "."
+        + currentData.getPenjualan().getNoFaktur());
+
+    piutang.setNilaiTagihan(BigDecimal.ZERO);
+    piutang.setPembayaranKe(currentData.getPembayaranKe() + 1);
+    piutang.setPenjualan(currentData.getPenjualan());
+    piutang.setNoFaktur(currentData.getPenjualan().getNoFaktur());
+
+
+    piutang.setStatus(statusProses);
+    piutang.setKekuranganBayar(BigDecimal.ZERO);
+    piutang.setDiskon(BigDecimal.ZERO);
+    piutang.setPembayaran(BigDecimal.ZERO);
+    piutang.setLastUpdate(new Date());
+    piutang.setUpdatedBy("SYSTEM");
+
+    piutang.setPembayaran(null);
+    piutang.setTglPembayaran(null);
+    piutang.setKolektor(null);
+    piutang.setKeterangan(null);
+
+    saveOrUpdate(piutang);
+
+    return piutang;
   }
 
   @Override
@@ -157,9 +211,15 @@ public class PiutangServiceImpl implements PiutangService {
   }
 
   @Override
-  public Piutang getNextPiutang(Piutang data) {
-    return getPiutangDAO().getPiutangByNoFakturAndPembayaranKe(data.getNoFaktur(),
-        data.getPembayaranKe() + 1);
+  public Piutang getNextPiutang(Piutang data, Status statusProses) {
+
+    if (data.getPenjualan().getIntervalKredit() <= data.getPembayaranKe()) {
+      return getAdditionalPiutang(data, statusProses);
+    } else {
+
+      return getPiutangDAO().getPiutangByNoFakturAndPembayaranKe(data.getNoFaktur(),
+          data.getPembayaranKe() + 1);
+    }
   }
 
   @Override

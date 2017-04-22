@@ -197,7 +197,11 @@ public class CetakPembayaranDiskonTextPrinter extends Window implements Serializ
       setAlignLeft(sb, WIDTH_COLUMN_B, item.getNoFaktur());
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-      setAlignLeft(sb, WIDTH_COLUMN_C, item.getNamaCustomer());
+      String nama = item.getNamaCustomer();
+      if (nama.length() > WIDTH_COLUMN_C) {
+        nama = nama.subSequence(0, WIDTH_COLUMN_C).toString();
+      }
+      setAlignLeft(sb, WIDTH_COLUMN_C, nama);
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
       String nilaiTagihStr = df.format(item.getNilaiTagih());

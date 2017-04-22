@@ -30,8 +30,21 @@
 												<column />
 											</columns>
 											<rows>
+												<!-- <row>
+													<label value="Laporan" />
+													<radiogroup id="radiogroup_laporan" >
+														<grid>
+													        <rows>													            
+													            <row>
+													                 <radio id="radioLaporanDivisi" label="Divisi" radiogroup="radiogroup_Laporan"/>
+											               			 <radio id="radioLaporanSales" label="Sales" radiogroup="radiogroup_Laporan" />												               			 
+													            </row>													            
+													        </rows>
+													    </grid>
+										      		</radiogroup>																																					
+												</row> -->
 												<row>
-													<label value="Divisi / Sales" />
+													<label value="Kode Karyawan" />
 													<hbox>														
 														<textbox id="txtb_KodeDivisi" 
 															  maxlength="50" width="100px" />														

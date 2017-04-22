@@ -63,22 +63,22 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
   private final int pageWidth = 80;
 
   private final int WIDTH_COLUMN_SEPERATE = 1;
-  private final int WIDTH_COLUMN_A = 10;
+  private final int WIDTH_COLUMN_A = 11;
   private final int WIDTH_COLUMN_B = 10;
   private final int WIDTH_COLUMN_C = 5;
   private final int WIDTH_COLUMN_D = 3;
   private final int WIDTH_COLUMN_E = 12;
   private final int WIDTH_COLUMN_F = 3;
   private final int WIDTH_COLUMN_G = 10;
-  private final int WIDTH_COLUMN_H = 10;
+  private final int WIDTH_COLUMN_H = 9;
   private final int WIDTH_COLUMN_I = 9;
 
-  private final int WIDTH_FOOTER_COLUMN_A = 14;
-  private final int WIDTH_FOOTER_COLUMN_B = 21;
-  private final int WIDTH_FOOTER_COLUMN_C = 5;
-  private final int WIDTH_FOOTER_COLUMN_D = 13;
-  private final int WIDTH_FOOTER_COLUMN_E = 11;
-  private final int WIDTH_FOOTER_COLUMN_F = 11;
+  private final int WIDTH_FOOTER_COLUMN_A = 13;
+  private final int WIDTH_FOOTER_COLUMN_B = 30;
+  private final int WIDTH_FOOTER_COLUMN_C = 3;
+  private final int WIDTH_FOOTER_COLUMN_D = 10;
+  private final int WIDTH_FOOTER_COLUMN_E = 9;
+  private final int WIDTH_FOOTER_COLUMN_F = 9;
 
   DecimalFormat df = new DecimalFormat("#,###");
 
@@ -159,22 +159,22 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
         (CompanyProfileService) SpringUtil.getBean("companyProfileService");
     String companyName = companyService.getAllCompanyProfiles().get(0).getCompanyName();
     String companyAddress = companyService.getAllCompanyProfiles().get(0).getAddress();
-    int itemPerPage = 80;
+    int itemPerPage = 54;
     int totalPage = roundUp(listItem.size(), itemPerPage);
-    totalAkhirTabungan = BigDecimal.ZERO;
+    // totalAkhirTabungan = BigDecimal.ZERO;
     totalKomisi = BigDecimal.ZERO;
-    totalAkhirKomisi = BigDecimal.ZERO;
+    // totalAkhirKomisi = BigDecimal.ZERO;
     totalQty = 0.0;
-    totalAkhirQty = 0.0;
+    // totalAkhirQty = 0.0;
     totalNilaiJual = BigDecimal.ZERO;
-    totalAkhirNilaiJual = BigDecimal.ZERO;
+    // totalAkhirNilaiJual = BigDecimal.ZERO;
     totalAngsuran = BigDecimal.ZERO;
-    totalAkhirAngsuran = BigDecimal.ZERO;
+    // totalAkhirAngsuran = BigDecimal.ZERO;
 
     for (int pageNo = 1; pageNo <= totalPage; pageNo++) {
       totalNilaiJual = BigDecimal.ZERO;
       totalKomisi = BigDecimal.ZERO;
-      totalNilaiJual = BigDecimal.ZERO;
+      totalAngsuran = BigDecimal.ZERO;
       totalQty = 0.0;
       generateHeaderReport(sb, karyawan, startDate, endDate, pageNo, companyName, companyAddress);
       generateDataReport(sb, listItem, itemPerPage, pageNo);
@@ -236,16 +236,16 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
       setAlignRight(sb, WIDTH_COLUMN_I, nilaiKomisiStr);
 
       totalQty = totalQty + item.getQtyKirim();
-      totalAkhirQty = totalAkhirQty + item.getQtyKirim();
+      // totalAkhirQty = totalAkhirQty + item.getQtyKirim();
 
       totalNilaiJual = totalNilaiJual.add(item.getPenjualanBarang());
-      totalAkhirNilaiJual = totalAkhirNilaiJual.add(item.getPenjualanBarang());
+      // totalAkhirNilaiJual = totalAkhirNilaiJual.add(item.getPenjualanBarang());
 
       totalAngsuran = totalAngsuran.add(item.getPenerimaanPenjualan());
-      totalAkhirAngsuran = totalAkhirAngsuran.add(item.getPenerimaanPenjualan());
+      // totalAkhirAngsuran = totalAkhirAngsuran.add(item.getPenerimaanPenjualan());
 
       totalKomisi = totalKomisi.add(item.getKomisiPenjualan());
-      totalAkhirKomisi = totalAkhirKomisi.add(item.getKomisiPenjualan());
+      // totalAkhirKomisi = totalAkhirKomisi.add(item.getKomisiPenjualan());
 
       addNewLine(sb, 1);
 
@@ -279,7 +279,7 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
 
     addNewLine(sb, 1);
     addDoubleBorder(sb, pageWidth);
-
+    addNewLine(sb, 3);
   }
 
   private void generateHeaderReport(StringBuffer sb, Karyawan karyawan, Date startDate,
@@ -341,7 +341,7 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
     setAlignRight(sb, WIDTH_COLUMN_G, "Nilai Jual");
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-    setAlignRight(sb, WIDTH_COLUMN_H, "Angsuran 1");
+    setAlignRight(sb, WIDTH_COLUMN_H, "Angsuran1");
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
     setAlignRight(sb, WIDTH_COLUMN_I, "Komisi");
@@ -355,9 +355,32 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
   private void generateLastFooterReport(StringBuffer sb, Karyawan karyawan) {
     BonusTransportService bonusService =
         (BonusTransportService) SpringUtil.getBean("bonusTransportService");
-    BigDecimal bonusSales = bonusService.getBonusSales(karyawan, totalQty);
-    BigDecimal transportSales = bonusService.getTransportSales(karyawan, totalQty);
+    BigDecimal bonusSales = bonusService.getBonusSales(karyawan, totalAkhirQty);
+    BigDecimal transportSales = bonusService.getTransportSales(karyawan, totalAkhirQty);
     BigDecimal total = totalAkhirKomisi.add(bonusSales).add(transportSales);
+
+
+    addWhiteSpace(sb, WIDTH_FOOTER_COLUMN_A);
+    addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
+    setAlignLeft(sb, WIDTH_FOOTER_COLUMN_B, "Total Semua");
+
+    addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
+    setAlignRight(sb, WIDTH_FOOTER_COLUMN_C, totalAkhirQty.toString());
+
+    addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
+    String totalAkhirNilaiJualStr = df.format(totalAkhirNilaiJual);
+    setAlignRight(sb, WIDTH_FOOTER_COLUMN_D, totalAkhirNilaiJualStr);
+
+    addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
+    String totalAkhirAngsuranStr = df.format(totalAkhirAngsuran);
+    setAlignRight(sb, WIDTH_FOOTER_COLUMN_E, totalAkhirAngsuranStr);
+
+    addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
+    String totalAkhirKomisiStr = df.format(totalAkhirKomisi);
+    setAlignRight(sb, WIDTH_FOOTER_COLUMN_F, totalAkhirKomisiStr);
+
+    addNewLine(sb, 1);
+    addDoubleBorder(sb, pageWidth);
 
     addNewLine(sb, 1);
     sb.append("Bonus     : " + df.format(bonusSales));
@@ -368,7 +391,7 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
     addNewLine(sb, 1);
     sb.append("Total     : " + df.format(total));
     addNewLine(sb, 1);
-    sb.append("Tabungan  : " + df.format(totalAkhirTabungan));
+    sb.append("Loyalitas : " + df.format(totalAkhirTabungan));
 
 
   }
@@ -382,52 +405,53 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
       List<PenjualanDetail> penjualanDetails =
           penjualanService.getPenjualanDetailsByPenjualan(penjualan);
       for (PenjualanDetail penjualanDetail : penjualanDetails) {
+        if (!penjualanDetail.getBarang().isBonus()) {
+          PerhitunganKomisi data = new PerhitunganKomisi();
+          data.setNomorFaktur(penjualan.getNoFaktur());
+          data.setNamaPelanggan(penjualan.getNamaPelanggan());
+          data.setIntervalKredit(penjualan.getIntervalKredit() + "");
+          String kodePartner = "0000";
+          Double qtyKirim = Double.parseDouble(String.valueOf(penjualanDetail.getQty()));
+          BigDecimal komisi = BigDecimal.ZERO;
+          BigDecimal tabungan = BigDecimal.ZERO;
+          if (penjualanDetail.getTabunganSales() == null) {
+            penjualanDetail.setTabunganSales(BigDecimal.ZERO);
+          }
+          if (penjualanDetail.getKomisiSales() == null) {
+            penjualanDetail.setKomisiSales(BigDecimal.ZERO);
+          }
 
-        PerhitunganKomisi data = new PerhitunganKomisi();
-        data.setNomorFaktur(penjualan.getNoFaktur());
-        data.setNamaPelanggan(penjualan.getNamaPelanggan());
-        data.setIntervalKredit(penjualan.getIntervalKredit() + "");
-        String kodePartner = "0000";
-        Double qtyKirim = Double.parseDouble(String.valueOf(penjualanDetail.getQty()));
-        BigDecimal komisi = BigDecimal.ZERO;
-        BigDecimal tabungan = BigDecimal.ZERO;
-        if (penjualanDetail.getTabunganSales() == null) {
-          penjualanDetail.setTabunganSales(BigDecimal.ZERO);
+          tabungan =
+              penjualanDetail.getTabunganSales().multiply(new BigDecimal(penjualanDetail.getQty()));
+          komisi =
+              penjualanDetail.getKomisiSales().multiply(new BigDecimal(penjualanDetail.getQty()));
+          if (penjualan.getSales1().getKodeKaryawan().equals(karyawan.getKodeKaryawan())
+              && penjualan.getSales2() != null) {
+            kodePartner = penjualan.getSales2().getKodeKaryawan();
+            qtyKirim = qtyKirim / 2;
+            komisi = komisi.divide(new BigDecimal(2));
+            tabungan = tabungan.divide(new BigDecimal(2));
+          } else if (penjualan.getSales2() != null
+              && penjualan.getSales2().getKodeKaryawan().equals(karyawan.getKodeKaryawan())
+              && penjualan.getSales1() != null) {
+            kodePartner = penjualan.getSales1().getKodeKaryawan();
+            qtyKirim = qtyKirim / 2;
+            komisi = komisi.divide(new BigDecimal(2));
+            tabungan = tabungan.divide(new BigDecimal(2));
+          }
+          data.setKodePartner(kodePartner);
+          data.setNamaBarang(penjualanDetail.getBarang().getNamaBarang());
+          data.setQtyKirim(qtyKirim);
+          data.setPenjualanBarang(penjualanDetail.getTotal());
+          data.setPenerimaanPenjualan(penjualanDetail.getDownPayment());
+          data.setKomisiPenjualan(komisi.add(tabungan));
+          totalAkhirKomisi = totalAkhirKomisi.add(komisi.add(tabungan));
+          totalAkhirTabungan = totalAkhirTabungan.add(tabungan);
+          totalAkhirNilaiJual = totalAkhirNilaiJual.add(penjualanDetail.getTotal());
+          totalAkhirAngsuran = totalAkhirAngsuran.add(penjualanDetail.getDownPayment());
+          totalAkhirQty = totalAkhirQty + qtyKirim;
+          komisiPenjualanList.add(data);
         }
-        if (penjualanDetail.getKomisiSales() == null) {
-          penjualanDetail.setKomisiSales(BigDecimal.ZERO);
-        }
-
-        tabungan =
-            penjualanDetail.getTabunganSales().multiply(new BigDecimal(penjualanDetail.getQty()));
-        komisi =
-            penjualanDetail.getKomisiSales().multiply(new BigDecimal(penjualanDetail.getQty()));
-        if (penjualan.getSales1().getKodeKaryawan().equals(karyawan.getKodeKaryawan())
-            && penjualan.getSales2() != null) {
-          kodePartner = penjualan.getSales2().getKodeKaryawan();
-          qtyKirim = qtyKirim / 2;
-          komisi = komisi.divide(new BigDecimal(2));
-          tabungan = tabungan.divide(new BigDecimal(2));
-        } else if (penjualan.getSales2() != null
-            && penjualan.getSales2().getKodeKaryawan().equals(karyawan.getKodeKaryawan())
-            && penjualan.getSales1() != null) {
-          kodePartner = penjualan.getSales1().getKodeKaryawan();
-          qtyKirim = qtyKirim / 2;
-          komisi = komisi.divide(new BigDecimal(2));
-          tabungan = tabungan.divide(new BigDecimal(2));
-        }
-        data.setKodePartner(kodePartner);
-        data.setNamaBarang(penjualanDetail.getBarang().getNamaBarang());
-        data.setQtyKirim(qtyKirim);
-        data.setPenjualanBarang(penjualanDetail.getTotal());
-        data.setPenerimaanPenjualan(penjualanDetail.getDownPayment());
-        data.setKomisiPenjualan(komisi);
-        totalAkhirKomisi = totalAkhirKomisi.add(komisi);
-        totalAkhirTabungan = totalAkhirTabungan.add(tabungan);
-        totalAkhirNilaiJual = totalAkhirNilaiJual.add(penjualanDetail.getTotal());
-        totalAkhirAngsuran = totalAkhirAngsuran.add(penjualanDetail.getDownPayment());
-        totalAkhirQty = totalAkhirQty + qtyKirim;
-        komisiPenjualanList.add(data);
       }
     }
     return komisiPenjualanList;

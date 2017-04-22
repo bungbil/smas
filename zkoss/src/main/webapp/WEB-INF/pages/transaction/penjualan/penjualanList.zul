@@ -53,7 +53,7 @@
 							label="Piutang" />
 						<listheader id="listheader_PenjualanList_Status"
 							sclass="FDListBoxHeader1" 
-							sort="auto" width="12%"
+							sort="auto" width="7%"
 							label="Status" />
 						<listheader id="listheader_PenjualanList_NamaPelanggan"
 							sclass="FDListBoxHeader1" 
@@ -71,6 +71,10 @@
 							sclass="FDListBoxHeader1" 
 							sort="auto" width="5%"
 							label="Sales 2" />
+						<listheader id="listheader_PenjualanList_Divisi"
+							sclass="FDListBoxHeader1" 
+							sort="auto" width="5%"
+							label="Kode Divisi" />
 						<listheader id="listheader_PenjualanList_LastUpdate"
 							sclass="FDListBoxHeader1" 
 							sort="auto" width="5%"
@@ -103,7 +107,9 @@
 						<listcell label="@{penjualan.sales1.namaPanggilan}"
 							style="padding-left: 5px" />
 						<listcell label="@{penjualan.sales2.namaPanggilan}"
-							style="padding-left: 5px" />														
+							style="padding-left: 5px" />
+						<listcell label="@{penjualan.divisi.kodeKaryawan}"
+							style="padding-left: 5px" />																					
 						<listcell label="@{penjualan.lastUpdate}"
 							style="padding-left: 5px" />	
 						<listcell label="@{penjualan.updatedBy}"

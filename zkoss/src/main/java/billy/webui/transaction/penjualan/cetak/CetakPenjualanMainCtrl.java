@@ -300,8 +300,7 @@ public class CetakPenjualanMainCtrl extends GFCBaseCtrl implements Serializable 
       selectedPrinter = printer;
       logger.info("Printer : " + printer.getName());
     }
-    if (karyawan != null && printer != null && txtb_NoFakturAwal.getValue().length() == 10
-        && txtb_NoFakturAkhir.getValue().length() == 10) {
+    if (karyawan != null && printer != null) {
 
       listNoFaktur = generateSequenceNoFaktur();
       if (listNoFaktur.size() > 0) {

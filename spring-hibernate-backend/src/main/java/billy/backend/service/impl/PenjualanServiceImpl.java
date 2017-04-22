@@ -52,10 +52,10 @@ public class PenjualanServiceImpl implements PenjualanService {
     List<Penjualan> allPenjualan = new ArrayList<Penjualan>();
     List<Penjualan> allPenjualanSalesUnderDivisi =
         getPenjualanDAO().getAllPenjualansByDivisiAndRangeDate(obj, startDate, endDate);
-    List<Penjualan> allPenjualanKaryawanDivisi =
-        getPenjualanDAO().getAllPenjualansByKaryawanAndRangeDate(obj, startDate, endDate);
+    // List<Penjualan> allPenjualanKaryawanDivisi =
+    // getPenjualanDAO().getAllPenjualansByKaryawanAndRangeDate(obj, startDate, endDate);
     allPenjualan.addAll(allPenjualanSalesUnderDivisi);
-    allPenjualan.addAll(allPenjualanKaryawanDivisi);
+    // allPenjualan.addAll(allPenjualanKaryawanDivisi);
 
     return allPenjualan;
   }
@@ -95,7 +95,6 @@ public class PenjualanServiceImpl implements PenjualanService {
     return getPenjualanDAO().getCountAllPenjualans();
   }
 
-
   @Override
   public int getCountAllPenjualansByDivisi(Karyawan obj, Date date) {
 
@@ -108,6 +107,7 @@ public class PenjualanServiceImpl implements PenjualanService {
 
     return getPenjualanDAO().getCountAllPenjualansByDivisi(obj, startDate, endDate);
   }
+
 
   @Override
   public int getCountPenjualanDetailsByPenjualan(Penjualan penjualan) {
@@ -133,6 +133,11 @@ public class PenjualanServiceImpl implements PenjualanService {
   @Override
   public Penjualan getPenjualanById(long id) {
     return getPenjualanDAO().getPenjualanById(id);
+  }
+
+  @Override
+  public Penjualan getPenjualanByNoFaktur(String noFaktur) {
+    return getPenjualanDAO().getPenjualanByNoFaktur(noFaktur);
   }
 
   public PenjualanDAO getPenjualanDAO() {

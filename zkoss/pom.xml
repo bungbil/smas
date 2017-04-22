@@ -33,7 +33,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source.version>1.6</maven.compiler.source.version>
 		<maven.compiler.target.version>1.6</maven.compiler.target.version>
-
+		<poi-version>3.10.1</poi-version>
 	</properties>
 
 	<repositories>
@@ -419,6 +419,21 @@
 			<artifactId>spring-web</artifactId>
 			<version>${spring.version}</version>
 			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>${poi-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>${poi-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml-schemas</artifactId>
+			<version>${poi-version}</version>
 		</dependency>
 	</dependencies>
 	<build>

@@ -45,6 +45,8 @@ public interface PenjualanService {
   // public void initialize(Penjualan proxy);
   public Penjualan getPenjualanById(long id);
 
+  public Penjualan getPenjualanByNoFaktur(String noFaktur);
+
   public List<PenjualanDetail> getPenjualanDetailsByPenjualan(Penjualan penjualan);
 
   public BigDecimal getPenjualanSum(Penjualan penjualan);

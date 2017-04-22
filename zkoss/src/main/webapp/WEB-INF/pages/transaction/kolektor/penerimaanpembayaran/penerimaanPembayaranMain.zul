@@ -88,8 +88,8 @@
 													</listbox>										                    						                    				                    									                    									                    											                     
 								                </row>
 								                <row>
-								                	<label value="Kekurangan Bayar"/>
-						                    		<decimalbox id="txb_KekuranganBayar" value="@{controller.piutang.kekuranganBayar}" readonly="true" format=",###.#" hflex="1" />										                
+								                	<label value="Kekurangan Bayar"/>						                    										                
+						                    		<decimalbox id="txb_KekuranganBayar" value="@{controller.piutang.kekuranganBayar}" readonly="true" format=",###.#" hflex="1" />
 						                    		<label />	
 								                	<label />
 								                	<label />								                    						                    				                    									                    									                    											                     

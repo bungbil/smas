@@ -454,50 +454,51 @@ public class PerhitunganKomisiDJReport extends Window implements Serializable {
       List<PenjualanDetail> penjualanDetails =
           penjualanService.getPenjualanDetailsByPenjualan(penjualan);
       for (PenjualanDetail penjualanDetail : penjualanDetails) {
+        if (!penjualanDetail.getBarang().isBonus()) {
+          PerhitunganKomisi data = new PerhitunganKomisi();
+          data.setNomorFaktur(penjualan.getNoFaktur());
+          data.setNamaPelanggan(penjualan.getNamaPelanggan());
+          data.setIntervalKredit(penjualan.getIntervalKredit() + " Bulan");
+          String kodePartner = "0000";
+          Double qtyKirim = Double.parseDouble(String.valueOf(penjualanDetail.getQty()));
+          BigDecimal komisi = BigDecimal.ZERO;
+          BigDecimal tabungan = BigDecimal.ZERO;
+          if (penjualanDetail.getTabunganSales() == null) {
+            penjualanDetail.setTabunganSales(BigDecimal.ZERO);
+          }
+          if (penjualanDetail.getKomisiSales() == null) {
+            penjualanDetail.setKomisiSales(BigDecimal.ZERO);
+          }
 
-        PerhitunganKomisi data = new PerhitunganKomisi();
-        data.setNomorFaktur(penjualan.getNoFaktur());
-        data.setNamaPelanggan(penjualan.getNamaPelanggan());
-        data.setIntervalKredit(penjualan.getIntervalKredit() + " Bulan");
-        String kodePartner = "0000";
-        Double qtyKirim = Double.parseDouble(String.valueOf(penjualanDetail.getQty()));
-        BigDecimal komisi = BigDecimal.ZERO;
-        BigDecimal tabungan = BigDecimal.ZERO;
-        if (penjualanDetail.getTabunganSales() == null) {
-          penjualanDetail.setTabunganSales(BigDecimal.ZERO);
+          tabungan =
+              penjualanDetail.getTabunganSales().multiply(new BigDecimal(penjualanDetail.getQty()));
+          komisi =
+              penjualanDetail.getKomisiSales().multiply(new BigDecimal(penjualanDetail.getQty()));
+          if (penjualan.getSales1().getKodeKaryawan().equals(karyawan.getKodeKaryawan())
+              && penjualan.getSales2() != null) {
+            kodePartner = penjualan.getSales2().getKodeKaryawan();
+            qtyKirim = qtyKirim / 2;
+            komisi = komisi.divide(new BigDecimal(2));
+            tabungan = tabungan.divide(new BigDecimal(2));
+          } else if (penjualan.getSales2() != null
+              && penjualan.getSales2().getKodeKaryawan().equals(karyawan.getKodeKaryawan())
+              && penjualan.getSales1() != null) {
+            kodePartner = penjualan.getSales1().getKodeKaryawan();
+            qtyKirim = qtyKirim / 2;
+            komisi = komisi.divide(new BigDecimal(2));
+            tabungan = tabungan.divide(new BigDecimal(2));
+          }
+          data.setKodePartner(kodePartner);
+          data.setNamaBarang(penjualanDetail.getBarang().getNamaBarang());
+          data.setQtyKirim(qtyKirim);
+          data.setPenjualanBarang(penjualanDetail.getTotal());
+          data.setPenerimaanPenjualan(penjualanDetail.getDownPayment());
+          data.setKomisiPenjualan(komisi);
+          totalKomisi = totalKomisi.add(komisi);
+          totalTabungan = totalTabungan.add(tabungan);
+          totalQty = totalQty + qtyKirim;
+          komisiPenjualanList.add(data);
         }
-        if (penjualanDetail.getKomisiSales() == null) {
-          penjualanDetail.setKomisiSales(BigDecimal.ZERO);
-        }
-
-        tabungan =
-            penjualanDetail.getTabunganSales().multiply(new BigDecimal(penjualanDetail.getQty()));
-        komisi =
-            penjualanDetail.getKomisiSales().multiply(new BigDecimal(penjualanDetail.getQty()));
-        if (penjualan.getSales1().getKodeKaryawan().equals(karyawan.getKodeKaryawan())
-            && penjualan.getSales2() != null) {
-          kodePartner = penjualan.getSales2().getKodeKaryawan();
-          qtyKirim = qtyKirim / 2;
-          komisi = komisi.divide(new BigDecimal(2));
-          tabungan = tabungan.divide(new BigDecimal(2));
-        } else if (penjualan.getSales2() != null
-            && penjualan.getSales2().getKodeKaryawan().equals(karyawan.getKodeKaryawan())
-            && penjualan.getSales1() != null) {
-          kodePartner = penjualan.getSales1().getKodeKaryawan();
-          qtyKirim = qtyKirim / 2;
-          komisi = komisi.divide(new BigDecimal(2));
-          tabungan = tabungan.divide(new BigDecimal(2));
-        }
-        data.setKodePartner(kodePartner);
-        data.setNamaBarang(penjualanDetail.getBarang().getNamaBarang());
-        data.setQtyKirim(qtyKirim);
-        data.setPenjualanBarang(penjualanDetail.getTotal());
-        data.setPenerimaanPenjualan(penjualanDetail.getDownPayment());
-        data.setKomisiPenjualan(komisi);
-        totalKomisi = totalKomisi.add(komisi);
-        totalTabungan = totalTabungan.add(tabungan);
-        totalQty = totalQty + qtyKirim;
-        komisiPenjualanList.add(data);
       }
     }
     return komisiPenjualanList;

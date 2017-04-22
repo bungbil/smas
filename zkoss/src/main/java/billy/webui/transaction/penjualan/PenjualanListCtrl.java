@@ -55,6 +55,7 @@ public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Ser
   protected Listheader listheader_PenjualanList_Telepon; // autowired
   protected Listheader listheader_PenjualanList_Sales1; // autowired
   protected Listheader listheader_PenjualanList_Sales2; // autowired
+  protected Listheader listheader_PenjualanList_Divisi; // autowired
   protected Listheader listheader_PenjualanList_LastUpdate; // autowired
   protected Listheader listheader_PenjualanList_UpdatedBy; // autowired
 
@@ -152,6 +153,10 @@ public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Ser
     listheader_PenjualanList_Sales2.setSortDescending(new FieldComparator("sales2.namaPanggilan",
         false));
 
+    listheader_PenjualanList_Divisi.setSortAscending(new FieldComparator("divisi.kodeKaryawan",
+        true));
+    listheader_PenjualanList_Divisi.setSortDescending(new FieldComparator("divisi.kodeKaryawan",
+        false));
     listheader_PenjualanList_LastUpdate.setSortAscending(new FieldComparator("lastUpdate", true));
     listheader_PenjualanList_LastUpdate.setSortDescending(new FieldComparator("lastUpdate", false));
 

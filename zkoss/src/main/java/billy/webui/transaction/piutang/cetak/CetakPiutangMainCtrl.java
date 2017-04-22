@@ -211,6 +211,9 @@ public class CetakPiutangMainCtrl extends GFCBaseCtrl implements Serializable {
       printer = (PrintService) lml1.get(itemPrinter.getIndex());
       selectedPrinter = printer;
       logger.info("Printer : " + printer.getName());
+    } else {
+      ZksampleMessageUtils.showErrorMessage("Silakan pilih printer");
+      return false;
     }
     if (karyawan != null && printer != null && txtb_tanggalAwalJatuhTempo.getValue() != null
         && txtb_tanggalAkhirJatuhTempo.getValue() != null) {

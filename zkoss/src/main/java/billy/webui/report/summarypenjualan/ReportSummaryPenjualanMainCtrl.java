@@ -147,7 +147,7 @@ public class ReportSummaryPenjualanMainCtrl extends GFCBaseCtrl implements Seria
   }
 
   public void onClick$btnCetak(Event event) throws Exception {
-    if (validToPrint()) {
+    if (validToPrint() && selectedPrinter != null) {
 
       final Window win = (Window) Path.getComponent("/outerIndexWindow");
       new SummaryPenjualanTextPrinter(win, karyawan, txtb_tanggalAwalPenjualan.getValue(),

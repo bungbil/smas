@@ -218,6 +218,20 @@ public class InputTglBawaMainCtrl extends GFCBaseCtrl implements Serializable {
     return statusService;
   }
 
+
+  public void onBlur$txtb_KodeKolektor(Event event) throws InterruptedException {
+    if (txtb_KodeKolektor.getValue() != null) {
+      ListModelList lml = (ListModelList) lbox_Kolektor.getModel();
+      Karyawan karyawan =
+          getKaryawanService().getKaryawanByKodeKaryawan(txtb_KodeKolektor.getValue().trim());
+      if (karyawan != null) {
+        lbox_Kolektor.setSelectedIndex(lml.indexOf(karyawan));
+      } else {
+        lbox_Kolektor.setSelectedIndex(-1);
+      }
+    }
+  }
+
   public void onChange$txtb_KodeKolektor(Event event) throws InterruptedException {
     if (txtb_KodeKolektor.getValue() != null) {
       ListModelList lml = (ListModelList) lbox_Kolektor.getModel();

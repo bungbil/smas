@@ -45,23 +45,15 @@
 														<textbox id="txtb_NoFaktur" value="@{controller.penjualan.noFaktur}"
 															readonly="true" constraint="no empty" maxlength="50" width="250px" />
 														<label />
-														<label value="No Order Sheet" />															
-														<textbox id="txtb_NoOrderSheet" value="@{controller.penjualan.noOrderSheet}"
-															readonly="true" constraint="no empty" maxlength="50" width="250px" />
+														<label />
+														<label />
+														
 													</row>
 													<row>
 														<label value="Mandiri" />															
 														<textbox id="txtb_Mandiri" value="@{controller.penjualan.mandiri}"
 															readonly="true" maxlength="20" width="250px" />
 														<label />
-														<label />
-														<label />
-													</row>
-													<row>
-														<label 	value="Tanggal Penjualan" />
-														<datebox id="txtb_TglPenjualan"	value="@{controller.penjualan.tglPenjualan}" 
-															format="dd/MM/yyyy" disabled="true" width="150px" constraint="no empty"/>	
-														<label />	
 														<label value="Wilayah" />																													
 														<listbox id="lbox_Wilayah" mold="select" disabled="true"
 																			multiple="false" rows="1"  width="150px" xmlns:w="client">
@@ -75,13 +67,14 @@
 														                }
 														            }
 														        ]]></attribute>																											
-														</listbox>													
+														</listbox>	
+														
 													</row>
 													<row>
-														<label 	value="Rencana Kirim" />															
-														<datebox id="txtb_RencanaKirim"	value="@{controller.penjualan.rencanaKirim}" 
-															format="dd/MM/yyyy" disabled="true" width="150px" constraint="no empty"/>				
-														<label />	
+														<label 	value="Tanggal Penjualan" />
+														<datebox id="txtb_TglPenjualan"	value="@{controller.penjualan.tglPenjualan}" 
+															format="dd/MM/yyyy" disabled="true" width="150px" constraint="no empty"/>	
+														<label />
 														<label id="label_Sales1" value="Sales 1" />
 														<listbox id="lbox_Sales1" mold="select" disabled="true"
 																multiple="false" rows="1" width="150px" xmlns:w="client">
@@ -95,7 +88,20 @@
 														                }
 														            }
 														        ]]></attribute>															
-														</listbox>										
+														</listbox>			
+																										
+													</row>
+													<row>
+														<label 	value="Rencana Kirim" />															
+														<datebox id="txtb_RencanaKirim"	value="@{controller.penjualan.rencanaKirim}" 
+															format="dd/MM/yyyy" disabled="true" width="150px" constraint="no empty"/>				
+														<label />	
+														
+														<label id="label_Sales2" value="Sales 2" />
+														<listbox id="lbox_Sales2" mold="select" disabled="true"
+																multiple="false" rows="1" width="150px">															
+														</listbox>
+																			
 													</row>													
 													<row>
 														<label id="label_Pengirim" value="Pengirim" />
@@ -113,10 +119,8 @@
 														        ]]></attribute>															
 														</listbox>
 														<label />
-														<label id="label_Sales2" value="Sales 2" />
-														<listbox id="lbox_Sales2" mold="select" disabled="true"
-																multiple="false" rows="1" width="150px">															
-														</listbox>
+														<label />
+														<label />	
 													</row>
 													
 													<row>
@@ -154,16 +158,45 @@
 															<label	value="Alamat Pelanggan" />															
 														</hbox>
 														<textbox id="txtb_Alamat" value="@{controller.penjualan.alamat}" 
-															readonly="true" constraint="no empty" maxlength="500"	hflex="1" rows="4" />
+															readonly="true" constraint="no empty" maxlength="500"	hflex="1" rows="1" />
+															
 													</row>	
 													<row>
 														<hbox>
 															<label value="Remark" />															
 														</hbox>
 														<textbox id="txtb_Remark" value="@{controller.penjualan.remark}"
-															readonly="true" maxlength="500" hflex="1" rows="2"  />
+															readonly="true" maxlength="500" hflex="1" rows="1"  />
 													</row>
 													
+													<row visible="false">
+														<label value="Metode Pembayaran"/>
+									            		<radiogroup id="radiogroup_MetodePembayaran" >
+															<grid>
+														        <rows>													            
+														            <row>
+														                 <radio id="radioStatusCash" label="Cash" radiogroup="radiogroup_MetodePembayaran" disabled="true"/>
+												               			 <radio id="radioStatusKredit" label="Kredit" radiogroup="radiogroup_MetodePembayaran" disabled="true"/>												               			 
+														            </row>													            
+														        </rows>
+														    </grid>
+											      		</radiogroup>	
+													</row>
+													<row>
+														<label value="Interval Kredit"/>									            													      		
+														<combobox id="cmb_IntervalKredit" width="150px" disabled="true">										                    
+										                        <comboitem label="1" value="1"/>
+										                        <comboitem label="2" value="2"/>
+										                        <comboitem label="3" value="3"/>
+										                        <comboitem label="4" value="4"/>
+										                        <comboitem label="5" value="5"/>
+										                        <comboitem label="6" value="6"/>
+										                        <comboitem label="7" value="7"/>
+										                        <comboitem label="8" value="8"/>
+										                        <comboitem label="9" value="9"/>
+										                        <comboitem label="10" value="10"/>										                    
+										                </combobox>
+													</row>
 													<row>
 														<separator bar="true"></separator>
 														<separator bar="true"></separator>
@@ -174,21 +207,33 @@
 											<grid sclass="GridLayoutNoBorder" fixedLayout="true"
 												style="border:0px; padding-left:5px; padding-right:5px;">
 									            <columns>
-									                <column  width="250px"/>
+									                <column  width="100px"/>
+									                <column />
 									                <column />
 									                <column />
 									                <column />
 									                <column />
 									            </columns>
+									            
 									            <rows>
+										            <row>									            	
+														<label value ="Kode Barang" />
+														<label value ="Pilih Barang" />
+										            	<label value ="Nama Barang" />
+										            	<label value ="qty" />
+														<label value ="Harga" />
+														<label/>														
+									            	</row>	
+									            	
 									            	<row>
-									            	<listbox id="lbox_Barang" mold="select" disabled="true"
-															multiple="false" rows="1"  width="250px">															
-													</listbox>
-													<textbox id="txtb_NamaBarang" readonly="true" maxlength="50" hflex="1" rows="1"  />
-													<intbox id="txtb_JumlahBarang" readonly="true" maxlength="50" hflex="1"/>
-													<decimalbox id="txtb_HargaBarang" readonly="true" maxlength="50" format=",###.#" constraint="no negative" hflex="1" />
-									            	<button id="btnNewBarang" disabled="true" label="Tambah Barang"  	/>
+									            		<textbox id="txtb_KodeBarang" readonly="true"  maxlength="50" width="100px" hflex="1" />
+										            	<listbox id="lbox_Barang" mold="select" disabled="true"
+																multiple="false" rows="1"  width="250px">															
+														</listbox>
+														<textbox id="txtb_NamaBarang" readonly="true" maxlength="50" hflex="1" rows="1"  />
+														<intbox id="txtb_JumlahBarang" readonly="true" maxlength="50" hflex="1"/>
+														<decimalbox id="txtb_HargaBarang" readonly="true" maxlength="50" format=",###.#" constraint="no negative" hflex="1" />
+										            	<button id="btnNewBarang" disabled="true" label="Tambah Barang"  	/>
 									            	</row>									            
 									            </rows>
 								            </grid>
@@ -271,17 +316,8 @@
 														<separator bar="true"></separator>
 													</row>
 									                <row>
-									                    <label value="Metode Pembayaran"/>
-									            		<radiogroup id="radiogroup_MetodePembayaran" >
-															<grid>
-														        <rows>													            
-														            <row>
-														                 <radio id="radioStatusCash" label="Cash" radiogroup="radiogroup_MetodePembayaran" disabled="true"/>
-												               			 <radio id="radioStatusKredit" label="Kredit" radiogroup="radiogroup_MetodePembayaran" disabled="true"/>												               			 
-														            </row>													            
-														        </rows>
-														    </grid>
-											      		</radiogroup>											      		
+						                    			<label value="Down Payment"/>
+									                    <decimalbox id="txtb_DownPayment" value="@{controller.penjualan.downPayment}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />							      		
 														<label />
 							                    		<label value="Tanggal Angsuran ke 2"/>
 									            		<datebox id="txtb_TglAngsuran2"	value="@{controller.penjualan.tglAngsuran2}" 
@@ -290,38 +326,22 @@
 									                </row>
 									                
 									                <row>
-									                    <label value="Interval Kredit"/>									            													      		
-														<combobox id="cmb_IntervalKredit" width="150px" disabled="true">										                    
-										                        <comboitem label="1" value="1"/>
-										                        <comboitem label="2" value="2"/>
-										                        <comboitem label="3" value="3"/>
-										                        <comboitem label="4" value="4"/>
-										                        <comboitem label="5" value="5"/>
-										                        <comboitem label="6" value="6"/>
-										                        <comboitem label="7" value="7"/>
-										                        <comboitem label="8" value="8"/>
-										                        <comboitem label="9" value="9"/>
-										                        <comboitem label="10" value="10"/>										                    
-										                </combobox>
+									                    <label value="Grand Total"/>
+							                    		<decimalbox id="label_GrandTotal" value="@{controller.penjualan.grandTotal}" readonly="true" format=",###.#" hflex="1" />
 										                <label />
 										                <label value="Kredit Per Bulan"/>
 									                    <decimalbox id="label_KreditPerBulan" value="@{controller.penjualan.kreditPerBulan}" readonly="true" format=",###.#" hflex="1" />                  											                       
 									                </row>
-									                <row>
+									                <!-- <row>
 									                	<label value="Diskon"/>
 									                    <decimalbox id="txtb_Diskon" value="@{controller.penjualan.diskon}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />
 									                    <label />
-									                    <label value="Down Payment"/>
-									                    <decimalbox id="txtb_DownPayment" value="@{controller.penjualan.downPayment}" readonly="true" format=",###.#" constraint="no negative" hflex="1" />									                    				                    									                    									                    											                      
-									                </row>
-									                
-									                <row>
-									                	<label value="Diskon + DP"/>									                    
+									                    <label value="Diskon + DP"/>									                    
 									                    <decimalbox id="label_DiskonDP" readonly="true" format=",###.#" hflex="1" />
-								                        <label />
-							                    		<label value="Grand Total"/>
-							                    		<decimalbox id="label_GrandTotal" value="@{controller.penjualan.grandTotal}" readonly="true" format=",###.#" hflex="1" />		                    									                    									                    											                      
-									                </row>
+								                        								                    				                    									                    									                    											                      
+									                </row> -->
+									                
+									                
 							                    	<row>
 									                	<label value="Status"/>
 									                    <listbox id="lbox_Status" mold="select" disabled="true"

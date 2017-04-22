@@ -299,7 +299,7 @@ public class KomisiSalesDJReport extends Window implements Serializable {
 
 
     AutoText footerTextTabungan =
-        new AutoText("Potongan Tabungan  : " + df.format(totalTabungan), AutoText.POSITION_FOOTER,
+        new AutoText("Potongan Loyalitas  : " + df.format(totalTabungan), AutoText.POSITION_FOOTER,
             HorizontalBandAlignment.RIGHT);
     footerTextTabungan.setWidth(new Integer(200));
 

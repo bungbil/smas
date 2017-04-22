@@ -1,6 +1,5 @@
 package billy.webui.transaction.piutang;
 
-import java.awt.print.PrinterJob;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -8,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.print.PrintService;
-import javax.print.PrintServiceLookup;
 
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
@@ -39,7 +37,6 @@ import billy.backend.service.PiutangService;
 import billy.backend.service.StatusService;
 import billy.webui.master.karyawan.model.KaryawanListModelItemRenderer;
 import billy.webui.master.status.model.StatusListModelItemRenderer;
-import billy.webui.printer.model.PrinterListModelItemRenderer;
 import billy.webui.transaction.piutang.cetak.report.CetakKuitansiTextPrinter;
 import de.forsthaus.UserWorkspace;
 import de.forsthaus.webui.util.GFCBaseCtrl;
@@ -129,13 +126,13 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
       setSelectedPiutang(null);
     }
 
-    // PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
-    PrintService[] printServices = PrinterJob.lookupPrintServices();
-    lbox_Printer.setModel(new ListModelList(printServices));
-    lbox_Printer.setItemRenderer(new PrinterListModelItemRenderer());
-    PrintService service = PrintServiceLookup.lookupDefaultPrintService();
-    ListModelList lml = (ListModelList) lbox_Printer.getModel();
-    lbox_Printer.setSelectedIndex(lml.indexOf(service));
+    // // PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+    // PrintService[] printServices = PrinterJob.lookupPrintServices();
+    // lbox_Printer.setModel(new ListModelList(printServices));
+    // lbox_Printer.setItemRenderer(new PrinterListModelItemRenderer());
+    // PrintService service = PrintServiceLookup.lookupDefaultPrintService();
+    // ListModelList lml = (ListModelList) lbox_Printer.getModel();
+    // lbox_Printer.setSelectedIndex(lml.indexOf(service));
   }
 
   public void doApprovalMode() {
@@ -315,7 +312,8 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
                       piutang.getNilaiTagihan().add(piutang.getKekuranganBayar())
                           .subtract(piutang.getPembayaran()).subtract(diskon);
                   // get next piutang, set aktif = true, kekurangan dari piutang sebelumnya
-                  Piutang nextPiutang = piutangService.getNextPiutang(piutang);
+                  Status statusProses = getStatusService().getStatusByID(new Long(3)); // PROSES
+                  Piutang nextPiutang = piutangService.getNextPiutang(piutang, statusProses);
                   nextPiutang.setAktif(true);
                   nextPiutang.setKekuranganBayar(kekuranganBayar);
                   getPiutangService().saveOrUpdate(nextPiutang);

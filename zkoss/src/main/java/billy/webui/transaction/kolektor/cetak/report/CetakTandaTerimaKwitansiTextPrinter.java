@@ -51,9 +51,9 @@ public class CetakTandaTerimaKwitansiTextPrinter extends Window implements Seria
   private BigDecimal totalAkhirPembayaran = BigDecimal.ZERO;
   private final int WIDTH_COLUMN_SEPERATE = 1;
   private final int WIDTH_COLUMN_A = 4;
-  private final int WIDTH_COLUMN_B = 10;
-  private final int WIDTH_COLUMN_C = 13;
-  private final int WIDTH_COLUMN_D = 9;
+  private final int WIDTH_COLUMN_B = 11;
+  private final int WIDTH_COLUMN_C = 14;
+  private final int WIDTH_COLUMN_D = 7;
   // private final int WIDTH_COLUMN_E = 16;
   // private final int WIDTH_COLUMN_F = 9;
 
@@ -198,7 +198,11 @@ public class CetakTandaTerimaKwitansiTextPrinter extends Window implements Seria
       setAlignLeft(sb, WIDTH_COLUMN_B, item.getNoFaktur());
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-      setAlignLeft(sb, WIDTH_COLUMN_C, item.getNamaCustomer());
+      String nama = item.getNamaCustomer();
+      if (nama.length() > WIDTH_COLUMN_C) {
+        nama = nama.subSequence(0, WIDTH_COLUMN_C).toString();
+      }
+      setAlignLeft(sb, WIDTH_COLUMN_C, nama);
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
       String nilaiTagihStr = df.format(item.getNilaiTagih());
@@ -223,8 +227,11 @@ public class CetakTandaTerimaKwitansiTextPrinter extends Window implements Seria
         setAlignLeft(sb, WIDTH_COLUMN_B, item2.getNoFaktur());
         addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-        setAlignLeft(sb, WIDTH_COLUMN_C, item2.getNamaCustomer());
-        addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
+        String nama2 = item2.getNamaCustomer();
+        if (nama2.length() > WIDTH_COLUMN_C) {
+          nama2 = nama2.subSequence(0, WIDTH_COLUMN_C).toString();
+        }
+        setAlignLeft(sb, WIDTH_COLUMN_C, nama2);
 
         String nilaiTagihStr2 = df.format(item2.getNilaiTagih());
         setAlignRight(sb, WIDTH_COLUMN_D, nilaiTagihStr2);

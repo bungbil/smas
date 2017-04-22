@@ -8,6 +8,8 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -225,6 +227,7 @@ public class SummaryPenjualanTextPrinter extends Window implements Serializable 
           sp = new SummaryPenjualan();
           sp.setNamaDivisi(karyawan.getNamaPanggilan());
           sp.setNamaBarang(penjualanDetail.getBarang().getNamaBarang());
+          sp.setBonus(penjualanDetail.isBonus());
           sp.setUnitSetTerjual(penjualanDetail.getQty());
           sp.setPenjualanBarang(penjualanDetail.getTotal());
           sp.setPenerimaanPenjualan(penjualanDetail.getDownPayment());
@@ -242,10 +245,32 @@ public class SummaryPenjualanTextPrinter extends Window implements Serializable 
     }
 
     List<SummaryPenjualan> summaryPenjualanList = new ArrayList<SummaryPenjualan>();
+    List<SummaryPenjualan> summaryPenjualanBonusList = new ArrayList<SummaryPenjualan>();
     for (Map.Entry<String, SummaryPenjualan> kodeBarangMap : mapBarang.entrySet()) {
       SummaryPenjualan sp = kodeBarangMap.getValue();
-      summaryPenjualanList.add(sp);
+      if (sp.isBonus()) {
+        summaryPenjualanBonusList.add(sp);
+      } else {
+        summaryPenjualanList.add(sp);
+      }
     }
+
+    Collections.sort(summaryPenjualanList, new Comparator<SummaryPenjualan>() {
+      @Override
+      public int compare(SummaryPenjualan obj1, SummaryPenjualan obj2) {
+        return obj1.getNamaBarang().compareTo(obj2.getNamaBarang());
+      }
+    });
+
+    Collections.sort(summaryPenjualanBonusList, new Comparator<SummaryPenjualan>() {
+      @Override
+      public int compare(SummaryPenjualan obj1, SummaryPenjualan obj2) {
+        return obj1.getNamaBarang().compareTo(obj2.getNamaBarang());
+      }
+    });
+
+    summaryPenjualanList.addAll(summaryPenjualanBonusList);
+
     logger.info("list summaryPenjualanList size : " + summaryPenjualanList.size());
     return summaryPenjualanList;
   }

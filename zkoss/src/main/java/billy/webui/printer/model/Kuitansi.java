@@ -12,6 +12,7 @@ public class Kuitansi {
   private String alamatKantor;
   private String alamatKantor2;
   private String namaKolektor;
+  private String kodeKolektor;
   private String namaPelanggan;
   private String alamat;
   private String alamat2;
@@ -61,6 +62,10 @@ public class Kuitansi {
 
   public String getJumlahInWord() {
     return jumlahInWord;
+  }
+
+  public String getKodeKolektor() {
+    return kodeKolektor;
   }
 
   public List<ItemFaktur> getListItemFaktur() {
@@ -137,6 +142,10 @@ public class Kuitansi {
 
   public void setJumlahInWord(String jumlahInWord) {
     this.jumlahInWord = jumlahInWord;
+  }
+
+  public void setKodeKolektor(String kodeKolektor) {
+    this.kodeKolektor = kodeKolektor;
   }
 
   public void setListItemFaktur(List<ItemFaktur> listItemFaktur) {

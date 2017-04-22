@@ -38,7 +38,7 @@ public interface PiutangService {
 
   public Piutang getNewPiutang();
 
-  public Piutang getNextPiutang(Piutang data);
+  public Piutang getNextPiutang(Piutang data, Status status);
 
   public Piutang getPiutangByNoFaktur(String data);
 

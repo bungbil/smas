@@ -68,7 +68,8 @@ public class CetakFakturTextPrinter extends Window implements Serializable {
     DecimalFormat df = new DecimalFormat("#,###");
 
     SimpleDateFormat formatDate = new SimpleDateFormat();
-    formatDate = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+    Locale id = new Locale("in", "ID");
+    formatDate = new SimpleDateFormat("dd MMMM yyyy", id);
     PenjualanService as = (PenjualanService) SpringUtil.getBean("penjualanService");
     List<Faktur> listFaktur = new ArrayList<Faktur>();
     for (Penjualan penjualan : listPenjualan) {
@@ -124,8 +125,9 @@ public class CetakFakturTextPrinter extends Window implements Serializable {
 
       List<PenjualanDetail> listPenjualanDetail = as.getPenjualanDetailsByPenjualan(penjualan);
       for (PenjualanDetail detail : listPenjualanDetail) {
-        faktur.tambahItemFaktur(new ItemFaktur(detail.getBarang().getNamaBarang(), String
-            .valueOf(detail.getQty()), df.format(detail.getHarga()), df.format(detail.getTotal())));
+        faktur.tambahItemFaktur(new ItemFaktur(detail.getBarang().getKodeBarang(), detail
+            .getBarang().getNamaBarang(), String.valueOf(detail.getQty()), df.format(detail
+            .getHarga()), df.format(detail.getTotal())));
       }
 
       listFaktur.add(faktur);
@@ -147,12 +149,12 @@ public class CetakFakturTextPrinter extends Window implements Serializable {
     is.close();
 
     // send FF to eject the page
-    InputStream ff = new ByteArrayInputStream("\f".getBytes());
-    Doc docff = new SimpleDoc(ff, flavor, null);
-    DocPrintJob jobff = selectedPrinter.createPrintJob();
-    pjw = new PrintJobWatcher(jobff);
-    jobff.print(docff, null);
-    pjw.waitForDone();
+    // InputStream ff = new ByteArrayInputStream("\f".getBytes());
+    // Doc docff = new SimpleDoc(ff, flavor, null);
+    // DocPrintJob jobff = selectedPrinter.createPrintJob();
+    // pjw = new PrintJobWatcher(jobff);
+    // jobff.print(docff, null);
+    // pjw.waitForDone();
 
   }
 
@@ -161,7 +163,7 @@ public class CetakFakturTextPrinter extends Window implements Serializable {
 
     for (Faktur faktur : listFaktur) {
 
-      addWhiteSpace(sb, 65);
+      addWhiteSpace(sb, 66);
       sb.append(faktur.getNomorFaktur());
       addNewLine(sb, 3);
       addWhiteSpace(sb, 13);
@@ -169,7 +171,7 @@ public class CetakFakturTextPrinter extends Window implements Serializable {
       sb.append(faktur.getNamaPelanggan());
       addWhiteSpace(sb, maxLengthNama - faktur.getNamaPelanggan().length());
       sb.append(faktur.getKodeSales1());
-      addWhiteSpace(sb, 8);
+      addWhiteSpace(sb, 10);
       sb.append(faktur.getKodeSales2());
 
       addNewLine(sb, 1);
@@ -178,18 +180,18 @@ public class CetakFakturTextPrinter extends Window implements Serializable {
       sb.append(faktur.getTelepon());
       addWhiteSpace(sb, 16);
       sb.append(faktur.getNamaSales1());
-      addWhiteSpace(sb, 3);
+      addWhiteSpace(sb, 6);
       sb.append(faktur.getNamaSales2());
 
       addNewLine(sb, 1);
-      addWhiteSpace(sb, 2);
+      addWhiteSpace(sb, 1);
       sb.append(faktur.getAlamat());
       addNewLine(sb, 1);
-      addWhiteSpace(sb, 2);
+      addWhiteSpace(sb, 1);
       sb.append(faktur.getAlamat2());
       addNewLine(sb, 1);
-      addWhiteSpace(sb, 2);
-      int maxLengthAlamat3 = 54;
+      addWhiteSpace(sb, 1);
+      int maxLengthAlamat3 = 57;
       sb.append(faktur.getAlamat3());
       addWhiteSpace(sb, maxLengthAlamat3 - faktur.getAlamat3().length());
       sb.append(faktur.getIntervalKredit());
@@ -199,9 +201,13 @@ public class CetakFakturTextPrinter extends Window implements Serializable {
         int maxLengthQty = 3;
         addWhiteSpace(sb, maxLengthQty - item.getQty().length());
         sb.append(item.getQty());
-        // addWhiteSpace(sb, 2);
-        sb.append(item.getNamaBarang().subSequence(0, 20).toString());
+        addWhiteSpace(sb, 2);
         int maxLengthNamaBarang = 20;
+        String namaBarang = item.getNamaBarang();
+        if (namaBarang.length() > maxLengthNamaBarang) {
+          namaBarang = namaBarang.subSequence(0, maxLengthNamaBarang).toString();
+        }
+        sb.append(namaBarang);
         addWhiteSpace(sb, maxLengthNamaBarang - item.getNamaBarang().length());
         int maxLengthHarga = 10;
         addWhiteSpace(sb, maxLengthHarga - item.getHarga().length());
@@ -214,7 +220,7 @@ public class CetakFakturTextPrinter extends Window implements Serializable {
         totalRowItem--;
       }
       addNewLine(sb, totalRowItem);
-      int maxLengthTotal = 43;
+      int maxLengthTotal = 45;
       addWhiteSpace(sb, maxLengthTotal - faktur.getTotal().length());
       sb.append(faktur.getTotal());
       addNewLine(sb, 2);
@@ -225,7 +231,7 @@ public class CetakFakturTextPrinter extends Window implements Serializable {
       addNewLine(sb, 5);
       addWhiteSpace(sb, 6);
       sb.append(faktur.getNamaSupervisor());
-      int maxLengthSupervisor = 14;
+      int maxLengthSupervisor = 17;
       addWhiteSpace(sb, maxLengthSupervisor - faktur.getNamaSupervisor().length());
       sb.append(faktur.getNamaPengirim());
       addNewLine(sb, 5);

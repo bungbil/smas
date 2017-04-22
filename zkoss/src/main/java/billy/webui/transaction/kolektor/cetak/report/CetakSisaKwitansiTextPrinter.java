@@ -51,9 +51,9 @@ public class CetakSisaKwitansiTextPrinter extends Window implements Serializable
   private BigDecimal totalAkhirPembayaran = BigDecimal.ZERO;
   private final int WIDTH_COLUMN_SEPERATE = 1;
   private final int WIDTH_COLUMN_A = 4;
-  private final int WIDTH_COLUMN_B = 10;
-  private final int WIDTH_COLUMN_C = 13;
-  private final int WIDTH_COLUMN_D = 9;
+  private final int WIDTH_COLUMN_B = 11;
+  private final int WIDTH_COLUMN_C = 14;
+  private final int WIDTH_COLUMN_D = 7;
   // private final int WIDTH_COLUMN_E = 16;
   // private final int WIDTH_COLUMN_F = 9;
 
@@ -197,7 +197,11 @@ public class CetakSisaKwitansiTextPrinter extends Window implements Serializable
       setAlignLeft(sb, WIDTH_COLUMN_B, item.getNoFaktur());
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-      setAlignLeft(sb, WIDTH_COLUMN_C, item.getNamaCustomer());
+      String nama = item.getNamaCustomer();
+      if (nama.length() > WIDTH_COLUMN_C) {
+        nama = nama.subSequence(0, WIDTH_COLUMN_C).toString();
+      }
+      setAlignLeft(sb, WIDTH_COLUMN_C, nama);
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
       String nilaiTagihStr = df.format(item.getNilaiTagih());
@@ -220,7 +224,11 @@ public class CetakSisaKwitansiTextPrinter extends Window implements Serializable
         setAlignLeft(sb, WIDTH_COLUMN_B, item2.getNoFaktur());
         addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-        setAlignLeft(sb, WIDTH_COLUMN_C, item2.getNamaCustomer());
+        String nama2 = item2.getNamaCustomer();
+        if (nama2.length() > WIDTH_COLUMN_C) {
+          nama2 = nama2.subSequence(0, WIDTH_COLUMN_C).toString();
+        }
+        setAlignLeft(sb, WIDTH_COLUMN_C, nama2);
         addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
         String nilaiTagihStr2 = df.format(item2.getNilaiTagih());
@@ -288,7 +296,7 @@ public class CetakSisaKwitansiTextPrinter extends Window implements Serializable
     setAlignLeft(sb, maxLengthTglPrint, companyName);
     sb.append(printDateStr);
     addNewLine(sb, 1);
-    //setAlignLeft(sb, maxLengthTglPrint, "");
+    // setAlignLeft(sb, maxLengthTglPrint, "");
     addWhiteSpace(sb, 20);
     sb.append(titleReport);
     addWhiteSpace(sb, maxLengthTglPrint - titleReport.length() - 20);

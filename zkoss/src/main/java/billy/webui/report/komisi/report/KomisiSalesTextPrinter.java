@@ -56,19 +56,19 @@ public class KomisiSalesTextPrinter extends Window implements Serializable {
   private BigDecimal totalJumlah = BigDecimal.ZERO;
 
   private final int WIDTH_COLUMN_SEPERATE = 1;
-  private final int WIDTH_COLUMN_A = 27;
+  private final int WIDTH_COLUMN_A = 31;
   private final int WIDTH_COLUMN_B = 6;
   private final int WIDTH_COLUMN_C = 6;
-  private final int WIDTH_COLUMN_D = 12;
-  private final int WIDTH_COLUMN_E = 12;
-  private final int WIDTH_COLUMN_F = 12;
+  private final int WIDTH_COLUMN_D = 16;
+  private final int WIDTH_COLUMN_E = 0;
+  private final int WIDTH_COLUMN_F = 16;
 
-  private final int WIDTH_FOOTER_COLUMN_A = 20;
+  private final int WIDTH_FOOTER_COLUMN_A = 31;
   private final int WIDTH_FOOTER_COLUMN_B = 6;
   private final int WIDTH_FOOTER_COLUMN_C = 6;
-  private final int WIDTH_FOOTER_COLUMN_D = 14;
-  private final int WIDTH_FOOTER_COLUMN_E = 14;
-  private final int WIDTH_FOOTER_COLUMN_F = 15;
+  private final int WIDTH_FOOTER_COLUMN_D = 16;
+  private final int WIDTH_FOOTER_COLUMN_E = 0;
+  private final int WIDTH_FOOTER_COLUMN_F = 16;
 
   DecimalFormat df = new DecimalFormat("#,###");
 
@@ -100,6 +100,12 @@ public class KomisiSalesTextPrinter extends Window implements Serializable {
   private void addSingleBorder(StringBuffer sb, int count) {
     for (int i = 0; i < count; i++) {
       sb.append("-");
+    }
+  }
+
+  private void addUnderline(StringBuffer sb, int count) {
+    for (int i = 0; i < count; i++) {
+      sb.append("_");
     }
   }
 
@@ -191,12 +197,13 @@ public class KomisiSalesTextPrinter extends Window implements Serializable {
       setAlignRight(sb, WIDTH_COLUMN_C, item.getQty() + "");
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-      String nilaiPenjualanStr = df.format(item.getKomisiSales());
+
+      String nilaiPenjualanStr = df.format(item.getKomisiSales().add(item.getTabunganSales()));
       setAlignRight(sb, WIDTH_COLUMN_D, nilaiPenjualanStr);
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-      String nilaiPenerimaanStr = df.format(item.getTabunganSales());
-      setAlignRight(sb, WIDTH_COLUMN_E, nilaiPenerimaanStr);
+      // String nilaiPenerimaanStr = df.format(item.getTabunganSales());
+      // setAlignRight(sb, WIDTH_COLUMN_E, nilaiPenerimaanStr);
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
       String nilaiSisaPiutangStr = df.format(item.getJumlah());
@@ -377,7 +384,7 @@ public class KomisiSalesTextPrinter extends Window implements Serializable {
     setAlignRight(sb, WIDTH_COLUMN_D, "Komisi");
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-    setAlignRight(sb, WIDTH_COLUMN_E, "Tabungan");
+    // setAlignRight(sb, WIDTH_COLUMN_E, "Tabungan");
 
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
     setAlignRight(sb, WIDTH_COLUMN_F, "Jumlah");
@@ -427,7 +434,7 @@ public class KomisiSalesTextPrinter extends Window implements Serializable {
 
     addNewLine(sb, 1);
     addWhiteSpace(sb, column0);
-    setAlignLeft(sb, column1, "Potongan Tabungan");
+    setAlignLeft(sb, column1, "Potongan Loyalitas");
     sb.append(separate);
     String totalTabunganStr = df.format(totalTabungan);
     setAlignRight(sb, column2, totalTabunganStr);
@@ -442,6 +449,51 @@ public class KomisiSalesTextPrinter extends Window implements Serializable {
     sb.append(separate);
     String totalStr = df.format(total);
     setAlignRight(sb, column2, totalStr);
+
+    addNewLine(sb, 1);
+    addWhiteSpace(sb, column0);
+    setAlignLeft(sb, column1, "Potongan KB");
+    sb.append(separate);
+
+    addNewLine(sb, 1);
+    addWhiteSpace(sb, column0);
+    setAlignLeft(sb, column1, "Potongan TB");
+    sb.append(separate);
+
+    addNewLine(sb, 1);
+    addWhiteSpace(sb, column0);
+    setAlignLeft(sb, column1, "Potongan Final");
+    sb.append(separate);
+
+    addNewLine(sb, 1);
+    addWhiteSpace(sb, column0);
+    addSingleBorder(sb, 35);
+
+    addNewLine(sb, 1);
+    addWhiteSpace(sb, column0);
+    setAlignLeft(sb, column1, "Sisa Komisi");
+    sb.append(separate);
+
+    addNewLine(sb, 2);
+    sb.append("SKB : ");
+    addUnderline(sb, 74);
+
+    addNewLine(sb, 2);
+    sb.append("Terbilang : ");
+    addUnderline(sb, 68);
+    addNewLine(sb, 2);
+    addUnderline(sb, 80);
+
+    addNewLine(sb, 2);
+    setAlignLeft(sb, 26, "    Pembukuan");
+    setAlignLeft(sb, 27, "     Audit");
+    setAlignLeft(sb, 27, "    Penerima");
+
+
+    addNewLine(sb, 4);
+    setAlignLeft(sb, 26, "(                 )");
+    setAlignLeft(sb, 27, "(                 )");
+    setAlignLeft(sb, 27, "(                 )");
 
   }
 

@@ -10,6 +10,7 @@ public class SummaryPenjualan {
   private BigDecimal penjualanBarang;
   private BigDecimal penerimaanPenjualan;
   private BigDecimal sisaPiutang;
+  private boolean bonus;
 
 
   public SummaryPenjualan() {
@@ -56,6 +57,16 @@ public class SummaryPenjualan {
 
   public int getUnitSetTerjual() {
     return unitSetTerjual;
+  }
+
+
+  public boolean isBonus() {
+    return bonus;
+  }
+
+
+  public void setBonus(boolean bonus) {
+    this.bonus = bonus;
   }
 
 

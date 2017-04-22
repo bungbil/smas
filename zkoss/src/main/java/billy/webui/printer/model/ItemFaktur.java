@@ -2,14 +2,16 @@ package billy.webui.printer.model;
 
 public class ItemFaktur {
 
+  private String kodeBarang;
   private String namaBarang;
   private String qty;
   private String harga;
   private String jumlah;
 
 
-  public ItemFaktur(String namaBarang, String qty, String harga, String jumlah) {
+  public ItemFaktur(String kodeBarang, String namaBarang, String qty, String harga, String jumlah) {
 
+    this.kodeBarang = kodeBarang;
     this.namaBarang = namaBarang;
     this.qty = qty;
     this.harga = harga;
@@ -22,6 +24,10 @@ public class ItemFaktur {
 
   public String getJumlah() {
     return jumlah;
+  }
+
+  public String getKodeBarang() {
+    return kodeBarang;
   }
 
   public String getNamaBarang() {
@@ -38,6 +44,10 @@ public class ItemFaktur {
 
   public void setJumlah(String jumlah) {
     this.jumlah = jumlah;
+  }
+
+  public void setKodeBarang(String kodeBarang) {
+    this.kodeBarang = kodeBarang;
   }
 
   public void setNamaBarang(String namaBarang) {

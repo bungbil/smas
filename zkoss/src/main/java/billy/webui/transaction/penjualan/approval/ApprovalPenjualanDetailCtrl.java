@@ -66,14 +66,14 @@ public class ApprovalPenjualanDetailCtrl extends GFCBaseCtrl implements Serializ
   protected Borderlayout borderlayout_ApprovalPenjualanDetail; // autowired
 
   protected Textbox txtb_NoFaktur; // autowired
-  protected Textbox txtb_NoOrderSheet; // autowired
+  // protected Textbox txtb_NoOrderSheet; // autowired
   protected Textbox txtb_Mandiri; // autowired
   protected Datebox txtb_TglPenjualan; // autowired
   protected Datebox txtb_RencanaKirim; // autowired
   protected Listbox lbox_Wilayah;
   protected Listbox lbox_Sales1;
   protected Listbox lbox_Sales2;
-  protected Listbox lbox_Pengirim;
+  // protected Listbox lbox_Pengirim;
   protected Textbox txtb_NamaPelanggan; // autowired
   protected Textbox txtb_Telepon; // autowired
   protected Textbox txtb_Alamat; // autowired
@@ -84,10 +84,10 @@ public class ApprovalPenjualanDetailCtrl extends GFCBaseCtrl implements Serializ
   protected Combobox cmb_IntervalKredit;
   protected Decimalbox label_KreditPerBulan;
   protected Decimalbox label_Total;
-  protected Decimalbox txtb_Diskon; // autowired
+  // protected Decimalbox txtb_Diskon; // autowired
   protected Decimalbox txtb_DownPayment; // autowired
   protected Listbox lbox_Status;
-  protected Decimalbox label_DiskonDP;
+  // protected Decimalbox label_DiskonDP;
   protected Decimalbox label_GrandTotal;
   protected Label label_butuhApproval;
   protected Textbox txtb_ReasonApproval;
@@ -140,7 +140,7 @@ public class ApprovalPenjualanDetailCtrl extends GFCBaseCtrl implements Serializ
     }
     grandTotal = grandTotal.subtract(diskonTotal);
 
-    label_DiskonDP.setValue(diskonTotal);
+    // label_DiskonDP.setValue(diskonTotal);
 
     getSelectedPenjualan().setGrandTotal(grandTotal);
     label_GrandTotal.setValue(grandTotal);
@@ -234,14 +234,14 @@ public class ApprovalPenjualanDetailCtrl extends GFCBaseCtrl implements Serializ
 
   public void doReadOnlyMode(boolean b) {
     // txtb_NoFaktur.setReadonly(b);
-    txtb_NoOrderSheet.setReadonly(b);
+    // txtb_NoOrderSheet.setReadonly(b);
     txtb_Mandiri.setReadonly(b);
     lbox_Wilayah.setDisabled(b);
     txtb_TglPenjualan.setDisabled(b);
     txtb_RencanaKirim.setDisabled(b);
     lbox_Sales1.setDisabled(b);
     lbox_Sales2.setDisabled(b);
-    lbox_Pengirim.setDisabled(b);
+    // lbox_Pengirim.setDisabled(b);
     txtb_NamaPelanggan.setReadonly(b);
     txtb_Telepon.setReadonly(b);
     txtb_Alamat.setReadonly(b);
@@ -251,7 +251,7 @@ public class ApprovalPenjualanDetailCtrl extends GFCBaseCtrl implements Serializ
     radioStatusKredit.setDisabled(b);
     // txtb_TglAngsuran2.setDisabled(b);
     cmb_IntervalKredit.setDisabled(b);
-    txtb_Diskon.setReadonly(b);
+    // txtb_Diskon.setReadonly(b);
 
     txtb_DownPayment.setReadonly(b);
     // lbox_Status.setDisabled(b);
@@ -308,14 +308,14 @@ public class ApprovalPenjualanDetailCtrl extends GFCBaseCtrl implements Serializ
         lbox_Sales2.setSelectedIndex(lml.indexOf(karyawan));
       }
 
-      lbox_Pengirim.setModel(new ListModelList(listKaryawan));
-      lbox_Pengirim.setItemRenderer(new KaryawanListModelItemRenderer());
-      if (getSelectedPenjualan().getPengirim() != null) {
-        ListModelList lml = (ListModelList) lbox_Pengirim.getModel();
-        Karyawan karyawan =
-            getKaryawanService().getKaryawanByID(getSelectedPenjualan().getPengirim().getId());
-        lbox_Pengirim.setSelectedIndex(lml.indexOf(karyawan));
-      }
+      // lbox_Pengirim.setModel(new ListModelList(listKaryawan));
+      // lbox_Pengirim.setItemRenderer(new KaryawanListModelItemRenderer());
+      // if (getSelectedPenjualan().getPengirim() != null) {
+      // ListModelList lml = (ListModelList) lbox_Pengirim.getModel();
+      // Karyawan karyawan =
+      // getKaryawanService().getKaryawanByID(getSelectedPenjualan().getPengirim().getId());
+      // lbox_Pengirim.setSelectedIndex(lml.indexOf(karyawan));
+      // }
 
       if (getSelectedPenjualan().getIntervalKredit() != 0) {
         cmb_IntervalKredit.setValue(String.valueOf(getSelectedPenjualan().getIntervalKredit()));
@@ -354,9 +354,9 @@ public class ApprovalPenjualanDetailCtrl extends GFCBaseCtrl implements Serializ
         BigDecimal diskonTotal = BigDecimal.ZERO;
         diskonTotal = diskonTotal.add(getSelectedPenjualan().getDiskon());
         diskonTotal = diskonTotal.add(getSelectedPenjualan().getDownPayment());
-        label_DiskonDP.setValue(diskonTotal);
+        // label_DiskonDP.setValue(diskonTotal);
       } else {
-        label_DiskonDP.setValue(BigDecimal.ZERO);
+        // label_DiskonDP.setValue(BigDecimal.ZERO);
       }
 
       if (getSelectedPenjualan().isNeedApproval()) {
@@ -369,7 +369,7 @@ public class ApprovalPenjualanDetailCtrl extends GFCBaseCtrl implements Serializ
 
   public void emptyAllValue() {
     txtb_NoFaktur.setValue(null);
-    txtb_NoOrderSheet.setValue(null);
+    // txtb_NoOrderSheet.setValue(null);
     txtb_Mandiri.setValue(null);
     txtb_TglPenjualan.setValue(null);
     txtb_RencanaKirim.setValue(null);
@@ -385,11 +385,11 @@ public class ApprovalPenjualanDetailCtrl extends GFCBaseCtrl implements Serializ
     cmb_IntervalKredit.setSelectedIndex(-1);
     txtb_NamaBarang.setValue(null);
     txtb_JumlahBarang.setValue(null);
-    txtb_Diskon.setValue(BigDecimal.ZERO);
+    // txtb_Diskon.setValue(BigDecimal.ZERO);
     txtb_DownPayment.setValue(BigDecimal.ZERO);
     txtb_HargaBarang.setValue(BigDecimal.ZERO);
     label_Total.setValue(BigDecimal.ZERO);
-    label_DiskonDP.setValue(BigDecimal.ZERO);
+    // label_DiskonDP.setValue(BigDecimal.ZERO);
     label_GrandTotal.setValue(BigDecimal.ZERO);
     label_KreditPerBulan.setValue(BigDecimal.ZERO);
   }
