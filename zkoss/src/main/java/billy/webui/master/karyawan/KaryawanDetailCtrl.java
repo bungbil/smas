@@ -104,19 +104,19 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
       setKaryawanMainCtrl((KaryawanMainCtrl) arg.get("ModuleMainController"));
 
       // SET THIS CONTROLLER TO THE module's Parent/MainController
-
+      getKaryawanMainCtrl().setKaryawanDetailCtrl(this);
       // Get the selected object.
       // Check if this Controller if created on first time. If so,
       // than the selectedXXXBean should be null
       if (getKaryawanMainCtrl().getSelectedKaryawan() != null) {
         setSelectedKaryawan(getKaryawanMainCtrl().getSelectedKaryawan());
         doRefresh();
-      } else
+      } else {
         setSelectedKaryawan(null);
+      }
     } else {
       setSelectedKaryawan(null);
     }
-
 
   }
 
@@ -171,33 +171,35 @@ public class KaryawanDetailCtrl extends GFCBaseCtrl implements Serializable {
   }
 
   public void doRefresh() {
-    getKaryawanMainCtrl().setKaryawanDetailCtrl(this);
+
     lbox_JobType.setModel(new ListModelList(getJobTypeService().getAllJobTypes()));
     lbox_JobType.setItemRenderer(new JobTypeListModelItemRenderer());
 
-    if (getSelectedKaryawan().getJobType() != null) {
-      ListModelList lml = (ListModelList) lbox_JobType.getModel();
-      JobType jobType =
-          getJobTypeService().getJobTypeByID(getSelectedKaryawan().getJobType().getId());
-      lbox_JobType.setSelectedIndex(lml.indexOf(jobType));
-    }
+    if (getSelectedKaryawan() != null) {
+      if (getSelectedKaryawan().getJobType() != null) {
+        ListModelList lml = (ListModelList) lbox_JobType.getModel();
+        JobType jobType =
+            getJobTypeService().getJobTypeByID(getSelectedKaryawan().getJobType().getId());
+        lbox_JobType.setSelectedIndex(lml.indexOf(jobType));
+      }
 
-    if (getSelectedKaryawan().getJenisKelamin() != null) {
-      cmb_JenisKelamin.setValue(getSelectedKaryawan().getJenisKelamin());
-    } else {
-      cmb_JenisKelamin.setValue("Pria");
-    }
+      if (getSelectedKaryawan().getJenisKelamin() != null) {
+        cmb_JenisKelamin.setValue(getSelectedKaryawan().getJenisKelamin());
+      } else {
+        cmb_JenisKelamin.setValue("Pria");
+      }
 
+
+      if (getSelectedKaryawan().getStatusDivisi() != null) {
+        if (getSelectedKaryawan().getStatusDivisi().equals(radioStatusPusat.getLabel())) {
+          radioStatusPusat.setSelected(true);
+        }
+        if (getSelectedKaryawan().getStatusDivisi().equals(radioStatusDaerah.getLabel())) {
+          radioStatusDaerah.setSelected(true);
+        }
+      }
+    }
     loadListBox();
-
-    if (getSelectedKaryawan().getStatusDivisi() != null) {
-      if (getSelectedKaryawan().getStatusDivisi().equals(radioStatusPusat.getLabel())) {
-        radioStatusPusat.setSelected(true);
-      }
-      if (getSelectedKaryawan().getStatusDivisi().equals(radioStatusDaerah.getLabel())) {
-        radioStatusDaerah.setSelected(true);
-      }
-    }
     try {
       KaryawanImages karyawanImages =
           getKaryawanImagesService().getKaryawanImagesByKaryawan(getSelectedKaryawan());

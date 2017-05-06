@@ -412,14 +412,16 @@ public class ApprovalPenjualanMainCtrl extends GFCBaseCtrl implements Serializab
     getApprovalPenjualanDetailCtrl().getBinder().saveAll();
 
     try {
-      getApprovalPenjualanDetailCtrl().txtb_ApprovedBy.setReadonly(true);
-      getApprovalPenjualanDetailCtrl().txtb_ApprovedRemark.setReadonly(true);
+      // getApprovalPenjualanDetailCtrl().txtb_ApprovedBy.setReadonly(true);
+      // getApprovalPenjualanDetailCtrl().txtb_ApprovedRemark.setReadonly(true);
       getApprovalPenjualanDetailCtrl().getPenjualan().setNeedApproval(false);
       String userName =
           ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
               .getUsername();
       getApprovalPenjualanDetailCtrl().getPenjualan().setLastUpdate(new Date());
       getApprovalPenjualanDetailCtrl().getPenjualan().setUpdatedBy(userName);
+      getApprovalPenjualanDetailCtrl().getPenjualan().setApprovedBy(userName);
+
 
       Status status =
           getApprovalPenjualanDetailCtrl().getStatusService().getStatusByID(new Long(3)); // PROSES

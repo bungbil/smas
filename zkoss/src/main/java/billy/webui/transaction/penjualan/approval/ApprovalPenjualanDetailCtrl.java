@@ -196,7 +196,7 @@ public class ApprovalPenjualanDetailCtrl extends GFCBaseCtrl implements Serializ
       if (getApprovalPenjualanMainCtrl().getSelectedPenjualan() != null) {
         setSelectedPenjualan(getApprovalPenjualanMainCtrl().getSelectedPenjualan());
         doRefresh();
-        txtb_ApprovedBy.focus();
+        txtb_ApprovedRemark.focus();
       } else
         setSelectedPenjualan(null);
     } else {
@@ -207,7 +207,7 @@ public class ApprovalPenjualanDetailCtrl extends GFCBaseCtrl implements Serializ
 
   public void doApprovalMode() {
     // doReadOnlyMode(true);
-    txtb_ApprovedBy.setReadonly(false);
+    // txtb_ApprovedBy.setReadonly(false);
     txtb_ApprovedRemark.setReadonly(false);
     btnApprovePenjualan.setVisible(true);
   }

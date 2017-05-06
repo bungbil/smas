@@ -201,8 +201,8 @@ public class CetakPenjualanMainCtrl extends GFCBaseCtrl implements Serializable 
 
   public void onClick$btnCetakFaktur(Event event) throws Exception {
     if (validToPrint()) {
+      listPenjualan = new ArrayList<Penjualan>();
       listPenjualan = getPenjualanService().getAllPenjualansByListNoFaktur(listNoFaktur);
-
       final Window win = (Window) Path.getComponent("/outerIndexWindow");
       // new CetakFakturDJReport(win, listPenjualan, selectedPrinter);
       new CetakFakturTextPrinter(win, listPenjualan, selectedPrinter);
@@ -213,6 +213,7 @@ public class CetakPenjualanMainCtrl extends GFCBaseCtrl implements Serializable 
 
   public void onClick$btnCetakKuitansiA2(Event event) throws Exception {
     if (validToPrint()) {
+      listPenjualan = new ArrayList<Penjualan>();
       listPenjualan = getPenjualanService().getAllPenjualansByListNoFaktur(listNoFaktur);
       final Window win = (Window) Path.getComponent("/outerIndexWindow");
       // new CetakKuitansiA2DJReport(win);
@@ -301,7 +302,7 @@ public class CetakPenjualanMainCtrl extends GFCBaseCtrl implements Serializable 
       logger.info("Printer : " + printer.getName());
     }
     if (karyawan != null && printer != null) {
-
+      listNoFaktur = new ArrayList<String>();
       listNoFaktur = generateSequenceNoFaktur();
       if (listNoFaktur.size() > 0) {
         listPenjualanNeedApproval =

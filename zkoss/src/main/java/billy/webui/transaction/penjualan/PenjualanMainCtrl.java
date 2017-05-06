@@ -21,6 +21,7 @@ import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zkplus.databind.BindingListModelList;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Checkbox;
+import org.zkoss.zul.Datebox;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Messagebox;
@@ -66,12 +67,17 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
   protected Tab tabPenjualanDetail; // autowired
   protected Tabpanel tabPanelPenjualanList; // autowired
   protected Tabpanel tabPanelPenjualanDetail; // autowired
+  protected Tab tabPenjualanUpload; // autowired
+  protected Tabpanel tabPanelPenjualanUpload; // autowired
 
   // filter components
   protected Checkbox checkbox_PenjualanList_ShowAll; // autowired
   protected Textbox tb_Search_No_Faktur; // aurowired
   protected Textbox tb_Search_Nama_Pelanggan; // aurowired
   protected Textbox tb_Search_Alamat; // aurowired
+  protected Textbox tb_Search_Kode_Divisi; // aurowired
+  protected Datebox tb_Search_Tgl_Penjualan_Awal; // aurowired
+  protected Datebox tb_Search_Tgl_Penjualan_Akhir; // aurowired
   protected Button button_PenjualanList_Search; // aurowired
 
 
@@ -222,6 +228,7 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
                 getPenjualanService().delete(anPenjualan);
               } catch (DataAccessException e) {
                 ZksampleMessageUtils.showErrorMessage(e.getMostSpecificCause().toString());
+                logger.info(e.getMostSpecificCause().toString());
               }
             }
 
@@ -234,6 +241,7 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
                   } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
+                    logger.info(e.getMessage());
                   }
                   break; //
                 case MultiLineMessageBox.NO:
@@ -356,6 +364,7 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
 
     } catch (Exception e) {
       // do nothing
+      logger.info("gagal loadAll" + e.getMessage());
     }
     // getPenjualanDetailCtrl().emptyAllValue();
     // set editable Mode
@@ -529,8 +538,8 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
           new Event("onChangeSelectedObject", null, str));
 
     } catch (DataAccessException e) {
-      ZksampleMessageUtils.showErrorMessage(e.getMostSpecificCause().toString());
-
+      ZksampleMessageUtils.showErrorMessage("Terjadi kesalahan sistem. Silakan refresh halaman.");
+      logger.info("Save Penjualan DataAccessException" + e.getMostSpecificCause().toString());
       // Reset to init values
       doResetToInitValues();
 
@@ -692,6 +701,9 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
     tb_Search_No_Faktur.setValue(""); // clear
     tb_Search_Nama_Pelanggan.setValue(""); // clear
     tb_Search_Alamat.setValue(""); // clear
+    tb_Search_Kode_Divisi.setValue(""); // clear
+    tb_Search_Tgl_Penjualan_Awal.setValue(null); // clear
+    tb_Search_Tgl_Penjualan_Akhir.setValue(null); // clear
 
     // ++ create the searchObject and init sorting ++//
     HibernateSearchObject<Penjualan> soPenjualan =
@@ -840,9 +852,14 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
   public void onClick$btnSave(Event event) throws InterruptedException {
 
     int interval = Integer.parseInt(getPenjualanDetailCtrl().cmb_IntervalKredit.getValue());
-    if (getPenjualanDetailCtrl().getPenjualan().getSales1() != null) {
-      getPenjualanDetailCtrl().getPenjualan().setPengirim(
-          getPenjualanDetailCtrl().getPenjualan().getSales1());
+
+    try {
+      if (getPenjualanDetailCtrl().getPenjualan().getSales1() != null) {
+        getPenjualanDetailCtrl().getPenjualan().setPengirim(
+            getPenjualanDetailCtrl().getPenjualan().getSales1());
+      }
+    } catch (Exception e) {
+
     }
 
     if (interval != 1 && getPenjualanDetailCtrl().getPenjualan().getTglAngsuran2() == null) {
@@ -936,7 +953,10 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
     // if not empty
     if (StringUtils.isNotEmpty(tb_Search_No_Faktur.getValue())
         || StringUtils.isNotEmpty(tb_Search_Nama_Pelanggan.getValue())
-        || StringUtils.isNotEmpty(tb_Search_Alamat.getValue())) {
+        || StringUtils.isNotEmpty(tb_Search_Alamat.getValue())
+        || StringUtils.isNotEmpty(tb_Search_Kode_Divisi.getValue())
+        || tb_Search_Tgl_Penjualan_Awal.getValue() != null
+        || tb_Search_Tgl_Penjualan_Akhir.getValue() != null) {
       checkbox_PenjualanList_ShowAll.setChecked(false); // unCheck
 
       // ++ create the searchObject and init sorting ++//
@@ -958,6 +978,22 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
         soPenjualan.addFilter(new Filter("alamat", "%" + tb_Search_Alamat.getValue() + "%",
             Filter.OP_ILIKE));
       }
+
+      if (StringUtils.isNotEmpty(tb_Search_Kode_Divisi.getValue())) {
+        soPenjualan.addFilter(new Filter("divisi.kodeKaryawan", "%"
+            + tb_Search_Kode_Divisi.getValue() + "%", Filter.OP_ILIKE));
+      }
+
+      if (tb_Search_Tgl_Penjualan_Awal.getValue() != null) {
+        soPenjualan.addFilter(new Filter("tglPenjualan", tb_Search_Tgl_Penjualan_Awal.getValue(),
+            Filter.OP_GREATER_OR_EQUAL));
+      }
+
+      if (tb_Search_Tgl_Penjualan_Akhir.getValue() != null) {
+        soPenjualan.addFilter(new Filter("tglPenjualan", tb_Search_Tgl_Penjualan_Akhir.getValue(),
+            Filter.OP_LESS_OR_EQUAL));
+      }
+
       SecUser secUser =
           ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
               .getSecUser();
@@ -1069,6 +1105,21 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
           "ModuleMainController", "/WEB-INF/pages/transaction/penjualan/penjualanList.zul");
     }
 
+  }
+
+  public void onSelect$tabPenjualanUpload(Event event) throws IOException {
+    // logger.debug(event.toString());
+
+    // Check if the tabpanel is already loaded
+    if (tabPanelPenjualanUpload.getFirstChild() != null) {
+      tabPenjualanUpload.setSelected(true);
+      return;
+    }
+
+    if (tabPanelPenjualanUpload != null) {
+      ZksampleCommonUtils.createTabPanelContent(this.tabPanelPenjualanUpload, this,
+          "ModuleMainController", "/WEB-INF/pages/transaction/penjualan/penjualanUpload.zul");
+    }
   }
 
   /* Master BEANS */

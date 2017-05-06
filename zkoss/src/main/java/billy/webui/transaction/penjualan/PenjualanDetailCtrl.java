@@ -314,11 +314,15 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
     List<Wilayah> listWilayah = getWilayahService().getAllWilayahs();
     lbox_Wilayah.setModel(new ListModelList(listWilayah));
     lbox_Wilayah.setItemRenderer(new WilayahListModelItemRenderer());
-    if (getSelectedPenjualan().getWilayah() != null) {
-      ListModelList lml = (ListModelList) lbox_Wilayah.getModel();
-      Wilayah wilayah =
-          getWilayahService().getWilayahByID(getSelectedPenjualan().getWilayah().getId());
-      lbox_Wilayah.setSelectedIndex(lml.indexOf(wilayah));
+    try {
+      if (getSelectedPenjualan().getWilayah() != null) {
+        ListModelList lml = (ListModelList) lbox_Wilayah.getModel();
+        Wilayah wilayah =
+            getWilayahService().getWilayahByID(getSelectedPenjualan().getWilayah().getId());
+        lbox_Wilayah.setSelectedIndex(lml.indexOf(wilayah));
+      }
+    } catch (Exception e) {
+
     }
     List<Status> listStatus = getStatusService().getAllStatuss();
     lbox_Status.setModel(new ListModelList(listStatus));

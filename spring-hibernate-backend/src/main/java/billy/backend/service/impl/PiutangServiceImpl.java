@@ -122,7 +122,7 @@ public class PiutangServiceImpl implements PiutangService {
         + currentData.getPenjualan().getNoFaktur());
 
     piutang.setNilaiTagihan(BigDecimal.ZERO);
-    piutang.setPembayaranKe(currentData.getPembayaranKe() + 1);
+    piutang.setPembayaranKe(currentData.getPembayaranKe());
     piutang.setPenjualan(currentData.getPenjualan());
     piutang.setNoFaktur(currentData.getPenjualan().getNoFaktur());
 

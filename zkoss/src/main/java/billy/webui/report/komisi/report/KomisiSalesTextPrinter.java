@@ -10,9 +10,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.print.Doc;
 import javax.print.DocFlavor;
@@ -77,11 +79,14 @@ public class KomisiSalesTextPrinter extends Window implements Serializable {
     super();
     this.setParent(parent);
 
-    try {
-      doPrint(karyawan, startDate, endDate, listPenjualan, selectedPrinter);
-    } catch (final Exception e) {
-      e.printStackTrace();
-      ZksampleMessageUtils.showErrorMessage(e.toString());
+    Set<Karyawan> listDivisi = getListDivisi(listPenjualan);
+    for (Karyawan divisi : listDivisi) {
+      try {
+        doPrint(karyawan, divisi, startDate, endDate, listPenjualan, selectedPrinter);
+      } catch (final Exception e) {
+        e.printStackTrace();
+        ZksampleMessageUtils.showErrorMessage(e.toString());
+      }
     }
   }
 
@@ -115,14 +120,14 @@ public class KomisiSalesTextPrinter extends Window implements Serializable {
     }
   }
 
-  public void doPrint(Karyawan karyawan, Date startDate, Date endDate,
+  public void doPrint(Karyawan karyawan, Karyawan divisi, Date startDate, Date endDate,
       List<Penjualan> listPenjualan, PrintService selectedPrinter) throws PrintException,
       IOException {
 
-    List<KomisiSales> listData = generateDataSummary(karyawan, listPenjualan);
+    List<KomisiSales> listData = generateDataSummary(karyawan, divisi, listPenjualan);
     InputStream is =
-        new ByteArrayInputStream(generateData(karyawan, startDate, endDate, listData).getBytes(
-            "UTF8"));
+        new ByteArrayInputStream(generateData(karyawan, divisi, startDate, endDate, listData)
+            .getBytes("UTF8"));
     PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
     pras.add(new Copies(1));
 
@@ -145,7 +150,7 @@ public class KomisiSalesTextPrinter extends Window implements Serializable {
 
   }
 
-  private String generateData(Karyawan karyawan, Date startDate, Date endDate,
+  private String generateData(Karyawan karyawan, Karyawan divisi, Date startDate, Date endDate,
       List<KomisiSales> listItem) {
     StringBuffer sb = new StringBuffer();
 
@@ -160,7 +165,8 @@ public class KomisiSalesTextPrinter extends Window implements Serializable {
 
     for (int pageNo = 1; pageNo <= totalPage; pageNo++) {
 
-      generateHeaderReport(sb, karyawan, startDate, endDate, pageNo, companyName, companyAddress);
+      generateHeaderReport(sb, karyawan, divisi, startDate, endDate, pageNo, companyName,
+          companyAddress);
       generateDataReport(sb, listItem, itemPerPage, pageNo);
       generateFooterReport(sb);
 
@@ -217,81 +223,86 @@ public class KomisiSalesTextPrinter extends Window implements Serializable {
 
   }
 
-  private List<KomisiSales> generateDataSummary(Karyawan karyawan, List<Penjualan> listPenjualan) {
+  private List<KomisiSales> generateDataSummary(Karyawan karyawan, Karyawan divisi,
+      List<Penjualan> listPenjualan) {
     Map<String, KomisiSales> mapBarang = new HashMap<String, KomisiSales>();
     PenjualanService penjualanService = (PenjualanService) SpringUtil.getBean("penjualanService");
     for (Penjualan penjualan : listPenjualan) {
-      List<PenjualanDetail> penjualanDetails =
-          penjualanService.getPenjualanDetailsByPenjualan(penjualan);
-      for (PenjualanDetail penjualanDetail : penjualanDetails) {
-        if (!penjualanDetail.getBarang().isBonus()) {
-          String kodeBarang =
-              penjualanDetail.getBarang().getKodeBarang() + "-" + penjualan.getIntervalKredit();
-          KomisiSales data = mapBarang.get(kodeBarang);
-          if (data == null) {
-            data = new KomisiSales();
-            data.setNamaBarang(penjualanDetail.getBarang().getNamaBarang());
-            data.setIntervalKredit(penjualan.getIntervalKredit());
-            data.setKomisiSales(penjualanDetail.getKomisiSales());
-            data.setTabunganSales(penjualanDetail.getTabunganSales());
+      if (penjualan.getDivisi().equals(divisi)) {
+        List<PenjualanDetail> penjualanDetails =
+            penjualanService.getPenjualanDetailsByPenjualan(penjualan);
+        for (PenjualanDetail penjualanDetail : penjualanDetails) {
+          if (!penjualanDetail.getBarang().isBonus()) {
+            String kodeBarang =
+                penjualanDetail.getBarang().getKodeBarang() + "-" + penjualan.getIntervalKredit();
+            KomisiSales data = mapBarang.get(kodeBarang);
+            if (data == null) {
+              data = new KomisiSales();
+              data.setNamaBarang(penjualanDetail.getBarang().getNamaBarang());
+              data.setIntervalKredit(penjualan.getIntervalKredit());
+              data.setKomisiSales(penjualanDetail.getKomisiSales());
+              data.setTabunganSales(penjualanDetail.getTabunganSales());
 
-            Double qty = Double.parseDouble(String.valueOf(penjualanDetail.getQty()));
-            BigDecimal komisi = BigDecimal.ZERO;
-            BigDecimal tabungan = BigDecimal.ZERO;
-            tabungan =
-                penjualanDetail.getTabunganSales().multiply(
-                    new BigDecimal(penjualanDetail.getQty()));
-            komisi =
-                penjualanDetail.getKomisiSales().multiply(new BigDecimal(penjualanDetail.getQty()));
+              Double qty = Double.parseDouble(String.valueOf(penjualanDetail.getQty()));
+              BigDecimal komisi = BigDecimal.ZERO;
+              BigDecimal tabungan = BigDecimal.ZERO;
+              tabungan =
+                  penjualanDetail.getTabunganSales().multiply(
+                      new BigDecimal(penjualanDetail.getQty()));
+              komisi =
+                  penjualanDetail.getKomisiSales().multiply(
+                      new BigDecimal(penjualanDetail.getQty()));
 
-            if (penjualan.getSales1().getKodeKaryawan().equals(karyawan.getKodeKaryawan())
-                && penjualan.getSales2() != null) {
-              qty = qty / 2;
-              komisi = komisi.divide(new BigDecimal(2));
-              tabungan = tabungan.divide(new BigDecimal(2));
-            } else if (penjualan.getSales2() != null
-                && penjualan.getSales2().getKodeKaryawan().equals(karyawan.getKodeKaryawan())
-                && penjualan.getSales1() != null) {
-              qty = qty / 2;
-              komisi = komisi.divide(new BigDecimal(2));
-              tabungan = tabungan.divide(new BigDecimal(2));
+              if (penjualan.getSales1().getKodeKaryawan().equals(karyawan.getKodeKaryawan())
+                  && penjualan.getSales2() != null) {
+                qty = qty / 2;
+                komisi = komisi.divide(new BigDecimal(2));
+                tabungan = tabungan.divide(new BigDecimal(2));
+              } else if (penjualan.getSales2() != null
+                  && penjualan.getSales2().getKodeKaryawan().equals(karyawan.getKodeKaryawan())
+                  && penjualan.getSales1() != null) {
+                qty = qty / 2;
+                komisi = komisi.divide(new BigDecimal(2));
+                tabungan = tabungan.divide(new BigDecimal(2));
+              }
+              totalKomisi = totalKomisi.add(komisi);
+              totalTabungan = totalTabungan.add(tabungan);
+              totalUnit = totalUnit + qty;
+
+              data.setQty(qty);
+              data.setJumlah(komisi.add(tabungan));
+              mapBarang.put(kodeBarang, data);
+            } else {
+
+              Double qty = Double.parseDouble(String.valueOf(penjualanDetail.getQty()));
+              BigDecimal komisi = BigDecimal.ZERO;
+              BigDecimal tabungan = BigDecimal.ZERO;
+              tabungan =
+                  penjualanDetail.getTabunganSales().multiply(
+                      new BigDecimal(penjualanDetail.getQty()));
+              komisi =
+                  penjualanDetail.getKomisiSales().multiply(
+                      new BigDecimal(penjualanDetail.getQty()));
+
+              if (penjualan.getSales1().getKodeKaryawan().equals(karyawan.getKodeKaryawan())
+                  && penjualan.getSales2() != null) {
+                qty = qty / 2;
+                komisi = komisi.divide(new BigDecimal(2));
+                tabungan = tabungan.divide(new BigDecimal(2));
+              } else if (penjualan.getSales2() != null
+                  && penjualan.getSales2().getKodeKaryawan().equals(karyawan.getKodeKaryawan())
+                  && penjualan.getSales1() != null) {
+                qty = qty / 2;
+                komisi = komisi.divide(new BigDecimal(2));
+                tabungan = tabungan.divide(new BigDecimal(2));
+              }
+              totalKomisi = totalKomisi.add(komisi);
+              totalTabungan = totalTabungan.add(tabungan);
+              totalUnit = totalUnit + qty;
+
+              data.setQty(data.getQty() + qty);
+              data.setJumlah(data.getJumlah().add(komisi).add(tabungan));
             }
-            totalKomisi = totalKomisi.add(komisi);
-            totalTabungan = totalTabungan.add(tabungan);
-            totalUnit = totalUnit + qty;
-
-            data.setQty(qty);
-            data.setJumlah(komisi.add(tabungan));
-            mapBarang.put(kodeBarang, data);
-          } else {
-
-            Double qty = Double.parseDouble(String.valueOf(penjualanDetail.getQty()));
-            BigDecimal komisi = BigDecimal.ZERO;
-            BigDecimal tabungan = BigDecimal.ZERO;
-            tabungan =
-                penjualanDetail.getTabunganSales().multiply(
-                    new BigDecimal(penjualanDetail.getQty()));
-            komisi =
-                penjualanDetail.getKomisiSales().multiply(new BigDecimal(penjualanDetail.getQty()));
-
-            if (penjualan.getSales1().getKodeKaryawan().equals(karyawan.getKodeKaryawan())
-                && penjualan.getSales2() != null) {
-              qty = qty / 2;
-              komisi = komisi.divide(new BigDecimal(2));
-              tabungan = tabungan.divide(new BigDecimal(2));
-            } else if (penjualan.getSales2() != null
-                && penjualan.getSales2().getKodeKaryawan().equals(karyawan.getKodeKaryawan())
-                && penjualan.getSales1() != null) {
-              qty = qty / 2;
-              komisi = komisi.divide(new BigDecimal(2));
-              tabungan = tabungan.divide(new BigDecimal(2));
-            }
-            totalKomisi = totalKomisi.add(komisi);
-            totalTabungan = totalTabungan.add(tabungan);
-            totalUnit = totalUnit + qty;
-
-            data.setQty(data.getQty() + qty);
-            data.setJumlah(data.getJumlah().add(komisi).add(tabungan));
           }
         }
       }
@@ -335,8 +346,8 @@ public class KomisiSalesTextPrinter extends Window implements Serializable {
 
   }
 
-  private void generateHeaderReport(StringBuffer sb, Karyawan karyawan, Date startDate,
-      Date endDate, int pageNo, String companyName, String companyAddress) {
+  private void generateHeaderReport(StringBuffer sb, Karyawan karyawan, Karyawan divisi,
+      Date startDate, Date endDate, int pageNo, String companyName, String companyAddress) {
     Date printDate = new Date();
     SimpleDateFormat formatDate = new SimpleDateFormat();
     formatDate = new SimpleDateFormat("dd-MM-yy", Locale.getDefault());
@@ -360,9 +371,12 @@ public class KomisiSalesTextPrinter extends Window implements Serializable {
     addWhiteSpace(sb, maxLengthTglPrint - titleReport.length() - 20);
     sb.append(printHourStr);
     addNewLine(sb, 1);
-    String divisi = "Sales : " + karyawan.getKodeKaryawan() + " - " + karyawan.getNamaPanggilan();
-    sb.append(divisi);
-    addWhiteSpace(sb, maxLengthTglPrint - divisi.length());
+    String sales =
+        "Sales : " + karyawan.getKodeKaryawan() + " - " + karyawan.getNamaPanggilan()
+            + ", Divisi : " + divisi.getKodeKaryawan() + " - " + divisi.getNamaPanggilan();
+
+    sb.append(sales);
+    addWhiteSpace(sb, maxLengthTglPrint - sales.length());
     sb.append(halStr);
     addNewLine(sb, 1);
     sb.append("Tanggal Penjualan : " + startDateStr + " s/d " + endDateStr);
@@ -495,6 +509,15 @@ public class KomisiSalesTextPrinter extends Window implements Serializable {
     setAlignLeft(sb, 27, "(                 )");
     setAlignLeft(sb, 27, "(                 )");
 
+  }
+
+  private Set<Karyawan> getListDivisi(List<Penjualan> listPenjualan) {
+    Set<Karyawan> listDivisi = new HashSet<Karyawan>();
+
+    for (Penjualan penjualan : listPenjualan) {
+      listDivisi.add(penjualan.getDivisi());
+    }
+    return listDivisi;
   }
 
   private void setAlignLeft(StringBuffer sb, int width, String value) {

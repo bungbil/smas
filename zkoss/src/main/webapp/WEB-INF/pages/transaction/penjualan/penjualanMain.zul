@@ -32,19 +32,38 @@
 							checked="true"
 							label="${c:l('common.showAll')}" />
 						<space />
-
-						<label value="No Faktur" style="padding-right: 3px"/>
-						<textbox id="tb_Search_No_Faktur" width="120px" />
-						
+						<vbox>
+							<hbox>
+								<label value="No Faktur" style="padding-right: 3px"/>
+								<textbox id="tb_Search_No_Faktur" width="120px" />
+							</hbox>
+							<hbox>
+								<label value="Kode Divisi" style="padding-right: 3px"/>
+								<textbox id="tb_Search_Kode_Divisi" width="120px" />
+							</hbox>					
+						</vbox>
 						<separator bar="true" orient="vertical" />
-
-						<label value="Nama Pelanggan" style="padding-right: 3px"/>
-						<textbox id="tb_Search_Nama_Pelanggan" width="120px" />
-						
-						<separator bar="true" orient="vertical" />
-						
-						<label value="Alamat" style="padding-right: 3px"/>
-						<textbox id="tb_Search_Alamat" width="120px" />
+						<vbox>
+							<hbox>
+								<label value="Pelanggan" style="padding-right: 3px"/>
+								<textbox id="tb_Search_Nama_Pelanggan" width="120px" />
+							</hbox>
+							<hbox>	
+								<label value="Alamat" style="padding-right: 3px"/>
+								<textbox id="tb_Search_Alamat" width="120px" />
+							</hbox>						
+						</vbox>
+						<separator bar="true" orient="vertical" />						
+						<vbox>
+							<hbox>
+								<label value="Tgl Awal" style="padding-right: 3px"/>
+								<datebox id="tb_Search_Tgl_Penjualan_Awal" width="120px" format="dd/MM/yyyy"/>
+							</hbox>
+							<hbox>	
+								<label value="Tgl Akhir" style="padding-right: 3px"/>
+								<datebox id="tb_Search_Tgl_Penjualan_Akhir" width="120px" format="dd/MM/yyyy"/>
+							</hbox>						
+						</vbox>						
 						
 						<button id="button_PenjualanList_Search"
 							sclass="oT_ButtonWithIcon" image="/images/icons/search.gif"
@@ -85,6 +104,8 @@
 					image="/images/icons/properties.gif" />
 				<tab id="tabPenjualanDetail"
 					label="${c:l('common.Details')}" image="/images/icons/table.gif" />
+				<!-- <tab id="tabPenjualanUpload"
+					label="Upload" image="/images/icons/properties.gif" /> -->
 			</tabs>
 
 			<tabpanels>
@@ -95,6 +116,10 @@
 				<!-- TabPanel DETAILS / DETAILS -->
 				<tabpanel id="tabPanelPenjualanDetail" height="100%"
 					style="border: none; padding: 0px; " />
+					
+				<!-- TabPanel UPLOAD FILE 
+				<tabpanel id="tabPanelPenjualanUpload" height="100%"
+					style="border: none; padding: 0px; " />-->
 			</tabpanels>
 		</tabbox>
 

@@ -20,6 +20,8 @@ import org.zkoss.zul.Datebox;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
+import org.zkoss.zul.Radio;
+import org.zkoss.zul.Radiogroup;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
@@ -46,6 +48,9 @@ public class ReportKomisiMainCtrl extends GFCBaseCtrl implements Serializable {
 
 
   protected Window windowReportKomisiMain; // autowired
+  protected Radiogroup radiogroup_laporan; // autowired
+  protected Radio radioLaporanDivisi;
+  protected Radio radioLaporanSales;
   protected Textbox txtb_KodeDivisi;
   protected Listbox lbox_Divisi;
   protected Datebox txtb_tanggalAwalPenjualan;
@@ -152,10 +157,10 @@ public class ReportKomisiMainCtrl extends GFCBaseCtrl implements Serializable {
     if (validToPrint() && selectedPrinter != null) {
 
       final Window win = (Window) Path.getComponent("/outerIndexWindow");
-      if (karyawan.getJobType().getId() == 4) {
+      if (radioLaporanSales.isSelected()) {
         new KomisiSalesTextPrinter(win, karyawan, txtb_tanggalAwalPenjualan.getValue(),
             txtb_tanggalAkhirPenjualan.getValue(), listPenjualan, selectedPrinter);
-      } else if (karyawan.getJobType().getId() == 2) {
+      } else if (radioLaporanDivisi.isSelected()) {
         new KomisiDivisiTextPrinter(win, karyawan, txtb_tanggalAwalPenjualan.getValue(),
             txtb_tanggalAkhirPenjualan.getValue(), listPenjualan, selectedPrinter);
       }
@@ -182,10 +187,10 @@ public class ReportKomisiMainCtrl extends GFCBaseCtrl implements Serializable {
     if (validToPrint()) {
       final Window win = (Window) Path.getComponent("/outerIndexWindow");
 
-      if (karyawan.getJobType().getId() == 4) {
+      if (radioLaporanSales.isSelected()) {
         new KomisiSalesDJReport(win, karyawan, txtb_tanggalAwalPenjualan.getValue(),
             txtb_tanggalAkhirPenjualan.getValue(), listPenjualan);
-      } else if (karyawan.getJobType().getId() == 2) {
+      } else if (radioLaporanDivisi.isSelected()) {
         new KomisiDivisiDJReport(win, karyawan, txtb_tanggalAwalPenjualan.getValue(),
             txtb_tanggalAkhirPenjualan.getValue(), listPenjualan);
       }
@@ -242,11 +247,11 @@ public class ReportKomisiMainCtrl extends GFCBaseCtrl implements Serializable {
     if (karyawan != null && txtb_tanggalAwalPenjualan.getValue() != null
         && txtb_tanggalAkhirPenjualan.getValue() != null) {
 
-      if (karyawan.getJobType().getId() == 4) {
+      if (radioLaporanSales.isSelected()) {
         listPenjualan =
             getPenjualanService().getAllPenjualansBySalesAndRangeDate(karyawan,
                 txtb_tanggalAwalPenjualan.getValue(), txtb_tanggalAkhirPenjualan.getValue());
-      } else if (karyawan.getJobType().getId() == 2) {
+      } else if (radioLaporanDivisi.isSelected()) {
         listPenjualan =
             getPenjualanService().getAllPenjualansByDivisiAndRangeDate(karyawan,
                 txtb_tanggalAwalPenjualan.getValue(), txtb_tanggalAkhirPenjualan.getValue());

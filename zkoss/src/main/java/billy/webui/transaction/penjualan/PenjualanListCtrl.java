@@ -56,6 +56,7 @@ public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Ser
   protected Listheader listheader_PenjualanList_Sales1; // autowired
   protected Listheader listheader_PenjualanList_Sales2; // autowired
   protected Listheader listheader_PenjualanList_Divisi; // autowired
+  protected Listheader listheader_PenjualanList_Mandiri; // autowired
   protected Listheader listheader_PenjualanList_LastUpdate; // autowired
   protected Listheader listheader_PenjualanList_UpdatedBy; // autowired
 
@@ -157,6 +158,10 @@ public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Ser
         true));
     listheader_PenjualanList_Divisi.setSortDescending(new FieldComparator("divisi.kodeKaryawan",
         false));
+
+    listheader_PenjualanList_Mandiri.setSortAscending(new FieldComparator("mandiri", true));
+    listheader_PenjualanList_Mandiri.setSortDescending(new FieldComparator("mandiri", false));
+
     listheader_PenjualanList_LastUpdate.setSortAscending(new FieldComparator("lastUpdate", true));
     listheader_PenjualanList_LastUpdate.setSortDescending(new FieldComparator("lastUpdate", false));
 

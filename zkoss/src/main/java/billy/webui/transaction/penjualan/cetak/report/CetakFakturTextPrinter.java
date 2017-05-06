@@ -94,7 +94,7 @@ public class CetakFakturTextPrinter extends Window implements Serializable {
 
       StringBuilder sb = new StringBuilder(penjualan.getAlamat());
       int i = 0;
-      while (i + 35 < sb.length() && (i = sb.lastIndexOf(" ", i + 35)) != -1) {
+      while (i + 45 < sb.length() && (i = sb.lastIndexOf(" ", i + 45)) != -1) {
         sb.replace(i, i + 1, "\n");
       }
       String[] alamat = sb.toString().split("\n");
@@ -167,21 +167,39 @@ public class CetakFakturTextPrinter extends Window implements Serializable {
       sb.append(faktur.getNomorFaktur());
       addNewLine(sb, 3);
       addWhiteSpace(sb, 13);
-      int maxLengthNama = 41;
-      sb.append(faktur.getNamaPelanggan());
-      addWhiteSpace(sb, maxLengthNama - faktur.getNamaPelanggan().length());
-      sb.append(faktur.getKodeSales1());
+      int maxLengthNama = 37;
+      setAlignLeft(sb, maxLengthNama, faktur.getNamaPelanggan());
+      int maxLengthKodeSales = 8;
+      String kodeSales = faktur.getKodeSales1();
+      if (kodeSales.length() > maxLengthKodeSales) {
+        kodeSales.subSequence(0, maxLengthKodeSales).toString();
+      }
+      setAlignRight(sb, maxLengthKodeSales, kodeSales);
       addWhiteSpace(sb, 10);
-      sb.append(faktur.getKodeSales2());
+      String kodeSales2 = faktur.getKodeSales2();
+      if (kodeSales2.length() > maxLengthKodeSales) {
+        kodeSales2.subSequence(0, maxLengthKodeSales).toString();
+      }
+      setAlignLeft(sb, maxLengthKodeSales, kodeSales2);
 
       addNewLine(sb, 1);
-      int maxLengthTelepon = 36;
-      addWhiteSpace(sb, maxLengthTelepon - faktur.getTelepon().length());
-      sb.append(faktur.getTelepon());
-      addWhiteSpace(sb, 16);
-      sb.append(faktur.getNamaSales1());
-      addWhiteSpace(sb, 6);
-      sb.append(faktur.getNamaSales2());
+      addWhiteSpace(sb, 22);
+      int maxLengthTelepon = 27;
+      setAlignLeft(sb, maxLengthTelepon, faktur.getTelepon());
+
+      int maxLengthNamaSales = 14;
+      String namaSales = faktur.getNamaSales1();
+      if (namaSales.length() > maxLengthNamaSales) {
+        namaSales.subSequence(0, maxLengthNamaSales).toString();
+      }
+      setAlignRight(sb, maxLengthNamaSales, namaSales);
+      addWhiteSpace(sb, 2);
+      String namaSales2 = faktur.getNamaSales2();
+      if (namaSales2.length() > maxLengthNamaSales) {
+        namaSales2.subSequence(0, maxLengthNamaSales).toString();
+      }
+      setAlignLeft(sb, maxLengthNamaSales, namaSales2);
+
 
       addNewLine(sb, 1);
       addWhiteSpace(sb, 1);
@@ -238,5 +256,15 @@ public class CetakFakturTextPrinter extends Window implements Serializable {
     }
 
     return sb.toString();
+  }
+
+  private void setAlignLeft(StringBuffer sb, int width, String value) {
+    sb.append(value);
+    addWhiteSpace(sb, width - value.length());
+  }
+
+  private void setAlignRight(StringBuffer sb, int width, String value) {
+    addWhiteSpace(sb, width - value.length());
+    sb.append(value);
   }
 }

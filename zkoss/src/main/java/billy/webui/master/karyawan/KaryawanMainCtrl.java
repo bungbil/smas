@@ -339,8 +339,8 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
     /** !!! DO NOT BREAK THE TIERS !!! */
     // We don't create a new DomainObject() in the frontend.
     // We GET it from the backend.
-    final Karyawan anKaryawan = getKaryawanService().getNewKaryawan();
-
+    // final Karyawan anKaryawan = getKaryawanService().getNewKaryawan();
+    Karyawan anKaryawan = new Karyawan();
     // set the beans in the related databinded controllers
     getKaryawanDetailCtrl().setKaryawan(anKaryawan);
     getKaryawanDetailCtrl().setSelectedKaryawan(anKaryawan);
@@ -349,9 +349,15 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
     getKaryawanDetailCtrl().setSelectedKaryawan(getSelectedKaryawan());
     try {
       getKaryawanDetailCtrl().doRefresh();
+    } catch (Exception e) {
+      // do nothing
+      logger.info("masuk exception refresh: " + e.getMessage());
+    }
+    try {
       getKaryawanDetailCtrl().getBinder().loadAll();
     } catch (Exception e) {
       // do nothing
+      logger.info("masuk exception binder: " + e.getMessage());
     }
 
     // set editable Mode
@@ -371,11 +377,13 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
     getKaryawanDetailCtrl().ktpImage.setSrc("/images/icon-no-image.png");
     getKaryawanDetailCtrl().profileImage.setSrc("/images/icon-no-image.png");
 
+
     // set the ButtonStatus to New-Mode
     btnCtrlKaryawan.setInitNew();
 
     tabKaryawanDetail.setSelected(true);
     // set focus
+
     getKaryawanDetailCtrl().txtb_KodeKaryawan.focus();
 
   }
@@ -435,9 +443,14 @@ public class KaryawanMainCtrl extends GFCBaseCtrl implements Serializable {
     getKaryawanDetailCtrl().getBinder().saveAll();
 
     Karyawan karyawanCheckKode = null;
-    karyawanCheckKode =
-        getKaryawanService().getKaryawanByKodeKaryawan(
-            getKaryawanDetailCtrl().getKaryawan().getKodeKaryawan());
+
+    String kodeKaryawanNow = "";
+    try {
+      kodeKaryawanNow = getKaryawanDetailCtrl().getKaryawan().getKodeKaryawan();
+    } catch (Exception e) {
+
+    }
+    karyawanCheckKode = getKaryawanService().getKaryawanByKodeKaryawan(kodeKaryawanNow);
 
     if (karyawanCheckKode != null) {
       if (karyawanCheckKode.getId() != getKaryawanDetailCtrl().getKaryawan().getId()) {

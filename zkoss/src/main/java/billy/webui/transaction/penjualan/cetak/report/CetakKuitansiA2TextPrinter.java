@@ -138,10 +138,11 @@ public class CetakKuitansiA2TextPrinter extends Window implements Serializable {
       kuitansi.setAlamat("");
       kuitansi.setAlamat2("");
       kuitansi.setAlamat3("");
+      kuitansi.setAlamat4("");
 
       StringBuilder sb = new StringBuilder(penjualan.getAlamat());
       int i = 0;
-      while (i + 35 < sb.length() && (i = sb.lastIndexOf(" ", i + 35)) != -1) {
+      while (i + 40 < sb.length() && (i = sb.lastIndexOf(" ", i + 40)) != -1) {
         sb.replace(i, i + 1, "\n");
       }
       String[] alamat = sb.toString().split("\n");
@@ -153,6 +154,8 @@ public class CetakKuitansiA2TextPrinter extends Window implements Serializable {
           kuitansi.setAlamat2(alamat[1]);
         } else if (k == 2) {
           kuitansi.setAlamat3(alamat[2]);
+        } else if (k == 3) {
+          kuitansi.setAlamat4(alamat[3]);
         }
       }
       kuitansi.setTelepon(penjualan.getTelepon());
@@ -214,100 +217,119 @@ public class CetakKuitansiA2TextPrinter extends Window implements Serializable {
 
     for (Kuitansi kuitansi : listKuitansi) {
       addNewLine(sb, 2);
-      addWhiteSpace(sb, 5);
+      addWhiteSpace(sb, 3);
       sb.append(kuitansi.getAlamatKantor());
       int maxLengthAlamatKantor = 60;
       addWhiteSpace(sb, maxLengthAlamatKantor - kuitansi.getAlamatKantor().length());
       sb.append(kuitansi.getMandiri());
+
       addNewLine(sb, 1);
-      addWhiteSpace(sb, 5);
+      addWhiteSpace(sb, 3);
       sb.append(kuitansi.getAlamatKantor2());
+
       addNewLine(sb, 1);
-      addWhiteSpace(sb, 52);
-      sb.append(kuitansi.getNamaSales1() + " / " + kuitansi.getNamaSales2());
+      int maxLengthSales = 75;
+      setAlignRight(sb, maxLengthSales, kuitansi.getNamaSales1() + " / " + kuitansi.getNamaSales2());
+
       addNewLine(sb, 2);
       addWhiteSpace(sb, 54);
       sb.append(kuitansi.getNomorKuitansi());
       addNewLine(sb, 4);
 
       int sizeItem = kuitansi.getListItemFaktur().size();
+      int maxLengthAlamat = 40;
+      int maxLengthBarang = 17;
+      int maxLengthKodeBarang = 8;
+
       addWhiteSpace(sb, 3);
       sb.append(kuitansi.getNamaPelanggan());
-      int maxLengthNama = 40;
-      addWhiteSpace(sb, maxLengthNama - kuitansi.getNamaPelanggan().length());
+      addWhiteSpace(sb, maxLengthAlamat - kuitansi.getNamaPelanggan().length());
       if (sizeItem >= 1) {
         ItemFaktur item = kuitansi.getListItemFaktur().get(0);
-        setAlignRight(sb, 7, item.getKodeBarang());
+        setAlignRight(sb, maxLengthKodeBarang, item.getKodeBarang());
         addWhiteSpace(sb, 1);
         String namaBarang = item.getNamaBarang();
-        if (namaBarang.length() > 20) {
-          namaBarang.subSequence(0, 20).toString();
+        if (namaBarang.length() > maxLengthBarang) {
+          namaBarang.subSequence(0, maxLengthBarang).toString();
         }
-        sb.append(namaBarang);
-        int maxLengthBarang = 20;
-        addWhiteSpace(sb, maxLengthBarang - item.getNamaBarang().length());
+        setAlignLeft(sb, maxLengthBarang, namaBarang);
+        addWhiteSpace(sb, 1);
         sb.append(item.getQty());
       }
+
       addNewLine(sb, 1);
       addWhiteSpace(sb, 3);
       sb.append(kuitansi.getAlamat());
-      int maxLengthAlamat = 40;
       addWhiteSpace(sb, maxLengthAlamat - kuitansi.getAlamat().length());
       if (sizeItem >= 2) {
         ItemFaktur item = kuitansi.getListItemFaktur().get(1);
-
-        setAlignRight(sb, 7, item.getKodeBarang());
+        setAlignRight(sb, maxLengthKodeBarang, item.getKodeBarang());
         addWhiteSpace(sb, 1);
         String namaBarang = item.getNamaBarang();
-        if (namaBarang.length() > 20) {
-          namaBarang.subSequence(0, 20).toString();
+        if (namaBarang.length() > maxLengthBarang) {
+          namaBarang.subSequence(0, maxLengthBarang).toString();
         }
-        sb.append(namaBarang);
-        int maxLengthBarang = 20;
-        addWhiteSpace(sb, maxLengthBarang - item.getNamaBarang().length());
+        setAlignLeft(sb, maxLengthBarang, namaBarang);
+        addWhiteSpace(sb, 1);
         sb.append(item.getQty());
       }
+
       addNewLine(sb, 1);
       addWhiteSpace(sb, 3);
       sb.append(kuitansi.getAlamat2());
-      int maxLengthAlamat2 = 40;
-      addWhiteSpace(sb, maxLengthAlamat2 - kuitansi.getAlamat2().length());
+      addWhiteSpace(sb, maxLengthAlamat - kuitansi.getAlamat2().length());
       if (sizeItem >= 3) {
         ItemFaktur item = kuitansi.getListItemFaktur().get(2);
-        setAlignRight(sb, 7, item.getKodeBarang());
+        setAlignRight(sb, maxLengthKodeBarang, item.getKodeBarang());
         addWhiteSpace(sb, 1);
         String namaBarang = item.getNamaBarang();
-        if (namaBarang.length() > 20) {
-          namaBarang.subSequence(0, 20).toString();
+        if (namaBarang.length() > maxLengthBarang) {
+          namaBarang.subSequence(0, maxLengthBarang).toString();
         }
-        sb.append(namaBarang);
-        int maxLengthBarang = 20;
-        addWhiteSpace(sb, maxLengthBarang - item.getNamaBarang().length());
-        sb.append(item.getQty());
-      }
-      addNewLine(sb, 1);
-      addWhiteSpace(sb, 3);
-      sb.append(kuitansi.getAlamat3());
-      int maxLengthAlamat3 = 40;
-      addWhiteSpace(sb, maxLengthAlamat3 - kuitansi.getAlamat3().length());
-      if (sizeItem >= 4) {
-        ItemFaktur item = kuitansi.getListItemFaktur().get(3);
-        setAlignRight(sb, 7, item.getKodeBarang());
+        setAlignLeft(sb, maxLengthBarang, namaBarang);
         addWhiteSpace(sb, 1);
-        String namaBarang = item.getNamaBarang();
-        if (namaBarang.length() > 20) {
-          namaBarang.subSequence(0, 20).toString();
-        }
-        sb.append(namaBarang);
-        int maxLengthBarang = 20;
-        addWhiteSpace(sb, maxLengthBarang - item.getNamaBarang().length());
         sb.append(item.getQty());
       }
 
       addNewLine(sb, 1);
-      // addWhiteSpace(sb, 5);
-      // sb.append("(" + kuitansi.getNamaKolektor() + ")");
-      addNewLine(sb, 3);
+      addWhiteSpace(sb, 3);
+      sb.append(kuitansi.getAlamat3());
+      addWhiteSpace(sb, maxLengthAlamat - kuitansi.getAlamat3().length());
+      if (sizeItem >= 4) {
+        ItemFaktur item = kuitansi.getListItemFaktur().get(3);
+        setAlignRight(sb, maxLengthKodeBarang, item.getKodeBarang());
+        addWhiteSpace(sb, 1);
+        String namaBarang = item.getNamaBarang();
+        if (namaBarang.length() > maxLengthBarang) {
+          namaBarang.subSequence(0, maxLengthBarang).toString();
+        }
+        setAlignLeft(sb, maxLengthBarang, namaBarang);
+        addWhiteSpace(sb, 1);
+        sb.append(item.getQty());
+      }
+
+      addNewLine(sb, 1);
+      addWhiteSpace(sb, 3);
+      sb.append(kuitansi.getAlamat4());
+      addWhiteSpace(sb, maxLengthAlamat - kuitansi.getAlamat4().length());
+      if (sizeItem >= 5) {
+        ItemFaktur item = kuitansi.getListItemFaktur().get(4);
+        setAlignRight(sb, maxLengthKodeBarang, item.getKodeBarang());
+        addWhiteSpace(sb, 1);
+        String namaBarang = item.getNamaBarang();
+        if (namaBarang.length() > maxLengthBarang) {
+          namaBarang.subSequence(0, maxLengthBarang).toString();
+        }
+        setAlignLeft(sb, maxLengthBarang, namaBarang);
+        addWhiteSpace(sb, 1);
+        sb.append(item.getQty());
+      }
+
+
+      addNewLine(sb, 1);
+      addWhiteSpace(sb, 3);
+      sb.append(kuitansi.getTelepon());
+      addNewLine(sb, 2);
       addWhiteSpace(sb, 17);
       sb.append(kuitansi.getJumlahInWord());
       addNewLine(sb, 3);

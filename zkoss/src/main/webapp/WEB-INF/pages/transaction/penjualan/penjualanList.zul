@@ -41,19 +41,19 @@
 							label="Tgl Penjualan" />
 						<listheader id="listheader_PenjualanList_MetodePembayaran"
 							sclass="FDListBoxHeader1" 
-							sort="auto" width="10%"
+							sort="auto" width="6%"
 							label="Metode Pembayaran" />
 						<listheader id="listheader_PenjualanList_Total"
 							sclass="FDListBoxHeader1" 
-							sort="auto" width="9%"
+							sort="auto" width="7%"
 							label="Total" />						
 						<listheader id="listheader_PenjualanList_Piutang"
 							sclass="FDListBoxHeader1" 
-							sort="auto" width="9%"
+							sort="auto" width="7%"
 							label="Piutang" />
 						<listheader id="listheader_PenjualanList_Status"
 							sclass="FDListBoxHeader1" 
-							sort="auto" width="7%"
+							sort="auto" width="6%"
 							label="Status" />
 						<listheader id="listheader_PenjualanList_NamaPelanggan"
 							sclass="FDListBoxHeader1" 
@@ -75,9 +75,13 @@
 							sclass="FDListBoxHeader1" 
 							sort="auto" width="5%"
 							label="Kode Divisi" />
-						<listheader id="listheader_PenjualanList_LastUpdate"
+						<listheader id="listheader_PenjualanList_Mandiri"
 							sclass="FDListBoxHeader1" 
 							sort="auto" width="5%"
+							label="Mandiri" />
+						<listheader id="listheader_PenjualanList_LastUpdate"
+							sclass="FDListBoxHeader1" 
+							sort="auto" width="9%"
 							label="${c:l('common.lastUpdate')}" />
 						<listheader id="listheader_PenjualanList_UpdatedBy"
 							sclass="FDListBoxHeader1" 
@@ -109,6 +113,8 @@
 						<listcell label="@{penjualan.sales2.namaPanggilan}"
 							style="padding-left: 5px" />
 						<listcell label="@{penjualan.divisi.kodeKaryawan}"
+							style="padding-left: 5px" />
+						<listcell label="@{penjualan.mandiri}"
 							style="padding-left: 5px" />																					
 						<listcell label="@{penjualan.lastUpdate}"
 							style="padding-left: 5px" />	
