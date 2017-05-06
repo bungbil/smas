@@ -417,35 +417,6 @@ deskripsi_status
 
 
 
-/*==============================================================*/
-/* Table: Kategori Barang                                       */
-/*==============================================================*/
-/*
-DROP TABLE IF EXISTS kartegori_barang cascade;
-DROP SEQUENCE IF EXISTS kategori_barang_seq;
-
-CREATE TABLE kategori_barang (
-   kategori_barang_id           INT8                not null,
-   kode_kategori_barang         varchar(50)         not null,
-   deskripsi_kategori_barang    varchar(254)        null,   
-   last_update       		  timestamp,          
-   updated_by       		  varchar(50)         null,
-   version                    int4                not null default 0,
-   constraint pk_kategori_barang primary key (kategori_barang_id)
-)
-without oids;
-ALTER TABLE kategori_barang owner to smas;
-
-CREATE SEQUENCE kategori_barang_seq START 100;
-ALTER SEQUENCE kategori_barang_seq OWNER TO smas;
-
-CREATE UNIQUE INDEX ix_kategori_barang_id on kategori_barang using btree (
-kategori_barang_id
-);
-CREATE UNIQUE INDEX ix_kode_kategori_barang on kategori_barang (
-kode_kategori_barang
-);
-*/
 
 
 /*==============================================================*/

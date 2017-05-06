@@ -1,4 +1,4 @@
-package billy.webui.master.kategoribarang;
+package billy.webui.master.mandiri;
 
 import java.io.Serializable;
 
@@ -10,39 +10,38 @@ import org.zkoss.zkplus.databind.AnnotateDataBinder;
 import org.zkoss.zkplus.databind.BindingListModelList;
 import org.zkoss.zul.Borderlayout;
 import org.zkoss.zul.Intbox;
-import org.zkoss.zul.Label;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
-import billy.backend.model.KategoriBarang;
-import billy.backend.service.KategoriBarangService;
+import billy.backend.model.Mandiri;
+import billy.backend.service.MandiriService;
 import de.forsthaus.UserWorkspace;
 import de.forsthaus.webui.util.GFCBaseCtrl;
 
-public class KategoriBarangDetailCtrl extends GFCBaseCtrl implements Serializable {
+public class MandiriDetailCtrl extends GFCBaseCtrl implements Serializable {
 
   private static final long serialVersionUID = -8352659530536077973L;
-  private static final Logger logger = Logger.getLogger(KategoriBarangDetailCtrl.class);
+  private static final Logger logger = Logger.getLogger(MandiriDetailCtrl.class);
 
-  protected Window windowKategoriBarangDetail; // autowired
+  protected Window windowMandiriDetail; // autowired
 
-  protected Borderlayout borderlayout_KategoriBarangDetail; // autowired
+  protected Borderlayout borderlayout_MandiriDetail; // autowired
 
-  protected Textbox txtb_KodeKategoriBarang; // autowired
-  protected Textbox txtb_DeskripsiKategoriBarang; // autowired
-  protected Label txtb_Status; // autowired
+  protected Textbox txtb_KodeMandiri; // autowired
+  protected Textbox txtb_DeskripsiMandiri; // autowired
+  // protected Label txtb_Status; // autowired
 
   // Databinding
   protected transient AnnotateDataBinder binder;
-  private KategoriBarangMainCtrl kategoriBarangMainCtrl;
+  private MandiriMainCtrl mandiriMainCtrl;
 
   // ServiceDAOs / Domain Classes
-  private transient KategoriBarangService kategoriBarangService;
+  private transient MandiriService mandiriService;
 
   /**
    * default constructor.<br>
    */
-  public KategoriBarangDetailCtrl() {
+  public MandiriDetailCtrl() {
     super();
   }
 
@@ -53,20 +52,20 @@ public class KategoriBarangDetailCtrl extends GFCBaseCtrl implements Serializabl
     this.self.setAttribute("controller", this, false);
 
     if (arg.containsKey("ModuleMainController")) {
-      setKategoriBarangMainCtrl((KategoriBarangMainCtrl) arg.get("ModuleMainController"));
+      setMandiriMainCtrl((MandiriMainCtrl) arg.get("ModuleMainController"));
 
       // SET THIS CONTROLLER TO THE module's Parent/MainController
-      getKategoriBarangMainCtrl().setKategoriBarangDetailCtrl(this);
+      getMandiriMainCtrl().setMandiriDetailCtrl(this);
 
       // Get the selected object.
       // Check if this Controller if created on first time. If so,
       // than the selectedXXXBean should be null
-      if (getKategoriBarangMainCtrl().getSelectedKategoriBarang() != null) {
-        setSelectedKategoriBarang(getKategoriBarangMainCtrl().getSelectedKategoriBarang());
+      if (getMandiriMainCtrl().getSelectedMandiri() != null) {
+        setSelectedMandiri(getMandiriMainCtrl().getSelectedMandiri());
       } else
-        setSelectedKategoriBarang(null);
+        setSelectedMandiri(null);
     } else {
-      setSelectedKategoriBarang(null);
+      setSelectedMandiri(null);
     }
 
   }
@@ -83,9 +82,9 @@ public class KategoriBarangDetailCtrl extends GFCBaseCtrl implements Serializabl
             .intValue();
     height = height - menuOffset;
     final int maxListBoxHeight = height - 152;
-    borderlayout_KategoriBarangDetail.setHeight(String.valueOf(maxListBoxHeight) + "px");
+    borderlayout_MandiriDetail.setHeight(String.valueOf(maxListBoxHeight) + "px");
 
-    windowKategoriBarangDetail.invalidate();
+    windowMandiriDetail.invalidate();
   }
 
   // +++++++++++++++++++++++++++++++++++++++++++++++++ //
@@ -97,8 +96,8 @@ public class KategoriBarangDetailCtrl extends GFCBaseCtrl implements Serializabl
   // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   public void doReadOnlyMode(boolean b) {
-    txtb_KodeKategoriBarang.setReadonly(b);
-    txtb_DeskripsiKategoriBarang.setReadonly(b);
+    txtb_KodeMandiri.setReadonly(b);
+    txtb_DeskripsiMandiri.setReadonly(b);
 
   }
 
@@ -111,27 +110,27 @@ public class KategoriBarangDetailCtrl extends GFCBaseCtrl implements Serializabl
   // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   /* Master BEANS */
-  public KategoriBarang getKategoriBarang() {
+  public Mandiri getMandiri() {
     // STORED IN THE module's MainController
-    return getKategoriBarangMainCtrl().getSelectedKategoriBarang();
+    return getMandiriMainCtrl().getSelectedMandiri();
   }
 
-  public KategoriBarangMainCtrl getKategoriBarangMainCtrl() {
-    return this.kategoriBarangMainCtrl;
+  public MandiriMainCtrl getMandiriMainCtrl() {
+    return this.mandiriMainCtrl;
   }
 
-  public BindingListModelList getKategoriBarangs() {
+  public BindingListModelList getMandiris() {
     // STORED IN THE module's MainController
-    return getKategoriBarangMainCtrl().getKategoriBarangs();
+    return getMandiriMainCtrl().getMandiris();
   }
 
-  public KategoriBarangService getKategoriBarangService() {
-    return this.kategoriBarangService;
+  public MandiriService getMandiriService() {
+    return this.mandiriService;
   }
 
-  public KategoriBarang getSelectedKategoriBarang() {
+  public Mandiri getSelectedMandiri() {
     // STORED IN THE module's MainController
-    return getKategoriBarangMainCtrl().getSelectedKategoriBarang();
+    return getMandiriMainCtrl().getSelectedMandiri();
   }
 
   /**
@@ -140,7 +139,7 @@ public class KategoriBarangDetailCtrl extends GFCBaseCtrl implements Serializabl
    * @param event
    * @throws Exception
    */
-  public void onCreate$windowKategoriBarangDetail(Event event) throws Exception {
+  public void onCreate$windowMandiriDetail(Event event) throws Exception {
     binder = (AnnotateDataBinder) event.getTarget().getAttribute("binder", true);
 
     binder.loadAll();
@@ -152,29 +151,29 @@ public class KategoriBarangDetailCtrl extends GFCBaseCtrl implements Serializabl
     this.binder = binder;
   }
 
-  public void setKategoriBarang(KategoriBarang anKategoriBarang) {
+  public void setMandiri(Mandiri anMandiri) {
     // STORED IN THE module's MainController
-    getKategoriBarangMainCtrl().setSelectedKategoriBarang(anKategoriBarang);
+    getMandiriMainCtrl().setSelectedMandiri(anMandiri);
   }
 
   /* CONTROLLERS */
-  public void setKategoriBarangMainCtrl(KategoriBarangMainCtrl kategoriBarangMainCtrl) {
-    this.kategoriBarangMainCtrl = kategoriBarangMainCtrl;
+  public void setMandiriMainCtrl(MandiriMainCtrl mandiriMainCtrl) {
+    this.mandiriMainCtrl = mandiriMainCtrl;
   }
 
-  public void setKategoriBarangs(BindingListModelList kategoriBarangs) {
+  public void setMandiris(BindingListModelList mandiris) {
     // STORED IN THE module's MainController
-    getKategoriBarangMainCtrl().setKategoriBarangs(kategoriBarangs);
+    getMandiriMainCtrl().setMandiris(mandiris);
   }
 
   /* SERVICES */
-  public void setKategoriBarangService(KategoriBarangService kategoriBarangService) {
-    this.kategoriBarangService = kategoriBarangService;
+  public void setMandiriService(MandiriService mandiriService) {
+    this.mandiriService = mandiriService;
   }
 
-  public void setSelectedKategoriBarang(KategoriBarang selectedKategoriBarang) {
+  public void setSelectedMandiri(Mandiri selectedMandiri) {
     // STORED IN THE module's MainController
-    getKategoriBarangMainCtrl().setSelectedKategoriBarang(selectedKategoriBarang);
+    getMandiriMainCtrl().setSelectedMandiri(selectedMandiri);
   }
 
   /* COMPONENTS and OTHERS */

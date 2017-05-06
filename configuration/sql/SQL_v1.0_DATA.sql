@@ -388,41 +388,6 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 
 
 
-/* KATEGORI BARANG */
-/* --> Page KategoriBarang 
-INSERT INTO SEC_RIGHT (RIG_ID, RIG_TYPE, RIG_NAME, VERSION) values
-(131, 0, 'windowKategoriBarangList', 0),
-(132, 0, 'windowKategoriBarangDetail', 0),*/
-/* window_KategoriBarangList Buttons
-(133, 6, 'button_KategoriBarangList_SearchName', 0),*/
-/* window_KategoriBarangDialog BUTTONS 
-(134, 6, 'button_KategoriBarangMain_btnNew', 0),
-(135, 6, 'button_KategoriBarangMain_btnEdit', 0),
-(136, 6, 'button_KategoriBarangMain_btnDelete', 0),
-(137, 6, 'button_KategoriBarangMain_btnSave', 0),
-(138, 6, 'button_KategoriBarangMain_btnClose', 0),*/
-/* KategoriBarang navigation buttons 
-(139, 6, 'button_KategoriBarangMain_btnCancel', 0),
-(140, 6, 'button_KategoriBarangMain_btnFirst', 0),
-(141, 6, 'button_KategoriBarangMain_btnPrevious', 0),
-(142, 6, 'button_KategoriBarangMain_btnNext', 0),
-(143, 6, 'button_KategoriBarangMain_btnLast', 0);
-
-INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
-(131, 1, 131, 0),
-(132, 1, 132, 0),
-(133, 1, 133, 0),
-(134, 1, 134, 0),
-(135, 1, 135, 0),
-(136, 1, 136, 0),
-(137, 1, 137, 0),
-(138, 1, 138, 0),
-(139, 1, 139, 0),
-(140, 1, 140, 0),
-(141, 1, 141, 0),
-(142, 1, 142, 0),
-(143, 1, 143, 0);*/
-
 
 
 /* JOB TYPE */

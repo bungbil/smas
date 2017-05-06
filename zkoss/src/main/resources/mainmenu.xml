@@ -95,10 +95,10 @@
 		<menuItem id="menu_Item_Karyawan" zulNavigation="/WEB-INF/pages/master/karyawan/karyawanMain.zul"
 			iconName="/images/icons/index_16x16.gif" rightName="menuItem_Master_Karyawan" />
 		<menuItem id="menu_Item_Barang" zulNavigation="/WEB-INF/pages/master/barang/barangMain.zul"
-			iconName="/images/icons/index_16x16.gif" />
-		<!-- <menuItem id="menu_Item_KategoriBarang" zulNavigation="/WEB-INF/pages/master/kategoribarang/kategoriBarangMain.zul"
-			iconName="/images/icons/index_16x16.gif" rightName="menuItem_Master_KategoriBarang"  />
-		<menuItem id="menu_Item_SatuanBarang" zulNavigation="/WEB-INF/pages/master/satuanbarang/satuanBarangMain.zul"
+			iconName="/images/icons/index_16x16.gif" rightName="menuItem_Master_Barang" />
+		<menuItem id="menu_Item_Mandiri" zulNavigation="/WEB-INF/pages/master/mandiri/mandiriMain.zul"
+			iconName="/images/icons/index_16x16.gif" rightName="menuItem_Master_Mandiri"  />
+		<!-- <menuItem id="menu_Item_SatuanBarang" zulNavigation="/WEB-INF/pages/master/satuanbarang/satuanBarangMain.zul"
 			iconName="/images/icons/index_16x16.gif" rightName="menuItem_Master_SatuanBarang" /> -->			
 		<menuItem id="menu_Item_Wilayah" zulNavigation="/WEB-INF/pages/master/wilayah/wilayahMain.zul"
 			iconName="/images/icons/index_16x16.gif" rightName="menuItem_Master_Wilayah" />					

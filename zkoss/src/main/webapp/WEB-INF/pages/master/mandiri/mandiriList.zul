@@ -5,60 +5,60 @@
 <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 <!-- Namespace dependent DataBinding Initiator.          -->
 <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./windowKategoriBarangList" ?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./windowMandiriList" ?>
 
 <zk xmlns="http://www.zkoss.org/2005/zul"
 	xmlns:h="http://www.w3.org/1999/xhtml"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
-	<window id="windowKategoriBarangList" apply="${kategoriBarangListCtrl}"
+	<window id="windowMandiriList" apply="${mandiriListCtrl}"
 		border="none" width="100%">
 
-		<borderlayout id="borderLayout_kategoriBarangList">
+		<borderlayout id="borderLayout_mandiriList">
 
 			<!-- PAGING COMPONENT -->
 			<north border="none" height="26px">
-				<paging id="paging_KategoriBarangList" />
+				<paging id="paging_MandiriList" />
 			</north>
 
 			<center border="none">
 
-				<listbox id="listBoxKategoriBarang"
+				<listbox id="listBoxMandiri"
 					style="border-top-width: 0px; border-left-width: 0px; border-right-width: 0px; border-bottom-width: 1px;"
-					model="@{controller.kategoriBarangs}"
-					selectedItem="@{controller.selectedKategoriBarang}" vflex="true"
+					model="@{controller.mandiris}"
+					selectedItem="@{controller.selectedMandiri}" vflex="true"
 					tooltiptext="${c:l('listbox.tooltiptext')}" width="100%"
 					height="100%" multiple="false">
 					<listhead sizable="true">
-						<listheader id="listheader_KategoriBarangList_Kode"
+						<listheader id="listheader_MandiriList_Kode"
 							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
-							label="${c:l('listheader_KategoriBarangList_Kode.label')}" sort="auto"
+							label="${c:l('listheader_MandiriList_Kode.label')}" sort="auto"
 							width="30%" />
-						<listheader id="listheader_KategoriBarangList_Deskripsi"
+						<listheader id="listheader_MandiriList_Deskripsi"
 							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
-							label="${c:l('listheader_KategoriBarangList_Deskripsi.label')}" sort="auto"
+							label="${c:l('listheader_MandiriList_Deskripsi.label')}" sort="auto"
 							width="30%" />						
-						<listheader id="listheader_KategoriBarangList_LastUpdate"
+						<listheader id="listheader_MandiriList_LastUpdate"
 							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
 							label="${c:l('common.lastUpdate')}" sort="auto"
 							width="20%" />
-						<listheader id="listheader_KategoriBarangList_UpdatedBy"
+						<listheader id="listheader_MandiriList_UpdatedBy"
 							sclass="FDListBoxHeader1" image="/images/icons/create_doc.gif"
 							label="${c:l('common.updatedBy')}" sort="auto"
 							width="20%" />
 					</listhead>
 
-					<listitem self="@{each='kategoriBarang'}" value="@{kategoriBarang}"
-						forward="onDoubleClick=onDoubleClickedKategoriBarangItem">
+					<listitem self="@{each='mandiri'}" value="@{mandiri}"
+						forward="onDoubleClick=onDoubleClickedMandiriItem">
 
-						<listcell label="@{kategoriBarang.kodeKategoriBarang}"
+						<listcell label="@{mandiri.kodeMandiri}"
 							style="padding-left: 5px" />
-						<listcell label="@{kategoriBarang.deskripsiKategoriBarang}"
+						<listcell label="@{mandiri.deskripsiMandiri}"
 							style="padding-left: 5px" />						
-						<listcell label="@{kategoriBarang.lastUpdate}"
+						<listcell label="@{mandiri.lastUpdate}"
 							style="padding-left: 5px" />	
-						<listcell label="@{kategoriBarang.updatedBy}"
+						<listcell label="@{mandiri.updatedBy}"
 							style="padding-left: 5px" />							
 					</listitem>
 				</listbox>

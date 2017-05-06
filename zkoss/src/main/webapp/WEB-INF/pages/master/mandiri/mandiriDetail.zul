@@ -5,15 +5,15 @@
 <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 <!-- Namespace dependent DataBinding Initiator.          -->
 <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./windowKategoriBarangDetail" ?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./windowMandiriDetail" ?>
 
 <zk xmlns="http://www.zkoss.org/2005/zul" xmlns:h="http://www.w3.org/1999/xhtml"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
-	<window id="windowKategoriBarangDetail" apply="${kategoriBarangDetailCtrl}" border="none" width="100%">
+	<window id="windowMandiriDetail" apply="${mandiriDetailCtrl}" border="none" width="100%">
 
-		<borderlayout id="borderlayout_KategoriBarangDetail">
+		<borderlayout id="borderlayout_MandiriDetail">
 			<center border="none" autoscroll="true">
 
 				<hbox align="stretch" pack="stretch" sclass="FDCenterNoBorder" width="100%">
@@ -39,10 +39,10 @@
 												<rows>
 													<row>
 														<hbox>
-															<label value="${c:l('label_KategoriBarangDialog_kodeKategoriBarang.value')}" />
+															<label value="${c:l('label_MandiriDialog_kodeMandiri.value')}" />
 															<label value="*" style="color:red;font-size:10px" />
 														</hbox>
-														<textbox id="txtb_KodeKategoriBarang" value="@{controller.kategoriBarang.kodeKategoriBarang}"
+														<textbox id="txtb_KodeMandiri" value="@{controller.mandiri.kodeMandiri}"
 															readonly="true" constraint="no empty" maxlength="50" width="300px" />
 													</row>
 													<row>
@@ -52,11 +52,11 @@
 													<row>
 														<hbox>
 															<label
-																value="${c:l('label_KategoriBarangDialog_deskripsiKategoriBarang.value')}" />
+																value="${c:l('label_MandiriDialog_deskripsiMandiri.value')}" />
 															<label value="*" style="color:red;font-size:10px" />
 														</hbox>
-														<textbox id="txtb_DeskripsiKategoriBarang"
-															value="@{controller.kategoriBarang.deskripsiKategoriBarang}" readonly="true" constraint="no empty" maxlength="254"
+														<textbox id="txtb_DeskripsiMandiri"
+															value="@{controller.mandiri.deskripsiMandiri}" readonly="true" constraint="no empty" maxlength="254"
 															hflex="1" />
 													</row>																										
 												</rows>

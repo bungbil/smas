@@ -4,33 +4,33 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-public class KategoriBarang implements java.io.Serializable, Entity {
+public class Mandiri implements java.io.Serializable, Entity {
 
   private static final long serialVersionUID = 1L;
 
   private long id = Long.MIN_VALUE + 1;
   private int version;
-  private String kodeKategoriBarang;
-  private String deskripsiKategoriBarang;
+  private String kodeMandiri;
+  private String deskripsiMandiri;
   private Date lastUpdate;
   private String updatedBy;
 
 
-  public KategoriBarang() {}
+  public Mandiri() {}
 
-  public KategoriBarang(long id, String kodeKategoriBarang) {
+  public Mandiri(long id, String kodeMandiri) {
     this.setId(id);
-    this.kodeKategoriBarang = kodeKategoriBarang;
+    this.kodeMandiri = kodeMandiri;
   }
 
-  public KategoriBarang(long id, String kodeKategoriBarang, String deskripsiKategoriBarang) {
+  public Mandiri(long id, String kodeMandiri, String deskripsiMandiri) {
     this.setId(id);
-    this.kodeKategoriBarang = kodeKategoriBarang;
-    this.deskripsiKategoriBarang = deskripsiKategoriBarang;
+    this.kodeMandiri = kodeMandiri;
+    this.deskripsiMandiri = deskripsiMandiri;
   }
 
-  public boolean equals(KategoriBarang kategoriBarang) {
-    return getId() == kategoriBarang.getId();
+  public boolean equals(Mandiri mandiri) {
+    return getId() == mandiri.getId();
   }
 
   @Override
@@ -39,16 +39,16 @@ public class KategoriBarang implements java.io.Serializable, Entity {
       return true;
     }
 
-    if (obj instanceof KategoriBarang) {
-      KategoriBarang kategoriBarang = (KategoriBarang) obj;
-      return equals(kategoriBarang);
+    if (obj instanceof Mandiri) {
+      Mandiri mandiri = (Mandiri) obj;
+      return equals(mandiri);
     }
 
     return false;
   }
 
-  public String getDeskripsiKategoriBarang() {
-    return deskripsiKategoriBarang;
+  public String getDeskripsiMandiri() {
+    return deskripsiMandiri;
   }
 
   @Override
@@ -56,8 +56,8 @@ public class KategoriBarang implements java.io.Serializable, Entity {
     return id;
   }
 
-  public String getKodeKategoriBarang() {
-    return kodeKategoriBarang;
+  public String getKodeMandiri() {
+    return kodeMandiri;
   }
 
   public Date getLastUpdate() {
@@ -82,8 +82,8 @@ public class KategoriBarang implements java.io.Serializable, Entity {
     return (getId() == Long.MIN_VALUE + 1);
   }
 
-  public void setDeskripsiKategoriBarang(String deskripsiKategoriBarang) {
-    this.deskripsiKategoriBarang = deskripsiKategoriBarang;
+  public void setDeskripsiMandiri(String deskripsiMandiri) {
+    this.deskripsiMandiri = deskripsiMandiri;
   }
 
   @Override
@@ -91,8 +91,8 @@ public class KategoriBarang implements java.io.Serializable, Entity {
     this.id = id;
   }
 
-  public void setKodeKategoriBarang(String kodeKategoriBarang) {
-    this.kodeKategoriBarang = kodeKategoriBarang;
+  public void setKodeMandiri(String kodeMandiri) {
+    this.kodeMandiri = kodeMandiri;
   }
 
   public void setLastUpdate(Date lastUpdate) {

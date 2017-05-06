@@ -4,22 +4,22 @@
 
 <hibernate-mapping>
 
-	<class name="billy.backend.model.KategoriBarang" table="kategori_barang">
+	<class name="billy.backend.model.Mandiri" table="mandiri">
 
 		<id name="id" type="long">
-			<column name="kategori_barang_id" />
+			<column name="mandiri_id" />
 			<generator class="sequence">
-				<param name="sequence">kategori_barang_seq</param>
+				<param name="sequence">mandiri_seq</param>
 			</generator>
 		</id>
 
 		<version name="version" column="VERSION" type="integer" />
 
-		<property name="kodeKategoriBarang" type="string">
-			<column name="kode_kategori_barang" length="50" not-null="true" unique="true" />
+		<property name="kodeMandiri" type="string">
+			<column name="kode_mandiri" length="50" not-null="true" unique="true" />
 		</property>
-		<property name="deskripsiKategoriBarang" type="string">
-			<column name="deskripsi_kategori_barang" length="254" />
+		<property name="deskripsiMandiri" type="string">
+			<column name="deskripsi_mandiri" length="254" />
 		</property>			
 		<property name="lastUpdate" type="timestamp">
 			<column name="last_update" length="29" />

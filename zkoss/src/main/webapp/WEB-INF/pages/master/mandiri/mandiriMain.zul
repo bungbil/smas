@@ -8,7 +8,7 @@
 	xmlns:w="http://www.zkoss.org/2005/zk/client"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
-	<window id="windowKategoriBarangMain" apply="${kategoriBarangMainCtrl}"
+	<window id="windowMandiriMain" apply="${mandiriMainCtrl}"
 		border="none" width="100%">
 
 		<div sclass="z-toolbar" style="padding:0">
@@ -28,17 +28,17 @@
 					style="float:left; border-style: none;">
 					<hbox align="center" style="padding: 2px">
 						<space />
-						<checkbox id="checkbox_KategoriBarangList_ShowAll"
+						<checkbox id="checkbox_MandiriList_ShowAll"
 							checked="true"
 							label="${c:l('common.showAll')}" />
 						<space />
 
-						<label value="${c:l('label_KategoriBarangList_Name')}"
+						<label value="${c:l('label_MandiriList_Name')}"
 							style="padding-right: 3px" />
-						<textbox id="txtb_KategoriBarang_Name" width="100px" />
-						<button id="button_KategoriBarangList_SearchName"
+						<textbox id="txtb_Mandiri_Name" width="100px" />
+						<button id="button_MandiriList_SearchName"
 							sclass="oT_ButtonWithIcon" image="/images/icons/search.gif"
-							tooltiptext="${c:l('button_KategoriBarangList_SearchName.tooltiptext')}" />												
+							tooltiptext="${c:l('button_MandiriList_SearchName.tooltiptext')}" />												
 					</hbox>
 				</toolbar>
 				
@@ -69,21 +69,21 @@
 		</div>
 
 
-		<tabbox id="tabbox_KategoriBarangMain">
+		<tabbox id="tabbox_MandiriMain">
 			<tabs>
-				<tab id="tabKategoriBarangList" label="${c:l('common.List')}"
+				<tab id="tabMandiriList" label="${c:l('common.List')}"
 					image="/images/icons/properties.gif" />
-				<tab id="tabKategoriBarangDetail"
+				<tab id="tabMandiriDetail"
 					label="${c:l('common.Details')}" image="/images/icons/table.gif" />
 			</tabs>
 
 			<tabpanels>
 				<!-- TabPanel LIST / LISTE -->
-				<tabpanel id="tabPanelKategoriBarangList" height="100%"
+				<tabpanel id="tabPanelMandiriList" height="100%"
 					style="border: none; padding: 0px; " />
 
 				<!-- TabPanel DETAILS / DETAILS -->
-				<tabpanel id="tabPanelKategoriBarangDetail" height="100%"
+				<tabpanel id="tabPanelMandiriDetail" height="100%"
 					style="border: none; padding: 0px; " />
 			</tabpanels>
 		</tabbox>
