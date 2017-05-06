@@ -5,7 +5,9 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -13,6 +15,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.EventQueues;
@@ -32,12 +35,14 @@ import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 import billy.backend.model.Karyawan;
+import billy.backend.model.Mandiri;
 import billy.backend.model.Penjualan;
 import billy.backend.model.PenjualanDetail;
 import billy.backend.model.Status;
 import billy.backend.model.Wilayah;
 import billy.backend.service.PenjualanService;
 import billy.backend.service.PiutangService;
+import billy.webui.transaction.penjualan.report.PenjualanListDJReport;
 
 import com.googlecode.genericdao.search.Filter;
 
@@ -441,6 +446,13 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
         getPenjualanDetailCtrl().getPenjualan().setWilayah(wilayah);
       }
 
+      Listitem itemMandiri = getPenjualanDetailCtrl().lbox_Mandiri.getSelectedItem();
+      if (itemMandiri != null) {
+        ListModelList lml1 = (ListModelList) getPenjualanDetailCtrl().lbox_Mandiri.getListModel();
+        Mandiri mandiri = (Mandiri) lml1.get(item.getIndex());
+        getPenjualanDetailCtrl().getPenjualan().setMandiriId(mandiri);
+      }
+
       /*
        * Listitem itemStatus = getPenjualanDetailCtrl().lbox_Status.getSelectedItem(); if
        * (itemStatus != null) { ListModelList lml1 = (ListModelList)
@@ -834,6 +846,38 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
     doSkip(event);
   }
 
+  /* COMPONENTS and OTHERS */
+  /**
+   * When the "print" button is clicked.<br>
+   * 
+   * @param event
+   * @throws InterruptedException
+   */
+  public void onClick$btnPrint(Event event) throws InterruptedException {
+    final Window win = (Window) Path.getComponent("/outerIndexWindow");
+
+    List<Penjualan> listPenjualan = new ArrayList<Penjualan>();
+    ListModelList lml1 =
+        (ListModelList) getPenjualanListCtrl().getListBoxPenjualan().getListModel();
+    int size = lml1.getSize();
+    for (int i = 0; i < size; i++) {
+      Penjualan penjualan = (Penjualan) lml1.get(i);
+      listPenjualan.add(penjualan);
+    }
+
+    if (listPenjualan.size() > 0) {
+      new PenjualanListDJReport(win, tb_Search_No_Faktur.getValue(),
+          tb_Search_Nama_Pelanggan.getValue(), tb_Search_Alamat.getValue(),
+          tb_Search_Kode_Divisi.getValue(), tb_Search_Tgl_Penjualan_Awal.getValue(),
+          tb_Search_Tgl_Penjualan_Akhir.getValue(), listPenjualan);
+    }
+
+  }
+
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+
   /**
    * when the "refresh" button is clicked. <br>
    * <br>
@@ -844,10 +888,6 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
   public void onClick$btnRefresh(Event event) throws InterruptedException {
     doResizeSelectedTab(event);
   }
-
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   public void onClick$btnSave(Event event) throws InterruptedException {
 
@@ -1151,7 +1191,4 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
   public void setSelectedPenjualan(Penjualan selectedPenjualan) {
     this.selectedPenjualan = selectedPenjualan;
   }
-
-  /* COMPONENTS and OTHERS */
-
 }

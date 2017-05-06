@@ -117,5 +117,16 @@
 			<column name="updated_by" length="50" />
 		</property>	
 		
+		<many-to-one name="mandiriId" class="billy.backend.model.Mandiri"
+			fetch="select" lazy="false">
+			<column name="mandiri_id" not-null="false" />
+		</many-to-one>
+		<property name="alamat2" type="string">
+			<column name="alamat2" length="255" />
+		</property>
+		<property name="alamat3" type="string">
+			<column name="alamat3" length="255" />
+		</property>
+		
 	</class>
 </hibernate-mapping>

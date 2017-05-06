@@ -53,10 +53,15 @@
 															 
 													</row>
 													<row>
-														<label value="Mandiri" />															
-														<textbox id="txtb_Mandiri" value="@{controller.penjualan.mandiri}"
-															readonly="true" maxlength="20" width="250px" />
-														<label />
+														<label value="Mandiri" />	
+														<hbox>														
+															<textbox id="txtb_Mandiri" value="@{controller.penjualan.mandiri}"
+																readonly="true" maxlength="20" width="100px" />
+															<listbox id="lbox_Mandiri" mold="select"  disabled="true"
+																multiple="false" rows="1" width="150px">															
+															</listbox>														
+														</hbox>
+														<label />	
 														<label value="Wilayah" />																													
 														<hbox>
 															<textbox id="txtb_KodeWilayah" value="@{controller.penjualan.wilayah.kodeWilayah}"
@@ -106,7 +111,7 @@
 														<datebox id="txtb_RencanaKirim"	value="@{controller.penjualan.rencanaKirim}" 
 															format="dd/MM/yyyy" disabled="true" width="150px" constraint="no empty"/>				
 														<label />	
-																	<label id="label_Sales2" value="Sales 2" />
+														<label id="label_Sales2" value="Sales 2" />
 														<hbox>
 															<textbox id="txtb_KodeSales2" value="@{controller.penjualan.sales2.kodeKaryawan}"
 																readonly="true"  maxlength="50" width="100px" />
@@ -157,30 +162,34 @@
 									            </columns>
 									            <rows>
 													<row>
-														<hbox>
-															<label value="Nama Pelanggan" />															
-														</hbox>
+														<label value="Nama Pelanggan" />															
 														<textbox id="txtb_NamaPelanggan" value="@{controller.penjualan.namaPelanggan}"
 															readonly="true" constraint="no empty" maxlength="100" width="300px" />
 													</row>
 													<row>
-														<hbox>
-															<label value="Telepon Pelanggan" />															
-														</hbox>
+														<label value="Telepon Pelanggan" />															
 														<textbox id="txtb_Telepon" value="@{controller.penjualan.telepon}"
 															readonly="true" maxlength="100" width="300px" />
 													</row>
 													<row>
-														<hbox>
-															<label	value="Alamat Pelanggan" />															
-														</hbox>
+														<label	value="Alamat Pelanggan" />															
 														<textbox id="txtb_Alamat" value="@{controller.penjualan.alamat}" 
-															readonly="true" constraint="no empty" maxlength="500"	hflex="1" rows="1" />
-													</row>	
+															readonly="true" constraint="no empty" maxlength="80" width="600px" />
+													</row>
 													<row>
-														<hbox>
-															<label value="Remark" />															
-														</hbox>
+														<label	value="Kecamatan Kelurahan" />															
+														<textbox id="txtb_Alamat2" value="@{controller.penjualan.alamat2}" 
+															readonly="true" constraint="no empty" maxlength="40" width="600px"/>
+													</row>	
+										
+													<row>
+														<label	value="Kota" />															
+														<textbox id="txtb_Alamat3" value="@{controller.penjualan.alamat3}" 
+															readonly="true" constraint="no empty" maxlength="40" width="600px" />
+													</row>	
+											
+													<row>
+														<label value="Remark" />															
 														<textbox id="txtb_Remark" value="@{controller.penjualan.remark}"
 															readonly="true" maxlength="500" hflex="1" rows="1"  />
 													</row>

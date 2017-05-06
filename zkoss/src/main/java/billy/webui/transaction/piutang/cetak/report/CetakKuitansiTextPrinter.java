@@ -123,7 +123,7 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
         monthString = "0" + monthString;
       }
       kuitansi.setNomorKuitansi(piutang.getNoKuitansi());
-      kuitansi.setMandiri(piutang.getPenjualan().getMandiri());
+      kuitansi.setMandiri(piutang.getPenjualan().getMandiriId().getKodeMandiri());
       kuitansi.setNamaSales1(piutang.getPenjualan().getSales1().getNamaPanggilan() + "("
           + piutang.getPenjualan().getSales1().getSupervisorDivisi().getInisialDivisi() + ")");
       if (piutang.getPenjualan().getSales2() != null) {
@@ -137,8 +137,8 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
       kuitansi.setNamaPelanggan(piutang.getPenjualan().getNamaPelanggan());
       kuitansi.setAlamat("");
       kuitansi.setAlamat2("");
-      kuitansi.setAlamat3("");
-      kuitansi.setAlamat4("");
+      kuitansi.setAlamat3(piutang.getPenjualan().getAlamat2());
+      kuitansi.setAlamat4(piutang.getPenjualan().getAlamat3());
 
       StringBuilder sb = new StringBuilder(piutang.getPenjualan().getAlamat());
       int i = 0;
@@ -152,10 +152,6 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
           kuitansi.setAlamat(alamat[0]);
         } else if (k == 1) {
           kuitansi.setAlamat2(alamat[1]);
-        } else if (k == 2) {
-          kuitansi.setAlamat3(alamat[2]);
-        } else if (k == 3) {
-          kuitansi.setAlamat4(alamat[3]);
         }
       }
       String kekurangan = "";
@@ -166,7 +162,25 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
       tagihan = tagihan.add(piutang.getKekuranganBayar());
       kuitansi.setAngsuranKe(piutang.getPembayaranKe() + " " + kekurangan);
 
-      kuitansi.setJumlahInWord("# " + angkaToTerbilang(tagihan.longValue()) + " #");
+      String jumlahInWord = "# " + angkaToTerbilang(tagihan.longValue()) + " #";
+      kuitansi.setJumlahInWord("");
+      kuitansi.setJumlahInWord2("");
+
+      sb = new StringBuilder(jumlahInWord);
+      i = 0;
+      while (i + 60 < sb.length() && (i = sb.lastIndexOf(" ", i + 60)) != -1) {
+        sb.replace(i, i + 1, "\n");
+      }
+      String[] jumlahInWordStr = sb.toString().split("\n");
+      length = jumlahInWordStr.length;
+      for (int k = 0; k < length; k++) {
+        if (k == 0) {
+          kuitansi.setJumlahInWord(jumlahInWordStr[0]);
+        } else if (k == 1) {
+          kuitansi.setJumlahInWord2(jumlahInWordStr[1]);
+        }
+      }
+
       kuitansi.setJumlah(df.format(tagihan));
       int sisaBulan = piutang.getPenjualan().getIntervalKredit() - piutang.getPembayaranKe();
       BigDecimal sisaPiutang =
@@ -352,7 +366,10 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
       addNewLine(sb, 2);
       addWhiteSpace(sb, 17);
       sb.append(kuitansi.getJumlahInWord());
-      addNewLine(sb, 3);
+      addNewLine(sb, 1);
+      addWhiteSpace(sb, 17);
+      sb.append(kuitansi.getJumlahInWord2());
+      addNewLine(sb, 2);
       addWhiteSpace(sb, 13);
       sb.append(kuitansi.getJumlah());
       addWhiteSpace(sb, 16);
@@ -367,8 +384,7 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
       addWhiteSpace(sb, 6);
       sb.append(kuitansi.getNamaKolektor());
       int maxLengthKolektor = 40;
-      addWhiteSpace(sb, maxLengthKolektor - kuitansi.getNamaKolektor().length());
-      sb.append(kuitansi.getNamaSupervisor());
+      setAlignRight(sb, maxLengthKolektor, kuitansi.getNamaSupervisor());
       addNewLine(sb, 1);
       addWhiteSpace(sb, 9);
       sb.append(kuitansi.getKodeKolektor());

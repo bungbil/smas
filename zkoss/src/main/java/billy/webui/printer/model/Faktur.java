@@ -14,26 +14,29 @@ public class Faktur {
   private String intervalKredit;
   private String namaPelanggan;
   private String alamat;
+  private String alamat1;
   private String alamat2;
   private String alamat3;
   private String telepon;
+
   private String total;
+
   private String dp;
   private String tglPenjualan;
   private String namaSupervisor;
   private String namaPengirim;
-
-
   private List<ItemFaktur> listItemFaktur = new ArrayList<ItemFaktur>();
 
   public Faktur() {
 
   }
 
+
   public Faktur(String nomorFaktur, String kodeSales1, String namaSales1, String kodeSales2,
       String namaSales2, String intervalKredit, String namaPelanggan, String alamat,
-      String alamat2, String alamat3, String telepon, String total, String dp, String tglPenjualan,
-      String namaSupervisor, String namaPengirim, List<ItemFaktur> listItemFaktur) {
+      String alamat1, String alamat2, String alamat3, String telepon, String total, String dp,
+      String tglPenjualan, String namaSupervisor, String namaPengirim,
+      List<ItemFaktur> listItemFaktur) {
 
     this.nomorFaktur = nomorFaktur;
     this.kodeSales1 = kodeSales1;
@@ -43,6 +46,7 @@ public class Faktur {
     this.intervalKredit = intervalKredit;
     this.namaPelanggan = namaPelanggan;
     this.alamat = alamat;
+    this.alamat1 = alamat1;
     this.alamat2 = alamat2;
     this.alamat3 = alamat3;
     this.telepon = telepon;
@@ -54,10 +58,14 @@ public class Faktur {
     this.listItemFaktur = listItemFaktur;
   }
 
-
   public String getAlamat() {
     return alamat;
   }
+
+  public String getAlamat1() {
+    return alamat1;
+  }
+
 
   public String getAlamat2() {
     return alamat2;
@@ -125,6 +133,10 @@ public class Faktur {
 
   public void setAlamat(String alamat) {
     this.alamat = alamat;
+  }
+
+  public void setAlamat1(String alamat1) {
+    this.alamat1 = alamat1;
   }
 
   public void setAlamat2(String alamat2) {

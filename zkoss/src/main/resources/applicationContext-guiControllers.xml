@@ -387,17 +387,17 @@
 		<property name="statusService" ref="statusService" />
 	</bean>
 	
-	<!-- KategoriBarang -->
-	<bean id="kategoriBarangMainCtrl" class="billy.webui.master.kategoribarang.KategoriBarangMainCtrl" parent="basisCtrl" scope="prototype">
-		<property name="kategoriBarangService" ref="kategoriBarangService" />
-		<property name="kategoriBarangListCtrl" ref="kategoriBarangListCtrl" />
-		<property name="kategoriBarangDetailCtrl" ref="kategoriBarangDetailCtrl" />
+	<!-- Mandiri -->
+	<bean id="mandiriMainCtrl" class="billy.webui.master.mandiri.MandiriMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="mandiriService" ref="mandiriService" />
+		<property name="mandiriListCtrl" ref="mandiriListCtrl" />
+		<property name="mandiriDetailCtrl" ref="mandiriDetailCtrl" />
 	</bean>
-	<bean id="kategoriBarangListCtrl" class="billy.webui.master.kategoribarang.KategoriBarangListCtrl" parent="basisCtrl" scope="prototype">
-		<property name="kategoriBarangService" ref="kategoriBarangService" />
+	<bean id="mandiriListCtrl" class="billy.webui.master.mandiri.MandiriListCtrl" parent="basisCtrl" scope="prototype">
+		<property name="mandiriService" ref="mandiriService" />
 	</bean>
-	<bean id="kategoriBarangDetailCtrl" class="billy.webui.master.kategoribarang.KategoriBarangDetailCtrl" parent="basisCtrl" scope="prototype">
-		<property name="kategoriBarangService" ref="kategoriBarangService" />
+	<bean id="mandiriDetailCtrl" class="billy.webui.master.mandiri.MandiriDetailCtrl" parent="basisCtrl" scope="prototype">
+		<property name="mandiriService" ref="mandiriService" />
 	</bean>
 	
 	<!-- JobType -->
@@ -473,8 +473,16 @@
 		<property name="karyawanService" ref="karyawanService" />
 		<property name="barangService" ref="barangService" />
 		<property name="statusService" ref="statusService" />
+		<property name="mandiriService" ref="mandiriService" />
 	</bean>
-	
+	<bean id="penjualanUploadCtrl" class="billy.webui.transaction.penjualan.PenjualanUploadCtrl" parent="basisCtrl" scope="prototype">
+		<property name="penjualanService" ref="penjualanService" />
+		<property name="wilayahService" ref="wilayahService" />
+		<property name="karyawanService" ref="karyawanService" />
+		<property name="barangService" ref="barangService" />
+		<property name="statusService" ref="statusService" />
+		<property name="mandiriService" ref="mandiriService" />
+	</bean>
 	<!-- ApprovalPenjualan -->
 	<bean id="approvalPenjualanMainCtrl" class="billy.webui.transaction.penjualan.approval.ApprovalPenjualanMainCtrl" parent="basisCtrl" scope="prototype">
 		<property name="penjualanService" ref="penjualanService" />
@@ -491,6 +499,7 @@
 		<property name="karyawanService" ref="karyawanService" />
 		<property name="barangService" ref="barangService" />
 		<property name="statusService" ref="statusService" />
+		<property name="mandiriService" ref="mandiriService" />
 	</bean>
 	
 	<!-- CetakPenjualan -->

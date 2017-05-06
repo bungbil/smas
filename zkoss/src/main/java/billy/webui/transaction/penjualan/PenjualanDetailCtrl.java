@@ -37,17 +37,20 @@ import org.zkoss.zul.Window;
 
 import billy.backend.model.Barang;
 import billy.backend.model.Karyawan;
+import billy.backend.model.Mandiri;
 import billy.backend.model.Penjualan;
 import billy.backend.model.PenjualanDetail;
 import billy.backend.model.Status;
 import billy.backend.model.Wilayah;
 import billy.backend.service.BarangService;
 import billy.backend.service.KaryawanService;
+import billy.backend.service.MandiriService;
 import billy.backend.service.PenjualanService;
 import billy.backend.service.StatusService;
 import billy.backend.service.WilayahService;
 import billy.webui.master.barang.model.BarangListModelItemRenderer;
 import billy.webui.master.karyawan.model.KaryawanListModelItemRenderer;
+import billy.webui.master.mandiri.model.MandiriListModelItemRenderer;
 import billy.webui.master.status.model.StatusListModelItemRenderer;
 import billy.webui.master.wilayah.model.WilayahListModelItemRenderer;
 import billy.webui.transaction.penjualan.model.PenjualanDetailListModelItemRenderer;
@@ -76,10 +79,13 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
   protected Listbox lbox_Wilayah;
   protected Listbox lbox_Sales1;
   protected Listbox lbox_Sales2;
+  protected Listbox lbox_Mandiri;
   protected Listbox lbox_Pengirim;
   protected Textbox txtb_NamaPelanggan; // autowired
   protected Textbox txtb_Telepon; // autowired
   protected Textbox txtb_Alamat; // autowired
+  protected Textbox txtb_Alamat2; // autowired
+  protected Textbox txtb_Alamat3; // autowired
   protected Textbox txtb_Remark; // autowired
   protected Radio radioStatusCash;
   protected Radio radioStatusKredit;
@@ -126,6 +132,7 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
   private transient KaryawanService karyawanService;
   private transient BarangService barangService;
   private transient StatusService statusService;
+  private transient MandiriService mandiriService;
 
   DecimalFormat df = new DecimalFormat("#,###");
 
@@ -275,7 +282,7 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
   public void doReadOnlyMode(boolean b) {
     // txtb_NoFaktur.setReadonly(b);
     // .txtb_NoOrderSheet.setReadonly(b);
-    txtb_Mandiri.setReadonly(b);
+    // txtb_Mandiri.setReadonly(b);
     // lbox_Wilayah.setDisabled(b);
     txtb_TglPenjualan.setDisabled(b);
     txtb_RencanaKirim.setDisabled(b);
@@ -285,8 +292,10 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
     txtb_NamaPelanggan.setReadonly(b);
     txtb_Telepon.setReadonly(b);
     txtb_Alamat.setReadonly(b);
+    txtb_Alamat2.setReadonly(b);
+    txtb_Alamat3.setReadonly(b);
     txtb_Remark.setReadonly(b);
-
+    lbox_Mandiri.setDisabled(b);
     radioStatusCash.setDisabled(b);
     radioStatusKredit.setDisabled(b);
     // txtb_TglAngsuran2.setDisabled(b);
@@ -324,6 +333,17 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
     } catch (Exception e) {
 
     }
+
+    List<Mandiri> listMandiri = getMandiriService().getAllMandiris();
+    lbox_Mandiri.setModel(new ListModelList(listMandiri));
+    lbox_Mandiri.setItemRenderer(new MandiriListModelItemRenderer());
+    if (getSelectedPenjualan().getMandiriId() != null) {
+      ListModelList lml = (ListModelList) lbox_Mandiri.getModel();
+      Mandiri mandiri =
+          getMandiriService().getMandiriByID(getSelectedPenjualan().getMandiriId().getId());
+      lbox_Mandiri.setSelectedIndex(lml.indexOf(mandiri));
+    }
+
     List<Status> listStatus = getStatusService().getAllStatuss();
     lbox_Status.setModel(new ListModelList(listStatus));
     lbox_Status.setItemRenderer(new StatusListModelItemRenderer());
@@ -440,6 +460,9 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
     // label_DiskonDP.setValue(BigDecimal.ZERO);
     label_GrandTotal.setValue(BigDecimal.ZERO);
     label_KreditPerBulan.setValue(BigDecimal.ZERO);
+    lbox_Mandiri.setSelectedIndex(-1);
+    txtb_Alamat2.setValue(null);
+    txtb_Alamat3.setValue(null);
   }
 
   // +++++++++++++++++++++++++++++++++++++++++++++++++ //
@@ -514,6 +537,10 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 
   public List<PenjualanDetail> getListPenjualanDetail() {
     return listPenjualanDetail;
+  }
+
+  public MandiriService getMandiriService() {
+    return mandiriService;
   }
 
   /* Master BEANS */
@@ -812,6 +839,10 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
     doFitSize(event);
   }
 
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+
   public void onDoubleClickedPenjualanDetailItem(Event event) {
     Listitem item = this.listBoxPenjualanDetail.getSelectedItem();
     if (item != null) {
@@ -881,10 +912,6 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
   }
 
   // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
   // +++++++++++++++++ Business Logic ++++++++++++++++ //
   // +++++++++++++++++++++++++++++++++++++++++++++++++ //
   public void onSelect$lbox_Barang(Event event) throws InterruptedException {
@@ -950,6 +977,10 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 
   public void setListPenjualanDetail(List<PenjualanDetail> listPenjualanDetail) {
     this.listPenjualanDetail = listPenjualanDetail;
+  }
+
+  public void setMandiriService(MandiriService mandiriService) {
+    this.mandiriService = mandiriService;
   }
 
   public void setPenjualan(Penjualan anPenjualan) {
