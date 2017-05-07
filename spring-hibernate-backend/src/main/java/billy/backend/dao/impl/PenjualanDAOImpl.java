@@ -59,6 +59,20 @@ public class PenjualanDAOImpl extends BillyBasisDAO<Penjualan> implements Penjua
     return getHibernateTemplate().findByCriteria(criteria);
   }
 
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Penjualan> getAllPenjualansBySalesAndRangeDateUnderDivisi(Karyawan sales,
+      Date startDate, Date endDate, Karyawan divisi) {
+    DetachedCriteria criteria = DetachedCriteria.forClass(Penjualan.class);
+    criteria.add(Restrictions.ge("tglPenjualan", startDate));
+    criteria.add(Restrictions.le("tglPenjualan", endDate));
+    criteria.add(Restrictions.eq("divisi.id", divisi.getId()));
+    Criterion sales1 = Restrictions.eq("sales1.id", sales.getId());
+    Criterion sales2 = Restrictions.eq("sales2.id", sales.getId());
+    criteria.add(Restrictions.or(sales1, sales2));
+    return getHibernateTemplate().findByCriteria(criteria);
+  }
+
   @Override
   public int getCountAllPenjualans() {
     return DataAccessUtils.intResult(getHibernateTemplate().find("select count(*) from Penjualan"));
@@ -72,7 +86,6 @@ public class PenjualanDAOImpl extends BillyBasisDAO<Penjualan> implements Penjua
     criteria.add(Restrictions.eq("divisi.id", obj.getId()));
     return getHibernateTemplate().findByCriteria(criteria).size();
   }
-
 
   @SuppressWarnings("unchecked")
   @Override

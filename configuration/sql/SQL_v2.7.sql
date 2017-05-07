@@ -68,24 +68,10 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 (143, 1, 143, 0),
 (274, 1, 274, 0);
 
-
 alter table penjualan
    add column mandiri_id			INT8                 null,  
    add column alamat2				varchar(255)   		 null,
    add column alamat3				varchar(255)   		 null;
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*BELUM DIPAKE*/
 INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values 
@@ -94,4 +80,3 @@ INSERT INTO SEC_GROUPRIGHT (GRI_ID, GRP_ID, RIG_ID, VERSION) values
 (277, 1, 277, 0),
 (278, 1, 278, 0),
 (279, 1, 279, 0);         
-   

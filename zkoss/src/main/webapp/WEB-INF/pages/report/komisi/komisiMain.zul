@@ -21,7 +21,60 @@
 							<panel border="none">
 								<panelchildren>
 									<groupbox mold="3d" closable="false">
-										<caption image="/images/icons/view.gif" label="Laporan Komisi" />
+										<caption image="/images/icons/view.gif" label="Laporan Komisi Per Divisi" />
+				
+										<grid sclass="GridLayoutNoBorder" fixedLayout="true"
+											style="border:0px; padding-left:5px; padding-right:5px;">
+											<columns>
+												<column width="250px" />
+												<column />
+											</columns>
+											<rows>
+												
+												<row>
+													<label value="Kode Divisi" />
+													<hbox>														
+														<textbox id="txtb_KodeDivisi_per_divisi" 
+															  maxlength="50" width="100px" />														
+														<listbox id="lbox_Divisi_per_divisi" mold="select"
+															multiple="false" rows="1" width="250px" disabled="true">
+														</listbox>									
+													</hbox>																																						
+												</row>
+												<row>
+													<label value="Tanggal Awal Penjualan" />
+													<datebox id="txtb_tanggalAwalPenjualan_per_divisi"
+															format="dd/MM/yyyy" width="150px" constraint="no empty"/>
+												</row>
+												<row>
+													<label value="Tanggal Akhir Penjualan" />
+													<datebox id="txtb_tanggalAkhirPenjualan_per_divisi" 
+															format="dd/MM/yyyy" width="150px" constraint="no empty"/>
+												</row>												
+												
+												<row>
+													<label value="Pilih Printer Dot Matrix" />
+													<hbox>
+														
+														<listbox id="lbox_Printer_per_divisi" mold="select"
+															multiple="false" rows="1" width="250px">															
+														</listbox>	
+														<button id="btnRefeshPrinter_per_divisi" label="Cari Printer"  width="100px" 	/>
+												
+													</hbox>
+												</row>
+												<row>
+													<label />
+													<button id="btnCetak_per_divisi" label="Cetak Dot Matrix"  	/>
+												</row>
+											</rows>
+										</grid>
+										
+									</groupbox>
+									
+								
+									<groupbox mold="3d" closable="false">
+										<caption image="/images/icons/view.gif" label="Laporan Komisi Per Karyawan" />
 				
 										<grid sclass="GridLayoutNoBorder" fixedLayout="true"
 											style="border:0px; padding-left:5px; padding-right:5px;">

@@ -86,9 +86,23 @@ public class PenjualanServiceImpl implements PenjualanService {
   }
 
   @Override
+  public List<Penjualan> getAllPenjualansBySalesAndRangeDateUnderDivisi(Karyawan sales,
+      Date startDate, Date endDate, Karyawan divisi) {
+    List<Penjualan> allPenjualan = new ArrayList<Penjualan>();
+    List<Penjualan> allPenjualanSalesUnderDivisi =
+        getPenjualanDAO().getAllPenjualansBySalesAndRangeDateUnderDivisi(sales, startDate, endDate,
+            divisi);
+    allPenjualan.addAll(allPenjualanSalesUnderDivisi);
+
+    return allPenjualan;
+  }
+
+
+  @Override
   public int getCountAllPenjualanDetails() {
     return getPenjualanDetailDAO().getCountAllPenjualanDetails();
   }
+
 
   @Override
   public int getCountAllPenjualans() {
@@ -107,7 +121,6 @@ public class PenjualanServiceImpl implements PenjualanService {
 
     return getPenjualanDAO().getCountAllPenjualansByDivisi(obj, startDate, endDate);
   }
-
 
   @Override
   public int getCountPenjualanDetailsByPenjualan(Penjualan penjualan) {
@@ -160,6 +173,7 @@ public class PenjualanServiceImpl implements PenjualanService {
     return result;
   }
 
+
   @Override
   public BigDecimal getPenjualanSum(Penjualan penjualan) {
     return getPenjualanDAO().getPenjualanSum(penjualan);
@@ -169,7 +183,6 @@ public class PenjualanServiceImpl implements PenjualanService {
   public void saveOrUpdate(Penjualan penjualan) {
     getPenjualanDAO().saveOrUpdate(penjualan);
   }
-
 
   @Override
   public void saveOrUpdate(PenjualanDetail penjualanDetail) {

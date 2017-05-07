@@ -22,6 +22,8 @@ public interface PenjualanDAO {
 
   public List<Penjualan> getAllPenjualansByListNoFaktur(List<String> listNoFaktur);
 
+  public List<Penjualan> getAllPenjualansBySalesAndRangeDateUnderDivisi(Karyawan sales,
+      Date startDate, Date endDate, Karyawan divisi);
 
   public int getCountAllPenjualans();
 

@@ -28,6 +28,9 @@ public interface PenjualanService {
   public List<Penjualan> getAllPenjualansBySalesAndRangeDate(Karyawan obj, Date startDate,
       Date endDate);
 
+  public List<Penjualan> getAllPenjualansBySalesAndRangeDateUnderDivisi(Karyawan sales,
+      Date startDate, Date endDate, Karyawan divisi);
+
   public int getCountAllPenjualanDetails();
 
   public int getCountAllPenjualans();
