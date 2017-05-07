@@ -11,14 +11,17 @@ import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 
 import org.apache.log4j.Logger;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
+import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
@@ -31,6 +34,7 @@ import billy.webui.printer.model.PrinterListModelItemRenderer;
 import billy.webui.transaction.kolektor.cetak.report.CetakPembayaranKwitansiTextPrinter;
 import de.forsthaus.UserWorkspace;
 import de.forsthaus.webui.util.GFCBaseCtrl;
+import de.forsthaus.webui.util.MultiLineMessageBox;
 import de.forsthaus.webui.util.ZksampleMessageUtils;
 
 public class PembayaranKwitansiMainCtrl extends GFCBaseCtrl implements Serializable {
@@ -84,6 +88,13 @@ public class PembayaranKwitansiMainCtrl extends GFCBaseCtrl implements Serializa
   // +++++++++++++++ Component Events ++++++++++++++++ //
   // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
+  public void doCetak() throws Exception {
+    final Window win = (Window) Path.getComponent("/outerIndexWindow");
+    new CetakPembayaranKwitansiTextPrinter(win, karyawan, txtb_tanggalAwal.getValue(),
+        txtb_tanggalAkhir.getValue(), listPiutang, selectedPrinter);
+
+  }
+
   /**
    * User rights check. <br>
    * Only components are set visible=true if the logged-in <br>
@@ -135,12 +146,33 @@ public class PembayaranKwitansiMainCtrl extends GFCBaseCtrl implements Serializa
     }
   }
 
-
   public void onClick$btnCetak(Event event) throws Exception {
     if (validToPrint()) {
-      final Window win = (Window) Path.getComponent("/outerIndexWindow");
-      new CetakPembayaranKwitansiTextPrinter(win, karyawan, txtb_tanggalAwal.getValue(),
-          txtb_tanggalAkhir.getValue(), listPiutang, selectedPrinter);
+      // Show a confirm box
+      String msg = "Apakah anda yakin ingin mencetak laporan ini ?";
+      final String title = Labels.getLabel("message.Information");
+
+      MultiLineMessageBox.doSetTemplate();
+      if (MultiLineMessageBox.show(msg, title, Messagebox.YES | Messagebox.NO, Messagebox.QUESTION,
+          true, new EventListener() {
+            @Override
+            public void onEvent(Event evt) {
+              switch (((Integer) evt.getData()).intValue()) {
+                case MultiLineMessageBox.YES:
+                  try {
+                    doCetak();
+                  } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                  }
+                  break; //
+                case MultiLineMessageBox.NO:
+                  break; //
+              }
+            }
+          }) == MultiLineMessageBox.YES) {
+      }
+
     } else {
       showErrorCetak();
     }

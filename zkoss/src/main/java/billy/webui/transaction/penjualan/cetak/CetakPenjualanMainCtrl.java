@@ -12,13 +12,16 @@ import javax.print.PrintServiceLookup;
 
 import org.apache.log4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
+import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
@@ -34,6 +37,7 @@ import de.forsthaus.UserWorkspace;
 import de.forsthaus.backend.model.SecUser;
 import de.forsthaus.policy.model.UserImpl;
 import de.forsthaus.webui.util.GFCBaseCtrl;
+import de.forsthaus.webui.util.MultiLineMessageBox;
 import de.forsthaus.webui.util.ZksampleMessageUtils;
 
 public class CetakPenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
@@ -89,6 +93,23 @@ public class CetakPenjualanMainCtrl extends GFCBaseCtrl implements Serializable 
   // +++++++++++++++++++++++++++++++++++++++++++++++++ //
   // +++++++++++++++ Component Events ++++++++++++++++ //
   // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+
+  public void doCetakFaktur() throws Exception {
+    listPenjualan = new ArrayList<Penjualan>();
+    listPenjualan = getPenjualanService().getAllPenjualansByListNoFaktur(listNoFaktur);
+    final Window win = (Window) Path.getComponent("/outerIndexWindow");
+    // new CetakFakturDJReport(win, listPenjualan, selectedPrinter);
+    new CetakFakturTextPrinter(win, listPenjualan, selectedPrinter);
+  }
+
+  public void doCetakKuitansiA2() throws Exception {
+    listPenjualan = new ArrayList<Penjualan>();
+    listPenjualan = getPenjualanService().getAllPenjualansByListNoFaktur(listNoFaktur);
+    final Window win = (Window) Path.getComponent("/outerIndexWindow");
+    // new CetakKuitansiA2DJReport(win);
+    new CetakKuitansiA2TextPrinter(win, listPenjualan, selectedPrinter);
+
+  }
 
   /**
    * User rights check. <br>
@@ -201,11 +222,32 @@ public class CetakPenjualanMainCtrl extends GFCBaseCtrl implements Serializable 
 
   public void onClick$btnCetakFaktur(Event event) throws Exception {
     if (validToPrint()) {
-      listPenjualan = new ArrayList<Penjualan>();
-      listPenjualan = getPenjualanService().getAllPenjualansByListNoFaktur(listNoFaktur);
-      final Window win = (Window) Path.getComponent("/outerIndexWindow");
-      // new CetakFakturDJReport(win, listPenjualan, selectedPrinter);
-      new CetakFakturTextPrinter(win, listPenjualan, selectedPrinter);
+      // Show a confirm box
+      String msg = "Apakah anda yakin ingin mencetak faktur ini ?";
+      final String title = Labels.getLabel("message.Information");
+
+      MultiLineMessageBox.doSetTemplate();
+      if (MultiLineMessageBox.show(msg, title, Messagebox.YES | Messagebox.NO, Messagebox.QUESTION,
+          true, new EventListener() {
+            @Override
+            public void onEvent(Event evt) {
+              switch (((Integer) evt.getData()).intValue()) {
+                case MultiLineMessageBox.YES:
+                  try {
+                    doCetakFaktur();
+                  } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                  }
+                  break; //
+                case MultiLineMessageBox.NO:
+                  break; //
+              }
+            }
+          }) == MultiLineMessageBox.YES) {
+      }
+
+
     } else {
       showErrorCetak();
     }
@@ -213,11 +255,32 @@ public class CetakPenjualanMainCtrl extends GFCBaseCtrl implements Serializable 
 
   public void onClick$btnCetakKuitansiA2(Event event) throws Exception {
     if (validToPrint()) {
-      listPenjualan = new ArrayList<Penjualan>();
-      listPenjualan = getPenjualanService().getAllPenjualansByListNoFaktur(listNoFaktur);
-      final Window win = (Window) Path.getComponent("/outerIndexWindow");
-      // new CetakKuitansiA2DJReport(win);
-      new CetakKuitansiA2TextPrinter(win, listPenjualan, selectedPrinter);
+
+      // Show a confirm box
+      String msg = "Apakah anda yakin ingin mencetak kuitansi ini ?";
+      final String title = Labels.getLabel("message.Information");
+
+      MultiLineMessageBox.doSetTemplate();
+      if (MultiLineMessageBox.show(msg, title, Messagebox.YES | Messagebox.NO, Messagebox.QUESTION,
+          true, new EventListener() {
+            @Override
+            public void onEvent(Event evt) {
+              switch (((Integer) evt.getData()).intValue()) {
+                case MultiLineMessageBox.YES:
+                  try {
+                    doCetakKuitansiA2();
+                  } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                  }
+                  break; //
+                case MultiLineMessageBox.NO:
+                  break; //
+              }
+            }
+          }) == MultiLineMessageBox.YES) {
+      }
+
     } else {
       showErrorCetak();
     }

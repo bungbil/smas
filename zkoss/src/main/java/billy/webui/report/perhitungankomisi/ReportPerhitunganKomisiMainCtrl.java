@@ -15,14 +15,17 @@ import javax.print.PrintServiceLookup;
 
 import org.apache.log4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
+import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
@@ -38,6 +41,7 @@ import de.forsthaus.UserWorkspace;
 import de.forsthaus.backend.model.SecUser;
 import de.forsthaus.policy.model.UserImpl;
 import de.forsthaus.webui.util.GFCBaseCtrl;
+import de.forsthaus.webui.util.MultiLineMessageBox;
 import de.forsthaus.webui.util.ZksampleMessageUtils;
 
 public class ReportPerhitunganKomisiMainCtrl extends GFCBaseCtrl implements Serializable {
@@ -99,6 +103,35 @@ public class ReportPerhitunganKomisiMainCtrl extends GFCBaseCtrl implements Seri
     lbox_Printer_per_divisi.setSelectedIndex(lml2.indexOf(service));
 
     this.self.setAttribute("controller", this, false);
+  }
+
+  public void doCetak() throws Exception {
+    final Window win = (Window) Path.getComponent("/outerIndexWindow");
+    new PerhitunganKomisiTextPrinter(win, karyawan, txtb_tanggalAwalPenjualan.getValue(),
+        txtb_tanggalAkhirPenjualan.getValue(), listPenjualan, selectedPrinter);
+  }
+
+  public void doCetakPerDivisi() throws Exception {
+    final Window win = (Window) Path.getComponent("/outerIndexWindow");
+
+    Set<Karyawan> listSales = new HashSet<Karyawan>();
+    for (Penjualan penjualan : listPenjualan_per_divisi) {
+      listSales.add(penjualan.getSales1());
+      if (penjualan.getSales2() != null) {
+        listSales.add(penjualan.getSales2());
+      }
+    }
+    for (Karyawan sales : listSales) {
+      List<Penjualan> listPenjualanPerSales = new ArrayList<Penjualan>();
+      listPenjualanPerSales =
+          getPenjualanService().getAllPenjualansBySalesAndRangeDateUnderDivisi(sales,
+              txtb_tanggalAwalPenjualan_per_divisi.getValue(),
+              txtb_tanggalAkhirPenjualan_per_divisi.getValue(), karyawan_per_divisi);
+
+      new PerhitunganKomisiTextPrinter(win, sales, txtb_tanggalAwalPenjualan_per_divisi.getValue(),
+          txtb_tanggalAkhirPenjualan_per_divisi.getValue(), listPenjualanPerSales,
+          selectedPrinter_per_divisi);
+    }
   }
 
   /**
@@ -183,10 +216,31 @@ public class ReportPerhitunganKomisiMainCtrl extends GFCBaseCtrl implements Seri
 
   public void onClick$btnCetak(Event event) throws Exception {
     if (validToPrint() && selectedPrinter != null) {
+      // Show a confirm box
+      String msg = "Apakah anda yakin ingin mencetak laporan ini ?";
+      final String title = Labels.getLabel("message.Information");
 
-      final Window win = (Window) Path.getComponent("/outerIndexWindow");
-      new PerhitunganKomisiTextPrinter(win, karyawan, txtb_tanggalAwalPenjualan.getValue(),
-          txtb_tanggalAkhirPenjualan.getValue(), listPenjualan, selectedPrinter);
+      MultiLineMessageBox.doSetTemplate();
+      if (MultiLineMessageBox.show(msg, title, Messagebox.YES | Messagebox.NO, Messagebox.QUESTION,
+          true, new EventListener() {
+            @Override
+            public void onEvent(Event evt) {
+              switch (((Integer) evt.getData()).intValue()) {
+                case MultiLineMessageBox.YES:
+                  try {
+                    doCetak();
+                  } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                  }
+                  break; //
+                case MultiLineMessageBox.NO:
+                  break; //
+              }
+            }
+          }) == MultiLineMessageBox.YES) {
+      }
+
     } else {
       showErrorCetak();
     }
@@ -194,27 +248,29 @@ public class ReportPerhitunganKomisiMainCtrl extends GFCBaseCtrl implements Seri
 
   public void onClick$btnCetak_per_divisi(Event event) throws Exception {
     if (validToPrintPerDivisi() && selectedPrinter_per_divisi != null) {
+      // Show a confirm box
+      String msg = "Apakah anda yakin ingin mencetak laporan ini ?";
+      final String title = Labels.getLabel("message.Information");
 
-      final Window win = (Window) Path.getComponent("/outerIndexWindow");
-
-      Set<Karyawan> listSales = new HashSet<Karyawan>();
-      for (Penjualan penjualan : listPenjualan_per_divisi) {
-        listSales.add(penjualan.getSales1());
-        if (penjualan.getSales2() != null) {
-          listSales.add(penjualan.getSales2());
-        }
-      }
-      for (Karyawan sales : listSales) {
-        List<Penjualan> listPenjualanPerSales = new ArrayList<Penjualan>();
-        listPenjualanPerSales =
-            getPenjualanService().getAllPenjualansBySalesAndRangeDateUnderDivisi(sales,
-                txtb_tanggalAwalPenjualan_per_divisi.getValue(),
-                txtb_tanggalAkhirPenjualan_per_divisi.getValue(), karyawan_per_divisi);
-
-        new PerhitunganKomisiTextPrinter(win, sales,
-            txtb_tanggalAwalPenjualan_per_divisi.getValue(),
-            txtb_tanggalAkhirPenjualan_per_divisi.getValue(), listPenjualanPerSales,
-            selectedPrinter_per_divisi);
+      MultiLineMessageBox.doSetTemplate();
+      if (MultiLineMessageBox.show(msg, title, Messagebox.YES | Messagebox.NO, Messagebox.QUESTION,
+          true, new EventListener() {
+            @Override
+            public void onEvent(Event evt) {
+              switch (((Integer) evt.getData()).intValue()) {
+                case MultiLineMessageBox.YES:
+                  try {
+                    doCetakPerDivisi();
+                  } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                  }
+                  break; //
+                case MultiLineMessageBox.NO:
+                  break; //
+              }
+            }
+          }) == MultiLineMessageBox.YES) {
       }
 
 
