@@ -9,8 +9,10 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.print.Doc;
 import javax.print.DocFlavor;
@@ -28,6 +30,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Window;
 
 import billy.backend.model.Karyawan;
+import billy.backend.model.Mandiri;
 import billy.backend.model.Piutang;
 import billy.backend.service.CompanyProfileService;
 import billy.webui.printer.PrintJobWatcher;
@@ -69,11 +72,13 @@ public class CetakSisaKwitansiTextPrinter extends Window implements Serializable
       throws InterruptedException {
     super();
     this.setParent(parent);
-
-    try {
-      doPrint(karyawan, startDate, endDate, listPiutang, selectedPrinter);
-    } catch (final Exception e) {
-      ZksampleMessageUtils.showErrorMessage(e.toString());
+    Set<Mandiri> listMandiri = getListMandiri(listPiutang);
+    for (Mandiri mandiri : listMandiri) {
+      try {
+        doPrint(karyawan, mandiri, startDate, endDate, listPiutang, selectedPrinter);
+      } catch (final Exception e) {
+        ZksampleMessageUtils.showErrorMessage(e.toString());
+      }
     }
   }
 
@@ -101,25 +106,27 @@ public class CetakSisaKwitansiTextPrinter extends Window implements Serializable
     }
   }
 
-  public void doPrint(Karyawan karyawan, Date startDate, Date endDate, List<Piutang> listPiutang,
-      PrintService selectedPrinter) throws PrintException, IOException {
+  public void doPrint(Karyawan karyawan, Mandiri mandiri, Date startDate, Date endDate,
+      List<Piutang> listPiutang, PrintService selectedPrinter) throws PrintException, IOException {
 
     List<ReportKwitansi> listData = new ArrayList<ReportKwitansi>();
     int i = 1;
     for (Piutang piutang : listPiutang) {
-      ReportKwitansi data = new ReportKwitansi();
-      data.setNo(i + "");
-      data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
-      data.setTglBawa(piutang.getTglBawaKolektor());
-      data.setTglBayar(piutang.getTglPembayaran());
-      data.setTglKuitansi(piutang.getTglJatuhTempo());
-      data.setNamaCustomer(piutang.getPenjualan().getNamaPelanggan());
-      data.setNilaiPembayaran(piutang.getPembayaran());
-      data.setNilaiTagih(piutang.getNilaiTagihan());
-      data.setKeterangan(piutang.getKeterangan());
+      if (piutang.getPenjualan().getMandiriId().equals(mandiri)) {
+        ReportKwitansi data = new ReportKwitansi();
+        data.setNo(i + "");
+        data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
+        data.setTglBawa(piutang.getTglBawaKolektor());
+        data.setTglBayar(piutang.getTglPembayaran());
+        data.setTglKuitansi(piutang.getTglJatuhTempo());
+        data.setNamaCustomer(piutang.getPenjualan().getNamaPelanggan());
+        data.setNilaiPembayaran(piutang.getPembayaran());
+        data.setNilaiTagih(piutang.getNilaiTagihan());
+        data.setKeterangan(piutang.getKeterangan());
 
-      listData.add(data);
-      i++;
+        listData.add(data);
+        i++;
+      }
     }
 
     InputStream is =
@@ -353,6 +360,15 @@ public class CetakSisaKwitansiTextPrinter extends Window implements Serializable
     sb.append("Yang Menerima");
     addWhiteSpace(sb, 35);
     sb.append("Yang Memberi");
+  }
+
+  private Set<Mandiri> getListMandiri(List<Piutang> listPiutang) {
+    Set<Mandiri> listMandiri = new HashSet<Mandiri>();
+
+    for (Piutang piutang : listPiutang) {
+      listMandiri.add(piutang.getPenjualan().getMandiriId());
+    }
+    return listMandiri;
   }
 
   private void setAlignLeft(StringBuffer sb, int width, String value) {
