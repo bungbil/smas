@@ -74,9 +74,9 @@
 														readonly="true" constraint="no empty" maxlength="50" width="250px" />
 												</row>
 												<row>
-													<label value="Pembayaran Ke-" />															
-													<textbox id="txtb_PembayaranKe" value="@{controller.piutang.pembayaranKe}"
-														readonly="true" maxlength="20" width="250px" />
+													<label value="Nama Pelanggan"/>
+								                	<textbox id="txtb_NamaPelanggan" value="@{controller.piutang.penjualan.namaPelanggan}"
+														readonly="true"  width="250px" />	
 													<label />
 													<label 	value="Tanggal Jatuh Tempo" />
 													<datebox id="txtb_TglJatuhTempo"	value="@{controller.piutang.tglJatuhTempo}" 
@@ -87,17 +87,19 @@
 								                	<label value="Tagihan"/>
 						                    		<decimalbox id="txtb_NilaiTagihan" value="@{controller.piutang.nilaiTagihan}" readonly="true" format=",###.#" hflex="1" />										                
 						                    		<label />	
-								                	<label value="Status"/>
-								                    <listbox id="lbox_Status" mold="select" disabled="true"
-															multiple="false" rows="1" hflex="1" width="100px" xmlns:w="client">																									
-													</listbox>										                    						                    				                    									                    									                    											                     
+								                	<label value="Pembayaran Ke-" />															
+													<textbox id="txtb_PembayaranKe" value="@{controller.piutang.pembayaranKe}"
+														readonly="true" maxlength="20" width="250px" />										                    						                    				                    									                    									                    											                     
 								                </row>
 								                <row>
 								                	<label value="Kekurangan Bayar"/>
 						                    		<decimalbox id="txb_KekuranganBayar" value="@{controller.piutang.kekuranganBayar}" readonly="true" format=",###.#" hflex="1" />										                
-						                    		<label value="@{controller.piutang.kekuranganBayar}"/>	
-								                	<label />
-								                	<label />								                    						                    				                    									                    									                    											                     
+						                    		<label />	
+								                	<label value="Status"/>
+								                    <listbox id="lbox_Status" mold="select" disabled="true"
+															multiple="false" rows="1" hflex="1" width="100px" xmlns:w="client">																									
+													</listbox>
+																			                    						                    				                    									                    									                    											                     
 								                </row>
 												<row>
 													<separator bar="true"></separator>
