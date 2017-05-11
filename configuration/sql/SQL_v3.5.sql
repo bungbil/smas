@@ -1,5 +1,5 @@
 /******************** Penjualan ********************/  
-UPDATE PARAMETER SET PARAM_VALUE ='2.7' WHERE PARAM_NAME = 'APPLICATION_VERSION';
+UPDATE PARAMETER SET PARAM_VALUE ='3.5' WHERE PARAM_NAME = 'APPLICATION_VERSION';
 
 /*==============================================================*/
 /* Table: Mandiri                                               */
