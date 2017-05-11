@@ -62,7 +62,7 @@ public class InputTglBawaMainCtrl extends GFCBaseCtrl implements Serializable {
   protected Textbox txtb_KodeKolektor;
   protected Listbox lbox_Kolektor;
   protected Datebox txtb_tglBawaKolektor;
-
+  protected Textbox txtb_NamaPelanggan;
   protected Datebox txtb_tglPembayaran;
   protected Decimalbox txtb_Pembayaran;
   protected Decimalbox txtb_Diskon;
@@ -150,7 +150,7 @@ public class InputTglBawaMainCtrl extends GFCBaseCtrl implements Serializable {
         txtb_PembayaranKe.setValue(String.valueOf(piutang.getPembayaranKe()));
         txtb_TglJatuhTempo.setValue(piutang.getTglJatuhTempo());
         txtb_NilaiTagihan.setValue(piutang.getNilaiTagihan());
-
+        txtb_NamaPelanggan.setValue(piutang.getPenjualan().getNamaPelanggan());
 
         List<Status> listStatus = getStatusService().getAllStatuss();
         lbox_Status.setModel(new ListModelList(listStatus));

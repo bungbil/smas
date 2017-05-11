@@ -77,15 +77,15 @@
 						tooltiptext="${c:l('btnLast.tooltiptext')}" />
 					<separator bar="true" orient="vertical" />
 					<!-- <button id="btnNew" sclass="oT_ButtonWithIcon"
-						tooltiptext="${c:l('btnNew.tooltiptext')}" />
+						tooltiptext="${c:l('btnNew.tooltiptext')}" />-->
 					<button id="btnEdit" sclass="oT_ButtonWithIcon"
 						tooltiptext="${c:l('btnEdit.tooltiptext')}" />
-					<button id="btnDelete" sclass="oT_ButtonWithIcon"
-						tooltiptext="${c:l('btnDelete.tooltiptext')}" />
+					<!-- <button id="btnDelete" sclass="oT_ButtonWithIcon"
+						tooltiptext="${c:l('btnDelete.tooltiptext')}" />-->
 					<button id="btnSave" sclass="oT_ButtonWithIcon"
 						tooltiptext="${c:l('btnSave.tooltiptext')}" />
 					<button id="btnCancel" sclass="oT_ButtonWithIcon"
-						tooltiptext="${c:l('btnCancel.tooltiptext')}" /> -->					
+						tooltiptext="${c:l('btnCancel.tooltiptext')}" /> 					
 				</toolbar>
 			</hbox>
 		</div>

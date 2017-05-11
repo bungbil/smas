@@ -41,19 +41,23 @@
 							label="Tgl Penjualan" />
 						<listheader id="listheader_PenjualanList_MetodePembayaran"
 							sclass="FDListBoxHeader1" 
-							sort="auto" width="6%"
+							sort="auto" width="5%"
 							label="Metode Pembayaran" />
 						<listheader id="listheader_PenjualanList_Total"
 							sclass="FDListBoxHeader1" 
 							sort="auto" width="7%"
-							label="Total" />						
+							label="Total" />	
+						<listheader id="listheader_PenjualanList_DP"
+							sclass="FDListBoxHeader1" 
+							sort="auto" width="5%"
+							label="DP" />							
 						<listheader id="listheader_PenjualanList_Piutang"
 							sclass="FDListBoxHeader1" 
 							sort="auto" width="7%"
 							label="Piutang" />
 						<listheader id="listheader_PenjualanList_Status"
 							sclass="FDListBoxHeader1" 
-							sort="auto" width="6%"
+							sort="auto" width="5%"
 							label="Status" />
 						<listheader id="listheader_PenjualanList_NamaPelanggan"
 							sclass="FDListBoxHeader1" 
@@ -61,7 +65,7 @@
 							label="Nama Pelanggan" />
 						<listheader id="listheader_PenjualanList_Telepon"
 							sclass="FDListBoxHeader1" 
-							sort="auto" width="10%"
+							sort="auto" width="7%"
 							label="Telepon" />
 						<listheader id="listheader_PenjualanList_Sales1"
 							sclass="FDListBoxHeader1" 
@@ -99,6 +103,8 @@
 						<listcell label="@{penjualan.metodePembayaran}"
 							style="padding-left: 5px" />
 						<listcell label="@{penjualan.grandTotal}"
+							style="padding-left: 5px" />
+						<listcell label="@{penjualan.downPayment}"
 							style="padding-left: 5px" />
 						<listcell label="@{penjualan.piutang}"
 							style="padding-left: 5px" />

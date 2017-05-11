@@ -537,6 +537,8 @@
 	<!-- Piutang -->
 	<bean id="piutangMainCtrl" class="billy.webui.transaction.piutang.PiutangMainCtrl" parent="basisCtrl" scope="prototype">		
 		<property name="piutangService" ref="piutangService" />
+		<property name="penjualanService" ref="penjualanService" />	
+		<property name="statusService" ref="statusService" />	
 		<property name="piutangListCtrl" ref="piutangListCtrl" />
 		<property name="piutangDetailCtrl" ref="piutangDetailCtrl" />
 	</bean>
@@ -544,7 +546,7 @@
 		<property name="piutangService" ref="piutangService" />
 	</bean>
 	<bean id="piutangDetailCtrl" class="billy.webui.transaction.piutang.PiutangDetailCtrl" parent="basisCtrl" scope="prototype">
-		<property name="piutangService" ref="piutangService" />
+		<property name="piutangService" ref="piutangService" />		
 		<property name="karyawanService" ref="karyawanService" />
 		<property name="statusService" ref="statusService" />
 	</bean>

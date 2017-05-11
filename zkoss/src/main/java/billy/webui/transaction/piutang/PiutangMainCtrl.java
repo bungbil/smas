@@ -35,9 +35,12 @@ import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 import billy.backend.model.Karyawan;
+import billy.backend.model.Penjualan;
 import billy.backend.model.Piutang;
 import billy.backend.model.Status;
+import billy.backend.service.PenjualanService;
 import billy.backend.service.PiutangService;
+import billy.backend.service.StatusService;
 import billy.webui.transaction.piutang.report.PiutangListDJReport;
 
 import com.googlecode.genericdao.search.Filter;
@@ -108,13 +111,13 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
 
   // ServiceDAOs / Domain Classes
   private PiutangService piutangService;
-
+  private PenjualanService penjualanService;
+  private StatusService statusService;
 
   // always a copy from the bean before modifying. Used for reseting
   private Piutang originalPiutang;
 
   DecimalFormat df = new DecimalFormat("#,###");
-
 
   /**
    * default constructor.<br>
@@ -122,10 +125,6 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
   public PiutangMainCtrl() {
     super();
   }
-
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // +++++++++++++++ Component Events ++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   @Override
   public void doAfterCompose(Component window) throws Exception {
@@ -265,6 +264,9 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
     getPiutangDetailCtrl().doRefresh();
   }
 
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++ Component Events ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   /**
    * Sets all UI-components to writable-mode. Sets the buttons to edit-Mode. Checks first, if the
@@ -275,41 +277,51 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
    * @throws InterruptedException
    */
   private void doEdit(Event event) {
-    // logger.debug(event.toString());
-    // get the current Tab for later checking if we must change it
-    Tab currentTab = tabbox_PiutangMain.getSelectedTab();
 
-    // check first, if the tabs are created, if not than create it
-    if (getPiutangDetailCtrl() == null) {
-      Events.sendEvent(new Event("onSelect", tabPiutangDetail, null));
-      // if we work with spring beanCreation than we must check a little
-      // bit deeper, because the Controller are preCreated ?
-    } else if (getPiutangDetailCtrl().getBinder() == null) {
-      Events.sendEvent(new Event("onSelect", tabPiutangDetail, null));
-    }
+    if (isValidToEdit()) {
 
-    // check if the tab is one of the Detail tabs. If so do not change the
-    // selection of it
-    if (!currentTab.equals(tabPiutangDetail)) {
-      tabPiutangDetail.setSelected(true);
+      // logger.debug(event.toString());
+      // get the current Tab for later checking if we must change it
+      Tab currentTab = tabbox_PiutangMain.getSelectedTab();
+
+      // check first, if the tabs are created, if not than create it
+      if (getPiutangDetailCtrl() == null) {
+        Events.sendEvent(new Event("onSelect", tabPiutangDetail, null));
+        // if we work with spring beanCreation than we must check a little
+        // bit deeper, because the Controller are preCreated ?
+      } else if (getPiutangDetailCtrl().getBinder() == null) {
+        Events.sendEvent(new Event("onSelect", tabPiutangDetail, null));
+      }
+
+      // check if the tab is one of the Detail tabs. If so do not change the
+      // selection of it
+      if (!currentTab.equals(tabPiutangDetail)) {
+        tabPiutangDetail.setSelected(true);
+      } else {
+        currentTab.setSelected(true);
+      }
+
+      // remember the old vars
+      doStoreInitValues();
+
+      btnCtrlPiutang.setBtnStatus_Edit();
+
+      getPiutangDetailCtrl().doReadOnlyMode(false);
+
+      // refresh the UI, because we can click the EditBtn from every tab.
+      getPiutangDetailCtrl().getBinder().loadAll();
+      getPiutangDetailCtrl().doRefresh();
+      // set focus
+      getPiutangDetailCtrl().txtb_tglPembayaran.focus();
     } else {
-      currentTab.setSelected(true);
+      try {
+        ZksampleMessageUtils
+            .showErrorMessage("Piutang ini tidak bisa di edit, hanya piutang aktif dan sebelumnya yang bisa di edit.");
+      } catch (Exception e) {
+
+      }
     }
-
-    // remember the old vars
-    doStoreInitValues();
-
-    btnCtrlPiutang.setBtnStatus_Edit();
-
-    getPiutangDetailCtrl().doReadOnlyMode(false);
-
-    // refresh the UI, because we can click the EditBtn from every tab.
-    getPiutangDetailCtrl().getBinder().loadAll();
-    getPiutangDetailCtrl().doRefresh();
-    // set focus
-    getPiutangDetailCtrl().txtb_tglPembayaran.focus();
   }
-
 
   /**
    * Opens the help screen for the current module.
@@ -401,6 +413,7 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
     }
   }
 
+
   /**
    * Resizes the container from the selected Tab.
    * 
@@ -416,6 +429,7 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
       getPiutangListCtrl().doFillListbox();
     }
   }
+
 
   /**
    * Saves all involved Beans to the DB.
@@ -447,6 +461,41 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
       getPiutangService().saveOrUpdate(getPiutangDetailCtrl().getPiutang());
 
 
+      // recalculate next piutang & piutang di penjualan.
+
+      // recalculate piutang at penjualan
+      List<Piutang> piutangList =
+          getPiutangService().getPiutangsByPenjualan(
+              getPiutangDetailCtrl().getPiutang().getPenjualan());
+      BigDecimal totalPaid = BigDecimal.ZERO;
+      Penjualan penjualan = getPiutangDetailCtrl().getPiutang().getPenjualan();
+      totalPaid = totalPaid.add(penjualan.getDownPayment());
+      for (Piutang pp : piutangList) {
+        if (null != pp.getPembayaran()) {
+          totalPaid = totalPaid.add(pp.getPembayaran()).add(pp.getDiskon());
+
+        }
+      }
+      penjualan.setPiutang(penjualan.getTotal().subtract(totalPaid));
+      getPenjualanService().saveOrUpdate(penjualan);
+
+      BigDecimal kekuranganBayar =
+          getPiutangDetailCtrl().getPiutang().getNilaiTagihan()
+              .add(getPiutangDetailCtrl().getPiutang().getKekuranganBayar())
+              .subtract(getPiutangDetailCtrl().getPiutang().getPembayaran())
+              .subtract(getPiutangDetailCtrl().getPiutang().getDiskon());
+      Status statusProses = getStatusService().getStatusByID(new Long(3)); // PROSES
+      if (penjualan.getPiutang().compareTo(BigDecimal.ZERO) == 1) {
+        // get next piutang, kekurangan dari piutang sebelumnya
+        Piutang nextPiutang =
+            piutangService.getNextPiutang(getPiutangDetailCtrl().getPiutang(), statusProses);
+        if (nextPiutang != null) {
+          nextPiutang.setKekuranganBayar(kekuranganBayar);
+          getPiutangService().saveOrUpdate(nextPiutang);
+        }
+      }
+
+
       // if saving is successfully than actualize the beans as
       // origins.
       doStoreInitValues();
@@ -473,6 +522,7 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
       getPiutangDetailCtrl().doReadOnlyMode(true);
     }
   }
+
 
   public void doSearch(Event event) throws Exception {
     // ++ create the searchObject and init sorting ++//
@@ -652,10 +702,13 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
     return this.originalPiutang;
   }
 
+  public PenjualanService getPenjualanService() {
+    return penjualanService;
+  }
+
   public PiutangDetailCtrl getPiutangDetailCtrl() {
     return this.piutangDetailCtrl;
   }
-
 
   public PiutangListCtrl getPiutangListCtrl() {
     return this.piutangListCtrl;
@@ -671,6 +724,27 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
 
   public Piutang getSelectedPiutang() {
     return this.selectedPiutang;
+  }
+
+
+  public StatusService getStatusService() {
+    return statusService;
+  }
+
+  private boolean isValidToEdit() {
+    if (getPiutangDetailCtrl().getPiutang().isAktif()) {
+      return true;
+    } else {
+      Status statusProses = getStatusService().getStatusByID(new Long(3)); // PROSES
+      Piutang nextPiutang =
+          piutangService.getNextPiutang(getPiutangDetailCtrl().getPiutang(), statusProses);
+      if (nextPiutang != null) {
+        if (nextPiutang.isAktif()) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   public void onCheck$checkbox_PiutangList_Aktif(Event event) throws Exception {
@@ -735,10 +809,6 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
     doEdit(event);
   }
 
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-
   /**
    * when the "go first record" button is clicked.
    * 
@@ -758,6 +828,10 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
   public void onClick$btnHelp(Event event) throws InterruptedException {
     doHelp(event);
   }
+
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // ++++++++++++++++++++ Helpers ++++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   /**
    * when the "go last record" button is clicked.
@@ -823,10 +897,6 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
     }
 
   }
-
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   /**
    * when the "refresh" button is clicked. <br>
@@ -912,6 +982,10 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
       doSave(event);
     }
   }
+
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   /**
    * Filter the piutang list <br>
@@ -1017,6 +1091,10 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
     this.originalPiutang = originalPiutang;
   }
 
+  public void setPenjualanService(PenjualanService penjualanService) {
+    this.penjualanService = penjualanService;
+  }
+
   public void setPiutangDetailCtrl(PiutangDetailCtrl piutangDetailCtrl) {
     this.piutangDetailCtrl = piutangDetailCtrl;
   }
@@ -1036,6 +1114,10 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
 
   public void setSelectedPiutang(Piutang selectedPiutang) {
     this.selectedPiutang = selectedPiutang;
+  }
+
+  public void setStatusService(StatusService statusService) {
+    this.statusService = statusService;
   }
 
   /* COMPONENTS and OTHERS */

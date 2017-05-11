@@ -79,7 +79,7 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
   protected Decimalbox txtb_Pembayaran;
   protected Decimalbox txtb_Diskon;
   protected Textbox txtb_Keterangan;
-
+  protected Textbox txtb_NamaPelanggan;
   protected Combobox cmb_StatusFinal;
 
   protected Label label_butuhApproval;
@@ -312,7 +312,7 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
         txtb_TglJatuhTempo.setValue(piutang.getTglJatuhTempo());
         txtb_NilaiTagihan.setValue(piutang.getNilaiTagihan());
         txb_KekuranganBayar.setValue(piutang.getKekuranganBayar());
-
+        txtb_NamaPelanggan.setValue(piutang.getPenjualan().getNamaPelanggan());
         List<Status> listStatus = getStatusService().getAllStatuss();
         lbox_Status.setModel(new ListModelList(listStatus));
         lbox_Status.setItemRenderer(new StatusListModelItemRenderer());

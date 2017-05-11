@@ -59,7 +59,7 @@ public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Ser
   protected Listheader listheader_PenjualanList_Mandiri; // autowired
   protected Listheader listheader_PenjualanList_LastUpdate; // autowired
   protected Listheader listheader_PenjualanList_UpdatedBy; // autowired
-
+  protected Listheader listheader_PenjualanList_DP;
   // NEEDED for ReUse in the SearchWindow
   private HibernateSearchObject<Penjualan> searchObj;
 
@@ -127,6 +127,9 @@ public class PenjualanListCtrl extends GFCBaseListCtrl<Penjualan> implements Ser
 
     listheader_PenjualanList_Total.setSortAscending(new FieldComparator("grandTotal", true));
     listheader_PenjualanList_Total.setSortDescending(new FieldComparator("grandTotal", false));
+
+    listheader_PenjualanList_DP.setSortAscending(new FieldComparator("downPayment", true));
+    listheader_PenjualanList_DP.setSortDescending(new FieldComparator("downPayment", false));
 
     listheader_PenjualanList_Piutang.setSortAscending(new FieldComparator("piutang", true));
     listheader_PenjualanList_Piutang.setSortDescending(new FieldComparator("piutang", false));
