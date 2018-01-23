@@ -1,7 +1,8 @@
 /******************** Penjualan ********************/  
 UPDATE PARAMETER SET PARAM_VALUE ='2.6' WHERE PARAM_NAME = 'APPLICATION_VERSION';
 
-CREATE UNIQUE INDEX ix_search_piutang on piutang (
+
+CREATE  INDEX ix_search_piutang on piutang (
 tgl_jatuh_tempo,kolektor_id
 );
 

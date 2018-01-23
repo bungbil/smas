@@ -109,7 +109,8 @@ public class SisaKwitansiMainCtrl extends GFCBaseCtrl implements Serializable {
 
   public void doReset() {
     List<Karyawan> listKolektor = getKaryawanService().getKaryawansByJobTypeId(new Long(6)); // Kolektor
-
+    List<Karyawan> listDivisi = getKaryawanService().getKaryawansByJobTypeId(new Long(2));// Divisi
+    listKolektor.addAll(listDivisi);
     lbox_Kolektor.setModel(new ListModelList(listKolektor));
     lbox_Kolektor.setItemRenderer(new KaryawanListModelItemRenderer());
 

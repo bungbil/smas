@@ -13,6 +13,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Decimalbox;
 import org.zkoss.zul.ListModelList;
@@ -67,7 +68,8 @@ public class InputTglBawaMainCtrl extends GFCBaseCtrl implements Serializable {
   protected Decimalbox txtb_Pembayaran;
   protected Decimalbox txtb_Diskon;
   protected Textbox txtb_Keterangan;
-
+  protected Checkbox checkbox_masalah;
+  protected Decimalbox txb_KekuranganBayar;
   // ServiceDAOs / Domain Classes
   private PiutangService piutangService;
   private PenjualanService penjualanService;
@@ -112,6 +114,8 @@ public class InputTglBawaMainCtrl extends GFCBaseCtrl implements Serializable {
       piutang.setTglBawaKolektor(null);
     }
 
+    piutang.setMasalah(checkbox_masalah.isChecked());
+
     Listitem itemKolektor = lbox_Kolektor.getSelectedItem();
     Penjualan penjualan = piutang.getPenjualan();
     if (itemKolektor != null) {
@@ -134,8 +138,8 @@ public class InputTglBawaMainCtrl extends GFCBaseCtrl implements Serializable {
     // save it to database
     getPenjualanService().saveOrUpdate(penjualan);
     getPiutangService().saveOrUpdate(piutang);
-
     panelResult.setVisible(false);
+
     piutang = null;
     txtb_SearchNoKwitansi.focus();
   }
@@ -144,6 +148,7 @@ public class InputTglBawaMainCtrl extends GFCBaseCtrl implements Serializable {
     if (txtb_SearchNoKwitansi.getValue() != null) {
       piutang = piutangService.getPiutangByNoFaktur(txtb_SearchNoKwitansi.getValue().toUpperCase());
       if (piutang != null) {
+        panelResult.setVisible(true);
 
         txtb_NoFaktur.setValue(piutang.getPenjualan().getNoFaktur());
         txtb_NoKuitansi.setValue(piutang.getNoKuitansi());
@@ -151,7 +156,7 @@ public class InputTglBawaMainCtrl extends GFCBaseCtrl implements Serializable {
         txtb_TglJatuhTempo.setValue(piutang.getTglJatuhTempo());
         txtb_NilaiTagihan.setValue(piutang.getNilaiTagihan());
         txtb_NamaPelanggan.setValue(piutang.getPenjualan().getNamaPelanggan());
-
+        txb_KekuranganBayar.setValue(piutang.getKekuranganBayar());
         List<Status> listStatus = getStatusService().getAllStatuss();
         lbox_Status.setModel(new ListModelList(listStatus));
         lbox_Status.setItemRenderer(new StatusListModelItemRenderer());
@@ -162,6 +167,9 @@ public class InputTglBawaMainCtrl extends GFCBaseCtrl implements Serializable {
         }
 
         List<Karyawan> listKaryawan = getKaryawanService().getKaryawansByJobTypeId(new Long(6));// Kolektor
+        List<Karyawan> listDivisi = getKaryawanService().getKaryawansByJobTypeId(new Long(2));// Divisi
+        listKaryawan.addAll(listDivisi);
+
 
         lbox_Kolektor.setModel(new ListModelList(listKaryawan));
         lbox_Kolektor.setItemRenderer(new KaryawanListModelItemRenderer());
@@ -177,11 +185,13 @@ public class InputTglBawaMainCtrl extends GFCBaseCtrl implements Serializable {
           txtb_tglBawaKolektor.setValue(new Date());
         }
 
-        panelResult.setVisible(true);
+
         txtb_tglPembayaran.setValue(piutang.getTglPembayaran());
         txtb_Pembayaran.setValue(piutang.getPembayaran());
         txtb_Diskon.setValue(piutang.getDiskon());
         txtb_Keterangan.setValue(piutang.getKeterangan());
+
+        checkbox_masalah.setChecked(piutang.isMasalah());
 
         txtb_KodeKolektor.focus();
       } else {
@@ -195,6 +205,7 @@ public class InputTglBawaMainCtrl extends GFCBaseCtrl implements Serializable {
       return;
     }
   }
+
 
   public KaryawanService getKaryawanService() {
     return this.karyawanService;

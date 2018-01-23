@@ -8,6 +8,8 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -75,7 +77,9 @@ public class CetakTandaTerimaKwitansiTextPrinter extends Window implements Seria
     Set<Mandiri> listMandiri = getListMandiri(listPiutang);
     for (Mandiri mandiri : listMandiri) {
       try {
-        doPrint(karyawan, mandiri, startDate, endDate, listPiutang, selectedPrinter);
+        doPrint(karyawan, mandiri, startDate, endDate, listPiutang, selectedPrinter, "A2");
+        doPrint(karyawan, mandiri, startDate, endDate, listPiutang, selectedPrinter, "A3-10");
+        doPrint(karyawan, mandiri, startDate, endDate, listPiutang, selectedPrinter, "MASALAH");
       } catch (final Exception e) {
         ZksampleMessageUtils.showErrorMessage(e.toString());
       }
@@ -107,56 +111,97 @@ public class CetakTandaTerimaKwitansiTextPrinter extends Window implements Seria
   }
 
   public void doPrint(Karyawan karyawan, Mandiri mandiri, Date startDate, Date endDate,
-      List<Piutang> listPiutang, PrintService selectedPrinter) throws PrintException, IOException,
-      Exception {
+      List<Piutang> listPiutang, PrintService selectedPrinter, String kondisi)
+      throws PrintException, IOException, Exception {
 
     List<ReportKwitansi> listData = new ArrayList<ReportKwitansi>();
+
+    Collections.sort(listPiutang, new Comparator<Piutang>() {
+      @Override
+      public int compare(Piutang obj1, Piutang obj2) {
+        return obj1.getNoFaktur().compareTo(obj2.getNoFaktur());
+      }
+    });
+
     int i = 1;
     for (Piutang piutang : listPiutang) {
       if (piutang.getPenjualan().getMandiriId().equals(mandiri)) {
-        ReportKwitansi data = new ReportKwitansi();
-        data.setNo(i + "");
-        data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
-        data.setTglBawa(piutang.getTglBawaKolektor());
-        data.setTglBayar(piutang.getTglPembayaran());
-        data.setTglKuitansi(piutang.getTglJatuhTempo());
-        data.setNamaCustomer(piutang.getPenjualan().getNamaPelanggan());
-        data.setNilaiPembayaran(piutang.getPembayaran());
-        data.setNilaiTagih(piutang.getNilaiTagihan());
-        data.setKeterangan(piutang.getKeterangan());
-
-        listData.add(data);
-        i++;
+        if (kondisi.equals("A2")) {
+          if (piutang.getPembayaranKe() == 2 && !piutang.isMasalah()) {
+            ReportKwitansi data = new ReportKwitansi();
+            data.setNo(i + ".");
+            data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
+            data.setTglBawa(piutang.getTglBawaKolektor());
+            data.setTglBayar(piutang.getTglPembayaran());
+            data.setTglKuitansi(piutang.getTglJatuhTempo());
+            data.setNamaCustomer(piutang.getPenjualan().getNamaPelanggan());
+            data.setNilaiPembayaran(piutang.getPembayaran());
+            data.setNilaiTagih(piutang.getNilaiTagihan());
+            data.setKeterangan(piutang.getKeterangan());
+            listData.add(data);
+            i++;
+          }
+        } else if (kondisi.equals("A3-10")) {
+          if (piutang.getPembayaranKe() != 2 && !piutang.isMasalah()) {
+            ReportKwitansi data = new ReportKwitansi();
+            data.setNo(i + ".");
+            data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
+            data.setTglBawa(piutang.getTglBawaKolektor());
+            data.setTglBayar(piutang.getTglPembayaran());
+            data.setTglKuitansi(piutang.getTglJatuhTempo());
+            data.setNamaCustomer(piutang.getPenjualan().getNamaPelanggan());
+            data.setNilaiPembayaran(piutang.getPembayaran());
+            data.setNilaiTagih(piutang.getNilaiTagihan());
+            data.setKeterangan(piutang.getKeterangan());
+            listData.add(data);
+            i++;
+          }
+        } else if (kondisi.equals("MASALAH")) {
+          if (piutang.isMasalah()) {
+            ReportKwitansi data = new ReportKwitansi();
+            data.setNo(i + ".");
+            data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
+            data.setTglBawa(piutang.getTglBawaKolektor());
+            data.setTglBayar(piutang.getTglPembayaran());
+            data.setTglKuitansi(piutang.getTglJatuhTempo());
+            data.setNamaCustomer(piutang.getPenjualan().getNamaPelanggan());
+            data.setNilaiPembayaran(piutang.getPembayaran());
+            data.setNilaiTagih(piutang.getNilaiTagihan());
+            data.setKeterangan(piutang.getKeterangan());
+            listData.add(data);
+            i++;
+          }
+        }
       }
     }
+    if (listData.size() > 0) {
+      InputStream is =
+          new ByteArrayInputStream(generateData(karyawan, mandiri, startDate, endDate, listData,
+              kondisi).getBytes("UTF8"));
+      PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
+      pras.add(new Copies(1));
 
-    InputStream is =
-        new ByteArrayInputStream(generateData(karyawan, startDate, endDate, listData).getBytes(
-            "UTF8"));
-    PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
-    pras.add(new Copies(1));
+      DocFlavor flavor = DocFlavor.INPUT_STREAM.AUTOSENSE;
+      Doc doc = new SimpleDoc(is, flavor, null);
+      DocPrintJob job = selectedPrinter.createPrintJob();
 
-    DocFlavor flavor = DocFlavor.INPUT_STREAM.AUTOSENSE;
-    Doc doc = new SimpleDoc(is, flavor, null);
-    DocPrintJob job = selectedPrinter.createPrintJob();
+      PrintJobWatcher pjw = new PrintJobWatcher(job);
+      job.print(doc, pras);
+      pjw.waitForDone();
+      is.close();
 
-    PrintJobWatcher pjw = new PrintJobWatcher(job);
-    job.print(doc, pras);
-    pjw.waitForDone();
-    is.close();
-
-    // send FF to eject the page
-    InputStream ff = new ByteArrayInputStream("\f".getBytes());
-    Doc docff = new SimpleDoc(ff, flavor, null);
-    DocPrintJob jobff = selectedPrinter.createPrintJob();
-    pjw = new PrintJobWatcher(jobff);
-    jobff.print(docff, null);
-    pjw.waitForDone();
-
+      // send FF to eject the page
+      InputStream ff = new ByteArrayInputStream("\f".getBytes());
+      Doc docff = new SimpleDoc(ff, flavor, null);
+      DocPrintJob jobff = selectedPrinter.createPrintJob();
+      pjw = new PrintJobWatcher(jobff);
+      jobff.print(docff, null);
+      pjw.waitForDone();
+    }
   }
 
-  private String generateData(Karyawan karyawan, Date startDate, Date endDate,
-      List<ReportKwitansi> listItem) throws Exception {
+  private String generateData(Karyawan karyawan, Mandiri mandiri, Date startDate, Date endDate,
+      List<ReportKwitansi> listItem, String kondisi) throws Exception {
     StringBuffer sb = new StringBuffer();
 
     CompanyProfileService companyService =
@@ -174,7 +219,8 @@ public class CetakTandaTerimaKwitansiTextPrinter extends Window implements Seria
       totalTagih = BigDecimal.ZERO;
       totalPembayaran = BigDecimal.ZERO;
 
-      generateHeaderReport(sb, karyawan, startDate, endDate, pageNo, companyName, companyAddress);
+      generateHeaderReport(sb, karyawan, mandiri, startDate, endDate, pageNo, companyName,
+          companyAddress, kondisi);
       generateDataReport(sb, listItem, itemPerPage, pageNo);
       generateFooterReport(sb);
 
@@ -286,8 +332,9 @@ public class CetakTandaTerimaKwitansiTextPrinter extends Window implements Seria
 
   }
 
-  private void generateHeaderReport(StringBuffer sb, Karyawan karyawan, Date startDate,
-      Date endDate, int pageNo, String companyName, String companyAddress) throws Exception {
+  private void generateHeaderReport(StringBuffer sb, Karyawan karyawan, Mandiri mandiri,
+      Date startDate, Date endDate, int pageNo, String companyName, String companyAddress,
+      String kondisi) throws Exception {
 
     Date printDate = new Date();
     SimpleDateFormat formatDate = new SimpleDateFormat();
@@ -312,7 +359,9 @@ public class CetakTandaTerimaKwitansiTextPrinter extends Window implements Seria
     addWhiteSpace(sb, maxLengthTglPrint - titleReport.length() - 20);
     sb.append(printHourStr);
     addNewLine(sb, 1);
-    String tglBawa = "Tanggal Bawa : " + startDateStr + " s/d " + endDateStr;
+    String tglBawa =
+        "Tanggal Bawa : " + startDateStr + " s/d " + endDateStr + "  Mandiri : "
+            + mandiri.getKodeMandiri();
     sb.append(tglBawa);
     addWhiteSpace(sb, maxLengthTglPrint - tglBawa.length());
     sb.append(halStr);
@@ -320,7 +369,7 @@ public class CetakTandaTerimaKwitansiTextPrinter extends Window implements Seria
 
     sb.append("Kolektor : " + karyawan.getKodeKaryawan() + " - " + karyawan.getNamaPanggilan());
     addWhiteSpace(sb, 10);
-    sb.append("Status : Belum dilunasi !");
+    sb.append("Status : Belum dilunasi ! " + kondisi);
 
     addNewLine(sb, 1);
     addDoubleBorder(sb, pageWidth);

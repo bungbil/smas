@@ -21,6 +21,7 @@ public class PenjualanServiceImpl implements PenjualanService {
   private PenjualanDAO penjualanDAO;
   private PenjualanDetailDAO penjualanDetailDAO;
 
+
   /**
    * default Constructor
    */
@@ -97,17 +98,16 @@ public class PenjualanServiceImpl implements PenjualanService {
     return allPenjualan;
   }
 
-
   @Override
   public int getCountAllPenjualanDetails() {
     return getPenjualanDetailDAO().getCountAllPenjualanDetails();
   }
 
-
   @Override
   public int getCountAllPenjualans() {
     return getPenjualanDAO().getCountAllPenjualans();
   }
+
 
   @Override
   public int getCountAllPenjualansByDivisi(Karyawan obj, Date date) {
@@ -121,6 +121,7 @@ public class PenjualanServiceImpl implements PenjualanService {
 
     return getPenjualanDAO().getCountAllPenjualansByDivisi(obj, startDate, endDate);
   }
+
 
   @Override
   public int getCountPenjualanDetailsByPenjualan(Penjualan penjualan) {
@@ -173,11 +174,11 @@ public class PenjualanServiceImpl implements PenjualanService {
     return result;
   }
 
-
   @Override
   public BigDecimal getPenjualanSum(Penjualan penjualan) {
     return getPenjualanDAO().getPenjualanSum(penjualan);
   }
+
 
   @Override
   public void saveOrUpdate(Penjualan penjualan) {

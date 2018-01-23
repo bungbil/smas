@@ -112,8 +112,8 @@
 													<label id="label_Kolektor" value="Kolektor" />
 													<hbox>
 														<textbox id="txtb_KodeKolektor" value="@{controller.piutang.kolektor.kodeKaryawan}"
-																maxlength="50"/>
-														<listbox id="lbox_Kolektor" mold="select"
+																maxlength="50" constraint="no empty"/>
+														<listbox id="lbox_Kolektor" mold="select" 
 																multiple="false" rows="1" xmlns:w="client"  disabled="true">																											
 														</listbox>
 													</hbox>		
@@ -123,8 +123,16 @@
 												</row>	
 												<row>
 													<label 	value="Tanggal Bawa Kolektor" />															
+													
 													<datebox id="txtb_tglBawaKolektor"	value="@{controller.piutang.tglBawaKolektor}" 
-														format="dd/MM/yyyy"  width="150px" />				
+														format="dd/MM/yyyy"  width="150px" constraint="no empty"/>				
+													<label />
+													<label />
+													<label />													
+												</row>
+												<row>
+													<label 	value="Kwitansi Bermasalah?" />																												
+														<checkbox id="checkbox_masalah" checked="false"/>				
 													<label />
 													<label />
 													<label />													

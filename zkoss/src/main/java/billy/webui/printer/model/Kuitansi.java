@@ -18,8 +18,12 @@ public class Kuitansi {
   private String alamat2;
   private String alamat3;
   private String alamat4;
+  private String alamat5;
   private String telepon;
+
+
   private String jumlahInWord;
+
   private String jumlahInWord2;
   private String jumlah;
   private String angsuranKe;
@@ -32,7 +36,6 @@ public class Kuitansi {
 
   }
 
-
   public String getAlamat() {
     return alamat;
   }
@@ -41,12 +44,17 @@ public class Kuitansi {
     return alamat2;
   }
 
+
   public String getAlamat3() {
     return alamat3;
   }
 
   public String getAlamat4() {
     return alamat4;
+  }
+
+  public String getAlamat5() {
+    return alamat5;
   }
 
   public String getAlamatKantor() {
@@ -135,6 +143,10 @@ public class Kuitansi {
 
   public void setAlamat4(String alamat4) {
     this.alamat4 = alamat4;
+  }
+
+  public void setAlamat5(String alamat5) {
+    this.alamat5 = alamat5;
   }
 
   public void setAlamatKantor(String alamatKantor) {

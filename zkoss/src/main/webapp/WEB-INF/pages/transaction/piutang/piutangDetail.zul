@@ -92,46 +92,51 @@
 															</listbox>
 														</hbox>		
 														<label />
-														<label />
-														<label />																																					
+														<label value="Nama Pelanggan Kwitansi"/>
+								                	<textbox id="txtb_NamaPelangganPiutang" value="@{controller.piutang.namaPelanggan}"
+														 width="250px" readonly="true"/>																																						
 													</row>	
 													<row>
 														<label 	value="Tanggal Bawa Kolektor" />															
 														<datebox id="txtb_tglBawaKolektor"	value="@{controller.piutang.tglBawaKolektor}" 
 															format="dd/MM/yyyy"  width="150px" disabled="true" />				
 														<label />
-														<label />
-														<label />													
+														<label value="Telepon Pelanggan" />															
+														<textbox id="txtb_Telepon" value="@{controller.piutang.telepon}"
+															 maxlength="100" width="250px"  readonly="true"/>													
 													</row>
 													<row>
 														<label 	value="Tanggal Pembayaran" />															
 														<datebox id="txtb_tglPembayaran"	value="@{controller.piutang.tglPembayaran}" 
 															format="dd/MM/yyyy" disabled="true" width="150px" constraint="no empty"/>				
 														<label />
-														<label />
-														<label />													
+														<label	value="Alamat Pelanggan" />															
+														<textbox id="txtb_Alamat" value="@{controller.piutang.alamat}" 
+															 maxlength="500" width="250px" readonly="true"/>														
 													</row>
 													<row>
 														<label value="Pembayaran"/>
 							                    		<decimalbox id="txtb_Pembayaran" value="@{controller.piutang.pembayaran}" readonly="true" format=",###.#" hflex="1" />										                
 							                    		<label />	
-														<label />
-														<label />													
+														<label	value="Kelurahan Kecamatan" />															
+														<textbox id="txtb_Alamat2" value="@{controller.piutang.alamat2}" 
+															 maxlength="40" width="250px" readonly="true"/>														
 													</row>
 													<row>
 														<label value="Diskon"/>
 							                    		<decimalbox id="txtb_Diskon" value="@{controller.piutang.diskon}" format=",###.#" hflex="1" readonly="true"/>										                
 							                    		<label />	
-														<label />
-														<label />													
+														<label	value="Kota" />															
+														<textbox id="txtb_Alamat3" value="@{controller.piutang.alamat3}" 
+															maxlength="40" width="250px" readonly="true"/>																
 													</row>
 													<row>
 														<label value="Keterangan" />															
 														<textbox id="txtb_Keterangan" value="@{controller.piutang.keterangan}"
 															readonly="true" maxlength="300" hflex="1" rows="2"  />
 														<label />	
-														<label />
-														<label />	
+														<label 	value="Kwitansi Bermasalah?" />																												
+														<checkbox id="checkbox_masalah" checked="@{controller.piutang.masalah}" disabled="true"/>	
 													</row>
 													<row>
 														<label value="Status Final"/>									            													      																
@@ -140,7 +145,7 @@
 														</listbox>	
 										                <label />	
 														<label />
-														<label />	
+														<button id="btnResetKwitansi" label="Reset Kwitansi" />	
 													</row>
 													<!-- <row>
 														<label value="Pilih Printer Dot Matrix" />

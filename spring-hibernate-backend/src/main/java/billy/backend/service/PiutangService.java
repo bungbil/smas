@@ -12,6 +12,8 @@ public interface PiutangService {
 
   public void delete(Piutang piutang);
 
+  public void deleteAllPiutang(Penjualan penjualan);
+
   public void deleteNextPiutang(Piutang data);
 
   public void generatePiutangByIntervalKredit(Penjualan penjualan, int intervalKredit, Status status);
@@ -38,6 +40,8 @@ public interface PiutangService {
 
   public Piutang getNewPiutang();
 
+  public Piutang getNextPiutang(Piutang data);
+
   public Piutang getNextPiutang(Piutang data, Status status);
 
   public Piutang getPiutangByNoFaktur(String data);
@@ -46,7 +50,13 @@ public interface PiutangService {
 
   public List<Piutang> getPiutangsByPenjualan(Penjualan penjualan);
 
+  public boolean resetPembayaranPiutang(Piutang piutang, Status statusProses);
+
   public void saveOrUpdate(Piutang piutang);
+
+  public void updateAlamat(Piutang piutang);
+
+  public void updateTglJatuhTempo(Piutang data);
 
 
 }

@@ -30,9 +30,11 @@ import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 import billy.backend.model.Karyawan;
+import billy.backend.model.Penjualan;
 import billy.backend.model.Piutang;
 import billy.backend.model.Status;
 import billy.backend.service.KaryawanService;
+import billy.backend.service.PenjualanService;
 import billy.backend.service.PiutangService;
 import billy.backend.service.StatusService;
 import billy.webui.master.karyawan.model.KaryawanListModelItemRenderer;
@@ -70,6 +72,7 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
   protected Button btnCetak;
   protected Button btnCetakKwitansiSekarang;
   protected Listbox lbox_Printer;
+  protected Button btnResetKwitansi;
 
   protected Label label_butuhApproval;
   protected Textbox txtb_ReasonApproval;
@@ -84,8 +87,12 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
 
   // ServiceDAOs / Domain Classes
   private transient PiutangService piutangService;
+  private transient PenjualanService penjualanService;
   private transient KaryawanService karyawanService;
+
+
   private transient StatusService statusService;
+
   private PrintService selectedPrinter;
   DecimalFormat df = new DecimalFormat("#,###");
 
@@ -95,12 +102,6 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
   public PiutangDetailCtrl() {
     super();
   }
-
-
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // +++++++++++++++ Component Events ++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-
 
   @Override
   public void doAfterCompose(Component window) throws Exception {
@@ -141,6 +142,12 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
     txtb_ApprovedRemark.setReadonly(false);
     btnApprovePiutang.setVisible(true);
   }
+
+
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++ Component Events ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+
 
   public void doFitSize(Event event) {
 
@@ -216,14 +223,18 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
     return this.binder;
   }
 
+  public KaryawanService getKaryawanService() {
+    return karyawanService;
+  }
+
+  public PenjualanService getPenjualanService() {
+    return penjualanService;
+  }
+
   // +++++++++++++++++++++++++++++++++++++++++++++++++ //
   // ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
   // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
-
-  public KaryawanService getKaryawanService() {
-    return karyawanService;
-  }
 
   /* Master BEANS */
   public Piutang getPiutang() {
@@ -231,10 +242,10 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
     return getPiutangMainCtrl().getSelectedPiutang();
   }
 
-
   public PiutangMainCtrl getPiutangMainCtrl() {
     return this.piutangMainCtrl;
   }
+
 
   public BindingListModelList getPiutangs() {
     // STORED IN THE module's MainController
@@ -413,6 +424,66 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
     }
   }
 
+  public void onClick$btnResetKwitansi(Event event) throws Exception {
+
+    final Piutang anPiutang = getSelectedPiutang();
+    if (anPiutang != null) {
+
+      // Show a confirm box
+      final String msg = "Apakah anda yakin akan mereset kwitansi ini?? \n\n ";
+      final String title = "";
+
+      MultiLineMessageBox.doSetTemplate();
+      if (MultiLineMessageBox.show(msg, title, Messagebox.YES | Messagebox.NO, Messagebox.QUESTION,
+          true, new EventListener() {
+
+
+            @Override
+            public void onEvent(Event evt) {
+              switch (((Integer) evt.getData()).intValue()) {
+                case MultiLineMessageBox.YES:
+                  try {
+                    Status statusProses = getStatusService().getStatusByID(new Long(3)); // PROSES
+                    boolean result =
+                        getPiutangService().resetPembayaranPiutang(anPiutang, statusProses);
+
+                    if (result) {
+                      List<Piutang> piutangList =
+                          getPiutangService().getPiutangsByPenjualan(anPiutang.getPenjualan());
+                      BigDecimal totalPaid = BigDecimal.ZERO;
+                      Penjualan penjualan = anPiutang.getPenjualan();
+                      totalPaid = totalPaid.add(penjualan.getDownPayment());
+                      for (Piutang pp : piutangList) {
+                        if (null != pp.getPembayaran()) {
+                          totalPaid = totalPaid.add(pp.getPembayaran()).add(pp.getDiskon());
+
+                        }
+                      }
+                      penjualan.setPiutang(penjualan.getTotal().subtract(totalPaid));
+                      getPenjualanService().saveOrUpdate(penjualan);
+                    } else {
+                      ZksampleMessageUtils
+                          .showErrorMessage("Reset Kwitansi hanya bisa untuk kwitansi terakhir");
+                    }
+
+                  } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                  }
+                  break; //
+                case MultiLineMessageBox.NO:
+                  break; //
+              }
+            }
+          }
+
+      ) == MultiLineMessageBox.YES) {
+      }
+
+    }
+
+  }
+
   /**
    * Automatically called method from zk.
    * 
@@ -427,15 +498,19 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
     doFitSize(event);
   }
 
-  /* COMPONENTS and OTHERS */
-
-
   public void setBinder(AnnotateDataBinder binder) {
     this.binder = binder;
   }
 
+  /* COMPONENTS and OTHERS */
+
+
   public void setKaryawanService(KaryawanService karyawanService) {
     this.karyawanService = karyawanService;
+  }
+
+  public void setPenjualanService(PenjualanService penjualanService) {
+    this.penjualanService = penjualanService;
   }
 
   public void setPiutang(Piutang anPiutang) {

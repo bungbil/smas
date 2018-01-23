@@ -8,6 +8,8 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -110,6 +112,14 @@ public class CetakPembayaranDiskonTextPrinter extends Window implements Serializ
       List<Piutang> listPiutang, PrintService selectedPrinter) throws PrintException, IOException {
 
     List<ReportKwitansi> listData = new ArrayList<ReportKwitansi>();
+
+    Collections.sort(listPiutang, new Comparator<Piutang>() {
+      @Override
+      public int compare(Piutang obj1, Piutang obj2) {
+        return obj1.getNoFaktur().compareTo(obj2.getNoFaktur());
+      }
+    });
+
     int i = 1;
     for (Piutang piutang : listPiutang) {
       if (piutang.getPenjualan().getMandiriId().equals(mandiri)) {
@@ -130,8 +140,8 @@ public class CetakPembayaranDiskonTextPrinter extends Window implements Serializ
     }
 
     InputStream is =
-        new ByteArrayInputStream(generateData(karyawan, startDate, endDate, listData).getBytes(
-            "UTF8"));
+        new ByteArrayInputStream(generateData(karyawan, mandiri, startDate, endDate, listData)
+            .getBytes("UTF8"));
     PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
     pras.add(new Copies(1));
 
@@ -154,7 +164,7 @@ public class CetakPembayaranDiskonTextPrinter extends Window implements Serializ
 
   }
 
-  private String generateData(Karyawan karyawan, Date startDate, Date endDate,
+  private String generateData(Karyawan karyawan, Mandiri mandiri, Date startDate, Date endDate,
       List<ReportKwitansi> listItem) {
     StringBuffer sb = new StringBuffer();
 
@@ -173,7 +183,8 @@ public class CetakPembayaranDiskonTextPrinter extends Window implements Serializ
       totalTagih = BigDecimal.ZERO;
       totalPembayaran = BigDecimal.ZERO;
 
-      generateHeaderReport(sb, karyawan, startDate, endDate, pageNo, companyName, companyAddress);
+      generateHeaderReport(sb, karyawan, mandiri, startDate, endDate, pageNo, companyName,
+          companyAddress);
       generateDataReport(sb, listItem, itemPerPage, pageNo);
       generateFooterReport(sb);
 
@@ -264,8 +275,8 @@ public class CetakPembayaranDiskonTextPrinter extends Window implements Serializ
 
   }
 
-  private void generateHeaderReport(StringBuffer sb, Karyawan karyawan, Date startDate,
-      Date endDate, int pageNo, String companyName, String companyAddress) {
+  private void generateHeaderReport(StringBuffer sb, Karyawan karyawan, Mandiri mandiri,
+      Date startDate, Date endDate, int pageNo, String companyName, String companyAddress) {
     Date printDate = new Date();
     SimpleDateFormat formatDate = new SimpleDateFormat();
     formatDate = new SimpleDateFormat("dd-MM-yy", Locale.getDefault());
@@ -289,7 +300,9 @@ public class CetakPembayaranDiskonTextPrinter extends Window implements Serializ
     addWhiteSpace(sb, maxLengthTglPrint - titleReport.length() - 20);
     sb.append(printHourStr);
     addNewLine(sb, 1);
-    String tglBawa = "Tanggal Bayar : " + startDateStr + " s/d " + endDateStr;
+    String tglBawa =
+        "Tanggal Bayar : " + startDateStr + " s/d " + endDateStr + "  Mandiri : "
+            + mandiri.getKodeMandiri();;
     sb.append(tglBawa);
     addWhiteSpace(sb, maxLengthTglPrint - tglBawa.length());
     sb.append(halStr);

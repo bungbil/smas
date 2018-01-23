@@ -549,6 +549,7 @@
 		<property name="piutangService" ref="piutangService" />		
 		<property name="karyawanService" ref="karyawanService" />
 		<property name="statusService" ref="statusService" />
+		<property name="penjualanService" ref="penjualanService" />	
 	</bean>
 	
 	<!-- Approval Piutang -->

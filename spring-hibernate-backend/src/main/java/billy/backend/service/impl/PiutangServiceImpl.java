@@ -6,6 +6,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import billy.backend.dao.PiutangDAO;
 import billy.backend.model.Karyawan;
 import billy.backend.model.Penjualan;
@@ -16,7 +18,7 @@ import billy.backend.service.PiutangService;
 public class PiutangServiceImpl implements PiutangService {
 
   private PiutangDAO piutangDAO;
-
+  private static final Logger logger = Logger.getLogger(PiutangServiceImpl.class);
 
   /**
    * default Constructor
@@ -30,18 +32,46 @@ public class PiutangServiceImpl implements PiutangService {
   }
 
   @Override
+  public void deleteAllPiutang(Penjualan penjualan) {
+
+    // if piutang exist must delete all
+    try {
+      logger.info("Start delete piutang by penjualan dengan no faktur :" + penjualan.getNoFaktur());
+      List<Piutang> piutang = getPiutangsByPenjualan(penjualan);
+
+      for (Piutang entity : piutang) {
+        getPiutangDAO().delete(entity);
+      }
+      logger.info("End delete piutang by penjualan dengan no faktur :" + penjualan.getNoFaktur());
+    } catch (Exception e) {
+      logger.error("Error delete piutang by penjualan dengan no faktur :" + penjualan.getNoFaktur()
+          + ", error message : " + e.getMessage());
+    }
+
+  }
+
+  @Override
   public void deleteNextPiutang(Piutang data) {
 
     int totalPiutang = data.getPenjualan().getIntervalKredit();
     int startDelete = data.getPembayaranKe() + 1;
-    for (int i = startDelete; i < totalPiutang; i++) {
-      Piutang piutang = getPiutangDAO().getPiutangByNoFakturAndPembayaranKe(data.getNoFaktur(), i);
-      getPiutangDAO().delete(piutang);
+    try {
+      for (int i = startDelete; i < totalPiutang; i++) {
+        Piutang piutang =
+            getPiutangDAO().getPiutangByNoFakturAndPembayaranKe(data.getNoFaktur(), i);
+        getPiutangDAO().delete(piutang);
+      }
+    } catch (Exception e) {
+      logger.error("Error delete next piutang dengan no faktur :" + data.getNoFaktur()
+          + ", error message : " + e.getMessage());
     }
+
   }
+
 
   @Override
   public void generatePiutangByIntervalKredit(Penjualan penjualan, int intervalKredit, Status status) {
+
 
     Calendar cal = Calendar.getInstance();
     for (int i = 2; i <= intervalKredit; i++) {
@@ -88,6 +118,13 @@ public class PiutangServiceImpl implements PiutangService {
       piutang.setTglPembayaran(null);
       piutang.setKolektor(null);
       piutang.setKeterangan(null);
+
+      piutang.setMasalah(false);
+      piutang.setNamaPelanggan(penjualan.getNamaPelanggan());
+      piutang.setTelepon(penjualan.getTelepon());
+      piutang.setAlamat(penjualan.getAlamat());
+      piutang.setAlamat2(penjualan.getAlamat2());
+      piutang.setAlamat3(penjualan.getAlamat3());
 
       saveOrUpdate(piutang);
     }
@@ -138,6 +175,13 @@ public class PiutangServiceImpl implements PiutangService {
     piutang.setTglPembayaran(null);
     piutang.setKolektor(null);
     piutang.setKeterangan(null);
+
+    piutang.setMasalah(false);
+    piutang.setNamaPelanggan(currentData.getNamaPelanggan());
+    piutang.setTelepon(currentData.getTelepon());
+    piutang.setAlamat(currentData.getAlamat());
+    piutang.setAlamat2(currentData.getAlamat2());
+    piutang.setAlamat3(currentData.getAlamat3());
 
     saveOrUpdate(piutang);
 
@@ -211,6 +255,13 @@ public class PiutangServiceImpl implements PiutangService {
   }
 
   @Override
+  public Piutang getNextPiutang(Piutang data) {
+
+    return getPiutangDAO().getPiutangByNoFakturAndPembayaranKe(data.getNoFaktur(),
+        data.getPembayaranKe() + 1);
+  }
+
+  @Override
   public Piutang getNextPiutang(Piutang data, Status statusProses) {
 
     if (data.getPenjualan().getIntervalKredit() <= data.getPembayaranKe()) {
@@ -242,6 +293,42 @@ public class PiutangServiceImpl implements PiutangService {
     return result;
   }
 
+
+  @Override
+  public boolean resetPembayaranPiutang(Piutang piutang, Status statusProses) {
+    boolean result = false;
+
+    Piutang nextPiutang =
+        getPiutangDAO().getPiutangByNoFakturAndPembayaranKe(piutang.getNoFaktur(),
+            piutang.getPembayaranKe() + 1);
+    if (nextPiutang.isAktif()) {
+      result = true;
+      nextPiutang.setAktif(false);
+      nextPiutang.setKekuranganBayar(null);
+      nextPiutang.setKolektor(null);
+      nextPiutang.setTglBawaKolektor(null);
+      nextPiutang.setNeedApproval(false);
+      nextPiutang.setReasonApproval(null);
+      nextPiutang.setFullPayment(false);
+      nextPiutang.setPembayaran(null);
+      nextPiutang.setTglPembayaran(null);
+      nextPiutang.setDiskon(null);
+      nextPiutang.setStatus(statusProses);
+      nextPiutang.setStatusFinal(null);
+      saveOrUpdate(nextPiutang);
+
+      piutang.setAktif(true);
+      piutang.setFullPayment(false);
+      piutang.setPembayaran(null);
+      piutang.setTglPembayaran(null);
+      piutang.setDiskon(null);
+      piutang.setStatus(statusProses);
+      piutang.setStatusFinal(null);
+      saveOrUpdate(piutang);
+    }
+    return result;
+  }
+
   @Override
   public void saveOrUpdate(Piutang piutang) {
     getPiutangDAO().saveOrUpdate(piutang);
@@ -250,5 +337,37 @@ public class PiutangServiceImpl implements PiutangService {
 
   public void setPiutangDAO(PiutangDAO piutangDAO) {
     this.piutangDAO = piutangDAO;
+  }
+
+  @Override
+  public void updateAlamat(Piutang piutang) {
+
+    for (int i = piutang.getPembayaranKe() + 1; i <= piutang.getPenjualan().getIntervalKredit(); i++) {
+      Piutang data = getPiutangDAO().getPiutangByNoFakturAndPembayaranKe(piutang.getNoFaktur(), i);
+      data.setNamaPelanggan(piutang.getNamaPelanggan());
+      data.setTelepon(piutang.getTelepon());
+      data.setAlamat(piutang.getAlamat());
+      data.setAlamat2(piutang.getAlamat2());
+      data.setAlamat3(piutang.getAlamat3());
+
+      saveOrUpdate(data);
+    }
+  }
+
+  @Override
+  public void updateTglJatuhTempo(Piutang piutang) {
+    saveOrUpdate(piutang);
+
+    Date tglJatuhTempo = piutang.getTglJatuhTempo();
+    Calendar cal = Calendar.getInstance();
+
+    for (int i = piutang.getPembayaranKe() + 1; i <= piutang.getPenjualan().getIntervalKredit(); i++) {
+      Piutang data = getPiutangDAO().getPiutangByNoFakturAndPembayaranKe(piutang.getNoFaktur(), i);
+      cal.setTime(tglJatuhTempo);
+      cal.add(Calendar.MONTH, 1);
+      tglJatuhTempo = cal.getTime();
+      data.setTglJatuhTempo(tglJatuhTempo);
+      saveOrUpdate(data);
+    }
   }
 }

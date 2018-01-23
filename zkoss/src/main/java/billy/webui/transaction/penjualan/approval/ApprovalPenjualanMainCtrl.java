@@ -431,13 +431,11 @@ public class ApprovalPenjualanMainCtrl extends GFCBaseCtrl implements Serializab
       getPenjualanService().saveOrUpdate(getApprovalPenjualanDetailCtrl().getPenjualan());
 
       // generatePiutang
-      if (getPiutangService().getCountPiutangsByPenjualan(
-          getApprovalPenjualanDetailCtrl().getPenjualan()) == 0) {
-        Status status2 =
-            getApprovalPenjualanDetailCtrl().getStatusService().getStatusByID(new Long(4)); // PIUTANG_BARU
+      if (getApprovalPenjualanDetailCtrl().getPenjualan().getIntervalKredit() > 1) {
+        getPiutangService().deleteAllPiutang(getApprovalPenjualanDetailCtrl().getPenjualan());
         getPiutangService().generatePiutangByIntervalKredit(
             getApprovalPenjualanDetailCtrl().getPenjualan(),
-            getApprovalPenjualanDetailCtrl().getPenjualan().getIntervalKredit(), status2);
+            getApprovalPenjualanDetailCtrl().getPenjualan().getIntervalKredit(), status);
       }
 
       // if saving is successfully than actualize the beans as

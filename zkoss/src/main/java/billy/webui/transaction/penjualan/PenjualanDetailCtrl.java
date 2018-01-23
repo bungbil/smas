@@ -73,7 +73,7 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
 
   protected Textbox txtb_NoFaktur; // autowired
   // protected Textbox txtb_NoOrderSheet; // autowired
-  protected Textbox txtb_Mandiri; // autowired
+  // protected Textbox txtb_Mandiri; // autowired
   protected Datebox txtb_TglPenjualan; // autowired
   protected Datebox txtb_RencanaKirim; // autowired
   protected Listbox lbox_Wilayah;
@@ -438,7 +438,7 @@ public class PenjualanDetailCtrl extends GFCBaseCtrl implements Serializable {
   public void emptyAllValue() {
     txtb_NoFaktur.setValue(null);
     // txtb_NoOrderSheet.setValue(null);
-    txtb_Mandiri.setValue(null);
+    // txtb_Mandiri.setValue(null);
     txtb_TglPenjualan.setValue(null);
     txtb_RencanaKirim.setValue(null);
     txtb_NamaPelanggan.setValue(null);

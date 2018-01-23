@@ -55,10 +55,10 @@
 													<row>
 														<label value="Mandiri" />	
 														<hbox>														
-															<textbox id="txtb_Mandiri" value="@{controller.penjualan.mandiri}"
-																readonly="true" maxlength="20" width="100px" />
+															<!-- <textbox id="txtb_Mandiri" value="@{controller.penjualan.mandiri}"
+																readonly="true" maxlength="20" width="100px" /> -->
 															<listbox id="lbox_Mandiri" mold="select"  disabled="true"
-																multiple="false" rows="1" width="150px">															
+																multiple="false" rows="1" width="250px">															
 															</listbox>														
 														</hbox>
 														<label />	
@@ -174,10 +174,10 @@
 													<row>
 														<label	value="Alamat Pelanggan" />															
 														<textbox id="txtb_Alamat" value="@{controller.penjualan.alamat}" 
-															readonly="true" constraint="no empty" maxlength="80" width="600px" />
+															readonly="true" constraint="no empty" maxlength="500" width="600px" />
 													</row>
 													<row>
-														<label	value="Kecamatan Kelurahan" />															
+														<label	value="Kelurahan Kecamatan" />															
 														<textbox id="txtb_Alamat2" value="@{controller.penjualan.alamat2}" 
 															readonly="true" constraint="no empty" maxlength="40" width="600px"/>
 													</row>	

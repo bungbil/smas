@@ -12,6 +12,7 @@ import java.util.List;
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -76,11 +77,21 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
   protected Datebox txtb_tglBawaKolektor;
   protected Decimalbox txb_KekuranganBayar;
   protected Datebox txtb_tglPembayaran;
+  protected Datebox txtb_tglJatuhTempoBerikut;
+
   protected Decimalbox txtb_Pembayaran;
   protected Decimalbox txtb_Diskon;
   protected Textbox txtb_Keterangan;
   protected Textbox txtb_NamaPelanggan;
   protected Combobox cmb_StatusFinal;
+
+
+  protected Textbox txtb_NamaPelangganPiutang; // autowired
+  protected Textbox txtb_Telepon; // autowired
+  protected Textbox txtb_Alamat; // autowired
+  protected Textbox txtb_Alamat2; // autowired
+  protected Textbox txtb_Alamat3; // autowired
+
 
   protected Label label_butuhApproval;
   protected Textbox txtb_ReasonApproval;
@@ -101,6 +112,7 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
   private StatusService statusService;
   DecimalFormat df = new DecimalFormat("#,###");
   Piutang piutang = new Piutang();
+  Piutang nextPiutang = new Piutang();
 
   /**
    * default constructor.<br>
@@ -128,29 +140,34 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
     /*
      * validasi butuh approval status final dipilih
      */
+    // System.out.println("Status final : " + cmb_StatusFinal.getValue());
     String message = "";
     if (cmb_StatusFinal.getValue() != null) {
-      if (cmb_StatusFinal.getValue() == "1") {
+      if (cmb_StatusFinal.getValue().equals("DISKON")) {
         message += "- Kwitansi akan di Finalkan dengan status DISKON \n";
         Status statusFinal = getStatusService().getStatusByID(new Long(5)); // DISKON
         piutang.setStatusFinal(statusFinal);
-      } else if (cmb_StatusFinal.getValue() == "2") {
+      } else if (cmb_StatusFinal.getValue().equals("TARIK BARANG")) {
         message += "- Kwitansi akan di Finalkan dengan status TARIK BARANG \n";
         Status statusFinal = getStatusService().getStatusByID(new Long(6)); // TARIK BARANG
         piutang.setStatusFinal(statusFinal);
-      } else if (cmb_StatusFinal.getValue() == "3") {
+      } else if (cmb_StatusFinal.getValue().equals("MASALAH")) {
         message += "- Kwitansi akan di Finalkan dengan status MASALAH \n";
         Status statusFinal = getStatusService().getStatusByID(new Long(7)); // MASALAH
         piutang.setStatusFinal(statusFinal);
-      } else if (cmb_StatusFinal.getValue() == "4") {
+      } else if (cmb_StatusFinal.getValue().equals("FINAL")) {
         message += "- Kwitansi akan di Finalkan dengan status FINAL \n";
         Status statusFinal = getStatusService().getStatusByID(new Long(8)); // FINAL
         piutang.setStatusFinal(statusFinal);
-      } else if (cmb_StatusFinal.getValue() == "0") {
+      } else if (cmb_StatusFinal.getValue().equals("UNDUR")) {
+        Status statusFinal = getStatusService().getStatusByID(new Long(9)); // UNDUR
+        piutang.setStatusFinal(statusFinal);
+        piutang.setStatus(statusFinal);
+      } else {
         message = "";
         piutang.setStatusFinal(null);
-
-        piutang.setStatus(null);
+        Status statusProses = getStatusService().getStatusByID(new Long(3)); // PROSES
+        piutang.setStatus(statusProses);
         piutang.setNeedApproval(false);
         piutang.setReasonApproval("");
         txtb_ReasonApproval.setValue("");
@@ -159,7 +176,7 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
     }
 
 
-    if (message != "") {
+    if (StringUtils.isNotEmpty(message)) {
       piutang.setNeedApproval(true);
       piutang.setReasonApproval(message);
       txtb_ReasonApproval.setValue(message);
@@ -250,7 +267,25 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
     piutang.setPembayaran(pembayaran);
     if (txtb_NilaiTagihan.getValue().compareTo(pembayaran) == -1) {
       piutang.setFullPayment(true);
+    } else if (txtb_NilaiTagihan.getValue().compareTo(pembayaran) == 0) {
+      piutang.setFullPayment(true);
     }
+
+    boolean alamatBerubah = false;
+    if (!txtb_NamaPelangganPiutang.getValue().equals(piutang.getNamaPelanggan())
+        || !txtb_Telepon.getValue().equals(piutang.getTelepon())
+        || !txtb_Alamat.getValue().equals(piutang.getAlamat())
+        || !txtb_Alamat2.getValue().equals(piutang.getAlamat2())
+        || !txtb_Alamat3.getValue().equals(piutang.getAlamat3())) {
+      alamatBerubah = true;
+    }
+
+    piutang.setNamaPelanggan(txtb_NamaPelangganPiutang.getValue());
+    piutang.setTelepon(txtb_Telepon.getValue());
+    piutang.setAlamat(txtb_Alamat.getValue());
+    piutang.setAlamat2(txtb_Alamat2.getValue());
+    piutang.setAlamat3(txtb_Alamat3.getValue());
+
 
     String userName =
         ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
@@ -262,16 +297,33 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
         piutang.getNilaiTagihan().add(piutang.getKekuranganBayar())
             .subtract(piutang.getPembayaran()).subtract(diskon);
 
-    piutang.setStatus(statusLunas);
-    piutang.setAktif(false);
+    // piutang.setStatus(statusLunas);
+    if (!piutang.isNeedApproval())
+      piutang.setAktif(false);
     // if (piutang.getPenjualan().getPiutang().compareTo(BigDecimal.ZERO) == 0) {
     // piutang.setAktif(true);
     // }
 
     // save it to database
     getPiutangService().saveOrUpdate(piutang);
+    nextPiutang = piutangService.getNextPiutang(piutang);
+    if (nextPiutang != null) {
+      if (txtb_tglJatuhTempoBerikut.getValue() != null) {
+        nextPiutang.setTglJatuhTempo(txtb_tglJatuhTempoBerikut.getValue());
+        // update ke semua piutang interval sebulan
+        getPiutangService().updateTglJatuhTempo(nextPiutang);
+        // getPiutangService().saveOrUpdate(nextPiutang);
+      } else {
+        nextPiutang.setTglJatuhTempo(null);
+      }
+    }
+
+    if (alamatBerubah) {
+      getPiutangService().updateAlamat(piutang);
+    }
 
     // recalculate piutang at penjualan
+
     List<Piutang> piutangList = getPiutangService().getPiutangsByPenjualan(piutang.getPenjualan());
     BigDecimal totalPaid = BigDecimal.ZERO;
     Penjualan penjualan = piutang.getPenjualan();
@@ -287,15 +339,19 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
 
     if (penjualan.getPiutang().compareTo(BigDecimal.ZERO) == 0) {
       penjualan.setStatus(statusLunas);
+      getPenjualanService().saveOrUpdate(penjualan);
       getPiutangService().deleteNextPiutang(piutang);
       ZksampleMessageUtils
           .showErrorMessage("No Faktur " + piutang.getNoFaktur() + " sudah LUNAS!!");
-    } else {
+
+
+    } else if (!piutang.isNeedApproval()) {
       printNextKuitansi(kekuranganBayar, statusProses);
     }
 
-
+    emptyAllValue();
     panelResult.setVisible(false);
+    panelApproval.setVisible(false);
     piutang = null;
     txtb_SearchNoKwitansi.focus();
   }
@@ -305,7 +361,8 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
       piutang = piutangService.getPiutangByNoFaktur(txtb_SearchNoKwitansi.getValue().toUpperCase());
 
       if (piutang != null) {
-
+        panelResult.setVisible(true);
+        emptyAllValue();
         txtb_NoFaktur.setValue(piutang.getPenjualan().getNoFaktur());
         txtb_NoKuitansi.setValue(piutang.getNoKuitansi());
         txtb_PembayaranKe.setValue(String.valueOf(piutang.getPembayaranKe()));
@@ -323,6 +380,8 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
         }
 
         List<Karyawan> listKaryawan = getKaryawanService().getKaryawansByJobTypeId(new Long(6));// Kolektor
+        List<Karyawan> listDivisi = getKaryawanService().getKaryawansByJobTypeId(new Long(2));// Divisi
+        listKaryawan.addAll(listDivisi);
 
         lbox_Kolektor.setModel(new ListModelList(listKaryawan));
         lbox_Kolektor.setItemRenderer(new KaryawanListModelItemRenderer());
@@ -340,14 +399,60 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
           txtb_tglPembayaran.setValue(new Date());
         }
 
-        panelResult.setVisible(true);
-        txtb_Pembayaran.setValue(piutang.getPembayaran());
-        txtb_Diskon.setValue(piutang.getDiskon());
+
+        // txtb_Pembayaran.setValue(piutang.getPembayaran());
+        // txtb_Diskon.setValue(piutang.getDiskon());
         if (piutang.getDiskon() == null) {
           txtb_Diskon.setValue(BigDecimal.ZERO);
         }
-        txtb_Keterangan.setValue(piutang.getKeterangan());
+        // txtb_Keterangan.setValue(piutang.getKeterangan());
         panelApproval.setVisible(piutang.isNeedApproval());
+
+        nextPiutang = piutangService.getNextPiutang(piutang);
+        if (nextPiutang != null) {
+          txtb_tglJatuhTempoBerikut.setValue(nextPiutang.getTglJatuhTempo());
+        }
+
+
+        if (StringUtils.isBlank(piutang.getNamaPelanggan())) {
+          txtb_NamaPelangganPiutang.setValue(piutang.getPenjualan().getNamaPelanggan());
+          piutang.setNamaPelanggan(piutang.getPenjualan().getNamaPelanggan());
+        } else {
+          txtb_NamaPelangganPiutang.setValue(piutang.getNamaPelanggan());
+        }
+
+        if (StringUtils.isBlank(piutang.getTelepon())) {
+          txtb_Telepon.setValue(piutang.getPenjualan().getTelepon());
+          piutang.setTelepon(piutang.getPenjualan().getTelepon());
+        } else {
+          txtb_Telepon.setValue(piutang.getTelepon());
+        }
+
+        if (StringUtils.isBlank(piutang.getAlamat())) {
+          txtb_Alamat.setValue(piutang.getPenjualan().getAlamat());
+          piutang.setAlamat(piutang.getPenjualan().getAlamat());
+        } else {
+          txtb_Alamat.setValue(piutang.getAlamat());
+        }
+
+        if (StringUtils.isBlank(piutang.getAlamat2())) {
+          txtb_Alamat2.setValue(piutang.getPenjualan().getAlamat2());
+          piutang.setAlamat2(piutang.getPenjualan().getAlamat2());
+        } else {
+          txtb_Alamat2.setValue(piutang.getAlamat2());
+        }
+
+        if (StringUtils.isBlank(piutang.getAlamat3())) {
+          txtb_Alamat3.setValue(piutang.getPenjualan().getAlamat3());
+          piutang.setAlamat3(piutang.getPenjualan().getAlamat3());
+        } else {
+          txtb_Alamat3.setValue(piutang.getAlamat3());
+        }
+
+        if (piutang.getStatusFinal() != null) {
+          // piutang.getStatusFinal().equals(l)
+          // cmb_StatusFinal
+        }
 
         txtb_tglPembayaran.focus();
       } else {
@@ -360,6 +465,24 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
     } else {
       ZksampleMessageUtils.showErrorMessage("Harap masukkan No Kwitansi");
       return;
+    }
+  }
+
+  public void emptyAllValue() {
+    try {
+
+
+      txtb_Pembayaran.setValue(BigDecimal.ZERO);
+      txtb_Diskon.setValue(BigDecimal.ZERO);
+      txtb_Keterangan.setValue("");
+      txtb_NamaPelangganPiutang.setValue("");
+      txtb_Telepon.setValue("");
+      txtb_Alamat.setValue("");
+      txtb_Alamat2.setValue("");
+      txtb_Alamat3.setValue("");
+
+    } catch (Exception e) {
+      logger.info("error empty value" + e.getMessage());
     }
   }
 
@@ -588,14 +711,25 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
               nextPiutang.setKekuranganBayar(kekuranganBayar);
               getPiutangService().saveOrUpdate(nextPiutang);
 
-              final Window win = (Window) Path.getComponent("/outerIndexWindow");
-              List<Piutang> listPiutang = new ArrayList<Piutang>();
-              listPiutang.add(nextPiutang);
-              new CetakKuitansiTextPrinter(win, listPiutang, selectedPrinter);
+              if (cmb_StatusFinal.getValue().equals("DISKON")
+                  || cmb_StatusFinal.getValue().equals("TARIK BARANG")
+                  || cmb_StatusFinal.getValue().equals("MASALAH")
+                  || cmb_StatusFinal.getValue().equals("FINAL")
+                  || (cmb_StatusFinal.getValue().equals("UNDUR") && piutang.getPembayaran().equals(
+                      BigDecimal.ZERO))) {
+                // no need to print
+
+              } else {
+                final Window win = (Window) Path.getComponent("/outerIndexWindow");
+                List<Piutang> listPiutang = new ArrayList<Piutang>();
+                listPiutang.add(nextPiutang);
+                new CetakKuitansiTextPrinter(win, listPiutang, selectedPrinter);
+              }
             }
           }
-        } catch (DataAccessException e) {
-          ZksampleMessageUtils.showErrorMessage(e.getMostSpecificCause().toString());
+        } catch (Exception e) {
+          ZksampleMessageUtils.showErrorMessage(e.getMessage().toString());
+          e.printStackTrace();
         }
       } else {
         ZksampleMessageUtils.showErrorMessage("Silakan pilih printer");

@@ -38,6 +38,7 @@ import billy.backend.model.Karyawan;
 import billy.backend.model.Mandiri;
 import billy.backend.model.Penjualan;
 import billy.backend.model.PenjualanDetail;
+import billy.backend.model.Piutang;
 import billy.backend.model.Status;
 import billy.backend.model.Wilayah;
 import billy.backend.service.PenjualanService;
@@ -271,7 +272,6 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
     getPenjualanDetailCtrl().doRefresh();
   }
 
-
   /**
    * Sets all UI-components to writable-mode. Sets the buttons to edit-Mode. Checks first, if the
    * NEEDED TABS with its contents are created. If not, than create it by simulate an onSelect()
@@ -281,41 +281,50 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
    * @throws InterruptedException
    */
   private void doEdit(Event event) {
-    // logger.debug(event.toString());
-    // get the current Tab for later checking if we must change it
-    Tab currentTab = tabbox_PenjualanMain.getSelectedTab();
 
-    // check first, if the tabs are created, if not than create it
-    if (getPenjualanDetailCtrl() == null) {
-      Events.sendEvent(new Event("onSelect", tabPenjualanDetail, null));
-      // if we work with spring beanCreation than we must check a little
-      // bit deeper, because the Controller are preCreated ?
-    } else if (getPenjualanDetailCtrl().getBinder() == null) {
-      Events.sendEvent(new Event("onSelect", tabPenjualanDetail, null));
-    }
+    if (isValidToEdit()) {
+      // logger.debug(event.toString());
+      // get the current Tab for later checking if we must change it
+      Tab currentTab = tabbox_PenjualanMain.getSelectedTab();
 
-    // check if the tab is one of the Detail tabs. If so do not change the
-    // selection of it
-    if (!currentTab.equals(tabPenjualanDetail)) {
-      tabPenjualanDetail.setSelected(true);
+      // check first, if the tabs are created, if not than create it
+      if (getPenjualanDetailCtrl() == null) {
+        Events.sendEvent(new Event("onSelect", tabPenjualanDetail, null));
+        // if we work with spring beanCreation than we must check a little
+        // bit deeper, because the Controller are preCreated ?
+      } else if (getPenjualanDetailCtrl().getBinder() == null) {
+        Events.sendEvent(new Event("onSelect", tabPenjualanDetail, null));
+      }
+
+      // check if the tab is one of the Detail tabs. If so do not change the
+      // selection of it
+      if (!currentTab.equals(tabPenjualanDetail)) {
+        tabPenjualanDetail.setSelected(true);
+      } else {
+        currentTab.setSelected(true);
+      }
+
+      // remember the old vars
+      doStoreInitValues();
+
+      btnCtrlPenjualan.setBtnStatus_Edit();
+
+      getPenjualanDetailCtrl().doReadOnlyMode(false);
+
+      // refresh the UI, because we can click the EditBtn from every tab.
+      getPenjualanDetailCtrl().getBinder().loadAll();
+      getPenjualanDetailCtrl().doRefresh();
+      // set focus
+      getPenjualanDetailCtrl().lbox_Mandiri.focus();
     } else {
-      currentTab.setSelected(true);
+      try {
+        ZksampleMessageUtils
+            .showErrorMessage("Penjualan ini tidak bisa di edit, karena piutang sudah berjalan.");
+      } catch (Exception e) {
+
+      }
     }
-
-    // remember the old vars
-    doStoreInitValues();
-
-    btnCtrlPenjualan.setBtnStatus_Edit();
-
-    getPenjualanDetailCtrl().doReadOnlyMode(false);
-
-    // refresh the UI, because we can click the EditBtn from every tab.
-    getPenjualanDetailCtrl().getBinder().loadAll();
-    getPenjualanDetailCtrl().doRefresh();
-    // set focus
-    getPenjualanDetailCtrl().txtb_Mandiri.focus();
   }
-
 
   /**
    * Opens the help screen for the current module.
@@ -379,9 +388,10 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
 
     tabPenjualanDetail.setSelected(true);
     // set focus
-    getPenjualanDetailCtrl().txtb_Mandiri.focus();
+    getPenjualanDetailCtrl().lbox_Mandiri.focus();
 
   }
+
 
   /**
    * Reset the selected object to its origin property values.
@@ -449,7 +459,7 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
       Listitem itemMandiri = getPenjualanDetailCtrl().lbox_Mandiri.getSelectedItem();
       if (itemMandiri != null) {
         ListModelList lml1 = (ListModelList) getPenjualanDetailCtrl().lbox_Mandiri.getListModel();
-        Mandiri mandiri = (Mandiri) lml1.get(item.getIndex());
+        Mandiri mandiri = (Mandiri) lml1.get(itemMandiri.getIndex());
         getPenjualanDetailCtrl().getPenjualan().setMandiriId(mandiri);
       }
 
@@ -506,6 +516,13 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
             getPenjualanDetailCtrl().radioStatusKredit.getLabel());
       }
 
+      getPenjualanDetailCtrl().getPenjualan().setAlamat(
+          getPenjualanDetailCtrl().getPenjualan().getAlamat().trim());
+      getPenjualanDetailCtrl().getPenjualan().setAlamat2(
+          getPenjualanDetailCtrl().getPenjualan().getAlamat2().trim());
+      getPenjualanDetailCtrl().getPenjualan().setAlamat3(
+          getPenjualanDetailCtrl().getPenjualan().getAlamat3().trim());
+
       getPenjualanDetailCtrl().getPenjualan().setPiutang(
           getPenjualanDetailCtrl().getPenjualan().getGrandTotal());
 
@@ -527,13 +544,13 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
       // generatePiutang
       if (getPenjualanDetailCtrl().getPenjualan().getIntervalKredit() > 1
           && !getPenjualanDetailCtrl().getPenjualan().isNeedApproval()) {
-        if (getPiutangService()
-            .getCountPiutangsByPenjualan(getPenjualanDetailCtrl().getPenjualan()) == 0) {
-          Status status = getPenjualanDetailCtrl().getStatusService().getStatusByID(new Long(3)); // PROSES
-          getPiutangService().generatePiutangByIntervalKredit(
-              getPenjualanDetailCtrl().getPenjualan(),
-              getPenjualanDetailCtrl().getPenjualan().getIntervalKredit(), status);
-        }
+
+        Status status = getPenjualanDetailCtrl().getStatusService().getStatusByID(new Long(3)); // PROSES
+        getPiutangService().deleteAllPiutang(getPenjualanDetailCtrl().getPenjualan());
+        getPiutangService().generatePiutangByIntervalKredit(
+            getPenjualanDetailCtrl().getPenjualan(),
+            getPenjualanDetailCtrl().getPenjualan().getIntervalKredit(), status);
+
       }
       // if saving is successfully than actualize the beans as
       // origins.
@@ -689,16 +706,31 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
     return this.penjualanService;
   }
 
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // +++++++++++++++++ Business Logic ++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-
   public PiutangService getPiutangService() {
     return piutangService;
   }
 
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++++ Business Logic ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+
   public Penjualan getSelectedPenjualan() {
     return this.selectedPenjualan;
+  }
+
+  private boolean isValidToEdit() {
+
+    List<Piutang> listPiutang =
+        getPiutangService().getPiutangsByPenjualan(getPenjualanDetailCtrl().getPenjualan());
+    Status status = getPenjualanDetailCtrl().getStatusService().getStatusByID(new Long(2));// LUNAS
+    for (Piutang data : listPiutang) {
+      if (data.getStatus().equals(status)) {
+        return false;
+      }
+
+    }
+
+    return true;
   }
 
   /**
@@ -905,6 +937,11 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
     if (interval != 1 && getPenjualanDetailCtrl().getPenjualan().getTglAngsuran2() == null) {
       ZksampleMessageUtils
           .showErrorMessage("Tanggal Angsuran ke 2 wajib di isi jika transaksi kredit");
+      return;
+    } else if (getPenjualanDetailCtrl().getPenjualan().getTglAngsuran2()
+        .before(getPenjualanDetailCtrl().getPenjualan().getTglPenjualan())) {
+      ZksampleMessageUtils
+          .showErrorMessage("Tanggal Angsuran ke 2 lebih kecil dari pada tanggal penjualan");
       return;
     }
 

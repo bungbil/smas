@@ -137,12 +137,11 @@ public class CetakKuitansiA2TextPrinter extends Window implements Serializable {
       kuitansi.setNamaPelanggan(penjualan.getNamaPelanggan());
       kuitansi.setAlamat("");
       kuitansi.setAlamat2("");
-      kuitansi.setAlamat3(penjualan.getAlamat2());
-      kuitansi.setAlamat4(penjualan.getAlamat3());
+      kuitansi.setAlamat3("");
 
       StringBuilder sb = new StringBuilder(penjualan.getAlamat());
       int i = 0;
-      while (i + 40 < sb.length() && (i = sb.lastIndexOf(" ", i + 40)) != -1) {
+      while (i + 35 < sb.length() && (i = sb.lastIndexOf(" ", i + 35)) != -1) {
         sb.replace(i, i + 1, "\n");
       }
       String[] alamat = sb.toString().split("\n");
@@ -152,9 +151,29 @@ public class CetakKuitansiA2TextPrinter extends Window implements Serializable {
           kuitansi.setAlamat(alamat[0]);
         } else if (k == 1) {
           kuitansi.setAlamat2(alamat[1]);
+        } else if (k == 2) {
+          kuitansi.setAlamat3(alamat[2]);
         }
+
       }
+
+
+      kuitansi.setAlamat4(penjualan.getAlamat2());
+      kuitansi.setAlamat5(penjualan.getAlamat3());
       kuitansi.setTelepon(penjualan.getTelepon());
+
+      if (kuitansi.getAlamat2().isEmpty()) {
+        kuitansi.setAlamat2(penjualan.getAlamat2());
+        kuitansi.setAlamat3(penjualan.getAlamat3());
+        kuitansi.setAlamat4(penjualan.getTelepon());
+        kuitansi.setAlamat5("");
+        kuitansi.setTelepon("");
+      } else if (kuitansi.getAlamat3().isEmpty()) {
+        kuitansi.setAlamat3(penjualan.getAlamat2());
+        kuitansi.setAlamat4(penjualan.getAlamat3());
+        kuitansi.setAlamat5(penjualan.getTelepon());
+        kuitansi.setTelepon("");
+      }
 
       String jumlahInWord =
           "# " + angkaToTerbilang(penjualan.getKreditPerBulan().longValue()) + " #";
@@ -247,18 +266,28 @@ public class CetakKuitansiA2TextPrinter extends Window implements Serializable {
       setAlignRight(sb, maxLengthSales, kuitansi.getNamaSales1() + " / " + kuitansi.getNamaSales2());
 
       addNewLine(sb, 2);
-      addWhiteSpace(sb, 54);
+      addWhiteSpace(sb, 47);
       sb.append(kuitansi.getNomorKuitansi());
-      addNewLine(sb, 4);
+      addNewLine(sb, 2);
 
       int sizeItem = kuitansi.getListItemFaktur().size();
-      int maxLengthAlamat = 40;
-      int maxLengthBarang = 17;
-      int maxLengthKodeBarang = 8;
+      int maxLengthAlamat = 35;
+      int maxLengthBarang = 22;
+      int maxLengthKodeBarang = 7;
 
       addWhiteSpace(sb, 3);
       sb.append(kuitansi.getNamaPelanggan());
       addWhiteSpace(sb, maxLengthAlamat - kuitansi.getNamaPelanggan().length());
+
+      addNewLine(sb, 1);
+      addWhiteSpace(sb, 3);
+      sb.append(kuitansi.getAlamat());
+      addWhiteSpace(sb, maxLengthAlamat - kuitansi.getAlamat().length());
+
+      addNewLine(sb, 1);
+      addWhiteSpace(sb, 3);
+      sb.append(kuitansi.getAlamat2());
+      addWhiteSpace(sb, maxLengthAlamat - kuitansi.getAlamat2().length());
       if (sizeItem >= 1) {
         ItemFaktur item = kuitansi.getListItemFaktur().get(0);
         setAlignRight(sb, maxLengthKodeBarang, item.getKodeBarang());
@@ -274,8 +303,8 @@ public class CetakKuitansiA2TextPrinter extends Window implements Serializable {
 
       addNewLine(sb, 1);
       addWhiteSpace(sb, 3);
-      sb.append(kuitansi.getAlamat());
-      addWhiteSpace(sb, maxLengthAlamat - kuitansi.getAlamat().length());
+      sb.append(kuitansi.getAlamat3());
+      addWhiteSpace(sb, maxLengthAlamat - kuitansi.getAlamat3().length());
       if (sizeItem >= 2) {
         ItemFaktur item = kuitansi.getListItemFaktur().get(1);
         setAlignRight(sb, maxLengthKodeBarang, item.getKodeBarang());
@@ -291,8 +320,8 @@ public class CetakKuitansiA2TextPrinter extends Window implements Serializable {
 
       addNewLine(sb, 1);
       addWhiteSpace(sb, 3);
-      sb.append(kuitansi.getAlamat2());
-      addWhiteSpace(sb, maxLengthAlamat - kuitansi.getAlamat2().length());
+      sb.append(kuitansi.getAlamat4());
+      addWhiteSpace(sb, maxLengthAlamat - kuitansi.getAlamat4().length());
       if (sizeItem >= 3) {
         ItemFaktur item = kuitansi.getListItemFaktur().get(2);
         setAlignRight(sb, maxLengthKodeBarang, item.getKodeBarang());
@@ -308,8 +337,8 @@ public class CetakKuitansiA2TextPrinter extends Window implements Serializable {
 
       addNewLine(sb, 1);
       addWhiteSpace(sb, 3);
-      sb.append(kuitansi.getAlamat3());
-      addWhiteSpace(sb, maxLengthAlamat - kuitansi.getAlamat3().length());
+      sb.append(kuitansi.getAlamat5());
+      addWhiteSpace(sb, maxLengthAlamat - kuitansi.getAlamat5().length());
       if (sizeItem >= 4) {
         ItemFaktur item = kuitansi.getListItemFaktur().get(3);
         setAlignRight(sb, maxLengthKodeBarang, item.getKodeBarang());
@@ -325,8 +354,8 @@ public class CetakKuitansiA2TextPrinter extends Window implements Serializable {
 
       addNewLine(sb, 1);
       addWhiteSpace(sb, 3);
-      sb.append(kuitansi.getAlamat4());
-      addWhiteSpace(sb, maxLengthAlamat - kuitansi.getAlamat4().length());
+      sb.append(kuitansi.getTelepon());
+      addWhiteSpace(sb, maxLengthAlamat - kuitansi.getTelepon().length());
       if (sizeItem >= 5) {
         ItemFaktur item = kuitansi.getListItemFaktur().get(4);
         setAlignRight(sb, maxLengthKodeBarang, item.getKodeBarang());
@@ -340,10 +369,7 @@ public class CetakKuitansiA2TextPrinter extends Window implements Serializable {
         sb.append(item.getQty());
       }
 
-      addNewLine(sb, 1);
-      addWhiteSpace(sb, 3);
-      sb.append(kuitansi.getTelepon());
-      addNewLine(sb, 2);
+      addNewLine(sb, 3);
       addWhiteSpace(sb, 17);
       sb.append(kuitansi.getJumlahInWord());
       addNewLine(sb, 1);
@@ -358,7 +384,7 @@ public class CetakKuitansiA2TextPrinter extends Window implements Serializable {
       addWhiteSpace(sb, 20);
       sb.append(kuitansi.getSisaPembayaran());
       addNewLine(sb, 2);
-      addWhiteSpace(sb, 56);
+      addWhiteSpace(sb, 58);
       sb.append(kuitansi.getTglAngsuran());
       addNewLine(sb, 3);
       addWhiteSpace(sb, 6);

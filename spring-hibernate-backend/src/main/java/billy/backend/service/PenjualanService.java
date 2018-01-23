@@ -57,4 +57,6 @@ public interface PenjualanService {
   public void saveOrUpdate(Penjualan penjualan);
 
   public void saveOrUpdate(PenjualanDetail penjualanDetail);
+
+
 }

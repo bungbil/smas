@@ -8,6 +8,8 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -32,7 +34,9 @@ import org.zkoss.zul.Window;
 import billy.backend.model.Karyawan;
 import billy.backend.model.Mandiri;
 import billy.backend.model.Piutang;
+import billy.backend.model.Status;
 import billy.backend.service.CompanyProfileService;
+import billy.backend.service.StatusService;
 import billy.webui.printer.PrintJobWatcher;
 import billy.webui.transaction.kolektor.cetak.model.ReportKwitansi;
 import de.forsthaus.webui.util.ZksampleMessageUtils;
@@ -75,7 +79,35 @@ public class CetakSisaKwitansiTextPrinter extends Window implements Serializable
     Set<Mandiri> listMandiri = getListMandiri(listPiutang);
     for (Mandiri mandiri : listMandiri) {
       try {
-        doPrint(karyawan, mandiri, startDate, endDate, listPiutang, selectedPrinter);
+        doPrint(karyawan, mandiri, startDate, endDate, listPiutang, selectedPrinter, "A2");
+        doPrint(karyawan, mandiri, startDate, endDate, listPiutang, selectedPrinter, "A2 UNDUR");
+        doPrint(karyawan, mandiri, startDate, endDate, listPiutang, selectedPrinter, "A2 DISKON");
+        doPrint(karyawan, mandiri, startDate, endDate, listPiutang, selectedPrinter,
+            "A2 TARIK BARANG");
+        doPrint(karyawan, mandiri, startDate, endDate, listPiutang, selectedPrinter, "A2 MASALAH");
+        doPrint(karyawan, mandiri, startDate, endDate, listPiutang, selectedPrinter, "A2 FINAL");
+
+        doPrint(karyawan, mandiri, startDate, endDate, listPiutang, selectedPrinter, "A3-10");
+        doPrint(karyawan, mandiri, startDate, endDate, listPiutang, selectedPrinter, "A3-10 UNDUR");
+        doPrint(karyawan, mandiri, startDate, endDate, listPiutang, selectedPrinter, "A3-10 DISKON");
+        doPrint(karyawan, mandiri, startDate, endDate, listPiutang, selectedPrinter,
+            "A3-10 TARIK BARANG");
+        doPrint(karyawan, mandiri, startDate, endDate, listPiutang, selectedPrinter,
+            "A3-10 MASALAH");
+        doPrint(karyawan, mandiri, startDate, endDate, listPiutang, selectedPrinter, "A3-10 FINAL");
+
+        doPrint(karyawan, mandiri, startDate, endDate, listPiutang, selectedPrinter, "MASALAH");
+        doPrint(karyawan, mandiri, startDate, endDate, listPiutang, selectedPrinter,
+            "MASALAH UNDUR");
+        doPrint(karyawan, mandiri, startDate, endDate, listPiutang, selectedPrinter,
+            "MASALAH DISKON");
+        doPrint(karyawan, mandiri, startDate, endDate, listPiutang, selectedPrinter,
+            "MASALAH TARIK BARANG");
+        doPrint(karyawan, mandiri, startDate, endDate, listPiutang, selectedPrinter,
+            "MASALAH MASALAH");
+        doPrint(karyawan, mandiri, startDate, endDate, listPiutang, selectedPrinter,
+            "MASALAH FINAL");
+
       } catch (final Exception e) {
         ZksampleMessageUtils.showErrorMessage(e.toString());
       }
@@ -107,55 +139,368 @@ public class CetakSisaKwitansiTextPrinter extends Window implements Serializable
   }
 
   public void doPrint(Karyawan karyawan, Mandiri mandiri, Date startDate, Date endDate,
-      List<Piutang> listPiutang, PrintService selectedPrinter) throws PrintException, IOException {
+      List<Piutang> listPiutang, PrintService selectedPrinter, String kondisi)
+      throws PrintException, IOException {
 
     List<ReportKwitansi> listData = new ArrayList<ReportKwitansi>();
+
+    Collections.sort(listPiutang, new Comparator<Piutang>() {
+      @Override
+      public int compare(Piutang obj1, Piutang obj2) {
+        return obj1.getNoFaktur().compareTo(obj2.getNoFaktur());
+      }
+    });
+    StatusService statusService = (StatusService) SpringUtil.getBean("statusService");
+    Status statusUndur = statusService.getStatusByID(new Long(9));
+    Status statusDiskon = statusService.getStatusByID(new Long(5));
+    Status statusTarikBarang = statusService.getStatusByID(new Long(6));
+    Status statusMasalah = statusService.getStatusByID(new Long(7));
+    Status statusFinal = statusService.getStatusByID(new Long(8));
+
     int i = 1;
     for (Piutang piutang : listPiutang) {
       if (piutang.getPenjualan().getMandiriId().equals(mandiri)) {
-        ReportKwitansi data = new ReportKwitansi();
-        data.setNo(i + "");
-        data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
-        data.setTglBawa(piutang.getTglBawaKolektor());
-        data.setTglBayar(piutang.getTglPembayaran());
-        data.setTglKuitansi(piutang.getTglJatuhTempo());
-        data.setNamaCustomer(piutang.getPenjualan().getNamaPelanggan());
-        data.setNilaiPembayaran(piutang.getPembayaran());
-        data.setNilaiTagih(piutang.getNilaiTagihan());
-        data.setKeterangan(piutang.getKeterangan());
+        if (kondisi.equals("A2")) {
+          if (piutang.getPembayaranKe() == 2 && !piutang.isMasalah()
+              && piutang.getStatusFinal() == null) {
+            ReportKwitansi data = new ReportKwitansi();
+            data.setNo(i + ".");
+            data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
+            data.setTglBawa(piutang.getTglBawaKolektor());
+            data.setTglBayar(piutang.getTglPembayaran());
+            data.setTglKuitansi(piutang.getTglJatuhTempo());
+            data.setNamaCustomer(piutang.getPenjualan().getNamaPelanggan());
+            data.setNilaiPembayaran(piutang.getPembayaran());
+            data.setNilaiTagih(piutang.getNilaiTagihan());
+            data.setKeterangan(piutang.getKeterangan());
 
-        listData.add(data);
-        i++;
+            listData.add(data);
+            i++;
+          }
+        }
+
+        else if (kondisi.equals("A2 UNDUR")) {
+          if (piutang.getPembayaranKe() == 2 && !piutang.isMasalah()
+              && piutang.getStatusFinal().equals(statusUndur)) {
+            ReportKwitansi data = new ReportKwitansi();
+            data.setNo(i + ".");
+            data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
+            data.setTglBawa(piutang.getTglBawaKolektor());
+            data.setTglBayar(piutang.getTglPembayaran());
+            data.setTglKuitansi(piutang.getTglJatuhTempo());
+            data.setNamaCustomer(piutang.getPenjualan().getNamaPelanggan());
+            data.setNilaiPembayaran(piutang.getPembayaran());
+            data.setNilaiTagih(piutang.getNilaiTagihan());
+            data.setKeterangan(piutang.getKeterangan());
+
+            listData.add(data);
+            i++;
+          }
+        } else if (kondisi.equals("A2 DISKON")) {
+          if (piutang.getPembayaranKe() == 2 && !piutang.isMasalah()
+              && piutang.getStatusFinal().equals(statusDiskon)) {
+            ReportKwitansi data = new ReportKwitansi();
+            data.setNo(i + ".");
+            data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
+            data.setTglBawa(piutang.getTglBawaKolektor());
+            data.setTglBayar(piutang.getTglPembayaran());
+            data.setTglKuitansi(piutang.getTglJatuhTempo());
+            data.setNamaCustomer(piutang.getPenjualan().getNamaPelanggan());
+            data.setNilaiPembayaran(piutang.getPembayaran());
+            data.setNilaiTagih(piutang.getNilaiTagihan());
+            data.setKeterangan(piutang.getKeterangan());
+
+            listData.add(data);
+            i++;
+          }
+        } else if (kondisi.equals("A2 TARIK BARANG")) {
+          if (piutang.getPembayaranKe() == 2 && !piutang.isMasalah()
+              && piutang.getStatusFinal().equals(statusTarikBarang)) {
+            ReportKwitansi data = new ReportKwitansi();
+            data.setNo(i + ".");
+            data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
+            data.setTglBawa(piutang.getTglBawaKolektor());
+            data.setTglBayar(piutang.getTglPembayaran());
+            data.setTglKuitansi(piutang.getTglJatuhTempo());
+            data.setNamaCustomer(piutang.getPenjualan().getNamaPelanggan());
+            data.setNilaiPembayaran(piutang.getPembayaran());
+            data.setNilaiTagih(piutang.getNilaiTagihan());
+            data.setKeterangan(piutang.getKeterangan());
+
+            listData.add(data);
+            i++;
+          }
+        } else if (kondisi.equals("A2 MASALAH")) {
+          if (piutang.getPembayaranKe() == 2 && !piutang.isMasalah()
+              && piutang.getStatusFinal().equals(statusMasalah)) {
+            ReportKwitansi data = new ReportKwitansi();
+            data.setNo(i + ".");
+            data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
+            data.setTglBawa(piutang.getTglBawaKolektor());
+            data.setTglBayar(piutang.getTglPembayaran());
+            data.setTglKuitansi(piutang.getTglJatuhTempo());
+            data.setNamaCustomer(piutang.getPenjualan().getNamaPelanggan());
+            data.setNilaiPembayaran(piutang.getPembayaran());
+            data.setNilaiTagih(piutang.getNilaiTagihan());
+            data.setKeterangan(piutang.getKeterangan());
+
+            listData.add(data);
+            i++;
+          }
+        } else if (kondisi.equals("A2 FINAL")) {
+          if (piutang.getPembayaranKe() == 2 && !piutang.isMasalah()
+              && piutang.getStatusFinal().equals(statusFinal)) {
+            ReportKwitansi data = new ReportKwitansi();
+            data.setNo(i + ".");
+            data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
+            data.setTglBawa(piutang.getTglBawaKolektor());
+            data.setTglBayar(piutang.getTglPembayaran());
+            data.setTglKuitansi(piutang.getTglJatuhTempo());
+            data.setNamaCustomer(piutang.getPenjualan().getNamaPelanggan());
+            data.setNilaiPembayaran(piutang.getPembayaran());
+            data.setNilaiTagih(piutang.getNilaiTagihan());
+            data.setKeterangan(piutang.getKeterangan());
+
+            listData.add(data);
+            i++;
+          }
+        }
+
+
+        else if (kondisi.equals("A3-10")) {
+          if (piutang.getPembayaranKe() != 2 && !piutang.isMasalah()
+              && piutang.getStatusFinal() == null) {
+            ReportKwitansi data = new ReportKwitansi();
+            data.setNo(i + ".");
+            data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
+            data.setTglBawa(piutang.getTglBawaKolektor());
+            data.setTglBayar(piutang.getTglPembayaran());
+            data.setTglKuitansi(piutang.getTglJatuhTempo());
+            data.setNamaCustomer(piutang.getPenjualan().getNamaPelanggan());
+            data.setNilaiPembayaran(piutang.getPembayaran());
+            data.setNilaiTagih(piutang.getNilaiTagihan());
+            data.setKeterangan(piutang.getKeterangan());
+
+            listData.add(data);
+            i++;
+          }
+        } else if (kondisi.equals("A3-10 UNDUR")) {
+          if (piutang.getPembayaranKe() != 2 && !piutang.isMasalah()
+              && piutang.getStatusFinal().equals(statusUndur)) {
+            ReportKwitansi data = new ReportKwitansi();
+            data.setNo(i + ".");
+            data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
+            data.setTglBawa(piutang.getTglBawaKolektor());
+            data.setTglBayar(piutang.getTglPembayaran());
+            data.setTglKuitansi(piutang.getTglJatuhTempo());
+            data.setNamaCustomer(piutang.getPenjualan().getNamaPelanggan());
+            data.setNilaiPembayaran(piutang.getPembayaran());
+            data.setNilaiTagih(piutang.getNilaiTagihan());
+            data.setKeterangan(piutang.getKeterangan());
+
+            listData.add(data);
+            i++;
+          }
+        } else if (kondisi.equals("A3-10 DISKON")) {
+          if (piutang.getPembayaranKe() != 2 && !piutang.isMasalah()
+              && piutang.getStatusFinal().equals(statusDiskon)) {
+            ReportKwitansi data = new ReportKwitansi();
+            data.setNo(i + ".");
+            data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
+            data.setTglBawa(piutang.getTglBawaKolektor());
+            data.setTglBayar(piutang.getTglPembayaran());
+            data.setTglKuitansi(piutang.getTglJatuhTempo());
+            data.setNamaCustomer(piutang.getPenjualan().getNamaPelanggan());
+            data.setNilaiPembayaran(piutang.getPembayaran());
+            data.setNilaiTagih(piutang.getNilaiTagihan());
+            data.setKeterangan(piutang.getKeterangan());
+
+            listData.add(data);
+            i++;
+          }
+        } else if (kondisi.equals("A3-10 TARIK BARANG")) {
+          if (piutang.getPembayaranKe() != 2 && !piutang.isMasalah()
+              && piutang.getStatusFinal().equals(statusTarikBarang)) {
+            ReportKwitansi data = new ReportKwitansi();
+            data.setNo(i + ".");
+            data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
+            data.setTglBawa(piutang.getTglBawaKolektor());
+            data.setTglBayar(piutang.getTglPembayaran());
+            data.setTglKuitansi(piutang.getTglJatuhTempo());
+            data.setNamaCustomer(piutang.getPenjualan().getNamaPelanggan());
+            data.setNilaiPembayaran(piutang.getPembayaran());
+            data.setNilaiTagih(piutang.getNilaiTagihan());
+            data.setKeterangan(piutang.getKeterangan());
+
+            listData.add(data);
+            i++;
+          }
+        } else if (kondisi.equals("A3-10 MASALAH")) {
+          if (piutang.getPembayaranKe() != 2 && !piutang.isMasalah()
+              && piutang.getStatusFinal().equals(statusMasalah)) {
+            ReportKwitansi data = new ReportKwitansi();
+            data.setNo(i + ".");
+            data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
+            data.setTglBawa(piutang.getTglBawaKolektor());
+            data.setTglBayar(piutang.getTglPembayaran());
+            data.setTglKuitansi(piutang.getTglJatuhTempo());
+            data.setNamaCustomer(piutang.getPenjualan().getNamaPelanggan());
+            data.setNilaiPembayaran(piutang.getPembayaran());
+            data.setNilaiTagih(piutang.getNilaiTagihan());
+            data.setKeterangan(piutang.getKeterangan());
+
+            listData.add(data);
+            i++;
+          }
+        } else if (kondisi.equals("A3-10 FINAL")) {
+          if (piutang.getPembayaranKe() != 2 && !piutang.isMasalah()
+              && piutang.getStatusFinal().equals(statusFinal)) {
+            ReportKwitansi data = new ReportKwitansi();
+            data.setNo(i + ".");
+            data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
+            data.setTglBawa(piutang.getTglBawaKolektor());
+            data.setTglBayar(piutang.getTglPembayaran());
+            data.setTglKuitansi(piutang.getTglJatuhTempo());
+            data.setNamaCustomer(piutang.getPenjualan().getNamaPelanggan());
+            data.setNilaiPembayaran(piutang.getPembayaran());
+            data.setNilaiTagih(piutang.getNilaiTagihan());
+            data.setKeterangan(piutang.getKeterangan());
+
+            listData.add(data);
+            i++;
+          }
+        }
+
+
+        else if (kondisi.equals("MASALAH")) {
+          if (piutang.isMasalah() && piutang.getStatusFinal() == null) {
+            ReportKwitansi data = new ReportKwitansi();
+            data.setNo(i + ".");
+            data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
+            data.setTglBawa(piutang.getTglBawaKolektor());
+            data.setTglBayar(piutang.getTglPembayaran());
+            data.setTglKuitansi(piutang.getTglJatuhTempo());
+            data.setNamaCustomer(piutang.getPenjualan().getNamaPelanggan());
+            data.setNilaiPembayaran(piutang.getPembayaran());
+            data.setNilaiTagih(piutang.getNilaiTagihan());
+            data.setKeterangan(piutang.getKeterangan());
+
+            listData.add(data);
+            i++;
+          }
+        } else if (kondisi.equals("MASALAH UNDUR")) {
+          if (piutang.isMasalah() && piutang.getStatusFinal().equals(statusUndur)) {
+            ReportKwitansi data = new ReportKwitansi();
+            data.setNo(i + ".");
+            data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
+            data.setTglBawa(piutang.getTglBawaKolektor());
+            data.setTglBayar(piutang.getTglPembayaran());
+            data.setTglKuitansi(piutang.getTglJatuhTempo());
+            data.setNamaCustomer(piutang.getPenjualan().getNamaPelanggan());
+            data.setNilaiPembayaran(piutang.getPembayaran());
+            data.setNilaiTagih(piutang.getNilaiTagihan());
+            data.setKeterangan(piutang.getKeterangan());
+
+            listData.add(data);
+            i++;
+          }
+        } else if (kondisi.equals("MASALAH DISKON")) {
+          if (piutang.isMasalah() && piutang.getStatusFinal().equals(statusDiskon)) {
+            ReportKwitansi data = new ReportKwitansi();
+            data.setNo(i + ".");
+            data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
+            data.setTglBawa(piutang.getTglBawaKolektor());
+            data.setTglBayar(piutang.getTglPembayaran());
+            data.setTglKuitansi(piutang.getTglJatuhTempo());
+            data.setNamaCustomer(piutang.getPenjualan().getNamaPelanggan());
+            data.setNilaiPembayaran(piutang.getPembayaran());
+            data.setNilaiTagih(piutang.getNilaiTagihan());
+            data.setKeterangan(piutang.getKeterangan());
+
+            listData.add(data);
+            i++;
+          }
+        } else if (kondisi.equals("MASALAH TARIK BARANG")) {
+          if (piutang.isMasalah() && piutang.getStatusFinal().equals(statusTarikBarang)) {
+            ReportKwitansi data = new ReportKwitansi();
+            data.setNo(i + ".");
+            data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
+            data.setTglBawa(piutang.getTglBawaKolektor());
+            data.setTglBayar(piutang.getTglPembayaran());
+            data.setTglKuitansi(piutang.getTglJatuhTempo());
+            data.setNamaCustomer(piutang.getPenjualan().getNamaPelanggan());
+            data.setNilaiPembayaran(piutang.getPembayaran());
+            data.setNilaiTagih(piutang.getNilaiTagihan());
+            data.setKeterangan(piutang.getKeterangan());
+
+            listData.add(data);
+            i++;
+          }
+        } else if (kondisi.equals("MASALAH MASALAH")) {
+          if (piutang.isMasalah() && piutang.getStatusFinal().equals(statusMasalah)) {
+            ReportKwitansi data = new ReportKwitansi();
+            data.setNo(i + ".");
+            data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
+            data.setTglBawa(piutang.getTglBawaKolektor());
+            data.setTglBayar(piutang.getTglPembayaran());
+            data.setTglKuitansi(piutang.getTglJatuhTempo());
+            data.setNamaCustomer(piutang.getPenjualan().getNamaPelanggan());
+            data.setNilaiPembayaran(piutang.getPembayaran());
+            data.setNilaiTagih(piutang.getNilaiTagihan());
+            data.setKeterangan(piutang.getKeterangan());
+
+            listData.add(data);
+            i++;
+          }
+        } else if (kondisi.equals("MASALAH FINAL")) {
+          if (piutang.isMasalah() && piutang.getStatusFinal().equals(statusFinal)) {
+            ReportKwitansi data = new ReportKwitansi();
+            data.setNo(i + ".");
+            data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
+            data.setTglBawa(piutang.getTglBawaKolektor());
+            data.setTglBayar(piutang.getTglPembayaran());
+            data.setTglKuitansi(piutang.getTglJatuhTempo());
+            data.setNamaCustomer(piutang.getPenjualan().getNamaPelanggan());
+            data.setNilaiPembayaran(piutang.getPembayaran());
+            data.setNilaiTagih(piutang.getNilaiTagihan());
+            data.setKeterangan(piutang.getKeterangan());
+
+            listData.add(data);
+            i++;
+          }
+        }
+
+
       }
     }
+    if (listData.size() > 0) {
+      InputStream is =
+          new ByteArrayInputStream(generateData(karyawan, mandiri, startDate, endDate, listData,
+              kondisi).getBytes("UTF8"));
+      PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
+      pras.add(new Copies(1));
 
-    InputStream is =
-        new ByteArrayInputStream(generateData(karyawan, startDate, endDate, listData).getBytes(
-            "UTF8"));
-    PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
-    pras.add(new Copies(1));
+      DocFlavor flavor = DocFlavor.INPUT_STREAM.AUTOSENSE;
+      Doc doc = new SimpleDoc(is, flavor, null);
+      DocPrintJob job = selectedPrinter.createPrintJob();
 
-    DocFlavor flavor = DocFlavor.INPUT_STREAM.AUTOSENSE;
-    Doc doc = new SimpleDoc(is, flavor, null);
-    DocPrintJob job = selectedPrinter.createPrintJob();
+      PrintJobWatcher pjw = new PrintJobWatcher(job);
+      job.print(doc, pras);
+      pjw.waitForDone();
+      is.close();
 
-    PrintJobWatcher pjw = new PrintJobWatcher(job);
-    job.print(doc, pras);
-    pjw.waitForDone();
-    is.close();
-
-    // send FF to eject the page
-    InputStream ff = new ByteArrayInputStream("\f".getBytes());
-    Doc docff = new SimpleDoc(ff, flavor, null);
-    DocPrintJob jobff = selectedPrinter.createPrintJob();
-    pjw = new PrintJobWatcher(jobff);
-    jobff.print(docff, null);
-    pjw.waitForDone();
-
+      // send FF to eject the page
+      InputStream ff = new ByteArrayInputStream("\f".getBytes());
+      Doc docff = new SimpleDoc(ff, flavor, null);
+      DocPrintJob jobff = selectedPrinter.createPrintJob();
+      pjw = new PrintJobWatcher(jobff);
+      jobff.print(docff, null);
+      pjw.waitForDone();
+    }
   }
 
-  private String generateData(Karyawan karyawan, Date startDate, Date endDate,
-      List<ReportKwitansi> listItem) {
+  private String generateData(Karyawan karyawan, Mandiri mandiri, Date startDate, Date endDate,
+      List<ReportKwitansi> listItem, String kondisi) {
     StringBuffer sb = new StringBuffer();
 
     CompanyProfileService companyService =
@@ -173,7 +518,8 @@ public class CetakSisaKwitansiTextPrinter extends Window implements Serializable
       totalTagih = BigDecimal.ZERO;
       totalPembayaran = BigDecimal.ZERO;
 
-      generateHeaderReport(sb, karyawan, startDate, endDate, pageNo, companyName, companyAddress);
+      generateHeaderReport(sb, karyawan, mandiri, startDate, endDate, pageNo, companyName,
+          companyAddress, kondisi);
       generateDataReport(sb, listItem, itemPerPage, pageNo);
       generateFooterReport(sb);
 
@@ -284,8 +630,9 @@ public class CetakSisaKwitansiTextPrinter extends Window implements Serializable
 
   }
 
-  private void generateHeaderReport(StringBuffer sb, Karyawan karyawan, Date startDate,
-      Date endDate, int pageNo, String companyName, String companyAddress) {
+  private void generateHeaderReport(StringBuffer sb, Karyawan karyawan, Mandiri mandiri,
+      Date startDate, Date endDate, int pageNo, String companyName, String companyAddress,
+      String kondisi) {
     Date printDate = new Date();
     SimpleDateFormat formatDate = new SimpleDateFormat();
     formatDate = new SimpleDateFormat("dd-MM-yy", Locale.getDefault());
@@ -309,7 +656,9 @@ public class CetakSisaKwitansiTextPrinter extends Window implements Serializable
     addWhiteSpace(sb, maxLengthTglPrint - titleReport.length() - 20);
     sb.append(printHourStr);
     addNewLine(sb, 1);
-    String tglBawa = "Tanggal Bawa : " + startDateStr + " s/d " + endDateStr;
+    String tglBawa =
+        "Tanggal Bawa : " + startDateStr + " s/d " + endDateStr + "  Mandiri : "
+            + mandiri.getKodeMandiri();;
     sb.append(tglBawa);
     addWhiteSpace(sb, maxLengthTglPrint - tglBawa.length());
     sb.append(halStr);
@@ -317,7 +666,7 @@ public class CetakSisaKwitansiTextPrinter extends Window implements Serializable
     addNewLine(sb, 1);
     sb.append("Kolektor : " + karyawan.getKodeKaryawan() + " - " + karyawan.getNamaPanggilan());
     addWhiteSpace(sb, 10);
-    sb.append("Status : Belum dilunasi !");
+    sb.append("Status : " + kondisi);
 
     addNewLine(sb, 1);
     addDoubleBorder(sb, pageWidth);
