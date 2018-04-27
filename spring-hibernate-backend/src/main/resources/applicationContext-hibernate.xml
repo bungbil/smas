@@ -339,7 +339,8 @@
 	
 	<bean name="penjualanService" class="billy.backend.service.impl.PenjualanServiceImpl">
 		<property name="penjualanDAO" ref="penjualanDAO" />
-		<property name="penjualanDetailDAO" ref="penjualanDetailDAO" />		
+		<property name="penjualanDetailDAO" ref="penjualanDetailDAO" />	
+		<property name="piutangDAO" ref="piutangDAO" />
 	</bean>
 	
 	<bean name="piutangService" class="billy.backend.service.impl.PiutangServiceImpl">

@@ -4,6 +4,7 @@ package billy.webui.transaction.kolektor.penerimaanpembayaran;
 import java.awt.print.PrinterJob;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,17 +35,22 @@ import org.zkoss.zul.Panel;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
+import billy.backend.model.Barang;
 import billy.backend.model.Karyawan;
 import billy.backend.model.Penjualan;
+import billy.backend.model.PenjualanDetail;
 import billy.backend.model.Piutang;
 import billy.backend.model.Status;
+import billy.backend.service.BarangService;
 import billy.backend.service.KaryawanService;
 import billy.backend.service.PenjualanService;
 import billy.backend.service.PiutangService;
 import billy.backend.service.StatusService;
+import billy.webui.master.barang.model.BarangListModelItemRenderer;
 import billy.webui.master.karyawan.model.KaryawanListModelItemRenderer;
 import billy.webui.master.status.model.StatusListModelItemRenderer;
 import billy.webui.printer.model.PrinterListModelItemRenderer;
+import billy.webui.transaction.penjualan.model.PenjualanDetailListModelItemRenderer;
 import billy.webui.transaction.piutang.cetak.report.CetakKuitansiTextPrinter;
 import de.forsthaus.UserWorkspace;
 import de.forsthaus.policy.model.UserImpl;
@@ -93,6 +99,16 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
   protected Textbox txtb_Alamat3; // autowired
 
 
+  protected Listbox lbox_Barang;
+  protected Textbox txtb_KodeBarang;
+  protected Decimalbox txtb_TotalPembayaran;
+  protected Decimalbox txtb_HargaBarang;
+  protected Decimalbox txtb_NextCicilan;
+
+  protected Listbox lbox_OldBarang;
+  protected Textbox txtb_OldKodeBarang;
+  protected Decimalbox txtb_OldHargaBarang;
+
   protected Label label_butuhApproval;
   protected Textbox txtb_ReasonApproval;
   protected Button btnApprovePiutang;
@@ -103,14 +119,21 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
   protected Button btnCetakKwitansiSekarang;
   protected Listbox lbox_Printer;
 
+  protected Listbox listBoxPenjualanDetail; // autowired
+  private PenjualanDetail selectedPenjualanDetail;
   // ServiceDAOs / Domain Classes
   private PenjualanService penjualanService;
+
   private PiutangService piutangService;
 
+  private BarangService barangService;
   private KaryawanService karyawanService;
   private PrintService selectedPrinter;
+
   private StatusService statusService;
+
   DecimalFormat df = new DecimalFormat("#,###");
+
   Piutang piutang = new Piutang();
   Piutang nextPiutang = new Piutang();
 
@@ -119,6 +142,34 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
    */
   public PenerimaanPembayaranMainCtrl() {
     super();
+  }
+
+  private void calculateNextCicilan() {
+    if (!txtb_KodeBarang.getValue().isEmpty()) {
+      int interval = piutang.getPenjualan().getIntervalKredit();
+      int sisaInterval = interval - piutang.getPembayaranKe();
+      BigDecimal totalPembayaranPenjualan =
+          piutang.getPenjualan().getTotal().subtract(piutang.getPenjualan().getPiutang());
+      txtb_TotalPembayaran.setValue(totalPembayaranPenjualan);
+
+      BigDecimal hargaBarang = BigDecimal.ZERO;
+      BigDecimal pembayaran = BigDecimal.ZERO;
+      BigDecimal diskon = BigDecimal.ZERO;
+      if (txtb_HargaBarang.getValue() != null) {
+        hargaBarang = txtb_HargaBarang.getValue();
+      }
+      if (txtb_Pembayaran.getValue() != null) {
+        pembayaran = txtb_Pembayaran.getValue();
+      }
+      if (txtb_Diskon.getValue() != null) {
+        diskon = txtb_Diskon.getValue();
+      }
+      BigDecimal sisaPiutangTukarBarang =
+          hargaBarang.subtract(totalPembayaranPenjualan).subtract(pembayaran).add(diskon);
+      BigDecimal nextCicilan =
+          sisaPiutangTukarBarang.divide(new BigDecimal(sisaInterval), 0, RoundingMode.HALF_UP);
+      txtb_NextCicilan.setValue(nextCicilan);
+    }
   }
 
   @Override
@@ -196,6 +247,7 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
     return message;
   }
 
+
   private String doCheckPembayaran() throws Exception {
     /*
      * validasi Kurang Bayar
@@ -211,8 +263,8 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
       BigDecimal totalTagihan = piutang.getNilaiTagihan().add(kekuranganBayar);
       if (totalTagihan.compareTo(totalBayar) == 1) {
         message += "- Pembayaran KURANG untuk kwitansi ini \n";
-        // Status status = getStatusService().getStatusByID(new Long(2)); // LUNAS
-        // piutang.setStatus(status);
+        Status status = getStatusService().getStatusByID(new Long(4)); // KURANG_BAYAR
+        piutang.setStatus(status);
 
       } else if (totalTagihan.compareTo(totalBayar) == -1) {
         message += "- Pembayaran LEBIH untuk kwitansi ini \n";
@@ -246,6 +298,34 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
 
     Status statusLunas = getStatusService().getStatusByID(new Long(2)); // LUNAS
     Status statusProses = getStatusService().getStatusByID(new Long(3)); // PROSES
+
+
+    boolean tukarBarang = false;
+    Listitem oldItemBarang = lbox_OldBarang.getSelectedItem();
+    if (oldItemBarang != null) {
+      ListModelList lmlBarang = (ListModelList) lbox_OldBarang.getListModel();
+      Barang barang = (Barang) lmlBarang.get(oldItemBarang.getIndex());
+      piutang.setTukarOldBarang(barang);
+      if (txtb_OldHargaBarang.getValue() != null) {
+        piutang.setTukarOldHarga(txtb_OldHargaBarang.getValue());
+      } else {
+        piutang.setTukarOldHarga(null);
+      }
+    }
+
+    Listitem itemBarang = lbox_Barang.getSelectedItem();
+    if (itemBarang != null) {
+      ListModelList lmlBarang = (ListModelList) lbox_Barang.getListModel();
+      Barang barang = (Barang) lmlBarang.get(itemBarang.getIndex());
+      piutang.setTukarBarang(barang);
+      tukarBarang = true;
+      calculateNextCicilan();
+      if (txtb_HargaBarang.getValue() != null) {
+        piutang.setTukarHarga(txtb_HargaBarang.getValue());
+      } else {
+        piutang.setTukarHarga(null);
+      }
+    }
 
     if (txtb_tglPembayaran.getValue() != null) {
       piutang.setTglPembayaran(txtb_tglPembayaran.getValue());
@@ -286,23 +366,21 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
     piutang.setAlamat2(txtb_Alamat2.getValue());
     piutang.setAlamat3(txtb_Alamat3.getValue());
 
-
     String userName =
         ((UserImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
             .getUsername();
     piutang.setLastUpdate(new Date());
     piutang.setUpdatedBy(userName);
 
-    BigDecimal kekuranganBayar =
-        piutang.getNilaiTagihan().add(piutang.getKekuranganBayar())
-            .subtract(piutang.getPembayaran()).subtract(diskon);
+    BigDecimal kekuranganBayar = BigDecimal.ZERO;
+    if (!tukarBarang) {
+      kekuranganBayar =
+          piutang.getNilaiTagihan().add(piutang.getKekuranganBayar())
+              .subtract(piutang.getPembayaran()).subtract(diskon);
+    }
 
-    // piutang.setStatus(statusLunas);
     if (!piutang.isNeedApproval())
       piutang.setAktif(false);
-    // if (piutang.getPenjualan().getPiutang().compareTo(BigDecimal.ZERO) == 0) {
-    // piutang.setAktif(true);
-    // }
 
     // save it to database
     getPiutangService().saveOrUpdate(piutang);
@@ -313,8 +391,6 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
         // update ke semua piutang interval sebulan
         getPiutangService().updateTglJatuhTempo(nextPiutang);
         // getPiutangService().saveOrUpdate(nextPiutang);
-      } else {
-        nextPiutang.setTglJatuhTempo(null);
       }
     }
 
@@ -322,8 +398,21 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
       getPiutangService().updateAlamat(piutang);
     }
 
-    // recalculate piutang at penjualan
 
+    if (tukarBarang) {
+      if (nextPiutang != null) {
+        if (txtb_NextCicilan.getValue() != null
+            || !BigDecimal.ZERO.equals(txtb_NextCicilan.getValue())) {
+          try { // update ke semua piutang cicilan nilai tagihan selanjutnya
+            getPiutangService().updateNextNilaiTagihan(piutang, txtb_NextCicilan.getValue());
+          } catch (Exception e) {
+            logger.info("gagal update nilai tagihan selanjutnya");
+          }
+        }
+      }
+    }
+
+    // recalculate piutang at penjualan
     List<Piutang> piutangList = getPiutangService().getPiutangsByPenjualan(piutang.getPenjualan());
     BigDecimal totalPaid = BigDecimal.ZERO;
     Penjualan penjualan = piutang.getPenjualan();
@@ -331,10 +420,16 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
     for (Piutang pp : piutangList) {
       if (null != pp.getPembayaran()) {
         totalPaid = totalPaid.add(pp.getPembayaran()).add(pp.getDiskon());
-
       }
     }
-    penjualan.setPiutang(penjualan.getTotal().subtract(totalPaid));
+    // penjualan.getTotal() harus di calculate lagi karena tukar barang
+    BigDecimal selisihTukarBarang = BigDecimal.ZERO;
+    if (tukarBarang) {
+      selisihTukarBarang = piutang.getTukarHarga().subtract(piutang.getTukarOldHarga());
+    }
+    penjualan.setPiutang(penjualan.getTotal().add(selisihTukarBarang).subtract(totalPaid));
+
+    penjualan.setTukarBarang(tukarBarang);
     getPenjualanService().saveOrUpdate(penjualan);
 
     if (penjualan.getPiutang().compareTo(BigDecimal.ZERO) == 0) {
@@ -353,6 +448,8 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
     panelResult.setVisible(false);
     panelApproval.setVisible(false);
     piutang = null;
+    nextPiutang = null;
+    txtb_SearchNoKwitansi.setValue("");
     txtb_SearchNoKwitansi.focus();
   }
 
@@ -361,7 +458,7 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
       piutang = piutangService.getPiutangByNoFaktur(txtb_SearchNoKwitansi.getValue().toUpperCase());
 
       if (piutang != null) {
-        panelResult.setVisible(true);
+
         emptyAllValue();
         txtb_NoFaktur.setValue(piutang.getPenjualan().getNoFaktur());
         txtb_NoKuitansi.setValue(piutang.getNoKuitansi());
@@ -390,6 +487,7 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
           Karyawan karyawan = getKaryawanService().getKaryawanByID(piutang.getKolektor().getId());
           lbox_Kolektor.setSelectedIndex(lml.indexOf(karyawan));
           txtb_KodeKolektor.setValue(karyawan.getKodeKaryawan());
+          panelResult.setVisible(true);
         }
         txtb_tglBawaKolektor.setValue(piutang.getTglBawaKolektor());
 
@@ -454,6 +552,30 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
           // cmb_StatusFinal
         }
 
+
+        List<PenjualanDetail> listPenjualanDetail = new ArrayList<PenjualanDetail>();
+        listPenjualanDetail =
+            getPenjualanService().getPenjualanDetailsTukarBarangByPenjualan(piutang.getPenjualan());
+        if (listPenjualanDetail.size() > 0) {
+          getListBoxPenjualanDetail().setModel(new ListModelList(listPenjualanDetail));
+          getListBoxPenjualanDetail().setItemRenderer(new PenjualanDetailListModelItemRenderer());
+        }
+
+        List<Barang> listBarang =
+            getBarangService().getAllBarangsByWilayah(piutang.getPenjualan().getWilayah());
+        lbox_OldBarang.setModel(new ListModelList(listBarang));
+        lbox_OldBarang.setItemRenderer(new BarangListModelItemRenderer());
+        lbox_Barang.setModel(new ListModelList(listBarang));
+        lbox_Barang.setItemRenderer(new BarangListModelItemRenderer());
+        if (piutang.getTukarBarang() != null) {
+          ListModelList lml = (ListModelList) lbox_Barang.getModel();
+          Barang barang = getBarangService().getBarangByID(piutang.getTukarBarang().getId());
+          lbox_Barang.setSelectedIndex(lml.indexOf(barang));
+          txtb_KodeBarang.setValue(barang.getKodeBarang());
+          txtb_HargaBarang.setValue(piutang.getTukarHarga());
+        }
+
+
         txtb_tglPembayaran.focus();
       } else {
         panelResult.setVisible(false);
@@ -480,14 +602,28 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
       txtb_Alamat.setValue("");
       txtb_Alamat2.setValue("");
       txtb_Alamat3.setValue("");
+      txtb_OldKodeBarang.setValue("");
+      txtb_OldHargaBarang.setValue(BigDecimal.ZERO);
+      txtb_KodeBarang.setValue("");
+      txtb_HargaBarang.setValue(BigDecimal.ZERO);
+      txtb_TotalPembayaran.setValue(BigDecimal.ZERO);
+      txtb_NextCicilan.setValue(BigDecimal.ZERO);
 
     } catch (Exception e) {
       logger.info("error empty value" + e.getMessage());
     }
   }
 
+  public BarangService getBarangService() {
+    return barangService;
+  }
+
   public KaryawanService getKaryawanService() {
     return this.karyawanService;
+  }
+
+  public Listbox getListBoxPenjualanDetail() {
+    return listBoxPenjualanDetail;
   }
 
   public PenjualanService getPenjualanService() {
@@ -499,6 +635,10 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
     return this.piutangService;
   }
 
+  public PenjualanDetail getSelectedPenjualanDetail() {
+    return selectedPenjualanDetail;
+  }
+
   public Piutang getSelectedPiutang() {
     // STORED IN THE module's MainController
     return this.piutang;
@@ -506,6 +646,14 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
 
   public StatusService getStatusService() {
     return statusService;
+  }
+
+  public void onBlur$txtb_Diskon(Event event) throws InterruptedException {
+    calculateNextCicilan();
+  }
+
+  public void onBlur$txtb_HargaBarang(Event event) throws InterruptedException {
+    calculateNextCicilan();
   }
 
   public void onBlur$txtb_KodeKolektor(Event event) throws InterruptedException {
@@ -521,6 +669,38 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
     }
   }
 
+  public void onBlur$txtb_Pembayaran(Event event) throws InterruptedException {
+    calculateNextCicilan();
+  }
+
+  public void onChange$txtb_KodeBarang(Event event) throws InterruptedException {
+    if (txtb_KodeBarang.getValue() != null) {
+      Barang barang = null;
+      if (piutang.getPenjualan().getWilayah() == null) {
+        barang = getBarangService().getBarangByKodeBarang(txtb_KodeBarang.getValue().trim());
+      } else {
+        barang =
+            getBarangService().getBarangByKodeBarangAndWilayah(txtb_KodeBarang.getValue().trim(),
+                piutang.getPenjualan().getWilayah());
+      }
+      if (barang != null) {
+        ListModelList lml = (ListModelList) lbox_Barang.getModel();
+        lbox_Barang.setSelectedIndex(lml.indexOf(barang));
+        int interval = piutang.getPenjualan().getIntervalKredit();
+        txtb_HargaBarang.setValue(barangService.getHargaBarangByIntervalKredit(barang, interval));
+        calculateNextCicilan();
+      } else {
+        lbox_Barang.setSelectedIndex(-1);
+        txtb_HargaBarang.setValue(BigDecimal.ZERO);
+        txtb_NextCicilan.setValue(BigDecimal.ZERO);
+        txtb_TotalPembayaran.setValue(BigDecimal.ZERO);
+        MultiLineMessageBox.doSetTemplate();
+        MultiLineMessageBox.show("Kode Barang tidak ditemukan", "Information",
+            MultiLineMessageBox.OK, "Information", true);
+      }
+    }
+  }
+
   public void onChange$txtb_KodeKolektor(Event event) throws InterruptedException {
     if (txtb_KodeKolektor.getValue() != null) {
       ListModelList lml = (ListModelList) lbox_Kolektor.getModel();
@@ -532,6 +712,18 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
         lbox_Kolektor.setSelectedIndex(-1);
       }
     }
+  }
+
+  public void onChange$txtb_tglJatuhTempoBerikut(Event event) throws InterruptedException {
+    if (txtb_tglJatuhTempoBerikut.getValue() != null && txtb_TglJatuhTempo.getValue() != null) {
+      if (txtb_tglJatuhTempoBerikut.getValue().equals(txtb_TglJatuhTempo.getValue())) {
+        MultiLineMessageBox.show(
+            "Tanggal Jatuh Tempo Kuitansi berikutnya tidak bisa sama dengan Kuitansi saat ini",
+            "Information", MultiLineMessageBox.OK, "Information", true);
+      }
+    }
+
+
   }
 
   public void onClick$btnCetakKwitansiSekarang(Event event) throws Exception {
@@ -598,9 +790,6 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
     }
   }
 
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // +++++++++++++++ Component Events ++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
 
   public void onClick$btnSave(Event event) throws Exception {
     String message = "";
@@ -666,6 +855,58 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
 
   }
 
+  public void onDoubleClickedPenjualanDetailItem(Event event) {
+    Listitem item = this.listBoxPenjualanDetail.getSelectedItem();
+    if (item != null) {
+      setSelectedPenjualanDetail((PenjualanDetail) item.getAttribute("data"));
+      // select item
+      // Show a confirm box
+      final String msg =
+          Labels.getLabel("message.Question.Are_you_sure_to_tukar_barang") + "\n\n --> "
+              + getSelectedPenjualanDetail().getBarang().getNamaBarang();
+      final String title = Labels.getLabel("message.Tukar.Barang");
+
+      MultiLineMessageBox.doSetTemplate();
+      try {
+        if (MultiLineMessageBox.show(msg, title, Messagebox.YES | Messagebox.NO,
+            Messagebox.QUESTION, true, new EventListener() {
+
+
+              @Override
+              public void onEvent(Event evt) {
+                switch (((Integer) evt.getData()).intValue()) {
+                  case MultiLineMessageBox.YES:
+
+                    ListModelList lml = (ListModelList) lbox_OldBarang.getModel();
+                    lbox_OldBarang.setSelectedIndex(lml.indexOf(getSelectedPenjualanDetail()
+                        .getBarang()));
+                    txtb_OldKodeBarang.setValue(getSelectedPenjualanDetail().getBarang()
+                        .getKodeBarang());
+                    txtb_OldHargaBarang.setValue(getSelectedPenjualanDetail().getTotal());
+
+
+                    break; //
+                  case MultiLineMessageBox.NO:
+                    break; //
+                }
+              }
+            }
+
+        ) == MultiLineMessageBox.YES) {
+        }
+      } catch (InterruptedException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+
+
+    }
+  }
+
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++ Component Events ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+
   public void onOK$txtb_Diskon(Event event) throws InterruptedException {
     txtb_Keterangan.focus();
   }
@@ -711,12 +952,11 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
               nextPiutang.setKekuranganBayar(kekuranganBayar);
               getPiutangService().saveOrUpdate(nextPiutang);
 
-              if (cmb_StatusFinal.getValue().equals("DISKON")
+              if ((cmb_StatusFinal.getValue().equals("DISKON")
                   || cmb_StatusFinal.getValue().equals("TARIK BARANG")
                   || cmb_StatusFinal.getValue().equals("MASALAH")
-                  || cmb_StatusFinal.getValue().equals("FINAL")
-                  || (cmb_StatusFinal.getValue().equals("UNDUR") && piutang.getPembayaran().equals(
-                      BigDecimal.ZERO))) {
+                  || cmb_StatusFinal.getValue().equals("FINAL") || (cmb_StatusFinal.getValue()
+                  .equals("UNDUR")) && piutang.getPembayaran().equals(BigDecimal.ZERO))) {
                 // no need to print
 
               } else {
@@ -738,13 +978,25 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
     }
   }
 
+  public void setBarangService(BarangService barangService) {
+    this.barangService = barangService;
+  }
+
   public void setKaryawanService(KaryawanService karyawanService) {
     this.karyawanService = karyawanService;
   }
 
+  public void setListBoxPenjualanDetail(Listbox listBoxPenjualanDetail) {
+    this.listBoxPenjualanDetail = listBoxPenjualanDetail;
+  }
 
   public void setPenjualanService(PenjualanService penjualanService) {
     this.penjualanService = penjualanService;
+  }
+
+
+  public void setPiutangService(PiutangService piutangService) {
+    this.piutangService = piutangService;
   }
 
   // +++++++++++++++++++++++++++++++++++++++++++++++++ //
@@ -754,8 +1006,8 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
   /* Master BEANS */
 
 
-  public void setPiutangService(PiutangService piutangService) {
-    this.piutangService = piutangService;
+  public void setSelectedPenjualanDetail(PenjualanDetail selectedPenjualanDetail) {
+    this.selectedPenjualanDetail = selectedPenjualanDetail;
   }
 
   /* COMPONENTS and OTHERS */

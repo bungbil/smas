@@ -108,5 +108,21 @@
 		<property name="alamat3" type="string">
 			<column name="alamat3" length="255" />
 		</property>
+		
+		<many-to-one name="tukarBarang" class="billy.backend.model.Barang"
+			fetch="select" lazy="false">
+			<column name="tukar_barang_id" not-null="false" />
+		</many-to-one>		
+		<property name="tukarHarga" type="big_decimal">
+			<column name="tukar_harga" precision="12" />
+		</property>	
+		
+		<many-to-one name="tukarOldBarang" class="billy.backend.model.Barang"
+			fetch="select" lazy="false">
+			<column name="tukar_old_barang_id" not-null="false" />
+		</many-to-one>		
+		<property name="tukarOldHarga" type="big_decimal">
+			<column name="tukar_old_harga" precision="12" />
+		</property>	
 	</class>
 </hibernate-mapping>

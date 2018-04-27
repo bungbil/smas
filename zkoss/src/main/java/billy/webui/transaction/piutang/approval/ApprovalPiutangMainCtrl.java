@@ -428,11 +428,16 @@ public class ApprovalPiutangMainCtrl extends GFCBaseCtrl implements Serializable
       getApprovalPiutangDetailCtrl().getPiutang().setUpdatedBy(userName);
 
       // LOGIC untuk status DISKON, KURANG BAYAR, TARIK BARANG
-      // Status status = getApprovalPiutangDetailCtrl().getStatusService().getStatusByID(new
-      // Long(4)); // KURANG_BAYAR
-      getApprovalPiutangDetailCtrl().getPiutang().setStatus(
-          getApprovalPiutangDetailCtrl().getPiutang().getStatusFinal());
+      //
+      if (getApprovalPiutangDetailCtrl().getPiutang().getStatusFinal() != null) {
+        getApprovalPiutangDetailCtrl().getPiutang().setStatus(
+            getApprovalPiutangDetailCtrl().getPiutang().getStatusFinal());
 
+      } else {
+        Status status =
+            getApprovalPiutangDetailCtrl().getStatusService().getStatusByID(new Long(4)); // KURANG_BAYAR
+        getApprovalPiutangDetailCtrl().getPiutang().setStatus(status);
+      }
       // hapus piutang selanjutnya
       // getPiutangService().deleteNextPiutang(getApprovalPiutangDetailCtrl().getPiutang());
 

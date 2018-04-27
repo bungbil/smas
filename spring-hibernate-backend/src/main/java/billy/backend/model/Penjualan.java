@@ -50,6 +50,8 @@ public class Penjualan implements java.io.Serializable, Entity {
   private Date lastUpdate;
   private String updatedBy;
 
+  private boolean tukarBarang = false;
+
   public Penjualan() {}
 
 
@@ -145,9 +147,11 @@ public class Penjualan implements java.io.Serializable, Entity {
     return approvedRemark;
   }
 
+
   public BigDecimal getDiskon() {
     return diskon;
   }
+
 
   public Karyawan getDivisi() {
     return divisi;
@@ -280,6 +284,10 @@ public class Penjualan implements java.io.Serializable, Entity {
     return (getId() == Long.MIN_VALUE + 1);
   }
 
+  public boolean isTukarBarang() {
+    return tukarBarang;
+  }
+
   public void setAlamat(String alamat) {
     this.alamat = alamat;
   }
@@ -341,10 +349,10 @@ public class Penjualan implements java.io.Serializable, Entity {
     this.mandiri = mandiri;
   }
 
-
   public void setMandiriId(Mandiri mandiriId) {
     this.mandiriId = mandiriId;
   }
+
 
   public void setMetodePembayaran(String metodePembayaran) {
     this.metodePembayaran = metodePembayaran;
@@ -412,6 +420,10 @@ public class Penjualan implements java.io.Serializable, Entity {
 
   public void setTotal(BigDecimal total) {
     this.total = total;
+  }
+
+  public void setTukarBarang(boolean tukarBarang) {
+    this.tukarBarang = tukarBarang;
   }
 
   public void setUpdatedBy(String updatedBy) {

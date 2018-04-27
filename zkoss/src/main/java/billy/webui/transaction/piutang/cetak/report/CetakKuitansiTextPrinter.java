@@ -253,7 +253,7 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
         kuitansi.setKodeKolektor("(" + piutang.getKolektor().getKodeKaryawan() + ")");
       }
       List<PenjualanDetail> listPenjualanDetail =
-          as.getPenjualanDetailsByPenjualan(piutang.getPenjualan());
+          as.getPenjualanDetailsTukarBarangByPenjualan(piutang.getPenjualan());
       for (PenjualanDetail detail : listPenjualanDetail) {
         String namaBarang = detail.getBarang().getNamaBarang();
         if (namaBarang.length() > 18) {

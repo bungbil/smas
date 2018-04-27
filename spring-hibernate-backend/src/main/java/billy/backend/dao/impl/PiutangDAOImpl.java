@@ -216,4 +216,19 @@ public class PiutangDAOImpl extends BillyBasisDAO<Piutang> implements PiutangDAO
     return result;
 
   }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Piutang> getPiutangsTukarBarangByPenjualan(Penjualan entity) {
+    List<Piutang> result;
+
+    DetachedCriteria criteria = DetachedCriteria.forClass(Piutang.class);
+    criteria.add(Restrictions.eq("penjualan", entity));
+    criteria.add(Restrictions.isNotNull("tukarBarang"));
+
+    result = getHibernateTemplate().findByCriteria(criteria);
+
+    return result;
+
+  }
 }

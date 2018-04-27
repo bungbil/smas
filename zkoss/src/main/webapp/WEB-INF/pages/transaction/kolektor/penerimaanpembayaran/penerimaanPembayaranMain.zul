@@ -92,7 +92,7 @@
 						                    		<label />	
 						                    		<label value="Status"/>
 								                    <listbox id="lbox_Status" mold="select" disabled="true"
-															multiple="false" rows="1" hflex="1" width="100px" xmlns:w="client">																									
+															multiple="false" rows="1" width="250px" xmlns:w="client">																									
 													</listbox>				                    						                    				                    									                    									                    											                     
 								                </row>
 												<row>
@@ -157,7 +157,116 @@
 						                    		<label />	
 													<label />
 													<label />													
+												</row>	
+												<row>
+													<separator bar="true"></separator>
+													<separator bar="true"></separator>
+													<separator bar="true"></separator>
+													<separator bar="true"></separator>
+													<separator bar="true"></separator>
 												</row>
+											  </rows>											
+											</grid>
+											
+											
+											<grid sclass="GridLayoutNoBorder" fixedLayout="true"
+												style="border:0px; padding-left:5px; padding-right:5px;">
+									            <columns>
+									                <column />
+									                
+									            </columns>
+									            <rows>
+									            <row>
+									            	<label value="Pilih Barang yang di Tukar"/>
+									            </row>
+										            <row>
+														<listbox id="listBoxPenjualanDetail"
+															style="border-top-width: 0px; border-left-width: 0px; border-right-width: 0px; border-bottom-width: 1px;"
+															 vflex="true"
+															 width="100%" height="100%" multiple="false">
+															<listhead sizable="true">
+																<listheader id="listheader_PenjualanDetailList_KodeBarang"
+																	sclass="FDListBoxHeader1" 
+																	sort="auto" width="20%"
+																	label="Kode Barang" />
+																<listheader id="listheader_PenjualanDetailList_NamaBarang"
+																	sclass="FDListBoxHeader1" 
+																	sort="auto" width="20%"
+																	label="Nama Barang" />
+																<listheader id="listheader_PenjualanDetailList_Jumlah"
+																	sclass="FDListBoxHeader1" 
+																	sort="auto" width="20%"
+																	label="Jumlah" />
+																<listheader id="listheader_PenjualanDetailList_Harga"
+																	sclass="FDListBoxHeader1" 
+																	sort="auto" width="20%"
+																	label="Harga/Unit" />	
+																<listheader id="listheader_PenjualanDetailList_Total"
+																	sclass="FDListBoxHeader1" 
+																	sort="auto" width="20%"
+																	label="Sub Total" />																		
+															</listhead>
+										
+														</listbox>
+													</row>
+									                
+												</rows>
+											</grid>
+											
+											<grid sclass="GridLayoutNoBorder" fixedLayout="true"
+												style="border:0px; padding-left:5px; padding-right:5px;">
+									            <columns>
+									                <column width="150px" />
+													<column />
+													<column width="50px" />
+													<column width="150px" />
+													<column />
+									            </columns>
+									            <rows>
+												 
+												<row>													
+													<label value="Tukar Barang Lama"/>
+													<hbox>
+														<textbox id="txtb_OldKodeBarang" value="" maxlength="30" width="100px" readonly="true"/>
+													 	<listbox id="lbox_OldBarang" mold="select" 
+																multiple="false" rows="1"  width="250px" disabled="true">															
+														</listbox>
+													</hbox> 
+													<label />														
+													<label value="Harga Barang Lama"/>
+													<decimalbox id="txtb_OldHargaBarang" value="0"  format=",###.#" width="250px" readonly="true"/>	
+												</row>
+												<row>													
+													<label value="Tukar Barang baru"/>
+													<hbox>
+														<textbox id="txtb_KodeBarang" value="" maxlength="30" width="100px"/>
+													 	<listbox id="lbox_Barang" mold="select" 
+																multiple="false" rows="1"  width="250px" disabled="true">															
+														</listbox>
+													</hbox> 
+													<label />	
+													<label value="Harga Barang Baru"/>
+													<decimalbox id="txtb_HargaBarang" value="0"  format=",###.#" width="250px"/>																																														
+																										
+													
+												</row>
+												
+												<row>
+												<label value="Total Pembayaran"/>
+											        <decimalbox id="txtb_TotalPembayaran" value="0"  format=",###.#" width="250px" readonly="true"/>
+													<label />	
+													<label value="Cicilan Berikutnya"/>
+													<decimalbox id="txtb_NextCicilan" value="0"  format=",###.#" width="250px" />														
+												</row>
+												
+												<row>
+													<separator bar="true"></separator>
+													<separator bar="true"></separator>
+													<separator bar="true"></separator>
+													<separator bar="true"></separator>
+													<separator bar="true"></separator>
+												</row> 
+																								
 												<row>
 													<label value="Keterangan" />															
 													<textbox id="txtb_Keterangan" value="@{controller.piutang.keterangan}"
@@ -203,7 +312,10 @@
 												<row>
 													<label />
 													<button id="btnSave" label="Save dan Cetak Kwitansi Berikutnya"  	/>
-												</row>												
+												</row>		
+												
+												
+																						
 											</rows>
 										</grid>										
 									</groupbox>									

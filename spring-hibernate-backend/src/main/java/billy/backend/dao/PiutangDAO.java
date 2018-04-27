@@ -53,6 +53,8 @@ public interface PiutangDAO {
 
   public List<Piutang> getPiutangsByPenjualan(Penjualan obj);
 
+  public List<Piutang> getPiutangsTukarBarangByPenjualan(Penjualan entity);
+
   public void save(Piutang entity);
 
   public void saveOrUpdate(Piutang entity);

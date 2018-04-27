@@ -1,5 +1,6 @@
 package billy.backend.service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -55,6 +56,9 @@ public interface PiutangService {
   public void saveOrUpdate(Piutang piutang);
 
   public void updateAlamat(Piutang piutang);
+
+
+  public void updateNextNilaiTagihan(Piutang piutang, BigDecimal nilaiTagihan);
 
   public void updateTglJatuhTempo(Piutang data);
 

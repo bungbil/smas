@@ -134,7 +134,7 @@ public class PiutangServiceImpl implements PiutangService {
   private Piutang getAdditionalPiutang(Piutang currentData, Status statusProses) {
     Calendar cal = Calendar.getInstance();
     Piutang piutang = getNewPiutang();
-    piutang.setAktif(false);
+    piutang.setAktif(true);
 
     Date tglJatuhTempo = currentData.getTglJatuhTempo();
     cal.setTime(tglJatuhTempo);
@@ -350,6 +350,15 @@ public class PiutangServiceImpl implements PiutangService {
       data.setAlamat2(piutang.getAlamat2());
       data.setAlamat3(piutang.getAlamat3());
 
+      saveOrUpdate(data);
+    }
+  }
+
+  @Override
+  public void updateNextNilaiTagihan(Piutang piutang, BigDecimal nilaiTagihan) {
+    for (int i = piutang.getPembayaranKe() + 1; i <= piutang.getPenjualan().getIntervalKredit(); i++) {
+      Piutang data = getPiutangDAO().getPiutangByNoFakturAndPembayaranKe(piutang.getNoFaktur(), i);
+      data.setNilaiTagihan(nilaiTagihan);
       saveOrUpdate(data);
     }
   }

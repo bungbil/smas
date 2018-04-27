@@ -551,6 +551,10 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
             getPenjualanDetailCtrl().getPenjualan(),
             getPenjualanDetailCtrl().getPenjualan().getIntervalKredit(), status);
 
+      } else if (getPenjualanDetailCtrl().getPenjualan().getIntervalKredit() > 1
+          && getPenjualanDetailCtrl().getPenjualan().isNeedApproval()) {
+        getPiutangService().deleteAllPiutang(getPenjualanDetailCtrl().getPenjualan());
+
       }
       // if saving is successfully than actualize the beans as
       // origins.
@@ -938,8 +942,9 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
       ZksampleMessageUtils
           .showErrorMessage("Tanggal Angsuran ke 2 wajib di isi jika transaksi kredit");
       return;
-    } else if (getPenjualanDetailCtrl().getPenjualan().getTglAngsuran2()
-        .before(getPenjualanDetailCtrl().getPenjualan().getTglPenjualan())) {
+    } else if (interval != 1
+        && getPenjualanDetailCtrl().getPenjualan().getTglAngsuran2()
+            .before(getPenjualanDetailCtrl().getPenjualan().getTglPenjualan())) {
       ZksampleMessageUtils
           .showErrorMessage("Tanggal Angsuran ke 2 lebih kecil dari pada tanggal penjualan");
       return;
@@ -949,7 +954,7 @@ public class PenjualanMainCtrl extends GFCBaseCtrl implements Serializable {
      * validasi butuh approval - tgl angsuran ke 2 > 45 hari tgl penjualan - harga barang berubah
      */
     String message = "";
-    if (getPenjualanDetailCtrl().getPenjualan().getTglAngsuran2() != null) {
+    if (interval != 1 && getPenjualanDetailCtrl().getPenjualan().getTglAngsuran2() != null) {
       if (getDiffDays(getPenjualanDetailCtrl().getPenjualan().getTglPenjualan(),
           getPenjualanDetailCtrl().getPenjualan().getTglAngsuran2()) > 45) {
         message += "- Tanggal Angsuran ke 2 melebihi 45 hari \n";

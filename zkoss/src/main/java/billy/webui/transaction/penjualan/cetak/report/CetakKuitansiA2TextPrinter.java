@@ -108,117 +108,119 @@ public class CetakKuitansiA2TextPrinter extends Window implements Serializable {
         (CompanyProfileService) SpringUtil.getBean("companyProfileService");
     List<Kuitansi> listKuitansi = new ArrayList<Kuitansi>();
     for (Penjualan penjualan : listPenjualan) {
-      Kuitansi kuitansi = new Kuitansi();
+      if (penjualan.getIntervalKredit() > 1) {
+        Kuitansi kuitansi = new Kuitansi();
 
-      Calendar cal = Calendar.getInstance();
-      cal.setTime(penjualan.getTglAngsuran2());
-      int month = cal.get(Calendar.MONTH) + 1;
-      int date = cal.get(Calendar.DATE);
-      String monthString = String.valueOf(month);
-      String dateString = String.valueOf(date);
-      if (dateString.length() == 1) {
-        dateString = "0" + dateString;
-      }
-      if (monthString.length() == 1) {
-        monthString = "0" + monthString;
-      }
-      kuitansi.setNomorKuitansi(dateString + "." + monthString + "." + penjualan.getNoFaktur());
-      kuitansi.setMandiri(penjualan.getMandiriId().getKodeMandiri());
-      kuitansi.setNamaSales1(penjualan.getSales1().getNamaPanggilan() + "("
-          + penjualan.getSales1().getSupervisorDivisi().getInisialDivisi() + ")");
-      if (penjualan.getSales2() != null) {
-        kuitansi.setNamaSales2(penjualan.getSales2().getNamaPanggilan() + "("
-            + penjualan.getSales2().getSupervisorDivisi().getInisialDivisi() + ")");
-      } else {
-        kuitansi.setNamaSales2("");
-      }
-      kuitansi.setAlamatKantor(companyService.getAllCompanyProfiles().get(0).getAddress());
-      kuitansi.setAlamatKantor2(companyService.getAllCompanyProfiles().get(0).getPhone());
-      kuitansi.setNamaPelanggan(penjualan.getNamaPelanggan());
-      kuitansi.setAlamat("");
-      kuitansi.setAlamat2("");
-      kuitansi.setAlamat3("");
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(penjualan.getTglAngsuran2());
+        int month = cal.get(Calendar.MONTH) + 1;
+        int date = cal.get(Calendar.DATE);
+        String monthString = String.valueOf(month);
+        String dateString = String.valueOf(date);
+        if (dateString.length() == 1) {
+          dateString = "0" + dateString;
+        }
+        if (monthString.length() == 1) {
+          monthString = "0" + monthString;
+        }
+        kuitansi.setNomorKuitansi(dateString + "." + monthString + "." + penjualan.getNoFaktur());
+        kuitansi.setMandiri(penjualan.getMandiriId().getKodeMandiri());
+        kuitansi.setNamaSales1(penjualan.getSales1().getNamaPanggilan() + "("
+            + penjualan.getSales1().getSupervisorDivisi().getInisialDivisi() + ")");
+        if (penjualan.getSales2() != null) {
+          kuitansi.setNamaSales2(penjualan.getSales2().getNamaPanggilan() + "("
+              + penjualan.getSales2().getSupervisorDivisi().getInisialDivisi() + ")");
+        } else {
+          kuitansi.setNamaSales2("");
+        }
+        kuitansi.setAlamatKantor(companyService.getAllCompanyProfiles().get(0).getAddress());
+        kuitansi.setAlamatKantor2(companyService.getAllCompanyProfiles().get(0).getPhone());
+        kuitansi.setNamaPelanggan(penjualan.getNamaPelanggan());
+        kuitansi.setAlamat("");
+        kuitansi.setAlamat2("");
+        kuitansi.setAlamat3("");
 
-      StringBuilder sb = new StringBuilder(penjualan.getAlamat());
-      int i = 0;
-      while (i + 35 < sb.length() && (i = sb.lastIndexOf(" ", i + 35)) != -1) {
-        sb.replace(i, i + 1, "\n");
-      }
-      String[] alamat = sb.toString().split("\n");
-      int length = alamat.length;
-      for (int k = 0; k < length; k++) {
-        if (k == 0) {
-          kuitansi.setAlamat(alamat[0]);
-        } else if (k == 1) {
-          kuitansi.setAlamat2(alamat[1]);
-        } else if (k == 2) {
-          kuitansi.setAlamat3(alamat[2]);
+        StringBuilder sb = new StringBuilder(penjualan.getAlamat());
+        int i = 0;
+        while (i + 35 < sb.length() && (i = sb.lastIndexOf(" ", i + 35)) != -1) {
+          sb.replace(i, i + 1, "\n");
+        }
+        String[] alamat = sb.toString().split("\n");
+        int length = alamat.length;
+        for (int k = 0; k < length; k++) {
+          if (k == 0) {
+            kuitansi.setAlamat(alamat[0]);
+          } else if (k == 1) {
+            kuitansi.setAlamat2(alamat[1]);
+          } else if (k == 2) {
+            kuitansi.setAlamat3(alamat[2]);
+          }
+
         }
 
-      }
 
+        kuitansi.setAlamat4(penjualan.getAlamat2());
+        kuitansi.setAlamat5(penjualan.getAlamat3());
+        kuitansi.setTelepon(penjualan.getTelepon());
 
-      kuitansi.setAlamat4(penjualan.getAlamat2());
-      kuitansi.setAlamat5(penjualan.getAlamat3());
-      kuitansi.setTelepon(penjualan.getTelepon());
-
-      if (kuitansi.getAlamat2().isEmpty()) {
-        kuitansi.setAlamat2(penjualan.getAlamat2());
-        kuitansi.setAlamat3(penjualan.getAlamat3());
-        kuitansi.setAlamat4(penjualan.getTelepon());
-        kuitansi.setAlamat5("");
-        kuitansi.setTelepon("");
-      } else if (kuitansi.getAlamat3().isEmpty()) {
-        kuitansi.setAlamat3(penjualan.getAlamat2());
-        kuitansi.setAlamat4(penjualan.getAlamat3());
-        kuitansi.setAlamat5(penjualan.getTelepon());
-        kuitansi.setTelepon("");
-      }
-
-      String jumlahInWord =
-          "# " + angkaToTerbilang(penjualan.getKreditPerBulan().longValue()) + " #";
-      kuitansi.setJumlahInWord("");
-      kuitansi.setJumlahInWord2("");
-
-      sb = new StringBuilder(jumlahInWord);
-      i = 0;
-      while (i + 60 < sb.length() && (i = sb.lastIndexOf(" ", i + 60)) != -1) {
-        sb.replace(i, i + 1, "\n");
-      }
-      String[] jumlahInWordStr = sb.toString().split("\n");
-      length = jumlahInWordStr.length;
-      for (int k = 0; k < length; k++) {
-        if (k == 0) {
-          kuitansi.setJumlahInWord(jumlahInWordStr[0]);
-        } else if (k == 1) {
-          kuitansi.setJumlahInWord2(jumlahInWordStr[1]);
+        if (kuitansi.getAlamat2().isEmpty()) {
+          kuitansi.setAlamat2(penjualan.getAlamat2());
+          kuitansi.setAlamat3(penjualan.getAlamat3());
+          kuitansi.setAlamat4(penjualan.getTelepon());
+          kuitansi.setAlamat5("");
+          kuitansi.setTelepon("");
+        } else if (kuitansi.getAlamat3().isEmpty()) {
+          kuitansi.setAlamat3(penjualan.getAlamat2());
+          kuitansi.setAlamat4(penjualan.getAlamat3());
+          kuitansi.setAlamat5(penjualan.getTelepon());
+          kuitansi.setTelepon("");
         }
-      }
 
-      kuitansi.setJumlah(df.format(penjualan.getKreditPerBulan()));
-      int sisaBulan = penjualan.getIntervalKredit() - 2;
-      BigDecimal sisaPiutang = penjualan.getPiutang().subtract(penjualan.getKreditPerBulan());
-      kuitansi.setSisaPembayaran(df.format(penjualan.getKreditPerBulan()) + " : SELAMA "
-          + sisaBulan + " BULAN , Total Rp. " + df.format(sisaPiutang));
-      kuitansi.setAngsuranKe("2");
-      kuitansi.setTglAngsuran(formatDate.format(penjualan.getTglAngsuran2()));
-      kuitansi.setNamaSupervisor(penjualan.getDivisi().getSupervisorDivisi().getNamaPanggilan());
-      kuitansi.setNamaKolektor("");
-      if (penjualan.getKolektor() != null) {
-        kuitansi.setNamaKolektor(penjualan.getKolektor().getNamaPanggilan());
-      }
-      List<PenjualanDetail> listPenjualanDetail = as.getPenjualanDetailsByPenjualan(penjualan);
-      for (PenjualanDetail detail : listPenjualanDetail) {
-        String namaBarang = detail.getBarang().getNamaBarang();
-        if (namaBarang.length() > 18) {
-          namaBarang = namaBarang.substring(0, 17);
+        String jumlahInWord =
+            "# " + angkaToTerbilang(penjualan.getKreditPerBulan().longValue()) + " #";
+        kuitansi.setJumlahInWord("");
+        kuitansi.setJumlahInWord2("");
+
+        sb = new StringBuilder(jumlahInWord);
+        i = 0;
+        while (i + 60 < sb.length() && (i = sb.lastIndexOf(" ", i + 60)) != -1) {
+          sb.replace(i, i + 1, "\n");
         }
-        kuitansi.tambahItemFaktur(new ItemFaktur(detail.getBarang().getKodeBarang(), namaBarang,
-            String.valueOf(detail.getQty()), df.format(detail.getHarga()), df.format(detail
-                .getTotal())));
-      }
+        String[] jumlahInWordStr = sb.toString().split("\n");
+        length = jumlahInWordStr.length;
+        for (int k = 0; k < length; k++) {
+          if (k == 0) {
+            kuitansi.setJumlahInWord(jumlahInWordStr[0]);
+          } else if (k == 1) {
+            kuitansi.setJumlahInWord2(jumlahInWordStr[1]);
+          }
+        }
 
-      listKuitansi.add(kuitansi);
+        kuitansi.setJumlah(df.format(penjualan.getKreditPerBulan()));
+        int sisaBulan = penjualan.getIntervalKredit() - 2;
+        BigDecimal sisaPiutang = penjualan.getPiutang().subtract(penjualan.getKreditPerBulan());
+        kuitansi.setSisaPembayaran(df.format(penjualan.getKreditPerBulan()) + " : SELAMA "
+            + sisaBulan + " BULAN , Total Rp. " + df.format(sisaPiutang));
+        kuitansi.setAngsuranKe("2");
+        kuitansi.setTglAngsuran(formatDate.format(penjualan.getTglAngsuran2()));
+        kuitansi.setNamaSupervisor(penjualan.getDivisi().getSupervisorDivisi().getNamaPanggilan());
+        kuitansi.setNamaKolektor("");
+        if (penjualan.getKolektor() != null) {
+          kuitansi.setNamaKolektor(penjualan.getKolektor().getNamaPanggilan());
+        }
+        List<PenjualanDetail> listPenjualanDetail = as.getPenjualanDetailsByPenjualan(penjualan);
+        for (PenjualanDetail detail : listPenjualanDetail) {
+          String namaBarang = detail.getBarang().getNamaBarang();
+          if (namaBarang.length() > 18) {
+            namaBarang = namaBarang.substring(0, 17);
+          }
+          kuitansi.tambahItemFaktur(new ItemFaktur(detail.getBarang().getKodeBarang(), namaBarang,
+              String.valueOf(detail.getQty()), df.format(detail.getHarga()), df.format(detail
+                  .getTotal())));
+        }
+
+        listKuitansi.add(kuitansi);
+      }
     }
 
     // prints the famous hello world! plus a form feed

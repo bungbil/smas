@@ -46,6 +46,12 @@ public class Piutang implements java.io.Serializable, Entity {
   private String alamat3;
 
 
+  private Barang tukarBarang;
+  private BigDecimal tukarHarga;
+  private Barang tukarOldBarang;
+  private BigDecimal tukarOldHarga;
+
+
   public Piutang() {}
 
 
@@ -56,7 +62,7 @@ public class Piutang implements java.io.Serializable, Entity {
       BigDecimal diskon, Date tglBawaKolektor, boolean fullPayment, Status statusFinal,
       BigDecimal kekuranganBayar, boolean aktif, Date lastUpdate, String updatedBy,
       boolean warning, boolean masalah, String namaPelanggan, String telepon, String alamat,
-      String alamat2, String alamat3) {
+      String alamat2, String alamat3, Barang tukarBarang, BigDecimal tukarHarga) {
     super();
     this.id = id;
     this.version = version;
@@ -90,6 +96,8 @@ public class Piutang implements java.io.Serializable, Entity {
     this.alamat = alamat;
     this.alamat2 = alamat2;
     this.alamat3 = alamat3;
+    this.tukarBarang = tukarBarang;
+    this.tukarHarga = tukarHarga;
   }
 
 
@@ -131,7 +139,6 @@ public class Piutang implements java.io.Serializable, Entity {
   public String getAlamat3() {
     return alamat3;
   }
-
 
   public String getApprovedBy() {
     return approvedBy;
@@ -223,20 +230,44 @@ public class Piutang implements java.io.Serializable, Entity {
     return statusFinal;
   }
 
+
   public String getTelepon() {
     return telepon;
   }
+
 
   public Date getTglBawaKolektor() {
     return tglBawaKolektor;
   }
 
+
   public Date getTglJatuhTempo() {
     return tglJatuhTempo;
   }
 
+
   public Date getTglPembayaran() {
     return tglPembayaran;
+  }
+
+
+  public Barang getTukarBarang() {
+    return tukarBarang;
+  }
+
+
+  public BigDecimal getTukarHarga() {
+    return tukarHarga;
+  }
+
+
+  public Barang getTukarOldBarang() {
+    return tukarOldBarang;
+  }
+
+
+  public BigDecimal getTukarOldHarga() {
+    return tukarOldHarga;
   }
 
   public String getUpdatedBy() {
@@ -276,13 +307,13 @@ public class Piutang implements java.io.Serializable, Entity {
   public boolean isWarning() {
     boolean isWarning = false;
 
-    if (isAktif() && daysBetween(getTglJatuhTempo().getTime(), new Date().getTime()) > 90) {
+    if (isAktif() && daysBetween(getTglJatuhTempo().getTime(), new Date().getTime()) > 90
+        && this.statusFinal == null) {
       isWarning = true;
     }
 
     return isWarning;
   }
-
 
   public void setAktif(boolean aktif) {
     this.aktif = aktif;
@@ -316,6 +347,7 @@ public class Piutang implements java.io.Serializable, Entity {
   public void setFullPayment(boolean fullPayment) {
     this.fullPayment = fullPayment;
   }
+
 
   @Override
   public void setId(long id) {
@@ -394,14 +426,30 @@ public class Piutang implements java.io.Serializable, Entity {
     this.tglBawaKolektor = tglBawaKolektor;
   }
 
-
   public void setTglJatuhTempo(Date tglJatuhTempo) {
     this.tglJatuhTempo = tglJatuhTempo;
   }
 
-
   public void setTglPembayaran(Date tglPembayaran) {
     this.tglPembayaran = tglPembayaran;
+  }
+
+  public void setTukarBarang(Barang tukarBarang) {
+    this.tukarBarang = tukarBarang;
+  }
+
+  public void setTukarHarga(BigDecimal tukarHarga) {
+    this.tukarHarga = tukarHarga;
+  }
+
+
+  public void setTukarOldBarang(Barang tukarOldBarang) {
+    this.tukarOldBarang = tukarOldBarang;
+  }
+
+
+  public void setTukarOldHarga(BigDecimal tukarOldHarga) {
+    this.tukarOldHarga = tukarOldHarga;
   }
 
 
@@ -424,12 +472,12 @@ public class Piutang implements java.io.Serializable, Entity {
   public String toString() {
     return String
         .format(
-            "Piutang [id=%s, version=%s, penjualan=%s, noFaktur=%s, noKuitansi=%s, pembayaranKe=%s, tglPembayaran=%s, status=%s, nilaiTagihan=%s, pembayaran=%s, tglJatuhTempo=%s, kolektor=%s, keterangan=%s, needApproval=%s, reasonApproval=%s, approvedRemark=%s, approvedBy=%s, diskon=%s, tglBawaKolektor=%s, fullPayment=%s, statusFinal=%s, kekuranganBayar=%s, aktif=%s, lastUpdate=%s, updatedBy=%s, warning=%s, masalah=%s, namaPelanggan=%s, telepon=%s, alamat=%s, alamat2=%s, alamat3=%s]",
+            "Piutang [id=%s, version=%s, penjualan=%s, noFaktur=%s, noKuitansi=%s, pembayaranKe=%s, tglPembayaran=%s, status=%s, nilaiTagihan=%s, pembayaran=%s, tglJatuhTempo=%s, kolektor=%s, keterangan=%s, needApproval=%s, reasonApproval=%s, approvedRemark=%s, approvedBy=%s, diskon=%s, tglBawaKolektor=%s, fullPayment=%s, statusFinal=%s, kekuranganBayar=%s, aktif=%s, lastUpdate=%s, updatedBy=%s, warning=%s, masalah=%s, namaPelanggan=%s, telepon=%s, alamat=%s, alamat2=%s, alamat3=%s, tukarBarang=%s, tukarHarga=%s]",
             id, version, penjualan, noFaktur, noKuitansi, pembayaranKe, tglPembayaran, status,
             nilaiTagihan, pembayaran, tglJatuhTempo, kolektor, keterangan, needApproval,
             reasonApproval, approvedRemark, approvedBy, diskon, tglBawaKolektor, fullPayment,
             statusFinal, kekuranganBayar, aktif, lastUpdate, updatedBy, warning, masalah,
-            namaPelanggan, telepon, alamat, alamat2, alamat3);
+            namaPelanggan, telepon, alamat, alamat2, alamat3, tukarBarang, tukarHarga);
   }
 
 }

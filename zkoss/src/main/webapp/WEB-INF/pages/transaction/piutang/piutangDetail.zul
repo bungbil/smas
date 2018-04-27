@@ -130,6 +130,37 @@
 														<textbox id="txtb_Alamat3" value="@{controller.piutang.alamat3}" 
 															maxlength="40" width="250px" readonly="true"/>																
 													</row>
+													
+													<row>
+													<separator bar="true"></separator>
+													<separator bar="true"></separator>
+													<separator bar="true"></separator>
+													<separator bar="true"></separator>
+													<separator bar="true"></separator>
+												</row>
+												<row>													
+													<label value="Tukar Barang"/>
+													<hbox>
+														<textbox id="txtb_KodeBarang" value="@{controller.piutang.tukarBarang.kodeBarang}" maxlength="30" width="100px" readonly="true"/>
+													 	<listbox id="lbox_Barang" mold="select" 
+																multiple="false" rows="1"  width="250px" disabled="true">															
+														</listbox>
+													</hbox> 
+													<label />														
+													<label value="Harga Barang"/>
+													<decimalbox id="txtb_HargaBarang" value="@{controller.piutang.tukarHarga}"  format=",###.#" width="250px" readonly="true"/>																																														
+													
+												</row>
+												
+												<row>
+													<separator bar="true"></separator>
+													<separator bar="true"></separator>
+													<separator bar="true"></separator>
+													<separator bar="true"></separator>
+													<separator bar="true"></separator>
+												</row>
+															
+													
 													<row>
 														<label value="Keterangan" />															
 														<textbox id="txtb_Keterangan" value="@{controller.piutang.keterangan}"

@@ -52,6 +52,8 @@ public interface PenjualanService {
 
   public List<PenjualanDetail> getPenjualanDetailsByPenjualan(Penjualan penjualan);
 
+  public List<PenjualanDetail> getPenjualanDetailsTukarBarangByPenjualan(Penjualan penjualan);
+
   public BigDecimal getPenjualanSum(Penjualan penjualan);
 
   public void saveOrUpdate(Penjualan penjualan);

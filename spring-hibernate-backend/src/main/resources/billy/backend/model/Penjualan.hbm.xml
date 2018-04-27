@@ -127,6 +127,8 @@
 		<property name="alamat3" type="string">
 			<column name="alamat3" length="255" />
 		</property>
-		
+		<property name="tukarBarang" type="boolean">
+			<column name="tukar_barang"  />
+		</property>
 	</class>
 </hibernate-mapping>

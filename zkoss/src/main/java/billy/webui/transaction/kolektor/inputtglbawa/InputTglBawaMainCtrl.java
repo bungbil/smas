@@ -141,6 +141,7 @@ public class InputTglBawaMainCtrl extends GFCBaseCtrl implements Serializable {
     panelResult.setVisible(false);
 
     piutang = null;
+    txtb_SearchNoKwitansi.setValue("");
     txtb_SearchNoKwitansi.focus();
   }
 

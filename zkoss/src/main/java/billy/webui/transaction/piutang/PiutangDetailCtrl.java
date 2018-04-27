@@ -29,14 +29,17 @@ import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
+import billy.backend.model.Barang;
 import billy.backend.model.Karyawan;
 import billy.backend.model.Penjualan;
 import billy.backend.model.Piutang;
 import billy.backend.model.Status;
+import billy.backend.service.BarangService;
 import billy.backend.service.KaryawanService;
 import billy.backend.service.PenjualanService;
 import billy.backend.service.PiutangService;
 import billy.backend.service.StatusService;
+import billy.webui.master.barang.model.BarangListModelItemRenderer;
 import billy.webui.master.karyawan.model.KaryawanListModelItemRenderer;
 import billy.webui.master.status.model.StatusListModelItemRenderer;
 import billy.webui.transaction.piutang.cetak.report.CetakKuitansiTextPrinter;
@@ -80,7 +83,9 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
   public Textbox txtb_ApprovedBy;
   public Textbox txtb_ApprovedRemark;
 
-
+  protected Listbox lbox_Barang;
+  protected Textbox txtb_KodeBarang;
+  protected Decimalbox txtb_HargaBarang;
   // Databinding
   protected transient AnnotateDataBinder binder;
   private PiutangMainCtrl piutangMainCtrl;
@@ -89,11 +94,12 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
   private transient PiutangService piutangService;
   private transient PenjualanService penjualanService;
   private transient KaryawanService karyawanService;
-
+  private transient BarangService barangService;
 
   private transient StatusService statusService;
 
   private PrintService selectedPrinter;
+
   DecimalFormat df = new DecimalFormat("#,###");
 
   /**
@@ -143,12 +149,6 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
     btnApprovePiutang.setVisible(true);
   }
 
-
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // +++++++++++++++ Component Events ++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-
-
   public void doFitSize(Event event) {
 
     final int menuOffset = UserWorkspace.getInstance().getMenuOffset();
@@ -173,6 +173,12 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
     txtb_Diskon.setReadonly(b);
     lbox_StatusFinal.setDisabled(b);
   }
+
+
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++++ Component Events ++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+
 
   public void doRefresh() {
     List<Status> listStatus = getStatusService().getAllStatuss();
@@ -205,6 +211,17 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
       lbox_Kolektor.setSelectedIndex(lml.indexOf(karyawan));
     }
 
+    List<Barang> listBarang =
+        getBarangService().getAllBarangsByWilayah(getSelectedPiutang().getPenjualan().getWilayah());
+    lbox_Barang.setModel(new ListModelList(listBarang));
+    lbox_Barang.setItemRenderer(new BarangListModelItemRenderer());
+
+    if (getSelectedPiutang().getTukarBarang() != null) {
+      ListModelList lml = (ListModelList) lbox_Barang.getModel();
+      Barang barang =
+          getBarangService().getBarangByID(getSelectedPiutang().getTukarBarang().getId());
+      lbox_Barang.setSelectedIndex(lml.indexOf(barang));
+    }
 
   }
 
@@ -219,6 +236,10 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
     selectedPrinter = null;
   }
 
+  public BarangService getBarangService() {
+    return barangService;
+  }
+
   public AnnotateDataBinder getBinder() {
     return this.binder;
   }
@@ -231,26 +252,26 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
     return penjualanService;
   }
 
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-  // ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
-  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
-
-
   /* Master BEANS */
   public Piutang getPiutang() {
     // STORED IN THE module's MainController
     return getPiutangMainCtrl().getSelectedPiutang();
   }
 
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // ++++++++++++++++ Setter/Getter ++++++++++++++++++ //
+  // +++++++++++++++++++++++++++++++++++++++++++++++++ //
+
+
   public PiutangMainCtrl getPiutangMainCtrl() {
     return this.piutangMainCtrl;
   }
-
 
   public BindingListModelList getPiutangs() {
     // STORED IN THE module's MainController
     return getPiutangMainCtrl().getPiutangs();
   }
+
 
   public PiutangService getPiutangService() {
     return this.piutangService;
@@ -496,6 +517,10 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
     binder.loadAll();
 
     doFitSize(event);
+  }
+
+  public void setBarangService(BarangService barangService) {
+    this.barangService = barangService;
   }
 
   public void setBinder(AnnotateDataBinder binder) {

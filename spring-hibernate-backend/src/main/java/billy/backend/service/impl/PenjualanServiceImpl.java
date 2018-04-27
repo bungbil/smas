@@ -10,9 +10,11 @@ import java.util.List;
 
 import billy.backend.dao.PenjualanDAO;
 import billy.backend.dao.PenjualanDetailDAO;
+import billy.backend.dao.PiutangDAO;
 import billy.backend.model.Karyawan;
 import billy.backend.model.Penjualan;
 import billy.backend.model.PenjualanDetail;
+import billy.backend.model.Piutang;
 import billy.backend.service.PenjualanService;
 
 
@@ -20,6 +22,7 @@ public class PenjualanServiceImpl implements PenjualanService {
 
   private PenjualanDAO penjualanDAO;
   private PenjualanDetailDAO penjualanDetailDAO;
+  private PiutangDAO piutangDAO;
 
 
   /**
@@ -108,7 +111,6 @@ public class PenjualanServiceImpl implements PenjualanService {
     return getPenjualanDAO().getCountAllPenjualans();
   }
 
-
   @Override
   public int getCountAllPenjualansByDivisi(Karyawan obj, Date date) {
 
@@ -122,17 +124,18 @@ public class PenjualanServiceImpl implements PenjualanService {
     return getPenjualanDAO().getCountAllPenjualansByDivisi(obj, startDate, endDate);
   }
 
-
   @Override
   public int getCountPenjualanDetailsByPenjualan(Penjualan penjualan) {
     int result = getPenjualanDetailDAO().getCountPenjualanDetailsByPenjualan(penjualan);
     return result;
   }
 
+
   @Override
   public List<Penjualan> getListNeedApprovalPenjualansByListNoFaktur(List<String> listNoFaktur) {
     return getPenjualanDAO().getListNeedApprovalPenjualansByListNoFaktur(listNoFaktur);
   }
+
 
   @Override
   public Penjualan getNewPenjualan() {
@@ -171,6 +174,39 @@ public class PenjualanServiceImpl implements PenjualanService {
     List<PenjualanDetail> result =
         getPenjualanDetailDAO().getPenjualanDetailsByPenjualan(penjualan);
 
+
+    return result;
+  }
+
+  @Override
+  public List<PenjualanDetail> getPenjualanDetailsTukarBarangByPenjualan(Penjualan penjualan) {
+
+    getPenjualanDAO().refresh(penjualan);
+    getPenjualanDAO().initialize(penjualan);
+
+    List<PenjualanDetail> result =
+        getPenjualanDetailDAO().getPenjualanDetailsByPenjualan(penjualan);
+
+    // replace with tukar barang
+    if (penjualan.isTukarBarang()) {
+      List<Piutang> listPiutangTukarBarang =
+          getPiutangDAO().getPiutangsTukarBarangByPenjualan(penjualan);
+
+      for (Piutang piutang : listPiutangTukarBarang) {
+        for (PenjualanDetail detail : result) {
+          if (piutang.getTukarOldBarang().equals(detail.getBarang())) {
+            result.remove(detail);
+            if (piutang.getTukarBarang() != null) {
+              detail.setBarang(piutang.getTukarBarang());
+              detail.setQty(1);
+              detail.setHarga(piutang.getTukarHarga());
+              detail.setTotal(piutang.getTukarHarga());
+              result.add(detail);
+            }
+          }
+        }
+      }
+    }
     return result;
   }
 
@@ -179,11 +215,15 @@ public class PenjualanServiceImpl implements PenjualanService {
     return getPenjualanDAO().getPenjualanSum(penjualan);
   }
 
+  public PiutangDAO getPiutangDAO() {
+    return piutangDAO;
+  }
 
   @Override
   public void saveOrUpdate(Penjualan penjualan) {
     getPenjualanDAO().saveOrUpdate(penjualan);
   }
+
 
   @Override
   public void saveOrUpdate(PenjualanDetail penjualanDetail) {
@@ -196,6 +236,10 @@ public class PenjualanServiceImpl implements PenjualanService {
 
   public void setPenjualanDetailDAO(PenjualanDetailDAO penjualanDetailDAO) {
     this.penjualanDetailDAO = penjualanDetailDAO;
+  }
+
+  public void setPiutangDAO(PiutangDAO piutangDAO) {
+    this.piutangDAO = piutangDAO;
   }
 
 }
