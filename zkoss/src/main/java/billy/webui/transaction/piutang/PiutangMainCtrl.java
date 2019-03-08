@@ -491,6 +491,7 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
             piutangService.getNextPiutang(getPiutangDetailCtrl().getPiutang(), statusProses);
         if (nextPiutang != null) {
           nextPiutang.setKekuranganBayar(kekuranganBayar);
+          nextPiutang.setAktif(true);
           getPiutangService().saveOrUpdate(nextPiutang);
         }
       }
@@ -735,15 +736,15 @@ public class PiutangMainCtrl extends GFCBaseCtrl implements Serializable {
     if (getPiutangDetailCtrl().getPiutang().isAktif()) {
       return true;
     } else {
-      Status statusProses = getStatusService().getStatusByID(new Long(3)); // PROSES
-      Piutang nextPiutang =
-          piutangService.getNextPiutang(getPiutangDetailCtrl().getPiutang(), statusProses);
+
+      Piutang nextPiutang = piutangService.getNextPiutang(getPiutangDetailCtrl().getPiutang());
       if (nextPiutang != null) {
         if (nextPiutang.isAktif()) {
           return true;
         }
       }
     }
+
     return false;
   }
 

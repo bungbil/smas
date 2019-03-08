@@ -344,17 +344,20 @@ public class PiutangDetailCtrl extends GFCBaseCtrl implements Serializable {
                       piutang.getNilaiTagihan().add(piutang.getKekuranganBayar())
                           .subtract(piutang.getPembayaran()).subtract(diskon);
                   // get next piutang, set aktif = true, kekurangan dari piutang sebelumnya
-                  Status statusProses = getStatusService().getStatusByID(new Long(3)); // PROSES
-                  Piutang nextPiutang = piutangService.getNextPiutang(piutang, statusProses);
-                  nextPiutang.setAktif(true);
-                  nextPiutang.setKekuranganBayar(kekuranganBayar);
-                  getPiutangService().saveOrUpdate(nextPiutang);
 
-                  if (nextPiutang != null) {
-                    final Window win = (Window) Path.getComponent("/outerIndexWindow");
-                    List<Piutang> listPiutang = new ArrayList<Piutang>();
-                    listPiutang.add(nextPiutang);
-                    new CetakKuitansiTextPrinter(win, listPiutang, selectedPrinter);
+                  if (piutang.getPenjualan().getPiutang().compareTo(BigDecimal.ZERO) == 1) {
+                    Status statusProses = getStatusService().getStatusByID(new Long(3)); // PROSES
+                    Piutang nextPiutang = piutangService.getNextPiutang(piutang, statusProses);
+                    nextPiutang.setAktif(true);
+                    nextPiutang.setKekuranganBayar(kekuranganBayar);
+                    getPiutangService().saveOrUpdate(nextPiutang);
+
+                    if (nextPiutang != null) {
+                      final Window win = (Window) Path.getComponent("/outerIndexWindow");
+                      List<Piutang> listPiutang = new ArrayList<Piutang>();
+                      listPiutang.add(nextPiutang);
+                      new CetakKuitansiTextPrinter(win, listPiutang, selectedPrinter);
+                    }
                   }
                 } catch (DataAccessException e) {
                   ZksampleMessageUtils.showErrorMessage(e.getMostSpecificCause().toString());

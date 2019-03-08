@@ -9,6 +9,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -433,6 +435,13 @@ public class PenerimaanPembayaranDJReport extends Window implements Serializable
       i++;
     }
 
+
+    Collections.sort(penerimaanPembayaranList, new Comparator<PenerimaanPembayaran>() {
+      @Override
+      public int compare(PenerimaanPembayaran obj1, PenerimaanPembayaran obj2) {
+        return obj1.getInvoiceNumber().compareTo(obj2.getInvoiceNumber());
+      }
+    });
     return penerimaanPembayaranList;
   }
 

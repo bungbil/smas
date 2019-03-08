@@ -168,12 +168,12 @@ public class PiutangDAOImpl extends BillyBasisDAO<Piutang> implements PiutangDAO
 
   @SuppressWarnings("unchecked")
   @Override
-  public Piutang getPiutangByNoFakturAndPembayaranKe(String data, int data2) {
+  public Piutang getPiutangByNoFakturAndAktif(String noFaktur) {
     List<Piutang> result;
 
     DetachedCriteria criteria = DetachedCriteria.forClass(Piutang.class);
-    criteria.add(Restrictions.eq("noFaktur", data));
-    criteria.add(Restrictions.eq("pembayaranKe", data2));
+    criteria.add(Restrictions.eq("noFaktur", noFaktur));
+    criteria.add(Restrictions.eq("aktif", true));
 
     result = getHibernateTemplate().findByCriteria(criteria);
     if (result.size() > 0) {
@@ -184,6 +184,23 @@ public class PiutangDAOImpl extends BillyBasisDAO<Piutang> implements PiutangDAO
     return null;
   }
 
+  @SuppressWarnings("unchecked")
+  @Override
+  public Piutang getPiutangByNoFakturAndPembayaranKe(String noFaktur, int pembayaranKe) {
+    List<Piutang> result;
+
+    DetachedCriteria criteria = DetachedCriteria.forClass(Piutang.class);
+    criteria.add(Restrictions.eq("noFaktur", noFaktur));
+    criteria.add(Restrictions.eq("pembayaranKe", pembayaranKe));
+
+    result = getHibernateTemplate().findByCriteria(criteria);
+    if (result.size() > 0) {
+      Piutang piutang = result.get(0);
+      return piutang;
+    }
+
+    return null;
+  }
 
   @SuppressWarnings("unchecked")
   @Override

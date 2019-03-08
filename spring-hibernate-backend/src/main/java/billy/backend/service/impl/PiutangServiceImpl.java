@@ -159,7 +159,7 @@ public class PiutangServiceImpl implements PiutangService {
         + currentData.getPenjualan().getNoFaktur());
 
     piutang.setNilaiTagihan(BigDecimal.ZERO);
-    piutang.setPembayaranKe(currentData.getPembayaranKe());
+    piutang.setPembayaranKe(currentData.getPembayaranKe() + 1);
     piutang.setPenjualan(currentData.getPenjualan());
     piutang.setNoFaktur(currentData.getPenjualan().getNoFaktur());
 
@@ -288,11 +288,54 @@ public class PiutangServiceImpl implements PiutangService {
   }
 
   @Override
+  public Piutang getPiutangM3(Penjualan penjualan) {
+    Piutang piutangAktif = getPiutangDAO().getPiutangByNoFakturAndAktif(penjualan.getNoFaktur());
+
+    if (piutangAktif != null && piutangAktif.isWarning()) {
+      return piutangAktif;
+    } else if (piutangAktif != null && piutangAktif.getPembayaranKe() > 5
+        && piutangAktif.getStatusFinal() == null) {
+      Piutang piutangBulan1 =
+          getPiutangDAO().getPiutangByNoFakturAndPembayaranKe(penjualan.getNoFaktur(),
+              piutangAktif.getPembayaranKe() - 1);
+      Piutang piutangBulan2 =
+          getPiutangDAO().getPiutangByNoFakturAndPembayaranKe(penjualan.getNoFaktur(),
+              piutangAktif.getPembayaranKe() - 2);
+      Piutang piutangBulan3 =
+          getPiutangDAO().getPiutangByNoFakturAndPembayaranKe(penjualan.getNoFaktur(),
+              piutangAktif.getPembayaranKe() - 3);
+
+      if (piutangBulan1.getPembayaran().compareTo(BigDecimal.ZERO) == 0
+          && piutangBulan2.getPembayaran().compareTo(BigDecimal.ZERO) == 0
+          && piutangBulan3.getPembayaran().compareTo(BigDecimal.ZERO) == 0) {
+
+        return piutangAktif;
+      }
+    }
+    return null;
+  }
+
+
+  @Override
   public List<Piutang> getPiutangsByPenjualan(Penjualan penjualan) {
     List<Piutang> result = getPiutangDAO().getPiutangsByPenjualan(penjualan);
     return result;
   }
 
+  @Override
+  public Piutang getPiutangTerakhirDibayar(Penjualan penjualan) {
+    Piutang piutangAktif = getPiutangDAO().getPiutangByNoFakturAndAktif(penjualan.getNoFaktur());
+    for (int i = piutangAktif.getPembayaranKe() - 4; i > 1; i--) {
+      Piutang piutang =
+          getPiutangDAO().getPiutangByNoFakturAndPembayaranKe(penjualan.getNoFaktur(), i);
+      if (piutang.getPembayaran().compareTo(BigDecimal.ZERO) == 1) {
+        return piutang;
+      }
+
+    }
+
+    return null;
+  }
 
   @Override
   public boolean resetPembayaranPiutang(Piutang piutang, Status statusProses) {
@@ -301,7 +344,7 @@ public class PiutangServiceImpl implements PiutangService {
     Piutang nextPiutang =
         getPiutangDAO().getPiutangByNoFakturAndPembayaranKe(piutang.getNoFaktur(),
             piutang.getPembayaranKe() + 1);
-    if (nextPiutang.isAktif()) {
+    if (nextPiutang != null && nextPiutang.isAktif()) {
       result = true;
       nextPiutang.setAktif(false);
       nextPiutang.setKekuranganBayar(null);
@@ -316,16 +359,16 @@ public class PiutangServiceImpl implements PiutangService {
       nextPiutang.setStatus(statusProses);
       nextPiutang.setStatusFinal(null);
       saveOrUpdate(nextPiutang);
-
-      piutang.setAktif(true);
-      piutang.setFullPayment(false);
-      piutang.setPembayaran(null);
-      piutang.setTglPembayaran(null);
-      piutang.setDiskon(null);
-      piutang.setStatus(statusProses);
-      piutang.setStatusFinal(null);
-      saveOrUpdate(piutang);
     }
+    piutang.setAktif(true);
+    piutang.setFullPayment(false);
+    piutang.setPembayaran(null);
+    piutang.setTglPembayaran(null);
+    piutang.setDiskon(null);
+    piutang.setStatus(statusProses);
+    piutang.setStatusFinal(null);
+    saveOrUpdate(piutang);
+
     return result;
   }
 

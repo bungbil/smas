@@ -1,4 +1,4 @@
-package billy.webui.report.perhitungankomisi.report;
+package billy.webui.report.piutangsales.report;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -32,29 +32,31 @@ import org.zkoss.zul.Window;
 import billy.backend.model.Karyawan;
 import billy.backend.model.Penjualan;
 import billy.backend.model.PenjualanDetail;
-import billy.backend.service.BonusTransportService;
+import billy.backend.model.Piutang;
+import billy.backend.model.Status;
 import billy.backend.service.CompanyProfileService;
 import billy.backend.service.PenjualanService;
+import billy.backend.service.PiutangService;
+import billy.backend.service.StatusService;
 import billy.webui.printer.PrintJobWatcher;
-import billy.webui.report.perhitungankomisi.model.PerhitunganKomisi;
+import billy.webui.report.piutangsales.model.PiutangSales;
 import de.forsthaus.webui.util.ZksampleMessageUtils;
 
-public class PerhitunganKomisiTextPrinter extends Window implements Serializable {
+public class PiutangSalesTextPrinter extends Window implements Serializable {
 
   private static final long serialVersionUID = 1L;
-  private static final Logger logger = Logger.getLogger(PerhitunganKomisiTextPrinter.class);
+  private static final Logger logger = Logger.getLogger(PiutangSalesTextPrinter.class);
 
   public static int roundUp(int dividend, int divisor) {
     return (dividend + divisor - 1) / divisor;
   }
 
-  private BigDecimal totalAkhirTabungan = BigDecimal.ZERO;
 
   private Double totalQty = 0.0;
   private Double totalAkhirQty = 0.0;
 
-  private BigDecimal totalKomisi = BigDecimal.ZERO;
-  private BigDecimal totalAkhirKomisi = BigDecimal.ZERO;
+  private BigDecimal totalSisaPiutang = BigDecimal.ZERO;
+  private BigDecimal totalAkhirSisaPiutang = BigDecimal.ZERO;
 
   private BigDecimal totalNilaiJual = BigDecimal.ZERO;
   private BigDecimal totalAkhirNilaiJual = BigDecimal.ZERO;
@@ -84,9 +86,8 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
 
   DecimalFormat df = new DecimalFormat("#,###");
 
-  public PerhitunganKomisiTextPrinter(Component parent, Karyawan karyawan, Date startDate,
-      Date endDate, List<Penjualan> listPenjualan, PrintService selectedPrinter)
-      throws InterruptedException {
+  public PiutangSalesTextPrinter(Component parent, Karyawan karyawan, Date startDate, Date endDate,
+      List<Penjualan> listPenjualan, PrintService selectedPrinter) throws InterruptedException {
     super();
     this.setParent(parent);
 
@@ -121,11 +122,57 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
     }
   }
 
+  private boolean checkAngsuran2Lunas(Status statusLunas, PiutangService piutangService,
+      Penjualan penjualan) {
+    // TODO Auto-generated method stub
+    try {
+      if (penjualan.getMetodePembayaran().equals("Cash")) {
+        return true;
+      } else {
+        List<Piutang> piutanglist = piutangService.getPiutangsByPenjualan(penjualan);
+        BigDecimal totalAngsuran = BigDecimal.ZERO;
+        for (Piutang data : piutanglist) {
+          if (data.getPembayaran() != null) {
+            totalAngsuran = totalAngsuran.add(data.getPembayaran());
+          }
+        }
+        if (totalAngsuran.compareTo(penjualan.getDownPayment()) == 1) {
+          return true;
+        } else if (totalAngsuran.compareTo(penjualan.getDownPayment()) == 0) {
+          return true;
+        }
+
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      logger.info("catch checkAngsurang2Lunas");
+    }
+    return false;
+  }
+
+  private boolean checkPiutangFinalStatusTarikBarang(Status statusTarikBarang,
+      PiutangService piutangService, Penjualan penjualan) {
+    // TODO Auto-generated method stub
+    try {
+      List<Piutang> piutanglist = piutangService.getPiutangsByPenjualan(penjualan);
+      for (Piutang data : piutanglist) {
+        if (data.getStatusFinal() != null && statusTarikBarang.equals(data.getStatusFinal())) {
+          return true;
+        }
+      }
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      logger.info("catch checkPiutangFinalStatusTarikBarang");
+    }
+    return false;
+  }
+
   public void doPrint(Karyawan karyawan, Date startDate, Date endDate,
       List<Penjualan> listPenjualan, PrintService selectedPrinter) throws PrintException,
       IOException {
 
-    List<PerhitunganKomisi> resultList = generatePerhitunganKomisi(karyawan, listPenjualan);
+    List<PiutangSales> resultList = generatePiutangSales(karyawan, listPenjualan);
 
 
     InputStream is =
@@ -154,7 +201,7 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
   }
 
   private String generateData(Karyawan karyawan, Date startDate, Date endDate,
-      List<PerhitunganKomisi> listItem) {
+      List<PiutangSales> listItem) {
     StringBuffer sb = new StringBuffer();
 
     CompanyProfileService companyService =
@@ -163,19 +210,15 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
     String companyAddress = companyService.getAllCompanyProfiles().get(0).getAddress();
     int itemPerPage = 54;
     int totalPage = roundUp(listItem.size(), itemPerPage);
-    // totalAkhirTabungan = BigDecimal.ZERO;
-    totalKomisi = BigDecimal.ZERO;
-    // totalAkhirKomisi = BigDecimal.ZERO;
+
+    totalSisaPiutang = BigDecimal.ZERO;
     totalQty = 0.0;
-    // totalAkhirQty = 0.0;
     totalNilaiJual = BigDecimal.ZERO;
-    // totalAkhirNilaiJual = BigDecimal.ZERO;
     totalAngsuran = BigDecimal.ZERO;
-    // totalAkhirAngsuran = BigDecimal.ZERO;
 
     for (int pageNo = 1; pageNo <= totalPage; pageNo++) {
       totalNilaiJual = BigDecimal.ZERO;
-      totalKomisi = BigDecimal.ZERO;
+      totalSisaPiutang = BigDecimal.ZERO;
       totalAngsuran = BigDecimal.ZERO;
       totalQty = 0.0;
       generateHeaderReport(sb, karyawan, startDate, endDate, pageNo, companyName, companyAddress);
@@ -188,8 +231,8 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
     return sb.toString();
   }
 
-  private void generateDataReport(StringBuffer sb, List<PerhitunganKomisi> listItem,
-      int itemPerPage, int pageNo) {
+  private void generateDataReport(StringBuffer sb, List<PiutangSales> listItem, int itemPerPage,
+      int pageNo) {
 
     int startIndex = itemPerPage * (pageNo - 1);
     int maxIndex = itemPerPage * pageNo;
@@ -198,7 +241,7 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
       maxIndex = listItem.size();
     }
     for (int i = startIndex; i < maxIndex; i++) {
-      PerhitunganKomisi item = listItem.get(i);
+      PiutangSales item = listItem.get(i);
 
       setAlignLeft(sb, WIDTH_COLUMN_A, item.getNomorFaktur());
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
@@ -234,20 +277,16 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
       setAlignRight(sb, WIDTH_COLUMN_H, nilaiAngsuranStr);
       addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-      String nilaiKomisiStr = df.format(item.getKomisiPenjualan());
-      setAlignRight(sb, WIDTH_COLUMN_I, nilaiKomisiStr);
+      String nilaiSisaPiutangStr = df.format(item.getSisaPiutang());
+      setAlignRight(sb, WIDTH_COLUMN_I, nilaiSisaPiutangStr);
 
       totalQty = totalQty + item.getQtyKirim();
-      // totalAkhirQty = totalAkhirQty + item.getQtyKirim();
 
       totalNilaiJual = totalNilaiJual.add(item.getPenjualanBarang());
-      // totalAkhirNilaiJual = totalAkhirNilaiJual.add(item.getPenjualanBarang());
 
       totalAngsuran = totalAngsuran.add(item.getPenerimaanPenjualan());
-      // totalAkhirAngsuran = totalAkhirAngsuran.add(item.getPenerimaanPenjualan());
 
-      totalKomisi = totalKomisi.add(item.getKomisiPenjualan());
-      // totalAkhirKomisi = totalAkhirKomisi.add(item.getKomisiPenjualan());
+      totalSisaPiutang = totalSisaPiutang.add(item.getSisaPiutang());
 
       addNewLine(sb, 1);
 
@@ -276,8 +315,8 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
     setAlignRight(sb, WIDTH_FOOTER_COLUMN_E, totalAngsuranStr);
 
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
-    String totalKomisiStr = df.format(totalKomisi);
-    setAlignRight(sb, WIDTH_FOOTER_COLUMN_F, totalKomisiStr);
+    String totalSisaPiutangStr = df.format(totalSisaPiutang);
+    setAlignRight(sb, WIDTH_FOOTER_COLUMN_F, totalSisaPiutangStr);
 
     addNewLine(sb, 1);
     addDoubleBorder(sb, pageWidth);
@@ -294,7 +333,7 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
     String printDateStr = "TGL : " + formatDate.format(printDate);
     String printHourStr = "JAM : " + formatHour.format(printDate);
     String halStr = "HAL : " + pageNo;
-    String titleReport = "SLIP PENDAPATAN MARKETING";
+    String titleReport = "LAPORAN PIUTANG SALES";
     String startDateStr = formatDate.format(startDate);
     String endDateStr = formatDate.format(endDate);
 
@@ -343,10 +382,10 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
     setAlignRight(sb, WIDTH_COLUMN_G, "Nilai Jual");
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-    setAlignRight(sb, WIDTH_COLUMN_H, "Angsuran1");
+    setAlignRight(sb, WIDTH_COLUMN_H, "Pembayaran");
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
 
-    setAlignRight(sb, WIDTH_COLUMN_I, "Komisi");
+    setAlignRight(sb, WIDTH_COLUMN_I, "Piutang");
 
 
     addNewLine(sb, 1);
@@ -355,11 +394,6 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
   }
 
   private void generateLastFooterReport(StringBuffer sb, Karyawan karyawan) {
-    BonusTransportService bonusService =
-        (BonusTransportService) SpringUtil.getBean("bonusTransportService");
-    BigDecimal bonusSales = bonusService.getBonusSales(karyawan, totalAkhirQty);
-    BigDecimal transportSales = bonusService.getTransportSales(karyawan, totalAkhirQty);
-    BigDecimal total = totalAkhirKomisi.add(bonusSales).add(transportSales);
 
 
     addWhiteSpace(sb, WIDTH_FOOTER_COLUMN_A);
@@ -378,91 +412,80 @@ public class PerhitunganKomisiTextPrinter extends Window implements Serializable
     setAlignRight(sb, WIDTH_FOOTER_COLUMN_E, totalAkhirAngsuranStr);
 
     addWhiteSpace(sb, WIDTH_COLUMN_SEPERATE);
-    String totalAkhirKomisiStr = df.format(totalAkhirKomisi);
-    setAlignRight(sb, WIDTH_FOOTER_COLUMN_F, totalAkhirKomisiStr);
+    String totalAkhirSisaPiutangStr = df.format(totalAkhirSisaPiutang);
+    setAlignRight(sb, WIDTH_FOOTER_COLUMN_F, totalAkhirSisaPiutangStr);
 
     addNewLine(sb, 1);
     addDoubleBorder(sb, pageWidth);
 
-    addNewLine(sb, 1);
-    sb.append("Bonus     : " + df.format(bonusSales));
-    addNewLine(sb, 1);
-    sb.append("Transport : " + df.format(transportSales));
-    addNewLine(sb, 1);
-    addSingleBorder(sb, 20);
-    addNewLine(sb, 1);
-    sb.append("Total     : " + df.format(total));
-    addNewLine(sb, 1);
-    sb.append("Loyalitas : " + df.format(totalAkhirTabungan));
-
+    addNewLine(sb, 5);
 
   }
 
-  private List<PerhitunganKomisi> generatePerhitunganKomisi(Karyawan karyawan,
-      List<Penjualan> listPenjualan) {
-    List<PerhitunganKomisi> komisiPenjualanList = new ArrayList<PerhitunganKomisi>();
+  private List<PiutangSales> generatePiutangSales(Karyawan karyawan, List<Penjualan> listPenjualan) {
+    List<PiutangSales> komisiPenjualanList = new ArrayList<PiutangSales>();
     PenjualanService penjualanService = (PenjualanService) SpringUtil.getBean("penjualanService");
+    StatusService statusService = (StatusService) SpringUtil.getBean("statusService");
+    PiutangService piutangService = (PiutangService) SpringUtil.getBean("piutangService");
+
+    Status statusLunas = statusService.getStatusByID(new Long(2)); // LUNAS
+    Status statusTarikBarang = statusService.getStatusByID(new Long(6)); // Tarik Barang
 
     for (Penjualan penjualan : listPenjualan) {
-      List<PenjualanDetail> penjualanDetails =
-          penjualanService.getPenjualanDetailsByPenjualan(penjualan);
-      for (PenjualanDetail penjualanDetail : penjualanDetails) {
-        if (!penjualanDetail.getBarang().isBonus()) {
-          PerhitunganKomisi data = new PerhitunganKomisi();
-          data.setNomorFaktur(penjualan.getNoFaktur());
-          data.setNamaPelanggan(penjualan.getNamaPelanggan());
-          data.setIntervalKredit(penjualan.getIntervalKredit() + "");
-          String kodePartner = "0000";
-          Double qtyKirim = Double.parseDouble(String.valueOf(penjualanDetail.getQty()));
-          BigDecimal komisi = BigDecimal.ZERO;
-          BigDecimal tabungan = BigDecimal.ZERO;
-          if (penjualanDetail.getTabunganSales() == null) {
-            penjualanDetail.setTabunganSales(BigDecimal.ZERO);
-          }
-          if (penjualanDetail.getKomisiSales() == null) {
-            penjualanDetail.setKomisiSales(BigDecimal.ZERO);
-          }
+      try {
+        if (checkAngsuran2Lunas(statusLunas, piutangService, penjualan)) {
+          List<PenjualanDetail> penjualanDetails =
+              penjualanService.getPenjualanDetailsByPenjualan(penjualan);
+          for (PenjualanDetail penjualanDetail : penjualanDetails) {
+            if (!penjualanDetail.getBarang().isBonus()) {
+              PiutangSales data = new PiutangSales();
+              data.setNomorFaktur(penjualan.getNoFaktur());
+              data.setNamaPelanggan(penjualan.getNamaPelanggan());
+              data.setIntervalKredit(penjualan.getIntervalKredit() + "");
+              String kodePartner = "0000";
+              Double qtyKirim = Double.parseDouble(String.valueOf(penjualanDetail.getQty()));
 
-          tabungan =
-              penjualanDetail.getTabunganSales().multiply(new BigDecimal(penjualanDetail.getQty()));
-          komisi =
-              penjualanDetail.getKomisiSales().multiply(new BigDecimal(penjualanDetail.getQty()));
-          if (penjualan.getSales1().getKodeKaryawan().equals(karyawan.getKodeKaryawan())
-              && penjualan.getSales2() != null) {
-            kodePartner = penjualan.getSales2().getKodeKaryawan();
-            qtyKirim = qtyKirim / 2;
-            komisi = komisi.divide(new BigDecimal(2));
-            tabungan = tabungan.divide(new BigDecimal(2));
-          } else if (penjualan.getSales2() != null
-              && penjualan.getSales2().getKodeKaryawan().equals(karyawan.getKodeKaryawan())
-              && penjualan.getSales1() != null) {
-            kodePartner = penjualan.getSales1().getKodeKaryawan();
-            qtyKirim = qtyKirim / 2;
-            komisi = komisi.divide(new BigDecimal(2));
-            tabungan = tabungan.divide(new BigDecimal(2));
+              if (penjualan.getSales1().getKodeKaryawan().equals(karyawan.getKodeKaryawan())
+                  && penjualan.getSales2() != null) {
+                kodePartner = penjualan.getSales2().getKodeKaryawan();
+                qtyKirim = qtyKirim / 2;
+              } else if (penjualan.getSales2() != null
+                  && penjualan.getSales2().getKodeKaryawan().equals(karyawan.getKodeKaryawan())
+                  && penjualan.getSales1() != null) {
+                kodePartner = penjualan.getSales1().getKodeKaryawan();
+                qtyKirim = qtyKirim / 2;
+              }
+              if (checkPiutangFinalStatusTarikBarang(statusTarikBarang, piutangService, penjualan)) {
+                qtyKirim = 0.0;
+              }
+              data.setKodePartner(kodePartner);
+              data.setNamaBarang(penjualanDetail.getBarang().getNamaBarang());
+              data.setQtyKirim(qtyKirim);
+              data.setPenjualanBarang(penjualanDetail.getTotal());
+              data.setPenerimaanPenjualan(penjualan.getTotal().subtract(penjualan.getPiutang()));
+              data.setSisaPiutang(penjualan.getPiutang());
+              totalAkhirSisaPiutang = totalAkhirSisaPiutang.add(penjualan.getPiutang());
+              totalAkhirNilaiJual = totalAkhirNilaiJual.add(penjualanDetail.getTotal());
+              totalAkhirAngsuran =
+                  totalAkhirAngsuran.add(penjualan.getTotal().subtract(penjualan.getPiutang()));
+              totalAkhirQty = totalAkhirQty + qtyKirim;
+              komisiPenjualanList.add(data);
+            }
           }
-          data.setKodePartner(kodePartner);
-          data.setNamaBarang(penjualanDetail.getBarang().getNamaBarang());
-          data.setQtyKirim(qtyKirim);
-          data.setPenjualanBarang(penjualanDetail.getTotal());
-          data.setPenerimaanPenjualan(penjualanDetail.getDownPayment());
-          data.setKomisiPenjualan(komisi.add(tabungan));
-          totalAkhirKomisi = totalAkhirKomisi.add(komisi.add(tabungan));
-          totalAkhirTabungan = totalAkhirTabungan.add(tabungan);
-          totalAkhirNilaiJual = totalAkhirNilaiJual.add(penjualanDetail.getTotal());
-          totalAkhirAngsuran = totalAkhirAngsuran.add(penjualanDetail.getDownPayment());
-          totalAkhirQty = totalAkhirQty + qtyKirim;
-          komisiPenjualanList.add(data);
         }
+      } catch (Exception e) {
+        e.printStackTrace();
+        logger.info("error piutangSales penjualan : " + penjualan.getNoFaktur());
       }
     }
 
-    Collections.sort(komisiPenjualanList, new Comparator<PerhitunganKomisi>() {
+    Collections.sort(komisiPenjualanList, new Comparator<PiutangSales>() {
       @Override
-      public int compare(PerhitunganKomisi obj1, PerhitunganKomisi obj2) {
+      public int compare(PiutangSales obj1, PiutangSales obj2) {
         return obj1.getNomorFaktur().compareTo(obj2.getNomorFaktur());
       }
     });
+
     return komisiPenjualanList;
   }
 

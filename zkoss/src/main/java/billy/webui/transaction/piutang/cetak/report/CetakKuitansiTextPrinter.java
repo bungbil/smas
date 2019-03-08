@@ -204,7 +204,12 @@ public class CetakKuitansiTextPrinter extends Window implements Serializable {
         kekurangan = "& kekurangannya";
       }
       tagihan = tagihan.add(piutang.getKekuranganBayar());
-      kuitansi.setAngsuranKe(piutang.getPembayaranKe() + " " + kekurangan);
+      int pembayaranKe = piutang.getPembayaranKe();
+      if (pembayaranKe > piutang.getPenjualan().getIntervalKredit()) {
+        pembayaranKe = piutang.getPenjualan().getIntervalKredit();
+      }
+
+      kuitansi.setAngsuranKe(pembayaranKe + " " + kekurangan);
 
       String jumlahInWord = "# " + angkaToTerbilang(tagihan.longValue()) + " #";
       kuitansi.setJumlahInWord("");

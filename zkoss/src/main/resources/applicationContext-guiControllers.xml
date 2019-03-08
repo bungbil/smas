@@ -521,6 +521,19 @@
 		<property name="karyawanService" ref="karyawanService" />		
 	</bean>
 	
+	<!-- ReportPiutangM3 -->
+	<bean id="reportPiutangM3MainCtrl" class="billy.webui.report.piutangm3.ReportPiutangM3MainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="penjualanService" ref="penjualanService" />		
+		<property name="karyawanService" ref="karyawanService" />		
+		<property name="piutangService" ref="piutangService" />
+	</bean>
+	
+	<!-- ReportPiutangSales -->
+	<bean id="reportPiutangSalesMainCtrl" class="billy.webui.report.piutangsales.ReportPiutangSalesMainCtrl" parent="basisCtrl" scope="prototype">
+		<property name="penjualanService" ref="penjualanService" />		
+		<property name="karyawanService" ref="karyawanService" />	
+	</bean>
+	
 	<!-- ReportKomisi -->
 	<bean id="reportKomisiMainCtrl" class="billy.webui.report.komisi.ReportKomisiMainCtrl" parent="basisCtrl" scope="prototype">
 		<property name="penjualanService" ref="penjualanService" />		

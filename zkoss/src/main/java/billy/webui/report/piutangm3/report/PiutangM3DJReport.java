@@ -1,4 +1,4 @@
-package billy.webui.report.piutang.report;
+package billy.webui.report.piutangm3.report;
 
 
 import java.io.ByteArrayInputStream;
@@ -7,10 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -53,13 +51,12 @@ import ar.com.fdvs.dj.domain.constants.HorizontalAlign;
 import ar.com.fdvs.dj.domain.entities.columns.AbstractColumn;
 import billy.backend.model.CompanyProfile;
 import billy.backend.model.Karyawan;
-import billy.backend.model.Piutang;
 import billy.backend.service.CompanyProfileService;
-import billy.webui.report.piutang.model.ReportPiutang;
+import billy.webui.report.piutangm3.model.ReportPiutangM3;
 import de.forsthaus.webui.util.ZksampleDateFormat;
 import de.forsthaus.webui.util.ZksampleMessageUtils;
 
-public class PiutangDJReport extends Window implements Serializable {
+public class PiutangM3DJReport extends Window implements Serializable {
 
   /**
    * EventListener for closing the Report Window.<br>
@@ -77,20 +74,19 @@ public class PiutangDJReport extends Window implements Serializable {
   private Iframe iFrame;
   private ByteArrayOutputStream output;
   private InputStream mediais;
-
-
   private AMedia amedia;
-  private static final Logger logger = Logger.getLogger(PiutangDJReport.class);
-  private static final String title = "LAPORAN KWITANSI MENURUT ";
+  private static final Logger logger = Logger.getLogger(PiutangM3DJReport.class);
+  DecimalFormat df = new DecimalFormat("#,###");
+  private static final String title = "LAPORAN PIUTANG M3 DIVISI";
   private static final SimpleDateFormat DATE_FORMATER = new SimpleDateFormat("ddMMyyyy");
 
-  public PiutangDJReport(Component parent, Karyawan karyawan, Date startDate, Date endDate,
-      List<Piutang> listPiutang, String usedTanggal) throws InterruptedException {
+  public PiutangM3DJReport(Component parent, Karyawan karyawan, Date startDate, Date endDate,
+      List<ReportPiutangM3> listPenjualan) throws InterruptedException {
     super();
     this.setParent(parent);
 
     try {
-      doPrint(karyawan, startDate, endDate, listPiutang, usedTanggal);
+      doPrint(karyawan, startDate, endDate, listPenjualan);
     } catch (final Exception e) {
       ZksampleMessageUtils.showErrorMessage(e.toString());
     }
@@ -99,8 +95,8 @@ public class PiutangDJReport extends Window implements Serializable {
   private void callReportWindow(AMedia aMedia, String format) {
     boolean modal = true;
 
-    setTitle(this.title);
-    setId("ReportWindowPiutang");
+    setTitle(title);
+    setId("ReportWindowPiutangM3");
     setVisible(true);
     setMaximizable(true);
     setMinimizable(true);
@@ -149,10 +145,11 @@ public class PiutangDJReport extends Window implements Serializable {
 
   }
 
-  public void doPrint(Karyawan karyawan, Date startDate, Date endDate, List<Piutang> listPiutang,
-      String usedTanggal) throws JRException, ColumnBuilderException, ClassNotFoundException,
-      IOException {
-    List<ReportPiutang> resultList = generateData(karyawan, listPiutang);
+  public void doPrint(Karyawan karyawan, Date startDate, Date endDate,
+      List<ReportPiutangM3> listPenjualan) throws JRException, ColumnBuilderException,
+      ClassNotFoundException, IOException {
+
+    List<ReportPiutangM3> resultList = listPenjualan;
     /**
      * STYLES
      */
@@ -182,9 +179,9 @@ public class PiutangDJReport extends Window implements Serializable {
 
     // Footer Style (center-align)
     Style footerStyle = new Style();
-    footerStyle.setFont(Font.VERDANA_SMALL);
-    footerStyle.getFont().setFontSize(8);
-    footerStyle.setHorizontalAlign(HorizontalAlign.CENTER);
+    // footerStyle.setFont(Font.VERDANA_SMALL);
+    // footerStyle.getFont().setFontSize(8);
+    footerStyle.setHorizontalAlign(HorizontalAlign.RIGHT);
     footerStyle.setBorderTop(Border.PEN_1_POINT());
 
     // Rows content Style (left-align)
@@ -208,9 +205,7 @@ public class PiutangDJReport extends Window implements Serializable {
 
     // Sets the Report Columns, header, Title, Groups, Etc Formats
     // DynamicJasper documentation
-    drb.setTitle(this.title + usedTanggal);
-    // drb.setSubtitle("Tanggal Penjualan : "+ZksampleDateFormat.getDateFormater().format(startDate)+" - "+ZksampleDateFormat.getDateFormater().format(endDate));
-    // drb.setSubtitleStyle(subtitleStyle);
+    drb.setTitle(title);
 
     drb.setHeaderHeight(20);
     drb.setDetailHeight(15);
@@ -244,23 +239,21 @@ public class PiutangDJReport extends Window implements Serializable {
     CompanyProfileService as = (CompanyProfileService) SpringUtil.getBean("companyProfileService");
     List<CompanyProfile> company = as.getAllCompanyProfiles();
 
+
     AutoText atCompanyHeader =
         new AutoText(company.get(0).getCompanyName(), AutoText.POSITION_HEADER,
             HorizontalBandAlignment.LEFT);
     atCompanyHeader.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
     atCompanyHeader.setWidth(new Integer(700));
-    // AutoText address =
-    // new AutoText(company.get(0).getAddress(), AutoText.POSITION_HEADER,
-    // HorizontalBandAlignment.LEFT);
-    // address.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
-    // address.setWidth(new Integer(700));
-    AutoText divisi =
-        new AutoText("Kolektor : " + karyawan.getKodeKaryawan() + " - "
-            + karyawan.getNamaPanggilan(), AutoText.POSITION_HEADER, HorizontalBandAlignment.LEFT);
-    divisi.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
-    divisi.setWidth(new Integer(700));
+
+    AutoText sales =
+        new AutoText("Divisi : " + karyawan.getKodeKaryawan() + "-" + karyawan.getNamaPanggilan()
+            + "(" + karyawan.getSupervisorDivisi().getInisialDivisi() + ")",
+            AutoText.POSITION_HEADER, HorizontalBandAlignment.LEFT);
+    sales.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
+    sales.setWidth(new Integer(700));
     AutoText tanggal =
-        new AutoText("Tanggal Pembayaran : "
+        new AutoText("Tanggal Penjualan : "
             + ZksampleDateFormat.getDateFormater().format(startDate) + " - "
             + ZksampleDateFormat.getDateFormater().format(endDate), AutoText.POSITION_HEADER,
             HorizontalBandAlignment.LEFT);
@@ -268,14 +261,8 @@ public class PiutangDJReport extends Window implements Serializable {
     tanggal.setWidth(new Integer(700));
     AutoText emptyLine = new AutoText("", AutoText.POSITION_HEADER, HorizontalBandAlignment.LEFT);
     emptyLine.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
-    drb.addAutoText(atCompanyHeader).addAutoText(divisi).addAutoText(tanggal);
-    //
-    // // Footer
-    // AutoText footerText = new
-    // AutoText("Help to prevent the global warming by writing cool software.",
-    // AutoText.POSITION_FOOTER, HorizontalBandAlignment.CENTER);
-    // footerText.setStyle(footerStyle);
-    // drb.addAutoText(footerText);
+    drb.addAutoText(atCompanyHeader).addAutoText(sales).addAutoText(tanggal);
+
 
     /**
      * Columns Definitions. A new ColumnBuilder instance for each column.
@@ -283,82 +270,61 @@ public class PiutangDJReport extends Window implements Serializable {
 
     AbstractColumn colNo =
         ColumnBuilder.getNew().setColumnProperty("no", String.class.getName()).build();
-    colNo.setTitle("No.");
-    colNo.setWidth(15);
+    colNo.setTitle("No");
+    colNo.setWidth(60);
     colNo.setHeaderStyle(columnHeaderStyleText);
     colNo.setStyle(columnDetailStyleText);
 
     AbstractColumn colNoFaktur =
         ColumnBuilder.getNew().setColumnProperty("noFaktur", String.class.getName()).build();
     colNoFaktur.setTitle("No Faktur");
-    colNoFaktur.setWidth(40);
+    colNoFaktur.setWidth(70);
     colNoFaktur.setHeaderStyle(columnHeaderStyleText);
     colNoFaktur.setStyle(columnDetailStyleText);
 
-    AbstractColumn colBillingDate =
-        ColumnBuilder.getNew().setColumnProperty("tglKuitansi", Date.class.getName()).build();
-    colBillingDate.setTitle("Tanggal Kwitansi");
-    colBillingDate.setWidth(35);
-    colBillingDate.setPattern("dd-MM-yyyy");
-    colBillingDate.setHeaderStyle(columnHeaderStyleNumber);
-    colBillingDate.setStyle(columnDetailStyleNumbers);
-
-    AbstractColumn colPaymentDate =
-        ColumnBuilder.getNew().setColumnProperty("tglBayar", Date.class.getName()).build();
-    colPaymentDate.setTitle("Tanggal Bayar");
-    colPaymentDate.setWidth(40);
-    colPaymentDate.setPattern("dd-MM-yyyy");
-    colPaymentDate.setHeaderStyle(columnHeaderStyleNumber);
-    colPaymentDate.setStyle(columnDetailStyleNumbers);
-
-
-    AbstractColumn colCustomerName =
+    AbstractColumn colPelanggan =
         ColumnBuilder.getNew().setColumnProperty("namaCustomer", String.class.getName()).build();
-    colCustomerName.setTitle("Nama Customer");
-    colCustomerName.setWidth(50);
-    colCustomerName.setHeaderStyle(columnHeaderStyleText);
-    colCustomerName.setStyle(columnDetailStyleText);
+    colPelanggan.setTitle("Nama Pelanggan");
+    colPelanggan.setWidth(70);
+    colPelanggan.setHeaderStyle(columnHeaderStyleText);
+    colPelanggan.setStyle(columnDetailStyleText);
 
+    AbstractColumn colNilaiTagihan =
+        ColumnBuilder.getNew().setColumnProperty("sisaPiutang", BigDecimal.class.getName()).build();
+    colNilaiTagihan.setTitle("Nilai Tagihan");
+    colNilaiTagihan.setWidth(50);
+    colNilaiTagihan.setPattern("#,##0");
+    colNilaiTagihan.setHeaderStyle(columnHeaderStyleNumber);
+    colNilaiTagihan.setStyle(columnDetailStyleNumbers);
 
-    AbstractColumn colTotalInvoice =
-        ColumnBuilder.getNew().setColumnProperty("nilaiTagih", BigDecimal.class.getName()).build();
-    colTotalInvoice.setTitle("Nilai Tagih");
-    colTotalInvoice.setWidth(40);
-    colTotalInvoice.setPattern("#,##0");
-    colTotalInvoice.setHeaderStyle(columnHeaderStyleNumber);
-    colTotalInvoice.setStyle(columnDetailStyleNumbers);
+    AbstractColumn colTglBayar =
+        ColumnBuilder.getNew().setColumnProperty("tglBayarTerakhir", Date.class.getName()).build();
+    colTglBayar.setTitle("Tgl Bayar Terakhir");
+    colTglBayar.setWidth(40);
+    colTglBayar.setPattern("dd-MM-yyyy");
+    colTglBayar.setHeaderStyle(columnHeaderStyleText);
+    colTglBayar.setStyle(columnDetailStyleText);
 
-    AbstractColumn colAmountPaid =
-        ColumnBuilder.getNew().setColumnProperty("nilaiPembayaran", BigDecimal.class.getName())
-            .build();
-    colAmountPaid.setTitle("Nilai Pembayaran");
-    colAmountPaid.setWidth(40);
-    colAmountPaid.setPattern("#,##0");
-    colAmountPaid.setHeaderStyle(columnHeaderStyleNumber);
-    colAmountPaid.setStyle(columnDetailStyleNumbers);
+    AbstractColumn colNamaKolektor =
+        ColumnBuilder.getNew()
+            .setColumnProperty("namaKolektorBayarTerakhir", String.class.getName()).build();
+    colNamaKolektor.setTitle("Kolektor Terakhir");
+    colNamaKolektor.setWidth(70);
+    colNamaKolektor.setHeaderStyle(columnHeaderStyleText);
+    colNamaKolektor.setStyle(columnDetailStyleText);
 
-
-    AbstractColumn colCollectorName =
-        ColumnBuilder.getNew().setColumnProperty("keterangan", String.class.getName()).build();
-    colCollectorName.setTitle("Keterangan");
-    colCollectorName.setWidth(40);
-    colCollectorName.setHeaderStyle(columnHeaderStyleNumber);
-    colCollectorName.setStyle(columnDetailStyleNumbers);
 
     drb.addColumn(colNo);
     drb.addColumn(colNoFaktur);
-    drb.addColumn(colBillingDate);
-    drb.addColumn(colPaymentDate);
-    drb.addColumn(colCustomerName);
-    drb.addColumn(colAmountPaid);
-    drb.addColumn(colTotalInvoice);
-    drb.addColumn(colCollectorName);
+    drb.addColumn(colPelanggan);
+    drb.addColumn(colNilaiTagihan);
+    drb.addColumn(colTglBayar);
+    drb.addColumn(colNamaKolektor);
 
     /**
      * Add a global total sum for the lineSum field.
      */
-    drb.addGlobalFooterVariable(colAmountPaid, DJCalculation.SUM, footerStyleTotalSumValue);
-    drb.addGlobalFooterVariable(colTotalInvoice, DJCalculation.SUM, footerStyleTotalSumValue);
+    drb.addGlobalFooterVariable(colNilaiTagihan, DJCalculation.SUM, footerStyleTotalSumValue);
     drb.setGlobalFooterVariableHeight(new Integer(20));
     drb.setGrandTotalLegend("Total");
 
@@ -366,6 +332,7 @@ public class PiutangDJReport extends Window implements Serializable {
 
     drb.setUseFullPageWidth(true); // use full width of the page
     dr = drb.build(); // build the report
+
 
     // Generate the Jasper Print Object
     JRDataSource ds = new JRBeanCollectionDataSource(resultList);
@@ -408,31 +375,6 @@ public class PiutangDJReport extends Window implements Serializable {
     }
   }
 
-  private List<ReportPiutang> generateData(Karyawan karyawan, List<Piutang> listPiutang) {
-    List<ReportPiutang> reportPiutangList = new ArrayList<ReportPiutang>();
-    int i = 1;
-    for (Piutang piutang : listPiutang) {
-      ReportPiutang data = new ReportPiutang();
-      data.setNo(i + ".");
-      data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
-      data.setTglBayar(piutang.getTglPembayaran());
-      data.setTglKuitansi(piutang.getTglJatuhTempo());
-      data.setNamaCustomer(piutang.getPenjualan().getNamaPelanggan());
-      data.setNilaiPembayaran(piutang.getPembayaran());
-      data.setNilaiTagih(piutang.getNilaiTagihan());
-      data.setKeterangan(piutang.getKeterangan());
-
-      reportPiutangList.add(data);
-      i++;
-    }
-    Collections.sort(reportPiutangList, new Comparator<ReportPiutang>() {
-      @Override
-      public int compare(ReportPiutang obj1, ReportPiutang obj2) {
-        return obj1.getNoFaktur().compareTo(obj2.getNoFaktur());
-      }
-    });
-    return reportPiutangList;
-  }
 
   private String generateFileName(String fileType, Karyawan karyawan, Date startDate, Date endDate) {
     StringBuffer fileName = new StringBuffer();

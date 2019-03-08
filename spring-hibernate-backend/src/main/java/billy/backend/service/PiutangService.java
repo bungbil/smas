@@ -49,14 +49,18 @@ public interface PiutangService {
 
   public Piutang getPiutangByNoKuitansi(String data);
 
+  public Piutang getPiutangM3(Penjualan penjualan);
+
   public List<Piutang> getPiutangsByPenjualan(Penjualan penjualan);
+
+  public Piutang getPiutangTerakhirDibayar(Penjualan penjualan);
 
   public boolean resetPembayaranPiutang(Piutang piutang, Status statusProses);
 
   public void saveOrUpdate(Piutang piutang);
 
-  public void updateAlamat(Piutang piutang);
 
+  public void updateAlamat(Piutang piutang);
 
   public void updateNextNilaiTagihan(Piutang piutang, BigDecimal nilaiTagihan);
 

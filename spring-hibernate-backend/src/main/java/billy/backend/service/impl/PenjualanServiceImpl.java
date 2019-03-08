@@ -64,6 +64,7 @@ public class PenjualanServiceImpl implements PenjualanService {
     return allPenjualan;
   }
 
+
   @Override
   public List<Penjualan> getAllPenjualansByListNoFaktur(List<String> listNoFaktur) {
     List<Penjualan> allPenjualan = getPenjualanDAO().getAllPenjualansByListNoFaktur(listNoFaktur);
@@ -124,6 +125,7 @@ public class PenjualanServiceImpl implements PenjualanService {
     return getPenjualanDAO().getCountAllPenjualansByDivisi(obj, startDate, endDate);
   }
 
+
   @Override
   public int getCountPenjualanDetailsByPenjualan(Penjualan penjualan) {
     int result = getPenjualanDetailDAO().getCountPenjualanDetailsByPenjualan(penjualan);
@@ -135,7 +137,6 @@ public class PenjualanServiceImpl implements PenjualanService {
   public List<Penjualan> getListNeedApprovalPenjualansByListNoFaktur(List<String> listNoFaktur) {
     return getPenjualanDAO().getListNeedApprovalPenjualansByListNoFaktur(listNoFaktur);
   }
-
 
   @Override
   public Penjualan getNewPenjualan() {
@@ -219,11 +220,11 @@ public class PenjualanServiceImpl implements PenjualanService {
     return piutangDAO;
   }
 
+
   @Override
   public void saveOrUpdate(Penjualan penjualan) {
     getPenjualanDAO().saveOrUpdate(penjualan);
   }
-
 
   @Override
   public void saveOrUpdate(PenjualanDetail penjualanDetail) {

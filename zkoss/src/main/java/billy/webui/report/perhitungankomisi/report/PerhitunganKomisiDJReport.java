@@ -10,6 +10,8 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -501,6 +503,13 @@ public class PerhitunganKomisiDJReport extends Window implements Serializable {
         }
       }
     }
+
+    Collections.sort(komisiPenjualanList, new Comparator<PerhitunganKomisi>() {
+      @Override
+      public int compare(PerhitunganKomisi obj1, PerhitunganKomisi obj2) {
+        return obj1.getNomorFaktur().compareTo(obj2.getNomorFaktur());
+      }
+    });
     return komisiPenjualanList;
   }
 

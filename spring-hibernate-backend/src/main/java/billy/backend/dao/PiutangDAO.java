@@ -47,7 +47,9 @@ public interface PiutangDAO {
 
   public Piutang getPiutangByNoFaktur(String data);
 
-  public Piutang getPiutangByNoFakturAndPembayaranKe(String data, int data2);
+  public Piutang getPiutangByNoFakturAndAktif(String noFaktur);
+
+  public Piutang getPiutangByNoFakturAndPembayaranKe(String noFaktur, int pembayaranKe);
 
   public Piutang getPiutangByNoKuitansi(String data);
 

@@ -794,8 +794,8 @@ public class PenerimaanPembayaranMainCtrl extends GFCBaseCtrl implements Seriali
   public void onClick$btnSave(Event event) throws Exception {
     String message = "";
 
-    message += doCheckPembayaran();
     message += doCheckApproval();
+    message += doCheckPembayaran();
     if (piutang != null) {
 
       if (message.equals("")) {

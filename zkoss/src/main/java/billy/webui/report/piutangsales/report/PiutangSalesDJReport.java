@@ -1,4 +1,4 @@
-package billy.webui.report.piutang.report;
+package billy.webui.report.piutangsales.report;
 
 
 import java.io.ByteArrayInputStream;
@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,13 +54,19 @@ import ar.com.fdvs.dj.domain.constants.HorizontalAlign;
 import ar.com.fdvs.dj.domain.entities.columns.AbstractColumn;
 import billy.backend.model.CompanyProfile;
 import billy.backend.model.Karyawan;
+import billy.backend.model.Penjualan;
+import billy.backend.model.PenjualanDetail;
 import billy.backend.model.Piutang;
+import billy.backend.model.Status;
 import billy.backend.service.CompanyProfileService;
-import billy.webui.report.piutang.model.ReportPiutang;
+import billy.backend.service.PenjualanService;
+import billy.backend.service.PiutangService;
+import billy.backend.service.StatusService;
+import billy.webui.report.piutangsales.model.PiutangSales;
 import de.forsthaus.webui.util.ZksampleDateFormat;
 import de.forsthaus.webui.util.ZksampleMessageUtils;
 
-public class PiutangDJReport extends Window implements Serializable {
+public class PiutangSalesDJReport extends Window implements Serializable {
 
   /**
    * EventListener for closing the Report Window.<br>
@@ -77,20 +84,20 @@ public class PiutangDJReport extends Window implements Serializable {
   private Iframe iFrame;
   private ByteArrayOutputStream output;
   private InputStream mediais;
-
-
+  private Double totalQty = 0.0;
   private AMedia amedia;
-  private static final Logger logger = Logger.getLogger(PiutangDJReport.class);
-  private static final String title = "LAPORAN KWITANSI MENURUT ";
+  private static final Logger logger = Logger.getLogger(PiutangSalesDJReport.class);
+  DecimalFormat df = new DecimalFormat("#,###");
+  private static final String title = "LAPORAN PIUTANG SALES";
   private static final SimpleDateFormat DATE_FORMATER = new SimpleDateFormat("ddMMyyyy");
 
-  public PiutangDJReport(Component parent, Karyawan karyawan, Date startDate, Date endDate,
-      List<Piutang> listPiutang, String usedTanggal) throws InterruptedException {
+  public PiutangSalesDJReport(Component parent, Karyawan karyawan, Date startDate, Date endDate,
+      List<Penjualan> listPenjualan) throws InterruptedException {
     super();
     this.setParent(parent);
 
     try {
-      doPrint(karyawan, startDate, endDate, listPiutang, usedTanggal);
+      doPrint(karyawan, startDate, endDate, listPenjualan);
     } catch (final Exception e) {
       ZksampleMessageUtils.showErrorMessage(e.toString());
     }
@@ -99,8 +106,8 @@ public class PiutangDJReport extends Window implements Serializable {
   private void callReportWindow(AMedia aMedia, String format) {
     boolean modal = true;
 
-    setTitle(this.title);
-    setId("ReportWindowPiutang");
+    setTitle(title);
+    setId("ReportWindowPiutangSales");
     setVisible(true);
     setMaximizable(true);
     setMinimizable(true);
@@ -129,6 +136,52 @@ public class PiutangDJReport extends Window implements Serializable {
 
   }
 
+  private boolean checkAngsuran2Lunas(Status statusLunas, PiutangService piutangService,
+      Penjualan penjualan) {
+    // TODO Auto-generated method stub
+    try {
+      if (penjualan.getMetodePembayaran().equals("Cash")) {
+        return true;
+      } else {
+        List<Piutang> piutanglist = piutangService.getPiutangsByPenjualan(penjualan);
+        BigDecimal totalAngsuran = BigDecimal.ZERO;
+        for (Piutang data : piutanglist) {
+          if (data.getPembayaran() != null) {
+            totalAngsuran = totalAngsuran.add(data.getPembayaran());
+          }
+        }
+        if (totalAngsuran.compareTo(penjualan.getDownPayment()) == 1) {
+          return true;
+        } else if (totalAngsuran.compareTo(penjualan.getDownPayment()) == 0) {
+          return true;
+        }
+
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      logger.info("catch checkAngsurang2Lunas");
+    }
+    return false;
+  }
+
+  private boolean checkPiutangFinalStatusTarikBarang(Status statusTarikBarang,
+      PiutangService piutangService, Penjualan penjualan) {
+    // TODO Auto-generated method stub
+    try {
+      List<Piutang> piutanglist = piutangService.getPiutangsByPenjualan(penjualan);
+      for (Piutang data : piutanglist) {
+        if (data.getStatusFinal() != null && statusTarikBarang.equals(data.getStatusFinal())) {
+          return true;
+        }
+      }
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      logger.info("catch checkPiutangFinalStatusTarikBarang");
+    }
+    return false;
+  }
+
   /**
    * We must clear something to prevent errors or problems <br>
    * by opening the report a few times. <br>
@@ -149,10 +202,10 @@ public class PiutangDJReport extends Window implements Serializable {
 
   }
 
-  public void doPrint(Karyawan karyawan, Date startDate, Date endDate, List<Piutang> listPiutang,
-      String usedTanggal) throws JRException, ColumnBuilderException, ClassNotFoundException,
-      IOException {
-    List<ReportPiutang> resultList = generateData(karyawan, listPiutang);
+  public void doPrint(Karyawan karyawan, Date startDate, Date endDate, List<Penjualan> listPenjualan)
+      throws JRException, ColumnBuilderException, ClassNotFoundException, IOException {
+
+    List<PiutangSales> resultList = generateData(karyawan, listPenjualan);
     /**
      * STYLES
      */
@@ -182,9 +235,9 @@ public class PiutangDJReport extends Window implements Serializable {
 
     // Footer Style (center-align)
     Style footerStyle = new Style();
-    footerStyle.setFont(Font.VERDANA_SMALL);
-    footerStyle.getFont().setFontSize(8);
-    footerStyle.setHorizontalAlign(HorizontalAlign.CENTER);
+    // footerStyle.setFont(Font.VERDANA_SMALL);
+    // footerStyle.getFont().setFontSize(8);
+    footerStyle.setHorizontalAlign(HorizontalAlign.RIGHT);
     footerStyle.setBorderTop(Border.PEN_1_POINT());
 
     // Rows content Style (left-align)
@@ -208,7 +261,7 @@ public class PiutangDJReport extends Window implements Serializable {
 
     // Sets the Report Columns, header, Title, Groups, Etc Formats
     // DynamicJasper documentation
-    drb.setTitle(this.title + usedTanggal);
+    drb.setTitle(title);
     // drb.setSubtitle("Tanggal Penjualan : "+ZksampleDateFormat.getDateFormater().format(startDate)+" - "+ZksampleDateFormat.getDateFormater().format(endDate));
     // drb.setSubtitleStyle(subtitleStyle);
 
@@ -244,6 +297,7 @@ public class PiutangDJReport extends Window implements Serializable {
     CompanyProfileService as = (CompanyProfileService) SpringUtil.getBean("companyProfileService");
     List<CompanyProfile> company = as.getAllCompanyProfiles();
 
+
     AutoText atCompanyHeader =
         new AutoText(company.get(0).getCompanyName(), AutoText.POSITION_HEADER,
             HorizontalBandAlignment.LEFT);
@@ -254,13 +308,14 @@ public class PiutangDJReport extends Window implements Serializable {
     // HorizontalBandAlignment.LEFT);
     // address.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
     // address.setWidth(new Integer(700));
-    AutoText divisi =
-        new AutoText("Kolektor : " + karyawan.getKodeKaryawan() + " - "
-            + karyawan.getNamaPanggilan(), AutoText.POSITION_HEADER, HorizontalBandAlignment.LEFT);
-    divisi.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
-    divisi.setWidth(new Integer(700));
+    AutoText sales =
+        new AutoText("Sales : " + karyawan.getKodeKaryawan() + "-" + karyawan.getNamaPanggilan()
+            + "(" + karyawan.getSupervisorDivisi().getInisialDivisi() + ")",
+            AutoText.POSITION_HEADER, HorizontalBandAlignment.LEFT);
+    sales.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
+    sales.setWidth(new Integer(700));
     AutoText tanggal =
-        new AutoText("Tanggal Pembayaran : "
+        new AutoText("Tanggal Penjualan : "
             + ZksampleDateFormat.getDateFormater().format(startDate) + " - "
             + ZksampleDateFormat.getDateFormater().format(endDate), AutoText.POSITION_HEADER,
             HorizontalBandAlignment.LEFT);
@@ -268,97 +323,98 @@ public class PiutangDJReport extends Window implements Serializable {
     tanggal.setWidth(new Integer(700));
     AutoText emptyLine = new AutoText("", AutoText.POSITION_HEADER, HorizontalBandAlignment.LEFT);
     emptyLine.setPrintWhenExpression(ExpressionHelper.printInFirstPage());
-    drb.addAutoText(atCompanyHeader).addAutoText(divisi).addAutoText(tanggal);
-    //
-    // // Footer
-    // AutoText footerText = new
-    // AutoText("Help to prevent the global warming by writing cool software.",
-    // AutoText.POSITION_FOOTER, HorizontalBandAlignment.CENTER);
-    // footerText.setStyle(footerStyle);
-    // drb.addAutoText(footerText);
+    drb.addAutoText(atCompanyHeader).addAutoText(sales).addAutoText(tanggal);
+
 
     /**
      * Columns Definitions. A new ColumnBuilder instance for each column.
      */
 
-    AbstractColumn colNo =
-        ColumnBuilder.getNew().setColumnProperty("no", String.class.getName()).build();
-    colNo.setTitle("No.");
-    colNo.setWidth(15);
-    colNo.setHeaderStyle(columnHeaderStyleText);
-    colNo.setStyle(columnDetailStyleText);
+    AbstractColumn colNomorFaktur =
+        ColumnBuilder.getNew().setColumnProperty("nomorFaktur", String.class.getName()).build();
+    colNomorFaktur.setTitle("Nomor Faktur");
+    colNomorFaktur.setWidth(60);
+    colNomorFaktur.setHeaderStyle(columnHeaderStyleText);
+    colNomorFaktur.setStyle(columnDetailStyleText);
 
-    AbstractColumn colNoFaktur =
-        ColumnBuilder.getNew().setColumnProperty("noFaktur", String.class.getName()).build();
-    colNoFaktur.setTitle("No Faktur");
-    colNoFaktur.setWidth(40);
-    colNoFaktur.setHeaderStyle(columnHeaderStyleText);
-    colNoFaktur.setStyle(columnDetailStyleText);
+    AbstractColumn colPelanggan =
+        ColumnBuilder.getNew().setColumnProperty("namaPelanggan", String.class.getName()).build();
+    colPelanggan.setTitle("Nama Pelanggan");
+    colPelanggan.setWidth(70);
+    colPelanggan.setHeaderStyle(columnHeaderStyleText);
+    colPelanggan.setStyle(columnDetailStyleText);
 
-    AbstractColumn colBillingDate =
-        ColumnBuilder.getNew().setColumnProperty("tglKuitansi", Date.class.getName()).build();
-    colBillingDate.setTitle("Tanggal Kwitansi");
-    colBillingDate.setWidth(35);
-    colBillingDate.setPattern("dd-MM-yyyy");
-    colBillingDate.setHeaderStyle(columnHeaderStyleNumber);
-    colBillingDate.setStyle(columnDetailStyleNumbers);
+    AbstractColumn colKodePartner =
+        ColumnBuilder.getNew().setColumnProperty("kodePartner", String.class.getName()).build();
+    colKodePartner.setTitle("Partner");
+    colKodePartner.setWidth(40);
+    colKodePartner.setHeaderStyle(columnHeaderStyleText);
+    colKodePartner.setStyle(columnDetailStyleText);
 
-    AbstractColumn colPaymentDate =
-        ColumnBuilder.getNew().setColumnProperty("tglBayar", Date.class.getName()).build();
-    colPaymentDate.setTitle("Tanggal Bayar");
-    colPaymentDate.setWidth(40);
-    colPaymentDate.setPattern("dd-MM-yyyy");
-    colPaymentDate.setHeaderStyle(columnHeaderStyleNumber);
-    colPaymentDate.setStyle(columnDetailStyleNumbers);
+    AbstractColumn colIntervalKredit =
+        ColumnBuilder.getNew().setColumnProperty("intervalKredit", String.class.getName()).build();
+    colIntervalKredit.setTitle("Interval Kredit");
+    colIntervalKredit.setWidth(40);
+    colIntervalKredit.setHeaderStyle(columnHeaderStyleText);
+    colIntervalKredit.setStyle(columnDetailStyleText);
 
+    AbstractColumn colBarang =
+        ColumnBuilder.getNew().setColumnProperty("namaBarang", String.class.getName()).build();
+    colBarang.setTitle("Nama Barang");
+    colBarang.setWidth(70);
+    colBarang.setHeaderStyle(columnHeaderStyleText);
+    colBarang.setStyle(columnDetailStyleText);
 
-    AbstractColumn colCustomerName =
-        ColumnBuilder.getNew().setColumnProperty("namaCustomer", String.class.getName()).build();
-    colCustomerName.setTitle("Nama Customer");
-    colCustomerName.setWidth(50);
-    colCustomerName.setHeaderStyle(columnHeaderStyleText);
-    colCustomerName.setStyle(columnDetailStyleText);
+    AbstractColumn colQuantity =
+        ColumnBuilder.getNew().setColumnProperty("qtyKirim", Double.class.getName()).build();
+    colQuantity.setTitle("Qty");
+    colQuantity.setWidth(20);
+    colQuantity.setHeaderStyle(columnHeaderStyleNumber);
+    colQuantity.setStyle(columnDetailStyleNumbers);
 
-
-    AbstractColumn colTotalInvoice =
-        ColumnBuilder.getNew().setColumnProperty("nilaiTagih", BigDecimal.class.getName()).build();
-    colTotalInvoice.setTitle("Nilai Tagih");
-    colTotalInvoice.setWidth(40);
-    colTotalInvoice.setPattern("#,##0");
-    colTotalInvoice.setHeaderStyle(columnHeaderStyleNumber);
-    colTotalInvoice.setStyle(columnDetailStyleNumbers);
-
-    AbstractColumn colAmountPaid =
-        ColumnBuilder.getNew().setColumnProperty("nilaiPembayaran", BigDecimal.class.getName())
+    AbstractColumn colPenjualanBarang =
+        ColumnBuilder.getNew().setColumnProperty("penjualanBarang", BigDecimal.class.getName())
             .build();
-    colAmountPaid.setTitle("Nilai Pembayaran");
-    colAmountPaid.setWidth(40);
-    colAmountPaid.setPattern("#,##0");
-    colAmountPaid.setHeaderStyle(columnHeaderStyleNumber);
-    colAmountPaid.setStyle(columnDetailStyleNumbers);
+    colPenjualanBarang.setTitle("Nilai Jual");
+    colPenjualanBarang.setWidth(50);
+    colPenjualanBarang.setPattern("#,##0");
+    colPenjualanBarang.setHeaderStyle(columnHeaderStyleNumber);
+    colPenjualanBarang.setStyle(columnDetailStyleNumbers);
 
+    AbstractColumn colPenerimaanPenjualan =
+        ColumnBuilder.getNew().setColumnProperty("penerimaanPenjualan", BigDecimal.class.getName())
+            .build();
+    colPenerimaanPenjualan.setTitle("Pembayaran");
+    colPenerimaanPenjualan.setWidth(50);
+    colPenerimaanPenjualan.setPattern("#,##0");
+    colPenerimaanPenjualan.setHeaderStyle(columnHeaderStyleNumber);
+    colPenerimaanPenjualan.setStyle(columnDetailStyleNumbers);
 
-    AbstractColumn colCollectorName =
-        ColumnBuilder.getNew().setColumnProperty("keterangan", String.class.getName()).build();
-    colCollectorName.setTitle("Keterangan");
-    colCollectorName.setWidth(40);
-    colCollectorName.setHeaderStyle(columnHeaderStyleNumber);
-    colCollectorName.setStyle(columnDetailStyleNumbers);
+    AbstractColumn colSisaPiutang =
+        ColumnBuilder.getNew().setColumnProperty("sisaPiutang", BigDecimal.class.getName()).build();
+    colSisaPiutang.setTitle("Sisa Piutang");
+    colSisaPiutang.setWidth(50);
+    colSisaPiutang.setPattern("#,##0");
+    colSisaPiutang.setHeaderStyle(columnHeaderStyleNumber);
+    colSisaPiutang.setStyle(columnDetailStyleNumbers);
 
-    drb.addColumn(colNo);
-    drb.addColumn(colNoFaktur);
-    drb.addColumn(colBillingDate);
-    drb.addColumn(colPaymentDate);
-    drb.addColumn(colCustomerName);
-    drb.addColumn(colAmountPaid);
-    drb.addColumn(colTotalInvoice);
-    drb.addColumn(colCollectorName);
+    drb.addColumn(colNomorFaktur);
+    drb.addColumn(colPelanggan);
+    drb.addColumn(colKodePartner);
+    drb.addColumn(colIntervalKredit);
+    drb.addColumn(colBarang);
+    drb.addColumn(colQuantity);
+    drb.addColumn(colPenjualanBarang);
+    drb.addColumn(colPenerimaanPenjualan);
+    drb.addColumn(colSisaPiutang);
 
     /**
      * Add a global total sum for the lineSum field.
      */
-    drb.addGlobalFooterVariable(colAmountPaid, DJCalculation.SUM, footerStyleTotalSumValue);
-    drb.addGlobalFooterVariable(colTotalInvoice, DJCalculation.SUM, footerStyleTotalSumValue);
+    drb.addGlobalFooterVariable(colQuantity, DJCalculation.SUM, footerStyleTotalSumValue);
+    drb.addGlobalFooterVariable(colPenjualanBarang, DJCalculation.SUM, footerStyleTotalSumValue);
+    drb.addGlobalFooterVariable(colPenerimaanPenjualan, DJCalculation.SUM, footerStyleTotalSumValue);
+    drb.addGlobalFooterVariable(colSisaPiutang, DJCalculation.SUM, footerStyleTotalSumValue);
     drb.setGlobalFooterVariableHeight(new Integer(20));
     drb.setGrandTotalLegend("Total");
 
@@ -366,6 +422,7 @@ public class PiutangDJReport extends Window implements Serializable {
 
     drb.setUseFullPageWidth(true); // use full width of the page
     dr = drb.build(); // build the report
+
 
     // Generate the Jasper Print Object
     JRDataSource ds = new JRBeanCollectionDataSource(resultList);
@@ -408,30 +465,70 @@ public class PiutangDJReport extends Window implements Serializable {
     }
   }
 
-  private List<ReportPiutang> generateData(Karyawan karyawan, List<Piutang> listPiutang) {
-    List<ReportPiutang> reportPiutangList = new ArrayList<ReportPiutang>();
-    int i = 1;
-    for (Piutang piutang : listPiutang) {
-      ReportPiutang data = new ReportPiutang();
-      data.setNo(i + ".");
-      data.setNoFaktur(piutang.getPenjualan().getNoFaktur());
-      data.setTglBayar(piutang.getTglPembayaran());
-      data.setTglKuitansi(piutang.getTglJatuhTempo());
-      data.setNamaCustomer(piutang.getPenjualan().getNamaPelanggan());
-      data.setNilaiPembayaran(piutang.getPembayaran());
-      data.setNilaiTagih(piutang.getNilaiTagihan());
-      data.setKeterangan(piutang.getKeterangan());
+  private List<PiutangSales> generateData(Karyawan karyawan, List<Penjualan> listPenjualan) {
+    List<PiutangSales> komisiPenjualanList = new ArrayList<PiutangSales>();
+    PenjualanService penjualanService = (PenjualanService) SpringUtil.getBean("penjualanService");
+    StatusService statusService = (StatusService) SpringUtil.getBean("statusService");
+    PiutangService piutangService = (PiutangService) SpringUtil.getBean("piutangService");
 
-      reportPiutangList.add(data);
-      i++;
+    Status statusLunas = statusService.getStatusByID(new Long(2)); // LUNAS
+    Status statusTarikBarang = statusService.getStatusByID(new Long(6)); // Tarik Barang
+
+    for (Penjualan penjualan : listPenjualan) {
+      try {
+        if (checkAngsuran2Lunas(statusLunas, piutangService, penjualan)) {
+          List<PenjualanDetail> penjualanDetails =
+              penjualanService.getPenjualanDetailsByPenjualan(penjualan);
+          for (PenjualanDetail penjualanDetail : penjualanDetails) {
+            // valid to show yg angsuran kedua lunas
+            if (!penjualanDetail.getBarang().isBonus()) {
+
+              PiutangSales data = new PiutangSales();
+              data.setNomorFaktur(penjualan.getNoFaktur());
+              data.setNamaPelanggan(penjualan.getNamaPelanggan());
+              data.setIntervalKredit(penjualan.getIntervalKredit() + " Bulan");
+              String kodePartner = "0000";
+              Double qtyKirim = Double.parseDouble(String.valueOf(penjualanDetail.getQty()));
+
+              if (penjualan.getSales1().getKodeKaryawan().equals(karyawan.getKodeKaryawan())
+                  && penjualan.getSales2() != null) {
+                kodePartner = penjualan.getSales2().getKodeKaryawan();
+                qtyKirim = qtyKirim / 2;
+              } else if (penjualan.getSales2() != null
+                  && penjualan.getSales2().getKodeKaryawan().equals(karyawan.getKodeKaryawan())
+                  && penjualan.getSales1() != null) {
+                kodePartner = penjualan.getSales1().getKodeKaryawan();
+                qtyKirim = qtyKirim / 2;
+              }
+
+              if (checkPiutangFinalStatusTarikBarang(statusTarikBarang, piutangService, penjualan)) {
+                qtyKirim = 0.0;
+              }
+              data.setKodePartner(kodePartner);
+              data.setNamaBarang(penjualanDetail.getBarang().getNamaBarang());
+              data.setQtyKirim(qtyKirim);
+              data.setPenjualanBarang(penjualanDetail.getTotal());
+              data.setPenerimaanPenjualan(penjualan.getTotal().subtract(penjualan.getPiutang()));
+              data.setSisaPiutang(penjualan.getPiutang());
+              totalQty = totalQty + qtyKirim;
+              komisiPenjualanList.add(data);
+            }
+          }
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
+        logger.info("error piutangSales penjualan : " + penjualan.getNoFaktur());
+      }
     }
-    Collections.sort(reportPiutangList, new Comparator<ReportPiutang>() {
+
+    Collections.sort(komisiPenjualanList, new Comparator<PiutangSales>() {
       @Override
-      public int compare(ReportPiutang obj1, ReportPiutang obj2) {
-        return obj1.getNoFaktur().compareTo(obj2.getNoFaktur());
+      public int compare(PiutangSales obj1, PiutangSales obj2) {
+        return obj1.getNomorFaktur().compareTo(obj2.getNomorFaktur());
       }
     });
-    return reportPiutangList;
+
+    return komisiPenjualanList;
   }
 
   private String generateFileName(String fileType, Karyawan karyawan, Date startDate, Date endDate) {
